@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		447E8ACE1862CFB900D38338 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 447E8ACD1862CFB900D38338 /* Parse.framework */; };
+		30905C6A1863A001003395CA /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30905C691863A001003395CA /* Parse.framework */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
@@ -35,13 +35,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		447E8ACB1862CFA400D38338 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 447E8AC71862CFA400D38338 /* ParseStarterProject.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 09ABC06D13A1D52D009C3FCF;
-			remoteInfo = ParseStarterProject;
-		};
 		44FC42CF1862667700CC948C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 44FC429E1862667700CC948C /* Project object */;
@@ -52,40 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		447E8A9D1862CFA400D38338 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		447E8A9F1862CFA400D38338 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		447E8AA01862CFA400D38338 /* buried.-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.-Info.plist"; sourceTree = "<group>"; };
-		447E8AA11862CFA400D38338 /* buried.-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "buried.-Prefix.pch"; sourceTree = "<group>"; };
-		447E8AA31862CFA400D38338 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		447E8AA41862CFA400D38338 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		447E8AA51862CFA400D38338 /* LTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTAppDelegate.h; sourceTree = "<group>"; };
-		447E8AA61862CFA400D38338 /* LTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTAppDelegate.m; sourceTree = "<group>"; };
-		447E8AA71862CFA400D38338 /* LTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTViewController.h; sourceTree = "<group>"; };
-		447E8AA81862CFA400D38338 /* LTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTViewController.m; sourceTree = "<group>"; };
-		447E8AA91862CFA400D38338 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		447E8AAA1862CFA400D38338 /* buried..xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = buried..xcodeproj; sourceTree = "<group>"; };
-		447E8AAE1862CFA400D38338 /* buried.Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.Tests-Info.plist"; sourceTree = "<group>"; };
-		447E8AAF1862CFA400D38338 /* buried_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = buried_Tests.m; sourceTree = "<group>"; };
-		447E8AB11862CFA400D38338 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		447E8AB21862CFA400D38338 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		447E8AB41862CFA400D38338 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		447E8AB61862CFA400D38338 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		447E8AB71862CFA400D38338 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		447E8AB81862CFA400D38338 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		447E8ABA1862CFA400D38338 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		447E8ABC1862CFA400D38338 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		447E8ABE1862CFA400D38338 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ParseStarterProjectViewController.xib; sourceTree = "<group>"; };
-		447E8ABF1862CFA400D38338 /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		447E8AC01862CFA400D38338 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		447E8AC11862CFA400D38338 /* ParseStarterProject-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ParseStarterProject-Info.plist"; sourceTree = "<group>"; };
-		447E8AC21862CFA400D38338 /* ParseStarterProject-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ParseStarterProject-Prefix.pch"; sourceTree = "<group>"; };
-		447E8AC31862CFA400D38338 /* ParseStarterProjectAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseStarterProjectAppDelegate.h; sourceTree = "<group>"; };
-		447E8AC41862CFA400D38338 /* ParseStarterProjectAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseStarterProjectAppDelegate.m; sourceTree = "<group>"; };
-		447E8AC51862CFA400D38338 /* ParseStarterProjectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseStarterProjectViewController.h; sourceTree = "<group>"; };
-		447E8AC61862CFA400D38338 /* ParseStarterProjectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseStarterProjectViewController.m; sourceTree = "<group>"; };
-		447E8AC71862CFA400D38338 /* ParseStarterProject.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ParseStarterProject.xcodeproj; sourceTree = "<group>"; };
-		447E8ACD1862CFB900D38338 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../Parse/Parse.framework; sourceTree = "<group>"; };
-		44FC42A61862667700CC948C /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried..app; path = "/Users/Mitch/Desktop/Lofty/buried/buried./build/Debug-iphoneos/buried..app"; sourceTree = "<absolute>"; };
+		30905C6818639FA6003395CA /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = buried.Tests.xctest; path = "/Users/Mitch/Desktop/buriedios/build/Debug-iphoneos/buried.Tests.xctest"; sourceTree = "<absolute>"; };
+		30905C691863A001003395CA /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Lofty/Parse/Parse.framework; sourceTree = "<group>"; };
+		30905C6C1863A051003395CA /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried..app; path = "/Users/Mitch/Desktop/buriedios/build/Debug-iphoneos/buried..app"; sourceTree = "<absolute>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -100,7 +62,6 @@
 		44FC42C11862667700CC948C /* LTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTViewController.h; sourceTree = "<group>"; };
 		44FC42C21862667700CC948C /* LTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTViewController.m; sourceTree = "<group>"; };
 		44FC42C41862667700CC948C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		44FC42CA1862667700CC948C /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = buried.Tests.xctest; path = "/Users/Mitch/Desktop/Lofty/buried/buried./build/Debug-iphoneos/buried.Tests.xctest"; sourceTree = "<absolute>"; };
 		44FC42CB1862667700CC948C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		44FC42D31862667700CC948C /* buried.Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.Tests-Info.plist"; sourceTree = "<group>"; };
 		44FC42D51862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -121,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				447E8ACE1862CFB900D38338 /* Parse.framework in Frameworks */,
+				30905C6A1863A001003395CA /* Parse.framework in Frameworks */,
 				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
 				44FC42F2186267D800CC948C /* StoreKit.framework in Frameworks */,
 				44FC42F0186267D300CC948C /* Security.framework in Frameworks */,
@@ -150,99 +111,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		447E8A991862CFA400D38338 /* buried */ = {
-			isa = PBXGroup;
-			children = (
-				447E8A9A1862CFA400D38338 /* buried. */,
-				447E8AB31862CFA400D38338 /* ParseStarterProject */,
-			);
-			name = buried;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		447E8A9A1862CFA400D38338 /* buried. */ = {
-			isa = PBXGroup;
-			children = (
-				447E8A9B1862CFA400D38338 /* buried. */,
-				447E8AAA1862CFA400D38338 /* buried..xcodeproj */,
-				447E8AAD1862CFA400D38338 /* buried.Tests */,
-				447E8AB21862CFA400D38338 /* Parse.framework */,
-			);
-			path = buried.;
-			sourceTree = "<group>";
-		};
-		447E8A9B1862CFA400D38338 /* buried. */ = {
-			isa = PBXGroup;
-			children = (
-				447E8A9C1862CFA400D38338 /* Main_iPad.storyboard */,
-				447E8A9E1862CFA400D38338 /* Main_iPhone.storyboard */,
-				447E8AA01862CFA400D38338 /* buried.-Info.plist */,
-				447E8AA11862CFA400D38338 /* buried.-Prefix.pch */,
-				447E8AA21862CFA400D38338 /* InfoPlist.strings */,
-				447E8AA41862CFA400D38338 /* Images.xcassets */,
-				447E8AA51862CFA400D38338 /* LTAppDelegate.h */,
-				447E8AA61862CFA400D38338 /* LTAppDelegate.m */,
-				447E8AA71862CFA400D38338 /* LTViewController.h */,
-				447E8AA81862CFA400D38338 /* LTViewController.m */,
-				447E8AA91862CFA400D38338 /* main.m */,
-			);
-			path = buried.;
-			sourceTree = "<group>";
-		};
-		447E8AAB1862CFA400D38338 /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
-			sourceTree = "<group>";
-		};
-		447E8AAD1862CFA400D38338 /* buried.Tests */ = {
-			isa = PBXGroup;
-			children = (
-				447E8AAE1862CFA400D38338 /* buried.Tests-Info.plist */,
-				447E8AAF1862CFA400D38338 /* buried_Tests.m */,
-				447E8AB01862CFA400D38338 /* InfoPlist.strings */,
-			);
-			path = buried.Tests;
-			sourceTree = "<group>";
-		};
-		447E8AB31862CFA400D38338 /* ParseStarterProject */ = {
-			isa = PBXGroup;
-			children = (
-				447E8AB41862CFA400D38338 /* Parse.framework */,
-				447E8AB51862CFA400D38338 /* ParseStarterProject */,
-				447E8AC71862CFA400D38338 /* ParseStarterProject.xcodeproj */,
-			);
-			path = ParseStarterProject;
-			sourceTree = "<group>";
-		};
-		447E8AB51862CFA400D38338 /* ParseStarterProject */ = {
-			isa = PBXGroup;
-			children = (
-				447E8AB61862CFA400D38338 /* Default-568h@2x.png */,
-				447E8AB71862CFA400D38338 /* Default.png */,
-				447E8AB81862CFA400D38338 /* Default@2x.png */,
-				447E8AB91862CFA400D38338 /* InfoPlist.strings */,
-				447E8ABB1862CFA400D38338 /* MainWindow.xib */,
-				447E8ABD1862CFA400D38338 /* ParseStarterProjectViewController.xib */,
-				447E8ABF1862CFA400D38338 /* Entitlements.plist */,
-				447E8AC01862CFA400D38338 /* main.m */,
-				447E8AC11862CFA400D38338 /* ParseStarterProject-Info.plist */,
-				447E8AC21862CFA400D38338 /* ParseStarterProject-Prefix.pch */,
-				447E8AC31862CFA400D38338 /* ParseStarterProjectAppDelegate.h */,
-				447E8AC41862CFA400D38338 /* ParseStarterProjectAppDelegate.m */,
-				447E8AC51862CFA400D38338 /* ParseStarterProjectViewController.h */,
-				447E8AC61862CFA400D38338 /* ParseStarterProjectViewController.m */,
-			);
-			path = ParseStarterProject;
-			sourceTree = "<group>";
-		};
-		447E8AC81862CFA400D38338 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				447E8ACC1862CFA400D38338 /* ParseStarterProject.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
@@ -255,8 +123,7 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				447E8ACD1862CFB900D38338 /* Parse.framework */,
-				447E8A991862CFA400D38338 /* buried */,
+				30905C691863A001003395CA /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
 				44FC42F1186267D800CC948C /* StoreKit.framework */,
 				44FC42EF186267D300CC948C /* Security.framework */,
@@ -335,7 +202,7 @@
 			);
 			name = buried.;
 			productName = buried.;
-			productReference = 44FC42A61862667700CC948C /* buried..app */;
+			productReference = 30905C6C1863A051003395CA /* buried..app */;
 			productType = "com.apple.product-type.application";
 		};
 		44FC42C91862667700CC948C /* buried.Tests */ = {
@@ -353,7 +220,7 @@
 			);
 			name = buried.Tests;
 			productName = buried.Tests;
-			productReference = 44FC42CA1862667700CC948C /* buried.Tests.xctest */;
+			productReference = 30905C6818639FA6003395CA /* buried.Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -382,16 +249,6 @@
 			mainGroup = 44FC429D1862667700CC948C;
 			productRefGroup = 44FC429D1862667700CC948C;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 447E8AAB1862CFA400D38338 /* Products */;
-					ProjectRef = 447E8AAA1862CFA400D38338 /* buried..xcodeproj */;
-				},
-				{
-					ProductGroup = 447E8AC81862CFA400D38338 /* Products */;
-					ProjectRef = 447E8AC71862CFA400D38338 /* ParseStarterProject.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				44FC42A51862667700CC948C /* buried. */,
@@ -399,16 +256,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		447E8ACC1862CFA400D38338 /* ParseStarterProject.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = ParseStarterProject.app;
-			remoteRef = 447E8ACB1862CFA400D38338 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		44FC42A41862667700CC948C /* Resources */ = {
@@ -462,62 +309,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		447E8A9C1862CFA400D38338 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8A9D1862CFA400D38338 /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		447E8A9E1862CFA400D38338 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8A9F1862CFA400D38338 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		447E8AA21862CFA400D38338 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8AA31862CFA400D38338 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		447E8AB01862CFA400D38338 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8AB11862CFA400D38338 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		447E8AB91862CFA400D38338 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8ABA1862CFA400D38338 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		447E8ABB1862CFA400D38338 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8ABC1862CFA400D38338 /* en */,
-			);
-			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		447E8ABD1862CFA400D38338 /* ParseStarterProjectViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				447E8ABE1862CFA400D38338 /* en */,
-			);
-			name = ParseStarterProjectViewController.xib;
-			sourceTree = "<group>";
-		};
 		44FC42B21862667700CC948C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -634,7 +425,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/loftierthoughts/Desktop/Dev/buried/buried.,
 					/Lofty/Parse,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -653,7 +443,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/loftierthoughts/Desktop/Dev/buried/buried.,
 					/Lofty/Parse,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
