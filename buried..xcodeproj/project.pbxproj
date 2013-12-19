@@ -85,7 +85,7 @@
 		447E8AC61862CFA400D38338 /* ParseStarterProjectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParseStarterProjectViewController.m; sourceTree = "<group>"; };
 		447E8AC71862CFA400D38338 /* ParseStarterProject.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ParseStarterProject.xcodeproj; sourceTree = "<group>"; };
 		447E8ACD1862CFB900D38338 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../Parse/Parse.framework; sourceTree = "<group>"; };
-		44FC42A61862667700CC948C /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried..app; sourceTree = BUILT_PRODUCTS_DIR; };
+		44FC42A61862667700CC948C /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried..app; path = "/Users/Mitch/Desktop/Lofty/buried/buried./build/Debug-iphoneos/buried..app"; sourceTree = "<absolute>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -100,12 +100,11 @@
 		44FC42C11862667700CC948C /* LTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTViewController.h; sourceTree = "<group>"; };
 		44FC42C21862667700CC948C /* LTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTViewController.m; sourceTree = "<group>"; };
 		44FC42C41862667700CC948C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		44FC42CA1862667700CC948C /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buried.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		44FC42CA1862667700CC948C /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = buried.Tests.xctest; path = "/Users/Mitch/Desktop/Lofty/buried/buried./build/Debug-iphoneos/buried.Tests.xctest"; sourceTree = "<absolute>"; };
 		44FC42CB1862667700CC948C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		44FC42D31862667700CC948C /* buried.Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.Tests-Info.plist"; sourceTree = "<group>"; };
 		44FC42D51862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		44FC42D71862667700CC948C /* buried_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = buried_Tests.m; sourceTree = "<group>"; };
-		44FC42E11862675E00CC948C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		44FC42E3186267AC00CC948C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		44FC42E5186267B100CC948C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		44FC42E7186267BB00CC948C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -250,17 +249,7 @@
 				44FC42AF1862667700CC948C /* buried. */,
 				44FC42D11862667700CC948C /* buried.Tests */,
 				44FC42A81862667700CC948C /* Frameworks */,
-				44FC42A71862667700CC948C /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		44FC42A71862667700CC948C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				44FC42A61862667700CC948C /* buried..app */,
-				44FC42CA1862667700CC948C /* buried.Tests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		44FC42A81862667700CC948C /* Frameworks */ = {
@@ -277,7 +266,6 @@
 				44FC42E7186267BB00CC948C /* CoreLocation.framework */,
 				44FC42E5186267B100CC948C /* CFNetwork.framework */,
 				44FC42E3186267AC00CC948C /* AudioToolbox.framework */,
-				44FC42E11862675E00CC948C /* Parse.framework */,
 				44FC42A91862667700CC948C /* Foundation.framework */,
 				44FC42AB1862667700CC948C /* CoreGraphics.framework */,
 				44FC42AD1862667700CC948C /* UIKit.framework */,
@@ -392,7 +380,7 @@
 				Base,
 			);
 			mainGroup = 44FC429D1862667700CC948C;
-			productRefGroup = 44FC42A71862667700CC948C /* Products */;
+			productRefGroup = 44FC429D1862667700CC948C;
 			projectDirPath = "";
 			projectReferences = (
 				{
