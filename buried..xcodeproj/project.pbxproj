@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30905C6A1863A001003395CA /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30905C691863A001003395CA /* Parse.framework */; };
+		114A50211864101B00CF8429 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114A50201864101B00CF8429 /* Parse.framework */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
@@ -45,9 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		30905C6818639FA6003395CA /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = buried.Tests.xctest; path = "/Users/Mitch/Desktop/buriedios/build/Debug-iphoneos/buried.Tests.xctest"; sourceTree = "<absolute>"; };
-		30905C691863A001003395CA /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Lofty/Parse/Parse.framework; sourceTree = "<group>"; };
-		30905C6C1863A051003395CA /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried..app; path = "/Users/Mitch/Desktop/buriedios/build/Debug-iphoneos/buried..app"; sourceTree = "<absolute>"; };
+		114A501E18640F4700CF8429 /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = buried.Tests.xctest; path = "/Users/april/Documents/buriedios/build/Debug-iphoneos/buried.Tests.xctest"; sourceTree = "<absolute>"; };
+		114A50201864101B00CF8429 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		114A50221864101B00CF8429 /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried..app; path = "/Users/april/Documents/buriedios/build/Debug-iphoneos/buried..app"; sourceTree = "<absolute>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -82,13 +82,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30905C6A1863A001003395CA /* Parse.framework in Frameworks */,
 				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
 				44FC42F2186267D800CC948C /* StoreKit.framework in Frameworks */,
 				44FC42F0186267D300CC948C /* Security.framework in Frameworks */,
 				44FC42EE186267CE00CC948C /* QuartzCore.framework in Frameworks */,
 				44FC42EC186267C900CC948C /* MobileCoreServices.framework in Frameworks */,
 				44FC42EA186267C100CC948C /* libz.1.1.3.dylib in Frameworks */,
+				114A50211864101B00CF8429 /* Parse.framework in Frameworks */,
 				44FC42E8186267BB00CC948C /* CoreLocation.framework in Frameworks */,
 				44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */,
 				44FC42E6186267B100CC948C /* CFNetwork.framework in Frameworks */,
@@ -123,7 +123,7 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				30905C691863A001003395CA /* Parse.framework */,
+				114A50201864101B00CF8429 /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
 				44FC42F1186267D800CC948C /* StoreKit.framework */,
 				44FC42EF186267D300CC948C /* Security.framework */,
@@ -202,7 +202,7 @@
 			);
 			name = buried.;
 			productName = buried.;
-			productReference = 30905C6C1863A051003395CA /* buried..app */;
+			productReference = 114A50221864101B00CF8429 /* buried..app */;
 			productType = "com.apple.product-type.application";
 		};
 		44FC42C91862667700CC948C /* buried.Tests */ = {
@@ -220,7 +220,7 @@
 			);
 			name = buried.Tests;
 			productName = buried.Tests;
-			productReference = 30905C6818639FA6003395CA /* buried.Tests.xctest */;
+			productReference = 114A501E18640F4700CF8429 /* buried.Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -425,7 +425,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Lofty/Parse,
+					/Users/april/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
@@ -443,7 +443,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Lofty/Parse,
+					/Users/april/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
