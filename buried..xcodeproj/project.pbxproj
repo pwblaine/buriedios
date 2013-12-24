@@ -7,16 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3083BFD91869A945006E050F /* LTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFD51869A945006E050F /* LTAppDelegate.m */; };
+		3083BFDA1869A945006E050F /* LTBuryItViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFD71869A945006E050F /* LTBuryItViewController.m */; };
+		3083BFDB1869A945006E050F /* LTBuryItViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFD81869A945006E050F /* LTBuryItViewController.xib */; };
+		3083BFDF1869A97C006E050F /* LTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFDD1869A97C006E050F /* LTLoginViewController.m */; };
+		3083BFE01869A97C006E050F /* LTLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFDE1869A97C006E050F /* LTLoginViewController.xib */; };
+		3083BFEA1869ACC0006E050F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE11869ACC0006E050F /* Icon@2x.png */; };
+		3083BFEB1869ACC0006E050F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE21869ACC0006E050F /* Icon.png */; };
+		3083BFEC1869ACC0006E050F /* login-button-small-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE31869ACC0006E050F /* login-button-small-pressed.png */; };
+		3083BFED1869ACC0006E050F /* login-button-small-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */; };
+		3083BFEE1869ACC0006E050F /* login-button-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE51869ACC0006E050F /* login-button-small.png */; };
+		3083BFEF1869ACC0006E050F /* login-button-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE61869ACC0006E050F /* login-button-small@2x.png */; };
+		3083BFF01869ACC0006E050F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE71869ACC0006E050F /* Default-568h@2x.png */; };
+		3083BFF11869ACC0006E050F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE81869ACC0006E050F /* Default.png */; };
+		3083BFF21869ACC0006E050F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE91869ACC0006E050F /* Default@2x.png */; };
+		3083BFF41869AEC9006E050F /* buriedlogo_250height.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFF31869AEC9006E050F /* buriedlogo_250height.png */; };
 		30EF8FBD186959880091D178 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FBC186959880091D178 /* Parse.framework */; };
+		30EF8FC21869630E0091D178 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FC11869630E0091D178 /* FacebookSDK.framework */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
 		44FC42B41862667700CC948C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42B21862667700CC948C /* InfoPlist.strings */; };
 		44FC42B61862667700CC948C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FC42B51862667700CC948C /* main.m */; };
-		44FC42BA1862667700CC948C /* LTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FC42B91862667700CC948C /* LTAppDelegate.m */; };
 		44FC42BD1862667700CC948C /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42BB1862667700CC948C /* Main_iPhone.storyboard */; };
 		44FC42C01862667700CC948C /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42BE1862667700CC948C /* Main_iPad.storyboard */; };
-		44FC42C31862667700CC948C /* LTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FC42C21862667700CC948C /* LTViewController.m */; };
 		44FC42C51862667700CC948C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42C41862667700CC948C /* Images.xcassets */; };
 		44FC42CC1862667700CC948C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42CB1862667700CC948C /* XCTest.framework */; };
 		44FC42CD1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
@@ -45,9 +59,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		30EF8FBA186946CC0091D178 /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried..app; sourceTree = BUILT_PRODUCTS_DIR; };
-		30EF8FBB186946CC0091D178 /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buried.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3083BFD41869A945006E050F /* LTAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTAppDelegate.h; sourceTree = "<group>"; };
+		3083BFD51869A945006E050F /* LTAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAppDelegate.m; sourceTree = "<group>"; };
+		3083BFD61869A945006E050F /* LTBuryItViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTBuryItViewController.h; sourceTree = "<group>"; };
+		3083BFD71869A945006E050F /* LTBuryItViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTBuryItViewController.m; sourceTree = "<group>"; };
+		3083BFD81869A945006E050F /* LTBuryItViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTBuryItViewController.xib; sourceTree = "<group>"; };
+		3083BFDC1869A97C006E050F /* LTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTLoginViewController.h; sourceTree = "<group>"; };
+		3083BFDD1869A97C006E050F /* LTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTLoginViewController.m; sourceTree = "<group>"; };
+		3083BFDE1869A97C006E050F /* LTLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTLoginViewController.xib; sourceTree = "<group>"; };
+		3083BFE11869ACC0006E050F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		3083BFE21869ACC0006E050F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		3083BFE31869ACC0006E050F /* login-button-small-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed.png"; sourceTree = "<group>"; };
+		3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed@2x.png"; sourceTree = "<group>"; };
+		3083BFE51869ACC0006E050F /* login-button-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small.png"; sourceTree = "<group>"; };
+		3083BFE61869ACC0006E050F /* login-button-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small@2x.png"; sourceTree = "<group>"; };
+		3083BFE71869ACC0006E050F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		3083BFE81869ACC0006E050F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		3083BFE91869ACC0006E050F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		3083BFF31869AEC9006E050F /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buriedlogo_250height.png; sourceTree = "<group>"; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		30EF8FC0186962D60091D178 /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried..app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30EF8FC11869630E0091D178 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		30EF8FC318696D8A0091D178 /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buried.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -55,12 +88,8 @@
 		44FC42B31862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		44FC42B51862667700CC948C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		44FC42B71862667700CC948C /* buried.-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "buried.-Prefix.pch"; sourceTree = "<group>"; };
-		44FC42B81862667700CC948C /* LTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTAppDelegate.h; sourceTree = "<group>"; };
-		44FC42B91862667700CC948C /* LTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTAppDelegate.m; sourceTree = "<group>"; };
 		44FC42BC1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		44FC42BF1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		44FC42C11862667700CC948C /* LTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LTViewController.h; sourceTree = "<group>"; };
-		44FC42C21862667700CC948C /* LTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LTViewController.m; sourceTree = "<group>"; };
 		44FC42C41862667700CC948C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		44FC42CB1862667700CC948C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		44FC42D31862667700CC948C /* buried.Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.Tests-Info.plist"; sourceTree = "<group>"; };
@@ -82,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30EF8FC21869630E0091D178 /* FacebookSDK.framework in Frameworks */,
 				30EF8FBD186959880091D178 /* Parse.framework in Frameworks */,
 				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
 				44FC42F2186267D800CC948C /* StoreKit.framework in Frameworks */,
@@ -117,14 +147,15 @@
 				44FC42AF1862667700CC948C /* buried. */,
 				44FC42D11862667700CC948C /* buried.Tests */,
 				44FC42A81862667700CC948C /* Frameworks */,
-				30EF8FBA186946CC0091D178 /* buried..app */,
-				30EF8FBB186946CC0091D178 /* buried.Tests.xctest */,
+				30EF8FC0186962D60091D178 /* buried..app */,
+				30EF8FC318696D8A0091D178 /* buried.Tests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				30EF8FC11869630E0091D178 /* FacebookSDK.framework */,
 				30EF8FBC186959880091D178 /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
 				44FC42F1186267D800CC948C /* StoreKit.framework */,
@@ -146,12 +177,16 @@
 		44FC42AF1862667700CC948C /* buried. */ = {
 			isa = PBXGroup;
 			children = (
-				44FC42B81862667700CC948C /* LTAppDelegate.h */,
-				44FC42B91862667700CC948C /* LTAppDelegate.m */,
+				3083BFD41869A945006E050F /* LTAppDelegate.h */,
+				3083BFD51869A945006E050F /* LTAppDelegate.m */,
+				3083BFDC1869A97C006E050F /* LTLoginViewController.h */,
+				3083BFDD1869A97C006E050F /* LTLoginViewController.m */,
+				3083BFDE1869A97C006E050F /* LTLoginViewController.xib */,
+				3083BFD61869A945006E050F /* LTBuryItViewController.h */,
+				3083BFD71869A945006E050F /* LTBuryItViewController.m */,
+				3083BFD81869A945006E050F /* LTBuryItViewController.xib */,
 				44FC42BB1862667700CC948C /* Main_iPhone.storyboard */,
 				44FC42BE1862667700CC948C /* Main_iPad.storyboard */,
-				44FC42C11862667700CC948C /* LTViewController.h */,
-				44FC42C21862667700CC948C /* LTViewController.m */,
 				44FC42C41862667700CC948C /* Images.xcassets */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 			);
@@ -161,6 +196,16 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3083BFF31869AEC9006E050F /* buriedlogo_250height.png */,
+				3083BFE11869ACC0006E050F /* Icon@2x.png */,
+				3083BFE21869ACC0006E050F /* Icon.png */,
+				3083BFE31869ACC0006E050F /* login-button-small-pressed.png */,
+				3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */,
+				3083BFE51869ACC0006E050F /* login-button-small.png */,
+				3083BFE61869ACC0006E050F /* login-button-small@2x.png */,
+				3083BFE71869ACC0006E050F /* Default-568h@2x.png */,
+				3083BFE81869ACC0006E050F /* Default.png */,
+				3083BFE91869ACC0006E050F /* Default@2x.png */,
 				44FC42B11862667700CC948C /* buried.-Info.plist */,
 				44FC42B21862667700CC948C /* InfoPlist.strings */,
 				44FC42B51862667700CC948C /* main.m */,
@@ -204,7 +249,7 @@
 			);
 			name = buried.;
 			productName = buried.;
-			productReference = 30EF8FBA186946CC0091D178 /* buried..app */;
+			productReference = 30EF8FC0186962D60091D178 /* buried..app */;
 			productType = "com.apple.product-type.application";
 		};
 		44FC42C91862667700CC948C /* buried.Tests */ = {
@@ -222,7 +267,7 @@
 			);
 			name = buried.Tests;
 			productName = buried.Tests;
-			productReference = 30EF8FBB186946CC0091D178 /* buried.Tests.xctest */;
+			productReference = 30EF8FC318696D8A0091D178 /* buried.Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -266,8 +311,20 @@
 			files = (
 				44FC42C01862667700CC948C /* Main_iPad.storyboard in Resources */,
 				44FC42C51862667700CC948C /* Images.xcassets in Resources */,
+				3083BFEA1869ACC0006E050F /* Icon@2x.png in Resources */,
+				3083BFE01869A97C006E050F /* LTLoginViewController.xib in Resources */,
+				3083BFEB1869ACC0006E050F /* Icon.png in Resources */,
+				3083BFED1869ACC0006E050F /* login-button-small-pressed@2x.png in Resources */,
+				3083BFF41869AEC9006E050F /* buriedlogo_250height.png in Resources */,
+				3083BFEF1869ACC0006E050F /* login-button-small@2x.png in Resources */,
 				44FC42BD1862667700CC948C /* Main_iPhone.storyboard in Resources */,
+				3083BFDB1869A945006E050F /* LTBuryItViewController.xib in Resources */,
+				3083BFF01869ACC0006E050F /* Default-568h@2x.png in Resources */,
 				44FC42B41862667700CC948C /* InfoPlist.strings in Resources */,
+				3083BFF11869ACC0006E050F /* Default.png in Resources */,
+				3083BFF21869ACC0006E050F /* Default@2x.png in Resources */,
+				3083BFEC1869ACC0006E050F /* login-button-small-pressed.png in Resources */,
+				3083BFEE1869ACC0006E050F /* login-button-small.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,9 +343,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44FC42BA1862667700CC948C /* LTAppDelegate.m in Sources */,
+				3083BFD91869A945006E050F /* LTAppDelegate.m in Sources */,
+				3083BFDA1869A945006E050F /* LTBuryItViewController.m in Sources */,
+				3083BFDF1869A97C006E050F /* LTLoginViewController.m in Sources */,
 				44FC42B61862667700CC948C /* main.m in Sources */,
-				44FC42C31862667700CC948C /* LTViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,11 +481,10 @@
 		44FC42DC1862667700CC948C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Mitch/Desktop/buriedios/buriedios,
+					/Users/Mitch/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
@@ -441,11 +498,10 @@
 		44FC42DD1862667700CC948C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Mitch/Desktop/buriedios/buriedios,
+					/Users/Mitch/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";

@@ -1,15 +1,15 @@
 //
-//  LTViewController.h
+//  LTBuryItViewController.h
 //  buried.
 //
-//  Created by Loftier Thoughts on 12/18/13.
+//  Created by Mitch Solomon on 12/24/13.
 //  Copyright (c) 2013 Loftier Thoughts. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface LTViewController : UIViewController
+@interface LTBuryItViewController : UIViewController
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -40,5 +40,5 @@
 -(NSNumber *)getNumberOfIntervalsInADay;
 
 -(PFObject *)getAppVariables; // returns an instance of the appVariables
-  
+
 @end
