@@ -53,10 +53,10 @@
             
             /* TODO updateProfile - ADDED test for change of email*/
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
-            
-            NSLog(@"User logged in with email: %@",userData[@"email"]);
-            
+            [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
             [[PFUser currentUser] saveInBackground];
+            
+            NSLog(@"User logged in with email: %@",[[PFUser currentUser ] email]);
             
             emailTextField.placeholder = userData[@"email"];
             
