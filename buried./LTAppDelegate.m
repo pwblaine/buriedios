@@ -53,7 +53,8 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-    [FBSession.activeSession close];
+    
+    [[PFFacebookUtils session] close];
 }
 
 @end

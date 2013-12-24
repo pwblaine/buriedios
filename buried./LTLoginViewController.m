@@ -16,7 +16,7 @@
     
     // Check if user is cached and linked to Facebook, if so, bypass login    
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        // [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:NO];
+        [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:NO];
     }
     
     // Add logout navigation bar button
@@ -31,6 +31,7 @@
 - (IBAction)loginButtonTouchHandler:(id)sender  {
     // Set permissions required from the facebook user account
     NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
+        
     
     // Login PFUser using facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
@@ -59,5 +60,6 @@
     
     [_activityIndicator startAnimating]; // Show loading indicator until login is finished
 }
+
 
 @end

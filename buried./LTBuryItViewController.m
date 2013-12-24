@@ -53,14 +53,12 @@
             
             /* TODO updateProfile - ADDED test for change of email*/
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
-            if (![[[PFUser currentUser] objectForKey:@"email"] isEqualToString:userData[@"email"]])
-                [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
             
             NSLog(@"User logged in with email: %@",userData[@"email"]);
             
             [[PFUser currentUser] saveInBackground];
             
-            emailTextField.placeholder = [[PFUser currentUser] email];
+            emailTextField.placeholder = userData[@"email"];
             
         }}];
 }
@@ -113,18 +111,23 @@
 -(void)setMessageToUserForTimeframe {
 messagesToUserLabel.textColor = [UIColor darkTextColor];
     if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"soon"])
-messagesToUserLabel.text = @"your thought will unearth during the next 24 hours";
+messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"later"])
-        messagesToUserLabel.text = @"your thought will unearth during the next 2-7 days";
+        messagesToUserLabel.text = @"your thought will in during the next 2-7 days";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"someday"])
-        messagesToUserLabel.text = @"your thought will unearth during the next 1-4 weeks";
+        messagesToUserLabel.text = @"your thought will in during the next 1-4 weeks";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"forgotten"])
-        messagesToUserLabel.text = @"your thought will unearth during the next 1-3 months";
+        messagesToUserLabel.text = @"your thought will in during the next 1-3 months";
     else
     {
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"every journey needs to end sometime...";
     }
+}
+
+-(IBAction)timeframeClicked:(id)sender
+{
+    [self setMessageToUserForTimeframe];
 }
 
 -(BOOL)validateFields
@@ -138,7 +141,7 @@ messagesToUserLabel.text = @"your thought will unearth during the next 24 hours"
     NSString *emailRegEx = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegEx];
     
-    if ([emailTest evaluateWithObject:email] == NO && ![email isEqualToString:@""]) {
+    if (([emailTest evaluateWithObject:email] == NO && ![email isEqualToString:@""]) || ([[[PFUser currentUser] email] isEqualToString:nil])) {
         // test that email is in correct format
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"your thought needs someone to find it...";

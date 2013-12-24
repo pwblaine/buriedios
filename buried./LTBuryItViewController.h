@@ -21,6 +21,8 @@
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender;
 
+-(void)setMessageToUserForTimeframe;
+
 -(void)clearMessageToUser;
 
 -(BOOL)validateFields;

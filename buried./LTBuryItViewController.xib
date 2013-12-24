@@ -6,7 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTBuryItViewController">
             <connections>
-                <outlet property="emailTextField" destination="amP-cu-zWY" id="J3z-8a-jdC"/>
+                <outlet property="emailTextField" destination="amP-cu-zWY" id="EhB-6c-cvX"/>
                 <outlet property="messagesToUserLabel" destination="rQD-wF-QbU" id="WTJ-FH-tea"/>
                 <outlet property="thoughtTextView" destination="wJi-YH-mrr" id="6qU-FQ-mIO"/>
                 <outlet property="timeframeSegmentedControl" destination="NPg-eJ-9CO" id="OIw-QT-pRQ"/>
@@ -46,6 +46,9 @@
                         <segment title="someday"/>
                         <segment title="forgotten"/>
                     </segments>
+                    <connections>
+                        <action selector="timeframeClicked:" destination="-1" eventType="valueChanged" id="6Lj-Zs-2sG"/>
+                    </connections>
                 </segmentedControl>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rQD-wF-QbU" userLabel="messages to user">
                     <rect key="frame" x="20" y="351" width="280" height="57"/>
