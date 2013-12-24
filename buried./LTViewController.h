@@ -35,8 +35,6 @@
 
 -(IBAction)buryIt:(id)sender;
 
--(PFObject *)adjustCapsuleDeliveryForForTimeframe:(PFObject *)capsule;
-
 -(NSNumber *)getDaysSinceLaunch;
 -(NSNumber *)getIntervalOfDay;
 -(NSNumber *)getNumberOfIntervalsInADay;

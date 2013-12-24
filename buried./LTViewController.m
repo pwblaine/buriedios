@@ -114,8 +114,6 @@
     capsule[@"email"] = email;
     capsule[@"thought"] = thought;
     capsule[@"timeframe"] = timeframe;
-    [self adjustCapsuleDeliveryForForTimeframe:capsule];
-    capsule[@"sent"] = @NO;
     [capsule saveInBackground];
         
         NSLog(@"a thought was buried and will be delivered on day %@, interval %@",capsule[@"deliveryDay"],capsule[@"intervalOfDay"]);
@@ -156,25 +154,6 @@
 {
     PFQuery *query = [PFQuery queryWithClassName:@"appVariables"];
     return [query getFirstObject];
-}
-
--(PFObject *)adjustCapsuleDeliveryForForTimeframe:(PFObject *)capsule
-{
-    capsule[@"intervalOfDay"] = @((arc4random() % 47)+1);
-    NSNumber *deliveryDay;
-    
-    if ([capsule[@"timeframe"] isEqualToString:@"soon"])
-        capsule[@"intervalOfDay"] = @((arc4random() % ([[self getNumberOfIntervalsInADay] intValue]-[[self getIntervalOfDay] intValue]))+[[self getIntervalOfDay] intValue]);
-    else if ([capsule[@"timeframe"] isEqualToString:@"later"])
-        deliveryDay = @((arc4random() % 14)+7);
-    else if ([capsule[@"timeframe"] isEqualToString:@"someday"])
-        deliveryDay = @((arc4random() % 60)+30);
-    else if ([capsule[@"timeframe"] isEqualToString:@"forgotten"])
-        deliveryDay = @((arc4random() % 65)+115);
-    
-    capsule[@"deliveryDay"] = @([deliveryDay intValue]+[[self getDaysSinceLaunch] intValue]);
-    
-    return capsule;
 }
 
 @end
