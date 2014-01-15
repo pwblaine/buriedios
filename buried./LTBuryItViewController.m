@@ -222,7 +222,15 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 #pragma mark - ()
 
 - (void)logoutButtonTouchHandler:(id)sender {
-    // Logout user, this automatically clears the cache
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    {
+        NSLog(@"Will need to log out");
+    }
+    [[PFFacebookUtils session] closeAndClearTokenInformation];
+    [[PFFacebookUtils session] close];
+    [[FBSession activeSession] closeAndClearTokenInformation];
+    [[FBSession activeSession] close];
+    [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
