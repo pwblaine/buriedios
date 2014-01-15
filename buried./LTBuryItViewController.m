@@ -51,16 +51,21 @@
             
             if (userData[@"name"]) {self.title = userData[@"name"];};
             
-            /* TODO updateProfile - ADDED test for change of email*/
+            /* TODO updateProfile - ADDED test for change of email */
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
-            [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
             [[PFUser currentUser] saveInBackground];
             
-            NSLog(@"User logged in with email: %@",[[PFUser currentUser ] email]);
+            emailTextField.placeholder = [[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"];
             
-            emailTextField.placeholder = userData[@"email"];
+            NSLog(@"User logged in with email: %@",[[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"]);
             
-        }}];
+        } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
+            NSLog(@"The facebook session was invalidated");
+            [self logoutButtonTouchHandler:nil];
+        } else {
+            NSLog(@"Some other error: %@", error);
+        }
+     }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -166,12 +171,12 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         NSString *thought = thoughtTextView.text;
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
         if ([email isEqualToString:@""])
-            capsule[@"email"] = [[PFUser currentUser] email];
+            capsule[@"email"] = [[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"];
         else
             capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"from"] = [[PFUser currentUser] email];
+        capsule[@"from"] = [[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"];
         [capsule saveInBackground];
         
         NSLog(@"current date is day %@, interval %@",[self getDaysSinceLaunch],[self getIntervalOfDay]);
@@ -186,7 +191,6 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         [timeframeSegmentedControl setSelectedSegmentIndex:0];
     }
 }
-
 -(NSNumber *)getDaysSinceLaunch
 {
     PFObject *appVariables = [self getAppVariables];
@@ -220,7 +224,6 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 - (void)logoutButtonTouchHandler:(id)sender {
     // Logout user, this automatically clears the cache
     [PFUser logOut];
-    
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

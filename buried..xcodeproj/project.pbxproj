@@ -485,6 +485,7 @@
 					"$(inherited)",
 					/Users/Mitch/Desktop/buriedios/buriedios,
 					/Users/Mitch/Documents/FacebookSDK,
+					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
@@ -502,6 +503,7 @@
 					"$(inherited)",
 					/Users/Mitch/Desktop/buriedios/buriedios,
 					/Users/Mitch/Documents/FacebookSDK,
+					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
