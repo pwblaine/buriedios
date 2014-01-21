@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		281E7A2E188E7F9600C85066 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7A29188E7F9600C85066 /* ViewController.m */; };
-		281E7A2F188E7F9600C85066 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A2A188E7F9600C85066 /* ViewController.xib */; };
-		281E7A30188E7F9600C85066 /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7A2C188E7F9600C85066 /* PhotoDetailViewController.m */; };
-		281E7A31188E7F9600C85066 /* PhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A2D188E7F9600C85066 /* PhotoDetailViewController.xib */; };
 		281E7A35188E813A00C85066 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FBC186959880091D178 /* Parse.framework */; };
 		281E7A36188E815600C85066 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FC11869630E0091D178 /* FacebookSDK.framework */; };
 		281E7A3B188E833000C85066 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7A3A188E833000C85066 /* MBProgressHUD.m */; };
@@ -70,12 +66,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		281E7A28188E7F9600C85066 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		281E7A29188E7F9600C85066 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		281E7A2A188E7F9600C85066 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
-		281E7A2B188E7F9600C85066 /* PhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailViewController.h; sourceTree = "<group>"; };
-		281E7A2C188E7F9600C85066 /* PhotoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailViewController.m; sourceTree = "<group>"; };
-		281E7A2D188E7F9600C85066 /* PhotoDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoDetailViewController.xib; sourceTree = "<group>"; };
 		281E7A39188E833000C85066 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		281E7A3A188E833000C85066 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		281E7A3C188E875A00C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ParseLogo.jpg; sourceTree = "<group>"; };
@@ -211,12 +201,6 @@
 		44FC42AF1862667700CC948C /* buried. */ = {
 			isa = PBXGroup;
 			children = (
-				281E7A28188E7F9600C85066 /* ViewController.h */,
-				281E7A29188E7F9600C85066 /* ViewController.m */,
-				281E7A2A188E7F9600C85066 /* ViewController.xib */,
-				281E7A2B188E7F9600C85066 /* PhotoDetailViewController.h */,
-				281E7A2C188E7F9600C85066 /* PhotoDetailViewController.m */,
-				281E7A2D188E7F9600C85066 /* PhotoDetailViewController.xib */,
 				3083BFD41869A945006E050F /* LTAppDelegate.h */,
 				3083BFD51869A945006E050F /* LTAppDelegate.m */,
 				3083BFDC1869A97C006E050F /* LTLoginViewController.h */,
@@ -359,13 +343,11 @@
 				44FC42C01862667700CC948C /* Main_iPad.storyboard in Resources */,
 				281E7A42188E875A00C85066 /* ParseLogo.jpg in Resources */,
 				281E7A45188E875A00C85066 /* Lime.jpg in Resources */,
-				281E7A2F188E7F9600C85066 /* ViewController.xib in Resources */,
 				44FC42C51862667700CC948C /* Images.xcassets in Resources */,
 				3083BFEA1869ACC0006E050F /* Icon@2x.png in Resources */,
 				3083BFE01869A97C006E050F /* LTLoginViewController.xib in Resources */,
 				3083BFEB1869ACC0006E050F /* Icon.png in Resources */,
 				281E7A43188E875A00C85066 /* Crowd.jpg in Resources */,
-				281E7A31188E7F9600C85066 /* PhotoDetailViewController.xib in Resources */,
 				3083BFED1869ACC0006E050F /* login-button-small-pressed@2x.png in Resources */,
 				3083BFF41869AEC9006E050F /* buriedlogo_250height.png in Resources */,
 				3083BFEF1869ACC0006E050F /* login-button-small@2x.png in Resources */,
@@ -402,8 +384,6 @@
 				3083BFDA1869A945006E050F /* LTBuryItViewController.m in Sources */,
 				3083BFDF1869A97C006E050F /* LTLoginViewController.m in Sources */,
 				44FC42B61862667700CC948C /* main.m in Sources */,
-				281E7A30188E7F9600C85066 /* PhotoDetailViewController.m in Sources */,
-				281E7A2E188E7F9600C85066 /* ViewController.m in Sources */,
 				281E7A3B188E833000C85066 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
