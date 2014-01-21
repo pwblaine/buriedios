@@ -180,10 +180,9 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
         
         if ([email isEqualToString:@""])
-            capsule[@"email"] = [[user objectForKey:@"profile"] objectForKey:@"email"];
-        else
-            capsule[@"email"] = email;
+            email = [[user objectForKey:@"profile"] objectForKey:@"email"];
         
+        capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
         capsule[@"from"] = email;
