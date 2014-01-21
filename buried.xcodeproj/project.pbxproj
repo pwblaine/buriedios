@@ -9,41 +9,33 @@
 /* Begin PBXBuildFile section */
 		281E7A35188E813A00C85066 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FBC186959880091D178 /* Parse.framework */; };
 		281E7A36188E815600C85066 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FC11869630E0091D178 /* FacebookSDK.framework */; };
-		281E7A3B188E833000C85066 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7A3A188E833000C85066 /* MBProgressHUD.m */; };
-		281E7A42188E875A00C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A3C188E875A00C85066 /* ParseLogo.jpg */; };
-		281E7A43188E875A00C85066 /* Crowd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A3D188E875A00C85066 /* Crowd.jpg */; };
-		281E7A44188E875A00C85066 /* Desert.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A3E188E875A00C85066 /* Desert.jpg */; };
-		281E7A45188E875A00C85066 /* Lime.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A3F188E875A00C85066 /* Lime.jpg */; };
-		281E7A46188E875A00C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A40188E875A00C85066 /* Sunflowers.jpg */; };
-		281E7A47188E875A00C85066 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A41188E875A00C85066 /* 37x-Checkmark.png */; };
-		3083BFD91869A945006E050F /* LTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFD51869A945006E050F /* LTAppDelegate.m */; };
-		3083BFDA1869A945006E050F /* LTBuryItViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFD71869A945006E050F /* LTBuryItViewController.m */; };
-		3083BFDB1869A945006E050F /* LTBuryItViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFD81869A945006E050F /* LTBuryItViewController.xib */; };
-		3083BFDF1869A97C006E050F /* LTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3083BFDD1869A97C006E050F /* LTLoginViewController.m */; };
-		3083BFE01869A97C006E050F /* LTLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFDE1869A97C006E050F /* LTLoginViewController.xib */; };
-		3083BFEA1869ACC0006E050F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE11869ACC0006E050F /* Icon@2x.png */; };
-		3083BFEB1869ACC0006E050F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE21869ACC0006E050F /* Icon.png */; };
-		3083BFEC1869ACC0006E050F /* login-button-small-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE31869ACC0006E050F /* login-button-small-pressed.png */; };
-		3083BFED1869ACC0006E050F /* login-button-small-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */; };
-		3083BFEE1869ACC0006E050F /* login-button-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE51869ACC0006E050F /* login-button-small.png */; };
-		3083BFEF1869ACC0006E050F /* login-button-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE61869ACC0006E050F /* login-button-small@2x.png */; };
-		3083BFF01869ACC0006E050F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE71869ACC0006E050F /* Default-568h@2x.png */; };
-		3083BFF11869ACC0006E050F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE81869ACC0006E050F /* Default.png */; };
-		3083BFF21869ACC0006E050F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFE91869ACC0006E050F /* Default@2x.png */; };
-		3083BFF41869AEC9006E050F /* buriedlogo_250height.png in Resources */ = {isa = PBXBuildFile; fileRef = 3083BFF31869AEC9006E050F /* buriedlogo_250height.png */; };
+		281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A8A188EA66800C85066 /* 37x-Checkmark.png */; };
+		281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A92188EA66800C85066 /* buriedlogo_250height.png */; };
+		281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A93188EA66800C85066 /* Crowd.jpg */; };
+		281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A94188EA66800C85066 /* Default-568h@2x.png */; };
+		281E7AB7188EA66800C85066 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A95188EA66800C85066 /* Default.png */; };
+		281E7AB8188EA66800C85066 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A96188EA66800C85066 /* Default@2x.png */; };
+		281E7AB9188EA66800C85066 /* Desert.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A97188EA66800C85066 /* Desert.jpg */; };
+		281E7ABB188EA66800C85066 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9B188EA66800C85066 /* Icon.png */; };
+		281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9C188EA66800C85066 /* Icon@2x.png */; };
+		281E7ABD188EA66800C85066 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9D188EA66800C85066 /* Images.xcassets */; };
+		281E7ABE188EA66800C85066 /* Lime.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9E188EA66800C85066 /* Lime.jpg */; };
+		281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9F188EA66800C85066 /* login-button-small-pressed.png */; };
+		281E7AC0188EA66800C85066 /* login-button-small-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */; };
+		281E7AC1188EA66800C85066 /* login-button-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA1188EA66800C85066 /* login-button-small.png */; };
+		281E7AC2188EA66800C85066 /* login-button-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA2188EA66800C85066 /* login-button-small@2x.png */; };
+		281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA4188EA66800C85066 /* LTAppDelegate.m */; };
+		281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA6188EA66800C85066 /* LTBuryItViewController.m */; };
+		281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */; };
+		281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA9188EA66800C85066 /* LTLoginViewController.m */; };
+		281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAA188EA66800C85066 /* LTLoginViewController.xib */; };
+		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
+		281E7AC9188EA66800C85066 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAD188EA66800C85066 /* MBProgressHUD.m */; };
+		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
+		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
-		44FC42B41862667700CC948C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42B21862667700CC948C /* InfoPlist.strings */; };
-		44FC42B61862667700CC948C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FC42B51862667700CC948C /* main.m */; };
-		44FC42BD1862667700CC948C /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42BB1862667700CC948C /* Main_iPhone.storyboard */; };
-		44FC42C01862667700CC948C /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42BE1862667700CC948C /* Main_iPad.storyboard */; };
-		44FC42C51862667700CC948C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42C41862667700CC948C /* Images.xcassets */; };
-		44FC42CC1862667700CC948C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42CB1862667700CC948C /* XCTest.framework */; };
-		44FC42CD1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
-		44FC42CE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
-		44FC42D61862667700CC948C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 44FC42D41862667700CC948C /* InfoPlist.strings */; };
-		44FC42D81862667700CC948C /* buried_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FC42D71862667700CC948C /* buried_Tests.m */; };
 		44FC42E4186267AC00CC948C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42E3186267AC00CC948C /* AudioToolbox.framework */; };
 		44FC42E6186267B100CC948C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42E5186267B100CC948C /* CFNetwork.framework */; };
 		44FC42E8186267BB00CC948C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42E7186267BB00CC948C /* CoreLocation.framework */; };
@@ -55,61 +47,44 @@
 		44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42F3186267DF00CC948C /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		44FC42CF1862667700CC948C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 44FC429E1862667700CC948C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 44FC42A51862667700CC948C;
-			remoteInfo = buried.;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		281E7A39188E833000C85066 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		281E7A3A188E833000C85066 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		281E7A3C188E875A00C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ParseLogo.jpg; sourceTree = "<group>"; };
-		281E7A3D188E875A00C85066 /* Crowd.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Crowd.jpg; sourceTree = "<group>"; };
-		281E7A3E188E875A00C85066 /* Desert.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Desert.jpg; sourceTree = "<group>"; };
-		281E7A3F188E875A00C85066 /* Lime.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Lime.jpg; sourceTree = "<group>"; };
-		281E7A40188E875A00C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sunflowers.jpg; sourceTree = "<group>"; };
-		281E7A41188E875A00C85066 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark.png"; sourceTree = "<group>"; };
-		3083BFD41869A945006E050F /* LTAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTAppDelegate.h; sourceTree = "<group>"; };
-		3083BFD51869A945006E050F /* LTAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAppDelegate.m; sourceTree = "<group>"; };
-		3083BFD61869A945006E050F /* LTBuryItViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LTBuryItViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		3083BFD71869A945006E050F /* LTBuryItViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTBuryItViewController.m; sourceTree = "<group>"; };
-		3083BFD81869A945006E050F /* LTBuryItViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTBuryItViewController.xib; sourceTree = "<group>"; };
-		3083BFDC1869A97C006E050F /* LTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTLoginViewController.h; sourceTree = "<group>"; };
-		3083BFDD1869A97C006E050F /* LTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTLoginViewController.m; sourceTree = "<group>"; };
-		3083BFDE1869A97C006E050F /* LTLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTLoginViewController.xib; sourceTree = "<group>"; };
-		3083BFE11869ACC0006E050F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		3083BFE21869ACC0006E050F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		3083BFE31869ACC0006E050F /* login-button-small-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed.png"; sourceTree = "<group>"; };
-		3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed@2x.png"; sourceTree = "<group>"; };
-		3083BFE51869ACC0006E050F /* login-button-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small.png"; sourceTree = "<group>"; };
-		3083BFE61869ACC0006E050F /* login-button-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small@2x.png"; sourceTree = "<group>"; };
-		3083BFE71869ACC0006E050F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		3083BFE81869ACC0006E050F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		3083BFE91869ACC0006E050F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		3083BFF31869AEC9006E050F /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buriedlogo_250height.png; sourceTree = "<group>"; };
+		281E7A48188EA5B000C85066 /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = buried.app; path = "/Users/patrickblaine/Documents/buriedios/build/Debug-iphoneos/buried.app"; sourceTree = "<absolute>"; };
+		281E7A8A188EA66800C85066 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark.png"; path = "buried/37x-Checkmark.png"; sourceTree = SOURCE_ROOT; };
+		281E7A90188EA66800C85066 /* buried-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "buried-Info.plist"; path = "buried/buried-Info.plist"; sourceTree = SOURCE_ROOT; };
+		281E7A91188EA66800C85066 /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		281E7A92188EA66800C85066 /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo_250height.png; path = buried/buriedlogo_250height.png; sourceTree = SOURCE_ROOT; };
+		281E7A93188EA66800C85066 /* Crowd.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Crowd.jpg; path = buried/Crowd.jpg; sourceTree = SOURCE_ROOT; };
+		281E7A94188EA66800C85066 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "buried/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7A95188EA66800C85066 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = buried/Default.png; sourceTree = SOURCE_ROOT; };
+		281E7A96188EA66800C85066 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "buried/Default@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7A97188EA66800C85066 /* Desert.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Desert.jpg; path = buried/Desert.jpg; sourceTree = SOURCE_ROOT; };
+		281E7A9B188EA66800C85066 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = buried/Icon.png; sourceTree = SOURCE_ROOT; };
+		281E7A9C188EA66800C85066 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "buried/Icon@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7A9D188EA66800C85066 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		281E7A9E188EA66800C85066 /* Lime.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Lime.jpg; path = buried/Lime.jpg; sourceTree = SOURCE_ROOT; };
+		281E7A9F188EA66800C85066 /* login-button-small-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small-pressed.png"; path = "buried/login-button-small-pressed.png"; sourceTree = SOURCE_ROOT; };
+		281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small-pressed@2x.png"; path = "buried/login-button-small-pressed@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7AA1188EA66800C85066 /* login-button-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small.png"; path = "buried/login-button-small.png"; sourceTree = SOURCE_ROOT; };
+		281E7AA2188EA66800C85066 /* login-button-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small@2x.png"; path = "buried/login-button-small@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7AA3188EA66800C85066 /* LTAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTAppDelegate.h; path = buried/LTAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		281E7AA4188EA66800C85066 /* LTAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTAppDelegate.m; path = buried/LTAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		281E7AA5188EA66800C85066 /* LTBuryItViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTBuryItViewController.h; path = buried/LTBuryItViewController.h; sourceTree = SOURCE_ROOT; };
+		281E7AA6188EA66800C85066 /* LTBuryItViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTBuryItViewController.m; path = buried/LTBuryItViewController.m; sourceTree = SOURCE_ROOT; };
+		281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTBuryItViewController.xib; path = buried/LTBuryItViewController.xib; sourceTree = SOURCE_ROOT; };
+		281E7AA8188EA66800C85066 /* LTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTLoginViewController.h; path = buried/LTLoginViewController.h; sourceTree = SOURCE_ROOT; };
+		281E7AA9188EA66800C85066 /* LTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTLoginViewController.m; path = buried/LTLoginViewController.m; sourceTree = SOURCE_ROOT; };
+		281E7AAA188EA66800C85066 /* LTLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTLoginViewController.xib; path = buried/LTLoginViewController.xib; sourceTree = SOURCE_ROOT; };
+		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
+		281E7AAC188EA66800C85066 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
+		281E7AAD188EA66800C85066 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
+		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		30EF8FC0186962D60091D178 /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30EF8FC11869630E0091D178 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		30EF8FC318696D8A0091D178 /* buriedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buriedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		44FC42B11862667700CC948C /* buried-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried-Info.plist"; sourceTree = "<group>"; };
-		44FC42B31862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		44FC42B51862667700CC948C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		44FC42B71862667700CC948C /* buried-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "buried-Prefix.pch"; sourceTree = "<group>"; };
-		44FC42BC1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		44FC42BF1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		44FC42C41862667700CC948C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		44FC42CB1862667700CC948C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		44FC42D31862667700CC948C /* buriedTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buriedTests-Info.plist"; sourceTree = "<group>"; };
-		44FC42D51862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		44FC42D71862667700CC948C /* buried_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = buried_Tests.m; sourceTree = "<group>"; };
 		44FC42E3186267AC00CC948C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		44FC42E5186267B100CC948C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		44FC42E7186267BB00CC948C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -143,36 +118,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		44FC42C71862667700CC948C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				44FC42CC1862667700CC948C /* XCTest.framework in Frameworks */,
-				44FC42CE1862667700CC948C /* UIKit.framework in Frameworks */,
-				44FC42CD1862667700CC948C /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		281E7A38188E831000C85066 /* MBProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				281E7A39188E833000C85066 /* MBProgressHUD.h */,
-				281E7A3A188E833000C85066 /* MBProgressHUD.m */,
-			);
-			name = MBProgressHUD;
-			sourceTree = "<group>";
-		};
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
-				44FC42AF1862667700CC948C /* buried */,
-				44FC42D11862667700CC948C /* buried Tests */,
+				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
+				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
+				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
+				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
+				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
+				281E7AA8188EA66800C85066 /* LTLoginViewController.h */,
+				281E7AA9188EA66800C85066 /* LTLoginViewController.m */,
+				281E7AAA188EA66800C85066 /* LTLoginViewController.xib */,
+				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,
-				30EF8FC0186962D60091D178 /* buried.app */,
-				30EF8FC318696D8A0091D178 /* buriedTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,71 +159,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		44FC42AF1862667700CC948C /* buried */ = {
-			isa = PBXGroup;
-			children = (
-				3083BFD41869A945006E050F /* LTAppDelegate.h */,
-				3083BFD51869A945006E050F /* LTAppDelegate.m */,
-				3083BFDC1869A97C006E050F /* LTLoginViewController.h */,
-				3083BFDD1869A97C006E050F /* LTLoginViewController.m */,
-				3083BFDE1869A97C006E050F /* LTLoginViewController.xib */,
-				3083BFD61869A945006E050F /* LTBuryItViewController.h */,
-				3083BFD71869A945006E050F /* LTBuryItViewController.m */,
-				3083BFD81869A945006E050F /* LTBuryItViewController.xib */,
-				44FC42BB1862667700CC948C /* Main_iPhone.storyboard */,
-				44FC42BE1862667700CC948C /* Main_iPad.storyboard */,
-				44FC42C41862667700CC948C /* Images.xcassets */,
-				281E7A38188E831000C85066 /* MBProgressHUD */,
-				44FC42B01862667700CC948C /* Supporting Files */,
-			);
-			name = buried;
-			path = buried.;
-			sourceTree = "<group>";
-		};
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				281E7A3C188E875A00C85066 /* ParseLogo.jpg */,
-				281E7A3D188E875A00C85066 /* Crowd.jpg */,
-				281E7A3E188E875A00C85066 /* Desert.jpg */,
-				281E7A3F188E875A00C85066 /* Lime.jpg */,
-				281E7A40188E875A00C85066 /* Sunflowers.jpg */,
-				281E7A41188E875A00C85066 /* 37x-Checkmark.png */,
-				3083BFF31869AEC9006E050F /* buriedlogo_250height.png */,
-				3083BFE11869ACC0006E050F /* Icon@2x.png */,
-				3083BFE21869ACC0006E050F /* Icon.png */,
-				3083BFE31869ACC0006E050F /* login-button-small-pressed.png */,
-				3083BFE41869ACC0006E050F /* login-button-small-pressed@2x.png */,
-				3083BFE51869ACC0006E050F /* login-button-small.png */,
-				3083BFE61869ACC0006E050F /* login-button-small@2x.png */,
-				3083BFE71869ACC0006E050F /* Default-568h@2x.png */,
-				3083BFE81869ACC0006E050F /* Default.png */,
-				3083BFE91869ACC0006E050F /* Default@2x.png */,
-				44FC42B11862667700CC948C /* buried-Info.plist */,
-				44FC42B21862667700CC948C /* InfoPlist.strings */,
-				44FC42B51862667700CC948C /* main.m */,
-				44FC42B71862667700CC948C /* buried-Prefix.pch */,
+				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
+				281E7A90188EA66800C85066 /* buried-Info.plist */,
+				281E7A91188EA66800C85066 /* buried-Prefix.pch */,
+				281E7A92188EA66800C85066 /* buriedlogo_250height.png */,
+				281E7A93188EA66800C85066 /* Crowd.jpg */,
+				281E7A94188EA66800C85066 /* Default-568h@2x.png */,
+				281E7A95188EA66800C85066 /* Default.png */,
+				281E7A96188EA66800C85066 /* Default@2x.png */,
+				281E7A97188EA66800C85066 /* Desert.jpg */,
+				281E7A9B188EA66800C85066 /* Icon.png */,
+				281E7A9C188EA66800C85066 /* Icon@2x.png */,
+				281E7A9D188EA66800C85066 /* Images.xcassets */,
+				281E7A9E188EA66800C85066 /* Lime.jpg */,
+				281E7A9F188EA66800C85066 /* login-button-small-pressed.png */,
+				281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */,
+				281E7AA1188EA66800C85066 /* login-button-small.png */,
+				281E7AA2188EA66800C85066 /* login-button-small@2x.png */,
+				281E7AAB188EA66800C85066 /* main.m */,
+				281E7AAC188EA66800C85066 /* MBProgressHUD.h */,
+				281E7AAD188EA66800C85066 /* MBProgressHUD.m */,
+				281E7AAE188EA66800C85066 /* ParseLogo.jpg */,
+				281E7AAF188EA66800C85066 /* Sunflowers.jpg */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		44FC42D11862667700CC948C /* buried Tests */ = {
-			isa = PBXGroup;
-			children = (
-				44FC42D71862667700CC948C /* buried_Tests.m */,
-				44FC42D21862667700CC948C /* Supporting Files */,
-			);
-			name = "buried Tests";
-			path = buried.Tests;
-			sourceTree = "<group>";
-		};
-		44FC42D21862667700CC948C /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				44FC42D31862667700CC948C /* buriedTests-Info.plist */,
-				44FC42D41862667700CC948C /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
+			path = buried.;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,26 +206,8 @@
 			);
 			name = buried;
 			productName = buried.;
-			productReference = 30EF8FC0186962D60091D178 /* buried.app */;
+			productReference = 281E7A48188EA5B000C85066 /* buried.app */;
 			productType = "com.apple.product-type.application";
-		};
-		44FC42C91862667700CC948C /* buriedTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buriedTests" */;
-			buildPhases = (
-				44FC42C61862667700CC948C /* Sources */,
-				44FC42C71862667700CC948C /* Frameworks */,
-				44FC42C81862667700CC948C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				44FC42D01862667700CC948C /* PBXTargetDependency */,
-			);
-			name = buriedTests;
-			productName = buried.Tests;
-			productReference = 30EF8FC318696D8A0091D178 /* buriedTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -312,11 +218,6 @@
 				CLASSPREFIX = LT;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Loftier Thoughts";
-				TargetAttributes = {
-					44FC42C91862667700CC948C = {
-						TestTargetID = 44FC42A51862667700CC948C;
-					};
-				};
 			};
 			buildConfigurationList = 44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -332,7 +233,6 @@
 			projectRoot = "";
 			targets = (
 				44FC42A51862667700CC948C /* buried */,
-				44FC42C91862667700CC948C /* buriedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -342,36 +242,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44FC42C01862667700CC948C /* Main_iPad.storyboard in Resources */,
-				281E7A42188E875A00C85066 /* ParseLogo.jpg in Resources */,
-				281E7A45188E875A00C85066 /* Lime.jpg in Resources */,
-				44FC42C51862667700CC948C /* Images.xcassets in Resources */,
-				3083BFEA1869ACC0006E050F /* Icon@2x.png in Resources */,
-				3083BFE01869A97C006E050F /* LTLoginViewController.xib in Resources */,
-				3083BFEB1869ACC0006E050F /* Icon.png in Resources */,
-				281E7A43188E875A00C85066 /* Crowd.jpg in Resources */,
-				3083BFED1869ACC0006E050F /* login-button-small-pressed@2x.png in Resources */,
-				3083BFF41869AEC9006E050F /* buriedlogo_250height.png in Resources */,
-				3083BFEF1869ACC0006E050F /* login-button-small@2x.png in Resources */,
-				44FC42BD1862667700CC948C /* Main_iPhone.storyboard in Resources */,
-				3083BFDB1869A945006E050F /* LTBuryItViewController.xib in Resources */,
-				3083BFF01869ACC0006E050F /* Default-568h@2x.png in Resources */,
-				281E7A44188E875A00C85066 /* Desert.jpg in Resources */,
-				44FC42B41862667700CC948C /* InfoPlist.strings in Resources */,
-				281E7A46188E875A00C85066 /* Sunflowers.jpg in Resources */,
-				3083BFF11869ACC0006E050F /* Default.png in Resources */,
-				281E7A47188E875A00C85066 /* 37x-Checkmark.png in Resources */,
-				3083BFF21869ACC0006E050F /* Default@2x.png in Resources */,
-				3083BFEC1869ACC0006E050F /* login-button-small-pressed.png in Resources */,
-				3083BFEE1869ACC0006E050F /* login-button-small.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		44FC42C81862667700CC948C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				44FC42D61862667700CC948C /* InfoPlist.strings in Resources */,
+				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
+				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
+				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
+				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
+				281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */,
+				281E7AC0188EA66800C85066 /* login-button-small-pressed@2x.png in Resources */,
+				281E7AB8188EA66800C85066 /* Default@2x.png in Resources */,
+				281E7AB7188EA66800C85066 /* Default.png in Resources */,
+				281E7AB9188EA66800C85066 /* Desert.jpg in Resources */,
+				281E7AC2188EA66800C85066 /* login-button-small@2x.png in Resources */,
+				281E7ABD188EA66800C85066 /* Images.xcassets in Resources */,
+				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
+				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
+				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
+				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
+				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
+				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
+				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
+				281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,66 +271,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3083BFD91869A945006E050F /* LTAppDelegate.m in Sources */,
-				3083BFDA1869A945006E050F /* LTBuryItViewController.m in Sources */,
-				3083BFDF1869A97C006E050F /* LTLoginViewController.m in Sources */,
-				44FC42B61862667700CC948C /* main.m in Sources */,
-				281E7A3B188E833000C85066 /* MBProgressHUD.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		44FC42C61862667700CC948C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				44FC42D81862667700CC948C /* buried_Tests.m in Sources */,
+				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
+				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
+				281E7AC9188EA66800C85066 /* MBProgressHUD.m in Sources */,
+				281E7AC8188EA66800C85066 /* main.m in Sources */,
+				281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		44FC42D01862667700CC948C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 44FC42A51862667700CC948C /* buried */;
-			targetProxy = 44FC42CF1862667700CC948C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		44FC42B21862667700CC948C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44FC42B31862667700CC948C /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		44FC42BB1862667700CC948C /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44FC42BC1862667700CC948C /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		44FC42BE1862667700CC948C /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44FC42BF1862667700CC948C /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		44FC42D41862667700CC948C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				44FC42D51862667700CC948C /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		44FC42D91862667700CC948C /* Debug */ = {
@@ -529,8 +367,8 @@
 					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried-Prefix.pch";
-				INFOPLIST_FILE = "buried./buried-Info.plist";
+				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
+				INFOPLIST_FILE = "buried/buried-Info.plist";
 				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
@@ -548,53 +386,11 @@
 					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried-Prefix.pch";
-				INFOPLIST_FILE = "buried./buried-Info.plist";
+				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
+				INFOPLIST_FILE = "buried/buried-Info.plist";
 				OTHER_LDFLAGS = "-fobjc-arc";
 				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		44FC42DF1862667700CC948C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/buried..app/buried.";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "buried.Tests/buriedTests-Info.plist";
-				PRODUCT_NAME = buriedTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		44FC42E01862667700CC948C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/buried..app/buried.";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
-				INFOPLIST_FILE = "buried.Tests/buriedTests-Info.plist";
-				PRODUCT_NAME = buriedTests;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -615,15 +411,6 @@
 			buildConfigurations = (
 				44FC42DC1862667700CC948C /* Debug */,
 				44FC42DD1862667700CC948C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buriedTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				44FC42DF1862667700CC948C /* Debug */,
-				44FC42E01862667700CC948C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
