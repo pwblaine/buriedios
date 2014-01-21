@@ -204,7 +204,6 @@
 				3083BFD41869A945006E050F /* LTAppDelegate.h */,
 				3083BFD51869A945006E050F /* LTAppDelegate.m */,
 				3083BFDC1869A97C006E050F /* LTLoginViewController.h */,
-				281E7A38188E831000C85066 /* MBProgressHUD */,
 				3083BFDD1869A97C006E050F /* LTLoginViewController.m */,
 				3083BFDE1869A97C006E050F /* LTLoginViewController.xib */,
 				3083BFD61869A945006E050F /* LTBuryItViewController.h */,
@@ -213,6 +212,7 @@
 				44FC42BB1862667700CC948C /* Main_iPhone.storyboard */,
 				44FC42BE1862667700CC948C /* Main_iPad.storyboard */,
 				44FC42C41862667700CC948C /* Images.xcassets */,
+				281E7A38188E831000C85066 /* MBProgressHUD */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 			);
 			path = buried.;
