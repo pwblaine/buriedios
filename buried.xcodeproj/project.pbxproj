@@ -169,7 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				44FC42AF1862667700CC948C /* buried */,
-				44FC42D11862667700CC948C /* buried.Tests */,
+				44FC42D11862667700CC948C /* buried Tests */,
 				44FC42A81862667700CC948C /* Frameworks */,
 				30EF8FC0186962D60091D178 /* buried.app */,
 				30EF8FC318696D8A0091D178 /* buriedTests.xctest */,
@@ -246,12 +246,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		44FC42D11862667700CC948C /* buried.Tests */ = {
+		44FC42D11862667700CC948C /* buried Tests */ = {
 			isa = PBXGroup;
 			children = (
 				44FC42D71862667700CC948C /* buried_Tests.m */,
 				44FC42D21862667700CC948C /* Supporting Files */,
 			);
+			name = "buried Tests";
 			path = buried.Tests;
 			sourceTree = "<group>";
 		};
