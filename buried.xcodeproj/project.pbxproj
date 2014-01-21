@@ -93,21 +93,21 @@
 		3083BFE91869ACC0006E050F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		3083BFF31869AEC9006E050F /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buriedlogo_250height.png; sourceTree = "<group>"; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		30EF8FC0186962D60091D178 /* buried..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried..app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30EF8FC0186962D60091D178 /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30EF8FC11869630E0091D178 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		30EF8FC318696D8A0091D178 /* buried.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buried.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		30EF8FC318696D8A0091D178 /* buriedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = buriedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		44FC42B11862667700CC948C /* buried.-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.-Info.plist"; sourceTree = "<group>"; };
+		44FC42B11862667700CC948C /* buried-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried-Info.plist"; sourceTree = "<group>"; };
 		44FC42B31862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		44FC42B51862667700CC948C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		44FC42B71862667700CC948C /* buried.-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "buried.-Prefix.pch"; sourceTree = "<group>"; };
+		44FC42B71862667700CC948C /* buried-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "buried-Prefix.pch"; sourceTree = "<group>"; };
 		44FC42BC1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		44FC42BF1862667700CC948C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		44FC42C41862667700CC948C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		44FC42CB1862667700CC948C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		44FC42D31862667700CC948C /* buried.Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buried.Tests-Info.plist"; sourceTree = "<group>"; };
+		44FC42D31862667700CC948C /* buriedTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "buriedTests-Info.plist"; sourceTree = "<group>"; };
 		44FC42D51862667700CC948C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		44FC42D71862667700CC948C /* buried_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = buried_Tests.m; sourceTree = "<group>"; };
 		44FC42E3186267AC00CC948C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -168,11 +168,11 @@
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
-				44FC42AF1862667700CC948C /* buried. */,
+				44FC42AF1862667700CC948C /* buried */,
 				44FC42D11862667700CC948C /* buried.Tests */,
 				44FC42A81862667700CC948C /* Frameworks */,
-				30EF8FC0186962D60091D178 /* buried..app */,
-				30EF8FC318696D8A0091D178 /* buried.Tests.xctest */,
+				30EF8FC0186962D60091D178 /* buried.app */,
+				30EF8FC318696D8A0091D178 /* buriedTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -198,7 +198,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		44FC42AF1862667700CC948C /* buried. */ = {
+		44FC42AF1862667700CC948C /* buried */ = {
 			isa = PBXGroup;
 			children = (
 				3083BFD41869A945006E050F /* LTAppDelegate.h */,
@@ -215,6 +215,7 @@
 				281E7A38188E831000C85066 /* MBProgressHUD */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 			);
+			name = buried;
 			path = buried.;
 			sourceTree = "<group>";
 		};
@@ -237,10 +238,10 @@
 				3083BFE71869ACC0006E050F /* Default-568h@2x.png */,
 				3083BFE81869ACC0006E050F /* Default.png */,
 				3083BFE91869ACC0006E050F /* Default@2x.png */,
-				44FC42B11862667700CC948C /* buried.-Info.plist */,
+				44FC42B11862667700CC948C /* buried-Info.plist */,
 				44FC42B21862667700CC948C /* InfoPlist.strings */,
 				44FC42B51862667700CC948C /* main.m */,
-				44FC42B71862667700CC948C /* buried.-Prefix.pch */,
+				44FC42B71862667700CC948C /* buried-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -257,7 +258,7 @@
 		44FC42D21862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				44FC42D31862667700CC948C /* buried.Tests-Info.plist */,
+				44FC42D31862667700CC948C /* buriedTests-Info.plist */,
 				44FC42D41862667700CC948C /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -266,9 +267,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		44FC42A51862667700CC948C /* buried. */ = {
+		44FC42A51862667700CC948C /* buried */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 44FC42DB1862667700CC948C /* Build configuration list for PBXNativeTarget "buried." */;
+			buildConfigurationList = 44FC42DB1862667700CC948C /* Build configuration list for PBXNativeTarget "buried" */;
 			buildPhases = (
 				44FC42A21862667700CC948C /* Sources */,
 				44FC42A31862667700CC948C /* Frameworks */,
@@ -278,14 +279,14 @@
 			);
 			dependencies = (
 			);
-			name = buried.;
+			name = buried;
 			productName = buried.;
-			productReference = 30EF8FC0186962D60091D178 /* buried..app */;
+			productReference = 30EF8FC0186962D60091D178 /* buried.app */;
 			productType = "com.apple.product-type.application";
 		};
-		44FC42C91862667700CC948C /* buried.Tests */ = {
+		44FC42C91862667700CC948C /* buriedTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buried.Tests" */;
+			buildConfigurationList = 44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buriedTests" */;
 			buildPhases = (
 				44FC42C61862667700CC948C /* Sources */,
 				44FC42C71862667700CC948C /* Frameworks */,
@@ -296,9 +297,9 @@
 			dependencies = (
 				44FC42D01862667700CC948C /* PBXTargetDependency */,
 			);
-			name = buried.Tests;
+			name = buriedTests;
 			productName = buried.Tests;
-			productReference = 30EF8FC318696D8A0091D178 /* buried.Tests.xctest */;
+			productReference = 30EF8FC318696D8A0091D178 /* buriedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -316,7 +317,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried." */;
+			buildConfigurationList = 44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -329,8 +330,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				44FC42A51862667700CC948C /* buried. */,
-				44FC42C91862667700CC948C /* buried.Tests */,
+				44FC42A51862667700CC948C /* buried */,
+				44FC42C91862667700CC948C /* buriedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -401,7 +402,7 @@
 /* Begin PBXTargetDependency section */
 		44FC42D01862667700CC948C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 44FC42A51862667700CC948C /* buried. */;
+			target = 44FC42A51862667700CC948C /* buried */;
 			targetProxy = 44FC42CF1862667700CC948C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -521,15 +522,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
-				INFOPLIST_FILE = "buried./buried.-Info.plist";
+				GCC_PREFIX_HEADER = "buried./buried-Prefix.pch";
+				INFOPLIST_FILE = "buried./buried-Info.plist";
 				OTHER_LDFLAGS = "-fobjc-arc";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -539,15 +541,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/patrickblaine/Documents/buriedios,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
-				INFOPLIST_FILE = "buried./buried.-Info.plist";
+				GCC_PREFIX_HEADER = "buried./buried-Prefix.pch";
+				INFOPLIST_FILE = "buried./buried-Info.plist";
 				OTHER_LDFLAGS = "-fobjc-arc";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -568,8 +571,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "buried.Tests/buried.Tests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "buried.Tests/buriedTests-Info.plist";
+				PRODUCT_NAME = buriedTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -587,8 +590,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried./buried.-Prefix.pch";
-				INFOPLIST_FILE = "buried.Tests/buried.Tests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "buried.Tests/buriedTests-Info.plist";
+				PRODUCT_NAME = buriedTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -597,7 +600,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried." */ = {
+		44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44FC42D91862667700CC948C /* Debug */,
@@ -606,7 +609,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		44FC42DB1862667700CC948C /* Build configuration list for PBXNativeTarget "buried." */ = {
+		44FC42DB1862667700CC948C /* Build configuration list for PBXNativeTarget "buried" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44FC42DC1862667700CC948C /* Debug */,
@@ -615,7 +618,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buried.Tests" */ = {
+		44FC42DE1862667700CC948C /* Build configuration list for PBXNativeTarget "buriedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				44FC42DF1862667700CC948C /* Debug */,
