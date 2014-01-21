@@ -23,7 +23,9 @@
     // ****************************************************************************
     // Your Facebook application id is configured in Info.plist.
     // ****************************************************************************
-    [PFFacebookUtils initializeFacebookWithUrlShemeSuffix:@""];
+    [PFFacebookUtils initializeFacebook];
+    
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     // Override point for customization after application launch.
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];

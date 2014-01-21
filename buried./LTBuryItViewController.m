@@ -41,6 +41,12 @@
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = logoutButton;
     
+    // Add camera navigation bar button
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = cameraButton;
+    
+    [self setMessageToUserForTimeframe];
+    
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -166,31 +172,77 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 {
     if ([self validateFields])
     {
+        PFUser *user = [PFUser currentUser];
         PFObject *capsule = [PFObject objectWithClassName:@"capsule"];
         NSString *email = emailTextField.text;
         NSString *thought = thoughtTextView.text;
+        
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
+        
         if ([email isEqualToString:@""])
-            capsule[@"email"] = [[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"];
+            capsule[@"email"] = [[user objectForKey:@"profile"] objectForKey:@"email"];
         else
             capsule[@"email"] = email;
+        
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"from"] = [[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"];
-        [capsule saveInBackground];
+        capsule[@"from"] = email;
         
-        NSLog(@"current date is day %@, interval %@",[self getDaysSinceLaunch],[self getIntervalOfDay]);
-        NSLog(@"a thought was buried by %@ and will be delivered %@",capsule[@"from"], capsule[@"timeframe"]);
+        PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
         
-        messagesToUserLabel.textColor = successColor;
-        messagesToUserLabel.text = @"your thought has been buried...";
+        capsule[@"image"] = imageFile;
         
-        emailTextField.text = @"";
-        thoughtTextView.text = @"";
+        HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
         
-        [timeframeSegmentedControl setSelectedSegmentIndex:0];
+        // Set determinate mode
+        HUD.mode = MBProgressHUDModeDeterminate;
+        HUD.delegate = self;
+        HUD.labelText = @"Uploading";
+        [HUD show:YES];
+        
+        // Save PFFile
+        [capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                
+            //Hide determinate HUD
+            [HUD hide:YES];
+            
+            // Show checkmark
+            HUD = [[MBProgressHUD alloc] initWithView:self.view];
+            [self.view addSubview:HUD];
+            
+            // The sample image is based on the work by http://www.pixelpressicons.com, http://creativecommons.org/licenses/by/2.5/ca/
+            // Make the customViews 37 by 37 pixels for best results (those are the bounds of the build-in progress indicators)
+            HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+            
+            // Set custom view mode
+            HUD.mode = MBProgressHUDModeCustomView;
+            
+            HUD.delegate = self;
+            
+                NSLog(@"current date is day %@, interval %@",[self getDaysSinceLaunch],[self getIntervalOfDay]);
+                NSLog(@"a thought was buried by %@ and will be delivered %@",capsule[@"from"], capsule[@"timeframe"]);
+                
+                messagesToUserLabel.textColor = successColor;
+                messagesToUserLabel.text = @"your thought has been buried...";
+                
+                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+                
+                emailTextField.text = @"";
+                thoughtTextView.text = @"";
+                
+                [timeframeSegmentedControl setSelectedSegmentIndex:0];
+                
+            } else{
+                [HUD hide:YES];
+                // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
     }
 }
+                 
 -(NSNumber *)getDaysSinceLaunch
 {
     PFObject *appVariables = [self getAppVariables];
@@ -218,6 +270,62 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     return [query getFirstObject];
 }
 
+#pragma mark - camera methods
+
+- (IBAction)cameraButtonTapped:(id)sender
+{
+    // Check for camera
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+        // Create image picker controller
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        
+        // Set source to the camera
+        imagePicker.sourceType =  UIImagePickerControllerSourceTypeCamera;
+        
+        // Delegate is self
+        imagePicker.delegate = self;
+        
+        // Show image picker
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
+    else{
+        // Device has no camera
+        UIImage *image;
+        int r = arc4random() % 5;
+        switch (r) {
+            case 0:
+                image = [UIImage imageNamed:@"ParseLogo.jpg"];
+                break;
+            case 1:
+                image = [UIImage imageNamed:@"Crowd.jpg"];
+                break;
+            case 2:
+                image = [UIImage imageNamed:@"Desert.jpg"];
+                break;
+            case 3:
+                image = [UIImage imageNamed:@"Lime.jpg"];
+                break;
+            case 4:
+                image = [UIImage imageNamed:@"Sunflowers.jpg"];
+                break;
+            default:
+                break;
+        }
+        
+        // Resize image
+        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+        [image drawInRect: CGRectMake(0, 0, 640, 960)];
+        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+        
+        messagesToUserLabel.textColor = successColor;
+        messagesToUserLabel.text = @"photo attached...";
+        
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+    }
+}
 
 #pragma mark - ()
 
@@ -238,5 +346,35 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 
 // Set received values if they are not nil and reload the table
 - (void)updateProfile {NSLog(@"updateProfile run");}
+
+#pragma mark UIImagePickerControllerDelegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // Access the uncropped image from info dictionary
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    
+    // Dismiss controller
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    // Resize image
+    UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+    [image drawInRect: CGRectMake(0, 0, 640, 960)];
+    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // Upload image
+    NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+    selectedImageData = imageData;
+}
+
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+    // Remove HUD from screen when the HUD hides
+    [HUD removeFromSuperview];
+	HUD = nil;
+}
 
 @end

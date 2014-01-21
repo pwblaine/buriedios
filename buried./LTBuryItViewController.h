@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "MBProgressHUD.h"
 
-@interface LTBuryItViewController : UIViewController
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -17,7 +18,13 @@
     IBOutlet UILabel *messagesToUserLabel;
     UIColor *errorColor;
     UIColor *successColor;
+    NSData *selectedImageData;
+    
+    MBProgressHUD *HUD;
+    MBProgressHUD *refreshHUD;
 }
+
+- (IBAction)cameraButtonTapped:(id)sender;
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender;
 
