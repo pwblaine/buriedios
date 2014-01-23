@@ -233,6 +233,11 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
                 
                 [timeframeSegmentedControl setSelectedSegmentIndex:0];
                 
+                
+                UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
+                self.navigationItem.rightBarButtonItem = cameraButton;
+                self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+                
             } else{
                 [HUD hide:YES];
                 // Log details of the failure
@@ -365,6 +370,15 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     // Upload image
     NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
     selectedImageData = imageData;
+    
+    // Resize image
+    UIGraphicsBeginImageContext(CGSizeMake(32, 32));
+    [image drawInRect: CGRectMake(0, 0, 32, 32)];
+    UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // Tint Camera button after picture taken
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem backArrowButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
 }
 
 #pragma mark -
