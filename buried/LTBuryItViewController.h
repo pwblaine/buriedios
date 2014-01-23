@@ -19,13 +19,15 @@
     IBOutlet UILabel *messagesToUserLabel;
     UIColor *errorColor;
     UIColor *successColor;
-    NSData *selectedImageData;
+    UIImage *theImage;
     
     MBProgressHUD *HUD;
     MBProgressHUD *refreshHUD;
 }
 
+-(void)resetCammra;
 - (IBAction)cameraButtonTapped:(id)sender;
+-(void)deletePhoto;
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender;
 
@@ -34,6 +36,7 @@
 -(void)clearMessageToUser;
 
 -(BOOL)validateFields;
+-(BOOL)clearFields;
 
 //UITextField Delegate Methods
 -(BOOL)textFieldShouldReturn:(UITextField *)textField;

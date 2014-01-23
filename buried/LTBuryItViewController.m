@@ -7,6 +7,7 @@
 //
 
 #import "LTBuryItViewController.h"
+#import "LTPhotoDetailViewController.h"
 
 @interface LTBuryItViewController ()
 
@@ -168,6 +169,38 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     return YES;
 }
 
+-(void)resetCammra
+{
+    // Add camera navigation bar button
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = cameraButton;
+}
+
+-(void)deletePhoto
+{
+    theImage = nil;
+    messagesToUserLabel.text = @"photo deleted...";
+    messagesToUserLabel.textColor =  errorColor;
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+}
+
+-(BOOL)clearFields
+{
+    emailTextField.text = @"";
+    thoughtTextView.text = @"";
+    
+    [timeframeSegmentedControl setSelectedSegmentIndex:0];
+    
+    theImage = nil;
+    [self resetCammra];
+    
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = cameraButton;
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+    
+    return YES;
+}
+
 -(IBAction)buryIt:(id)sender
 {
     if ([self validateFields])
@@ -186,6 +219,14 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
         capsule[@"from"] = email;
+        
+        // Resize image
+        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+        [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
+        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
         
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
         
@@ -227,16 +268,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
                 messagesToUserLabel.text = @"your thought has been buried...";
                 
                 [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-                
-                emailTextField.text = @"";
-                thoughtTextView.text = @"";
-                
-                [timeframeSegmentedControl setSelectedSegmentIndex:0];
-                
-                
-                UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
-                self.navigationItem.rightBarButtonItem = cameraButton;
-                self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
+                [self clearFields];
                 
             } else{
                 [HUD hide:YES];
@@ -278,6 +310,8 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 
 - (IBAction)cameraButtonTapped:(id)sender
 {
+    if (!theImage)
+    {
     // Check for camera
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
         // Create image picker controller
@@ -317,17 +351,27 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         }
         
         // Resize image
-        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-        [image drawInRect: CGRectMake(0, 0, 640, 960)];
-        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsBeginImageContext(CGSizeMake(32, 32));
+        [image drawInRect: CGRectMake(0, 0, 32, 32)];
+        UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+        // Tint Camera button after picture taken
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem backArrowButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
         
         messagesToUserLabel.textColor = successColor;
         messagesToUserLabel.text = @"photo attached...";
         
         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+        
+        theImage = image;
+        }
+    } else {
+        LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
+        photoDetailViewController.theImage = theImage;
+        photoDetailViewController.callingViewController = self;
+        photoDetailViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+        [self presentViewController:photoDetailViewController animated:YES completion:nil];
     }
 }
 
@@ -336,7 +380,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 - (void)logoutButtonTouchHandler:(id)sender {
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
     {
-        NSLog(@"Will need to log out");
+        NSLog(@"Logging out...");
     }
     [[PFFacebookUtils session] closeAndClearTokenInformation];
     [[PFFacebookUtils session] close];
@@ -345,6 +389,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller
+    theImage = nil;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -361,15 +406,8 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    // Resize image
-    UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-    [image drawInRect: CGRectMake(0, 0, 640, 960)];
-    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    // Upload image
-    NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
-    selectedImageData = imageData;
+    // Save the image
+    theImage = image;
     
     // Resize image
     UIGraphicsBeginImageContext(CGSizeMake(32, 32));
@@ -390,4 +428,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
 	HUD = nil;
 }
 
+-(void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [self clearFields];
+}
 @end

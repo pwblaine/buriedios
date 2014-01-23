@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */; };
+		28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */; };
+		28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */; };
 		281E7A35188E813A00C85066 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FBC186959880091D178 /* Parse.framework */; };
 		281E7A36188E815600C85066 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FC11869630E0091D178 /* FacebookSDK.framework */; };
 		281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A8A188EA66800C85066 /* 37x-Checkmark.png */; };
@@ -51,6 +53,9 @@
 /* Begin PBXFileReference section */
 		280657AA18910008007AAB22 /* UIBarButtonItem+_projectButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+_projectButtons.h"; path = "buried/UIBarButtonItem+_projectButtons.h"; sourceTree = "<group>"; };
 		280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBarButtonItem+_projectButtons.m"; path = "buried/UIBarButtonItem+_projectButtons.m"; sourceTree = "<group>"; };
+		28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTPhotoDetailViewController.h; path = buried/LTPhotoDetailViewController.h; sourceTree = "<group>"; };
+		28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTPhotoDetailViewController.m; path = buried/LTPhotoDetailViewController.m; sourceTree = "<group>"; };
+		28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTPhotoDetailViewController.xib; path = buried/LTPhotoDetailViewController.xib; sourceTree = "<group>"; };
 		281E7A8A188EA66800C85066 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark.png"; path = "buried/37x-Checkmark.png"; sourceTree = SOURCE_ROOT; };
 		281E7A90188EA66800C85066 /* buried-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "buried-Info.plist"; path = "buried/buried-Info.plist"; sourceTree = SOURCE_ROOT; };
 		281E7A91188EA66800C85066 /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -129,11 +134,14 @@
 			children = (
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
-				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
-				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
 				280657AA18910008007AAB22 /* UIBarButtonItem+_projectButtons.h */,
 				280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */,
+				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
+				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
 				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
+				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
+				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
+				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
 				281E7AA8188EA66800C85066 /* LTLoginViewController.h */,
 				281E7AA9188EA66800C85066 /* LTLoginViewController.m */,
 				281E7AAA188EA66800C85066 /* LTLoginViewController.xib */,
@@ -248,6 +256,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
 				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
 				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
@@ -277,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */,
 				280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,

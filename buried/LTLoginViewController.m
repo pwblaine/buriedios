@@ -21,7 +21,7 @@
     
     // Add logout navigation bar button
     UIBarButtonItem *loginButton = [[UIBarButtonItem alloc] initWithTitle:@"Log In" style:UIBarButtonItemStyleBordered target:self action:@selector(loginButtonTouchHandler:)];
-    self.navigationItem.leftBarButtonItem = loginButton;
+    self.navigationItem.rightBarButtonItem = loginButton;
 }
 
 
