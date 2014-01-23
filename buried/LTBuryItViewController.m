@@ -357,7 +357,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
         UIGraphicsEndImageContext();
         
         // Tint Camera button after picture taken
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem backArrowButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
         
         messagesToUserLabel.textColor = successColor;
         messagesToUserLabel.text = @"photo attached...";
@@ -416,7 +416,7 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     UIGraphicsEndImageContext();
     
     // Tint Camera button after picture taken
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem backArrowButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
 }
 
 #pragma mark -

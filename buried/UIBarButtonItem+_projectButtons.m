@@ -10,7 +10,7 @@
 
 @implementation UIBarButtonItem (_projectButtons)
 
-+(UIBarButtonItem*)backArrowButtonWithTarget:(id)target action:(SEL)action withImage:(UIImage *)buttonImage
++(UIBarButtonItem*)customNavBarButtonWithTarget:(id)target action:(SEL)action withImage:(UIImage *)buttonImage
 {
     
     //create the button and assign the image

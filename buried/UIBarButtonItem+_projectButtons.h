@@ -10,7 +10,7 @@
 
 @interface UIBarButtonItem (_projectButtons)
 
-+(UIBarButtonItem *)backArrowButtonWithTarget:(id)target action:(SEL)action withImage:(UIImage *)image;
++(UIBarButtonItem *)customNavBarButtonWithTarget:(id)target action:(SEL)action withImage:(UIImage *)image;
 
 
 @end
