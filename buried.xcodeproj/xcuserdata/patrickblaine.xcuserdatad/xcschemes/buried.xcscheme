@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "44FC42A51862667700CC948C"
                BuildableName = "buried.app"
-               BlueprintName = "buried"
+               BlueprintName = "buried."
                ReferencedContainer = "container:buried.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "44FC42A51862667700CC948C"
             BuildableName = "buried.app"
-            BlueprintName = "buried"
+            BlueprintName = "buried."
             ReferencedContainer = "container:buried.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "44FC42A51862667700CC948C"
             BuildableName = "buried.app"
-            BlueprintName = "buried"
+            BlueprintName = "buried."
             ReferencedContainer = "container:buried.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,7 +81,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "44FC42A51862667700CC948C"
             BuildableName = "buried.app"
-            BlueprintName = "buried"
+            BlueprintName = "buried."
             ReferencedContainer = "container:buried.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
