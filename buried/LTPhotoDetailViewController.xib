@@ -6,7 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTPhotoDetailViewController">
             <connections>
-                <outlet property="deleteButton" destination="UAy-c1-Uvl" id="acF-6f-qFg"/>
+                <outlet property="discardButton" destination="UAy-c1-Uvl" id="9WK-pr-izt"/>
                 <outlet property="imageView" destination="9Vl-6O-3Od" id="Cjg-Ta-dGR"/>
                 <outlet property="keepButton" destination="SxH-Tn-xha" id="I4b-jC-49g"/>
                 <outlet property="view" destination="1" id="5Jf-GV-U0L"/>
@@ -21,11 +21,11 @@
                     <rect key="frame" x="40" y="420" width="80" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <state key="normal" title="delete">
+                    <state key="normal" title="discard">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="deleteButtonTouched:" destination="-1" eventType="touchUpInside" id="DU1-qv-bxt"/>
+                        <action selector="discardButtonTouched:" destination="-1" eventType="touchUpInside" id="ayB-Bh-Blm"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SxH-Tn-xha" userLabel="keep">

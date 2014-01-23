@@ -27,7 +27,7 @@
 
 -(void)resetCammra;
 - (IBAction)cameraButtonTapped:(id)sender;
--(void)deletePhoto;
+-(void)discardPhoto;
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender;
 

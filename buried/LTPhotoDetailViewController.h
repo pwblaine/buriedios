@@ -10,7 +10,7 @@
 
 @interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate>
 {
-    IBOutlet UIButton *deleteButton;
+    IBOutlet UIButton *discardButton;
     IBOutlet UIButton *keepButton;
     IBOutlet UIImageView *imageView;
 }
@@ -18,7 +18,7 @@
 @property UIImage *theImage;
 @property (retain) LTBuryItViewController *callingViewController;
 
--(IBAction)deleteButtonTouched:(id)sender;
+-(IBAction)discardButtonTouched:(id)sender;
 
 -(IBAction)keepButtonTouched:(id)sender;
 

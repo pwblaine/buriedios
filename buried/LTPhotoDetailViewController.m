@@ -30,11 +30,11 @@
     // Dispose of any resources that can be recreated.
 }
 
--(IBAction)deleteButtonTouched:(id)sender
+-(IBAction)discardButtonTouched:(id)sender
 {
     self.theImage = nil;
     [callingViewController resetCammra];
-    [callingViewController deletePhoto];
+    [callingViewController discardPhoto];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

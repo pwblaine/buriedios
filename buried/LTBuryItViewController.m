@@ -176,10 +176,10 @@ messagesToUserLabel.text = @"your thought will unearth in the next 24 hours";
     self.navigationItem.rightBarButtonItem = cameraButton;
 }
 
--(void)deletePhoto
+-(void)discardPhoto
 {
     theImage = nil;
-    messagesToUserLabel.text = @"photo deleted...";
+    messagesToUserLabel.text = @"photo discarded...";
     messagesToUserLabel.textColor =  errorColor;
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
 }
