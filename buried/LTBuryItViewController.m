@@ -83,6 +83,7 @@
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
+    [self validateFields];
     [self.view endEditing:YES];
 }
 
