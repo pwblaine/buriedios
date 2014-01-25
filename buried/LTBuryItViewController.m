@@ -84,7 +84,6 @@
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
     [self.view endEditing:YES];
-    [self validateFields];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -110,26 +109,24 @@
 
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self clearMessageToUser];
     return YES;
 }
 
 -(BOOL)textViewDidBeginEditing:(UITextView *)textView
 {
-    [self clearMessageToUser];
     return YES;
 }
 
 -(void)setMessageToUserForTimeframe {
-messagesToUserLabel.textColor = [UIColor darkTextColor];
+messagesToUserLabel.textColor = [UIColor lightGrayColor];
     if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"soon"])
-messagesToUserLabel.text = @"this will unearth in the next 24 hours";
+messagesToUserLabel.text = @"will unearth in the next 24 hours";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"later"])
-        messagesToUserLabel.text = @"this will unearth in during the next 2-7 days";
+        messagesToUserLabel.text = @"will unearth in the next 2-7 days";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"someday"])
-        messagesToUserLabel.text = @"this will unearth in during the next 1-4 weeks";
+        messagesToUserLabel.text = @"will unearth in the next 1-4 weeks";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"forgotten"])
-        messagesToUserLabel.text = @"this will unearth in during the next 1-3 months";
+        messagesToUserLabel.text = @"will unearth in the next 1-3 months";
     else
     {
         messagesToUserLabel.textColor = errorColor;
