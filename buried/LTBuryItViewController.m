@@ -176,9 +176,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(void)discardPhoto
 {
     theImage = nil;
-    messagesToUserLabel.text = @"photo discarded...";
+    messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
 }
 
 -(BOOL)clearFields
@@ -357,9 +357,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
         
         messagesToUserLabel.textColor = successColor;
-        messagesToUserLabel.text = @"photo attached...";
+        messagesToUserLabel.text = @"photo attached";
         
-        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
         
         theImage = image;
         }
