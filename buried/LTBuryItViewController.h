@@ -25,7 +25,7 @@
     MBProgressHUD *refreshHUD;
 }
 
--(void)resetCammra;
+-(void)resetCamera;
 - (IBAction)cameraButtonTapped:(id)sender;
 -(void)discardPhoto;
 

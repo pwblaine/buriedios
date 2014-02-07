@@ -232,6 +232,11 @@
 				CLASSPREFIX = LT;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Loftier Thoughts";
+				TargetAttributes = {
+					44FC42A51862667700CC948C = {
+						DevelopmentTeam = 3562EE5B52;
+					};
+				};
 			};
 			buildConfigurationList = 44FC42A11862667700CC948C /* Build configuration list for PBXProject "buried" */;
 			compatibilityVersion = "Xcode 3.2";

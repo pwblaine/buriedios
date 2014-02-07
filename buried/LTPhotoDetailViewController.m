@@ -33,7 +33,7 @@
 -(IBAction)discardButtonTouched:(id)sender
 {
     self.theImage = nil;
-    [callingViewController resetCammra];
+    [callingViewController resetCamera];
     [callingViewController discardPhoto];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }

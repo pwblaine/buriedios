@@ -167,7 +167,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     return YES;
 }
 
--(void)resetCammra
+-(void)resetCamera
 {
     // Add camera navigation bar button
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
@@ -190,7 +190,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     [timeframeSegmentedControl setSelectedSegmentIndex:0];
     
     theImage = nil;
-    [self resetCammra];
+    [self resetCamera];
     
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
@@ -427,6 +427,5 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 }
 
 -(void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [self clearFields];
 }
 @end
