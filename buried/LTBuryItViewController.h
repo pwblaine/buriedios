@@ -39,6 +39,7 @@
 
 -(BOOL)validateFields;
 -(BOOL)clearFields;
+-(BOOL)checkForItems;
 
 //UITextField Delegate Methods
 -(BOOL)textFieldShouldReturn:(UITextField *)textField;

@@ -78,6 +78,8 @@
             NSLog(@"Some other error: %@", error);
         }
      }];
+    
+    
 }
 
 
@@ -118,6 +120,7 @@
 -(void)clearMessageToUser
 {
     messagesToUserLabel.text = @"";
+    
 }
 
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField
@@ -145,6 +148,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"every journey needs to end sometime...";
     }
+    
 }
 
 -(IBAction)timeframeClicked:(id)sender
@@ -152,13 +156,22 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     [self setMessageToUserForTimeframe];
 }
 
--(BOOL)validateFields
+-(BOOL)checkForItems
 {
     // Test for items in the capsule if so change the button to cancel
     if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0)
+    {
         self.navigationItem.leftBarButtonItem.title = @"Cancel";
-    else
+    }
+    else if (self.navigationItem.leftBarButtonItem)
+    {
         self.navigationItem.leftBarButtonItem.title = @"Log Out";
+    }
+        return YES;
+}
+
+-(BOOL)validateFields
+{
     
     // Get contents of fields
    // NSString *email = emailTextField.text;
@@ -186,7 +199,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     } else {
         [self setMessageToUserForTimeframe];
     }
-    
     return YES;
 }
 
@@ -195,6 +207,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Add camera navigation bar button
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
+    
+    
 }
 
 -(void)discardPhoto
@@ -221,6 +235,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
     
     [self validateFields];
+    
     
     return YES;
 }
@@ -410,18 +425,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark - ()
 
 - (void)logoutButtonTouchHandler:(id)sender {
-    if (thoughtTextView.text.length || theImage || self.selectedFBEmailString.length)
+    if (thoughtTextView.text.length || theImage || self.selectedFBEmailString.length || [self.navigationItem.leftBarButtonItem.title isEqualToString:@"Cancel"])
     {
         NSLog(@"Cancelling capsule");
         [self clearFields];
         [self resetCamera];
-        NSLog(@"%@",self.selectedFBEmailString);
         self.selectedFBEmailString = nil;
         [self validateFields];
-    }
-    else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-    {
-        NSLog(@"Logging out...");
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller
@@ -455,7 +465,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Tint Camera button after picture taken
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
     
-    self.navigationItem.leftBarButtonItem.title = @"Cancel";
+    
 }
 
 #pragma mark - Partner Classes
@@ -532,14 +542,15 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             }];
     }
     
-    [text appendString:[[self.friendPickerController.selection objectAtIndex:0] name]];
-    
     if (self.friendPickerController.selection.count > 1) {
+        [text appendString:[[self.friendPickerController.selection objectAtIndex:0] name]];
         [text appendFormat:@" + %d",self.friendPickerController.selection.count - 1];
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
     }
     if (text.length > 0)
+    {
         [self fillTextBoxAndDismiss:text];
+        
+    }
     else
         [self fillTextBoxAndDismiss:nil];
 }
