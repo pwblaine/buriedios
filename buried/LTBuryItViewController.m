@@ -192,7 +192,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         return YES;
     } else
         */
-        if (thought.length == 0) {
+    // either or for delivery
+        if (thought.length == 0 && !theImage) {
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"nothing buried, nothing gained...";
         return NO;
@@ -249,7 +250,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     else
         email = [[user objectForKey:@"profile"] objectForKey:@"email"];
     NSLog(@"Current recipients: %@",email);
-    if ([self validateFields] && self.selectedFBEmailString)
+    if ([self validateFields])
     {
         NSLog(@"works");
         PFObject *capsule = [PFObject objectWithClassName:@"capsule"];
@@ -425,8 +426,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark - ()
 
 - (void)logoutButtonTouchHandler:(id)sender {
-    if (thoughtTextView.text.length || theImage || self.selectedFBEmailString.length || [self.navigationItem.leftBarButtonItem.title isEqualToString:@"Cancel"])
-    {
+   
         NSLog(@"Cancelling capsule");
         [self clearFields];
         [self resetCamera];
@@ -437,7 +437,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Return to login view controller
     theImage = nil;
     [self.navigationController popToRootViewControllerAnimated:YES];
-    }
+    
 }
 
 // Set received values if they are not nil and reload the table
@@ -544,7 +544,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     if (self.friendPickerController.selection.count > 1) {
         [text appendString:[[self.friendPickerController.selection objectAtIndex:0] name]];
-        [text appendFormat:@" + %d",self.friendPickerController.selection.count - 1];
+        [text appendFormat:@" + %@",[NSNumber numberWithDouble:(self.friendPickerController.selection.count - 1)]];
     }
     if (text.length > 0)
     {
