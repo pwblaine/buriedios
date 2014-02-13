@@ -11,7 +11,7 @@
 #import "MBProgressHUD.h"
 #import "UIBarButtonItem+_projectButtons.h"
 
-@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate>
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -25,9 +25,11 @@
     MBProgressHUD *refreshHUD;
 }
 
--(void)resetCamera;
+- (IBAction)pickFriendsButtonClick:(id)sender;
+
 - (IBAction)cameraButtonTapped:(id)sender;
 -(void)discardPhoto;
+-(void)resetCamera;
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender;
 
