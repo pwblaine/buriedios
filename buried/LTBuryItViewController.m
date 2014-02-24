@@ -536,8 +536,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             }];
     }
     
-    if (self.friendPickerController.selection.count > 1) {
+    if (self.friendPickerController.selection.count >= 1) {
         [text appendString:[[self.friendPickerController.selection objectAtIndex:0] name]];
+        if (self.friendPickerController.selection.count > 1)
         [text appendFormat:@" + %@",[NSNumber numberWithDouble:(self.friendPickerController.selection.count - 1)]];
     }
     if (text.length > 0)
