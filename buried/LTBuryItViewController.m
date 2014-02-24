@@ -426,12 +426,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark - ()
 
 - (void)logoutButtonTouchHandler:(id)sender {
-   
-        NSLog(@"Cancelling capsule");
-        [self clearFields];
-        [self resetCamera];
-        self.selectedFBEmailString = nil;
-        [self validateFields];
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller
