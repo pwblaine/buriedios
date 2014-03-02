@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import "MBProgressHUD.h"
 
-@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, NSURLConnectionDelegate>
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -19,18 +19,10 @@
     UIColor *errorColor;
     UIColor *successColor;
     UIImage *theImage;
-    NSMutableData *profileImageData;
     
     MBProgressHUD *HUD;
     MBProgressHUD *refreshHUD;
 }
-
-#pragma mark - NSURLConnectionDataDelegate
-
-/* Callback delegate methods used for downloading the user's profile picture */
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection;
-- (void)updateUserProfile;
 
 - (IBAction)pickFriendsButtonClick:(id)sender;
 

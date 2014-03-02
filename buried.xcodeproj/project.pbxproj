@@ -45,6 +45,8 @@
 		286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
+		28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D2A21218C33354007EB808 /* LTUnearthedViewController.m */; };
+		28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
@@ -110,6 +112,9 @@
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
 		28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = "<group>"; };
+		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
+		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
+		28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTUnearthedViewController.xib; sourceTree = "<group>"; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -215,6 +220,9 @@
 				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
 				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
 				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
+				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
+				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
+				28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */,
 				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
 				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
 				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
@@ -351,6 +359,7 @@
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
+				28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */,
 				284B2D0118AC4A4800BB976F /* Project-Debug.xcconfig in Resources */,
 				284B2D0018AC4A4800BB976F /* Application.xcconfig in Resources */,
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
@@ -376,6 +385,7 @@
 				284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */,
 				286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */,
 				286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */,
+				28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */,
 				286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
