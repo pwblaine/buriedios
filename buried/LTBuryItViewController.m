@@ -69,8 +69,8 @@
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
             
             // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-            if ([PFUser currentUser][@"username"] != userData[@"username"])
-                [[PFUser currentUser] setUsername:userData[@"username"]];
+            if ([PFUser currentUser][@"username"] != userData[@"email"])
+                [[PFUser currentUser] setUsername:userData[@"email"]];
             if ([PFUser currentUser][@"email"] != userData[@"email"])
                 [[PFUser currentUser] setEmail:userData[@"email"]];
             
