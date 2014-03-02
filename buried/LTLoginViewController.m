@@ -38,15 +38,15 @@
         
         if (!user) {
             if (!error) {
-                NSLog(@"Uh oh. The user cancelled the Facebook login.");
+                NSLog(@"uh oh. The user cancelled the Facebook login.");
             } else {
-                NSLog(@"Uh oh. An error occurred: %@", error);
+                NSLog(@"uh oh. An error occurred: %@", error);
             }
         } else if (user.isNew) {
-            NSLog(@"User with facebook signed up and logged in!");
+            NSLog(@"user with facebook signed up and logged in!");
             [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
         } else {
-            NSLog(@"User with facebook logged in!");
+            NSLog(@"user with facebook logged in!");
             [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
         }
     }];

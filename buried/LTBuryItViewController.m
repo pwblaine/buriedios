@@ -69,14 +69,27 @@
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
             
             // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-            if ([PFUser currentUser][@"username"] != userData[@"email"])
-                [[PFUser currentUser] setUsername:userData[@"email"]];
-            if ([PFUser currentUser][@"email"] != userData[@"email"])
-                [[PFUser currentUser] setEmail:userData[@"email"]];
             
             [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
             [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
             [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+            
+            
+            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
+            {
+                
+                NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
+                
+                if (![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
+                {
+                    [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
+                    [[PFUser currentUser] setEmail:userData[@"email"]];
+                    NSLog(@"adding/updating email");
+                }
+                
+                [[PFUser currentUser] saveInBackground];
+                
+            } else {NSLog(@"user profile is up to date");}
             
             // Download the user's facebook profile picture
             profileImageData = [[NSMutableData alloc] init]; // the data will be loaded in here
@@ -92,27 +105,18 @@
             
             NSLog(@"profile picture download initiated");
             if (!urlConnection) {
-                NSLog(@"Failed to download picture");
+                NSLog(@"failed to download picture");
             }
             
-            if ([[PFUser currentUser][@"profile"] isDirty])
-            {
-                
-                NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
-            
-            [[PFUser currentUser] saveInBackground];
-            
-            } else {NSLog(@"user profile is up to date");}
+            NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
             
             emailTextField.placeholder = @"for my eyes only";
             
-            NSLog(@"User logged in with email: %@",[[PFUser currentUser] email]);
-            
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
-            NSLog(@"The facebook session was invalidated");
+            NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];
         } else {
-            NSLog(@"Some other error: %@", error);
+            NSLog(@"some other error: %@", error);
         }
      }];
     
@@ -598,34 +602,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     UIImage *image = [UIImage imageWithData:profileImageData];
     
-    UIImage *mediumRoundedImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationHigh];
+    UIImage *mediumRoundedImage = [image thumbnailImage:180 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationHigh];
     UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
     
     NSData *mediumRoundedImageData = UIImagePNGRepresentation(mediumRoundedImage);
     NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
-    
-    PFFile *fileImage = [PFFile fileWithData:profileImageData];
-    [fileImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            [[PFUser currentUser] setObject:fileImage forKey:@"profilePictureFull"];
-            if ([[PFUser currentUser][@"profilePictureFull"] isDirty])
-            {
-            [[PFUser currentUser] saveEventually];
-            NSLog(@"profile picture stored in full size");
-            } else {NSLog(@"full profile picture up to date");return;}
-        }
-    }];
 
     if (mediumRoundedImageData.length > 0) {
         PFFile *fileMediumRoundedImage = [PFFile fileWithData:mediumRoundedImageData];
         [fileMediumRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 [[PFUser currentUser] setObject:fileMediumRoundedImage forKey:@"profilePictureMedium"];
-                if ([[PFUser currentUser][@"profilePictureMedium"] isDirty])
-                {
                     [[PFUser currentUser] saveEventually];
                     NSLog(@"profile picture stored in medium size");
-                } else {NSLog(@"medium profile picture up to date");return;}
             }
         }];
     }
@@ -635,12 +624,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:@"profilePictureSmall"];
-                
-                if ([[PFUser currentUser][@"profilePictureSmall"] isDirty])
-                {
                 [[PFUser currentUser] saveEventually];
                     NSLog(@"profile picture stored in small size");
-                } else {NSLog(@"small profile picture up to date");return;}
             }
         }];
         
