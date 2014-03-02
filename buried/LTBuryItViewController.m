@@ -8,6 +8,7 @@
 
 #import "LTBuryItViewController.h"
 #import "LTPhotoDetailViewController.h"
+#import "UIImage+ResizeAdditions.h"
 
 @interface LTBuryItViewController ()
 
@@ -61,15 +62,51 @@
             // Parse the data received
             NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
             
-            if (userData[@"name"]) {self.title = userData[@"name"];};
+            if (userData[@"name"]) {self.title = userData[@"name"];}
+            else {self.title = @"buried.";}
             
-            /* TODO updateProfile - ADDED test for change of email */
+            /* TODO updateProfile  */
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
+            
+            // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+            if ([PFUser currentUser][@"username"] != userData[@"username"])
+                [[PFUser currentUser] setUsername:userData[@"username"]];
+            if ([PFUser currentUser][@"email"] != userData[@"email"])
+                [[PFUser currentUser] setEmail:userData[@"email"]];
+            
+            [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+            [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+            
+            // Download the user's facebook profile picture
+            profileImageData = [[NSMutableData alloc] init]; // the data will be loaded in here
+            
+            NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
+            NSLog(@"profile picture URL created");
+            
+            NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:pictureURL
+                                                                      cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                                  timeoutInterval:2.0f];
+            // Run network request asynchronously
+            NSURLConnection *urlConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
+            
+            NSLog(@"profile picture download initiated");
+            if (!urlConnection) {
+                NSLog(@"Failed to download picture");
+            }
+            
+            if ([[PFUser currentUser][@"profile"] isDirty])
+            {
+                
+                NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
+            
             [[PFUser currentUser] saveInBackground];
+            
+            } else {NSLog(@"user profile is up to date");}
             
             emailTextField.placeholder = @"for my eyes only";
             
-            NSLog(@"User logged in with email: %@",[[[PFUser currentUser] objectForKey:@"profile"] objectForKey:@"email"]);
+            NSLog(@"User logged in with email: %@",[[PFUser currentUser] email]);
             
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"The facebook session was invalidated");
@@ -252,7 +289,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     NSLog(@"Current recipients: %@",email);
     if ([self validateFields])
     {
-        NSLog(@"works");
+        NSLog(@"all fields validated successfully, sending...");
         PFObject *capsule = [PFObject objectWithClassName:@"capsule"];
         NSString *thought = thoughtTextView.text;
         
@@ -307,7 +344,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             
             HUD.delegate = self;
             
-                NSLog(@"current date is day %@, interval %@",[self getDaysSinceLaunch],[self getIntervalOfDay]);
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
                 
                 messagesToUserLabel.textColor = successColor;
@@ -323,33 +359,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             }
         }];
     }
-}
-                 
--(NSNumber *)getDaysSinceLaunch
-{
-    PFObject *appVariables = [self getAppVariables];
-    NSNumber *daysSinceLaunch = appVariables[@"daysSinceLaunch"];
-    return daysSinceLaunch;
-}
-
--(NSNumber *)getIntervalOfDay
-{
-    PFObject *appVariables = [self getAppVariables];
-    NSNumber *intervalOfDay = appVariables[@"intervalOfDay"];
-    return intervalOfDay;
-}
-
--(NSNumber *)getNumberOfIntervalsInADay
-{
-    PFObject *appVariables = [self getAppVariables];
-    NSNumber *numberOfIntervalsInADay = appVariables[@"numberOfIntervalsInADay"];
-    return numberOfIntervalsInADay;
-}
-
--(PFObject *)getAppVariables
-{
-    PFQuery *query = [PFQuery queryWithClassName:@"appVariables"];
-    return [query getFirstObject];
 }
 
 #pragma mark - camera methods
@@ -564,6 +573,78 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     if (!self.selectedFBEmailString)
         self.selectedFBEmailString = [[NSString alloc] init];
         self.selectedFBEmailString = [self.selectedFBEmailString stringByAppendingFormat:@"%@,",email];
+}
+
+#pragma mark - NSURLConnectionDataDelegate
+
+/* Callback delegate methods used for downloading the user's profile picture */
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    // As chuncks of the image are received, we build our data file
+    [profileImageData appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    // All data has been downloaded, now we can set the image in the header image view
+    
+    NSLog(@"profile picture downloaded");
+    
+    if (profileImageData.length == 0) {
+        NSLog(@"profile picture blank");
+        return;
+    }
+    
+    // The user's Facebook profile picture is cached to disk. Check if the cached profile picture data matches the incoming profile picture. If it does, avoid uploading this data to Parse.
+    
+    UIImage *image = [UIImage imageWithData:profileImageData];
+    
+    UIImage *mediumRoundedImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
+    
+    NSData *mediumRoundedImageData = UIImagePNGRepresentation(mediumRoundedImage);
+    NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
+    
+    PFFile *fileImage = [PFFile fileWithData:profileImageData];
+    [fileImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [[PFUser currentUser] setObject:fileImage forKey:@"profilePictureFull"];
+            if ([[PFUser currentUser][@"profilePictureFull"] isDirty])
+            {
+            [[PFUser currentUser] saveEventually];
+            NSLog(@"profile picture stored in full size");
+            } else {NSLog(@"full profile picture up to date");return;}
+        }
+    }];
+
+    if (mediumRoundedImageData.length > 0) {
+        PFFile *fileMediumRoundedImage = [PFFile fileWithData:mediumRoundedImageData];
+        [fileMediumRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                [[PFUser currentUser] setObject:fileMediumRoundedImage forKey:@"profilePictureMedium"];
+                if ([[PFUser currentUser][@"profilePictureMedium"] isDirty])
+                {
+                    [[PFUser currentUser] saveEventually];
+                    NSLog(@"profile picture stored in medium size");
+                } else {NSLog(@"medium profile picture up to date");return;}
+            }
+        }];
+    }
+    
+    if (smallRoundedImageData.length > 0) {
+        PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
+            [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:@"profilePictureSmall"];
+                
+                if ([[PFUser currentUser][@"profilePictureSmall"] isDirty])
+                {
+                [[PFUser currentUser] saveEventually];
+                    NSLog(@"profile picture stored in small size");
+                } else {NSLog(@"small profile picture up to date");return;}
+            }
+        }];
+        
+    }
 }
 
 @end

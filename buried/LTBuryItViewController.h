@@ -11,7 +11,7 @@
 #import "MBProgressHUD.h"
 #import "UIBarButtonItem+_projectButtons.h"
 
-@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate>
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, NSURLConnectionDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -20,10 +20,17 @@
     UIColor *errorColor;
     UIColor *successColor;
     UIImage *theImage;
+    NSMutableData *profileImageData;
     
     MBProgressHUD *HUD;
     MBProgressHUD *refreshHUD;
 }
+
+#pragma mark - NSURLConnectionDataDelegate
+
+/* Callback delegate methods used for downloading the user's profile picture */
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection;
 
 - (IBAction)pickFriendsButtonClick:(id)sender;
 
@@ -51,10 +58,5 @@
 
 -(IBAction)buryIt:(id)sender;
 
--(NSNumber *)getDaysSinceLaunch;
--(NSNumber *)getIntervalOfDay;
--(NSNumber *)getNumberOfIntervalsInADay;
-
--(PFObject *)getAppVariables; // returns an instance of the appVariables
 
 @end

@@ -40,6 +40,9 @@
 		284B2D0318AC4A4800BB976F /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFF18AC4A4800BB976F /* Project.xcconfig */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
+		286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */; };
+		286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */; };
+		286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
@@ -97,6 +100,12 @@
 		284B2D0518AC4A9000BB976F /* FPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPViewController.h; sourceTree = "<group>"; };
 		284B2D0618AC4A9000BB976F /* FPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPViewController.m; sourceTree = "<group>"; };
 		284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FPViewController_iPhone.xib; sourceTree = "<group>"; };
+		286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
+		286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
+		286E641418C30D3400CDB033 /* UIImage+AlphaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+AlphaAdditions.h"; sourceTree = "<group>"; };
+		286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+AlphaAdditions.m"; sourceTree = "<group>"; };
+		286E641618C30D3400CDB033 /* UIImage+RoundedCornerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCornerAdditions.h"; sourceTree = "<group>"; };
+		286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCornerAdditions.m"; sourceTree = "<group>"; };
 		28A6BADD188FBF15008C81A1 /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
@@ -145,6 +154,7 @@
 		284B2CFA18AC49D500BB976F /* Partner Classes */ = {
 			isa = PBXGroup;
 			children = (
+				286E641118C30C9200CDB033 /* UIImage Categories */,
 				284B2D0A18AC4AB800BB976F /* FBFriendPicker */,
 				284B2D0418AC4A7D00BB976F /* MBProgressHUD */,
 			);
@@ -179,6 +189,19 @@
 				284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */,
 			);
 			name = FBFriendPicker;
+			sourceTree = "<group>";
+		};
+		286E641118C30C9200CDB033 /* UIImage Categories */ = {
+			isa = PBXGroup;
+			children = (
+				286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */,
+				286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */,
+				286E641418C30D3400CDB033 /* UIImage+AlphaAdditions.h */,
+				286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */,
+				286E641618C30D3400CDB033 /* UIImage+RoundedCornerAdditions.h */,
+				286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */,
+			);
+			name = "UIImage Categories";
 			sourceTree = "<group>";
 		};
 		44FC429D1862667700CC948C = {
@@ -351,6 +374,9 @@
 				28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */,
 				280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */,
 				284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */,
+				286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */,
+				286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */,
+				286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
