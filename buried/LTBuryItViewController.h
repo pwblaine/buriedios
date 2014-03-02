@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "MBProgressHUD.h"
-#import "UIBarButtonItem+_projectButtons.h"
 
 @interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, NSURLConnectionDelegate>
 {
@@ -31,6 +30,7 @@
 /* Callback delegate methods used for downloading the user's profile picture */
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection;
+- (void)updateUserProfile;
 
 - (IBAction)pickFriendsButtonClick:(id)sender;
 
