@@ -40,6 +40,7 @@
 		284B2D0318AC4A4800BB976F /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFF18AC4A4800BB976F /* Project.xcconfig */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
+		284EBAC818C68C4D00F3CFD6 /* buried-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 284EBAC718C68C2900F3CFD6 /* buried-Prefix.pch */; };
 		286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */; };
 		286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */; };
 		286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */; };
@@ -71,7 +72,6 @@
 		28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTPhotoDetailViewController.xib; path = buried/LTPhotoDetailViewController.xib; sourceTree = "<group>"; };
 		281E7A8A188EA66800C85066 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark.png"; path = "buried/37x-Checkmark.png"; sourceTree = SOURCE_ROOT; };
 		281E7A90188EA66800C85066 /* buried-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "buried-Info.plist"; path = "buried/buried-Info.plist"; sourceTree = SOURCE_ROOT; };
-		281E7A91188EA66800C85066 /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		281E7A92188EA66800C85066 /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo_250height.png; path = buried/buriedlogo_250height.png; sourceTree = SOURCE_ROOT; };
 		281E7A93188EA66800C85066 /* Crowd.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Crowd.jpg; path = buried/Crowd.jpg; sourceTree = SOURCE_ROOT; };
 		281E7A94188EA66800C85066 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "buried/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -104,6 +104,7 @@
 		284B2D0518AC4A9000BB976F /* FPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPViewController.h; sourceTree = "<group>"; };
 		284B2D0618AC4A9000BB976F /* FPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPViewController.m; sourceTree = "<group>"; };
 		284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FPViewController_iPhone.xib; sourceTree = "<group>"; };
+		284EBAC718C68C2900F3CFD6 /* buried-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
 		286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
 		286E641418C30D3400CDB033 /* UIImage+AlphaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+AlphaAdditions.h"; sourceTree = "<group>"; };
@@ -269,9 +270,9 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				284EBAC718C68C2900F3CFD6 /* buried-Prefix.pch */,
 				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
-				281E7A91188EA66800C85066 /* buried-Prefix.pch */,
 				281E7A92188EA66800C85066 /* buriedlogo_250height.png */,
 				281E7A93188EA66800C85066 /* Crowd.jpg */,
 				281E7A94188EA66800C85066 /* Default-568h@2x.png */,
@@ -352,6 +353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				284EBAC818C68C4D00F3CFD6 /* buried-Prefix.pch in Resources */,
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
 				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
 				284B2D0218AC4A4800BB976F /* Project-Release.xcconfig in Resources */,
