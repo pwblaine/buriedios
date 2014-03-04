@@ -2,7 +2,7 @@
 //  Copyright (c) 2013 Parse. All rights reserved.
 
 #import "LTLoginViewController.h"
-#import "LTBuryItViewController.h"
+#import "LTUnearthedViewController.h"
 #import <Parse/Parse.h>
 
 @implementation LTLoginViewController
@@ -16,7 +16,7 @@
     
     // Check if user is cached and linked to Facebook, if so, bypass login    
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:NO];
+        [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
     }
     
     // Add logout navigation bar button
@@ -44,10 +44,10 @@
             }
         } else if (user.isNew) {
             NSLog(@"user with facebook signed up and logged in!");
-            [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:YES];
         } else {
             NSLog(@"user with facebook logged in!");
-            [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:YES];
         }
     }];
 }
