@@ -29,6 +29,8 @@
 
 /* Login to facebook method */
 - (IBAction)loginButtonTouchHandler:(id)sender  {
+    [(UIBarButtonItem*)sender setEnabled:NO];
+    
     // The permissions requested from the user
     NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"email"];
     
@@ -37,17 +39,22 @@
         [_activityIndicator stopAnimating]; // Hide loading indicator
         
         if (!user) {
+            [(UIBarButtonItem*)sender setEnabled:YES];
             if (!error) {
                 NSLog(@"uh oh. The user cancelled the Facebook login.");
+                self.navigationItem.rightBarButtonItem.enabled = YES;
             } else {
                 NSLog(@"uh oh. An error occurred: %@", error);
+                self.navigationItem.rightBarButtonItem.enabled = YES;
             }
         } else if (user.isNew) {
             NSLog(@"user with facebook signed up and logged in!");
-            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+            self.navigationItem.rightBarButtonItem.enabled = YES;
         } else {
             NSLog(@"user with facebook logged in!");
-            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:YES];
+             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+            self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];
 }

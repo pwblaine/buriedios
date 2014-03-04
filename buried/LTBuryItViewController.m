@@ -77,8 +77,8 @@
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
-    [self validateFields];
     [self.view endEditing:YES];
+    [self checkForItems];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -100,7 +100,6 @@
 -(void)clearMessageToUser
 {
     messagesToUserLabel.text = @"";
-    
 }
 
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField
@@ -139,15 +138,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(BOOL)checkForItems
 {
     // Test for items in the capsule if so change the button to cancel
-    if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0)
+    if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0 || self.friendPickerController.selection.count > 0)
     {
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
-    }
-    else if (self.navigationItem.leftBarButtonItem)
-    {
-        self.navigationItem.leftBarButtonItem.title = @"Log Out";
-    }
+        self.navigationItem.leftBarButtonItem.title = @"Clear";
         return YES;
+    } else {
+        self.navigationItem.leftBarButtonItem.title = @"Cancel";
+        return NO;}
 }
 
 -(BOOL)validateFields
@@ -172,13 +169,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         return YES;
     } else
         */
-    // either or for delivery
-        if (thought.length == 0 && !theImage) {
+    // either/or for delivery
+    if (thought.length == 0 && !theImage) {
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"nothing buried, nothing gained...";
         return NO;
-    } else {
-        [self setMessageToUserForTimeframe];
     }
     return YES;
 }
@@ -188,8 +183,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Add camera navigation bar button
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
-    
-    
 }
 
 -(void)discardPhoto
@@ -197,14 +190,16 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     theImage = nil;
     messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-    [self validateFields];
+    [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+    [self checkForItems];
 }
 
 -(BOOL)clearFields
 {
     emailTextField.text = @"";
     thoughtTextView.text = @"";
+    [self.friendPickerController clearSelection];
+    self.selectedFBEmailString = @"";
     
     [timeframeSegmentedControl setSelectedSegmentIndex:0];
     
@@ -216,7 +211,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
     
     [self validateFields];
-    
     
     return YES;
 }
@@ -289,11 +283,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
                 
+                [self clearFields];
+                [self checkForItems];
+                
                 messagesToUserLabel.textColor = successColor;
                 messagesToUserLabel.text = @"your thought has been buried...";
                 
-                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-                [self clearFields];
+                [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
                 
             } else{
                 [HUD hide:YES];
@@ -360,11 +356,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         messagesToUserLabel.textColor = successColor;
         messagesToUserLabel.text = @"photo attached";
         
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
         
         theImage = image;
         
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
+        [self checkForItems];
         }
     } else {
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
@@ -375,11 +371,15 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     }
 }
 
-#pragma mark Logout methods
+#pragma mark Cancel Button methods
 
 - (void)cancelButtonTouchHandler:(id)sender {
-    theImage = nil;
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if ([self checkForItems])
+    {
+        [self clearFields];
+        [self checkForItems];
+    } else
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
@@ -404,6 +404,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     // Tint Camera button after picture taken
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+    
+    [self checkForItems];
     
     
 }
@@ -502,7 +504,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (void)fillTextBoxAndDismiss:(NSString *)text {
     emailTextField.text = text;
-    
+    [self checkForItems];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
