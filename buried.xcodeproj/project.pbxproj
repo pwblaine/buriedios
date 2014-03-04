@@ -47,6 +47,8 @@
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
 		28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D2A21218C33354007EB808 /* LTUnearthedViewController.m */; };
 		28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */; };
+		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
+		28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
@@ -115,6 +117,9 @@
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
 		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
 		28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTUnearthedViewController.xib; sourceTree = "<group>"; };
+		28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTCapsuleViewController.h; sourceTree = "<group>"; };
+		28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTCapsuleViewController.m; sourceTree = "<group>"; };
+		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -223,6 +228,9 @@
 				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
 				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
 				28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */,
+				28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */,
+				28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */,
+				28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */,
 				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
 				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
 				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
@@ -347,6 +355,7 @@
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
 				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
 				284B2D0218AC4A4800BB976F /* Project-Release.xcconfig in Resources */,
+				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
 				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
@@ -381,6 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */,
+				28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */,
 				280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */,
 				284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */,
 				286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */,

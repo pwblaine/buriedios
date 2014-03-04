@@ -8,6 +8,7 @@
 
 #import "LTUnearthedViewController.h"
 #import "LTBuryItViewController.h"
+#import "LTCapsuleViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
 
@@ -50,8 +51,7 @@
         self.textKey = @"deliveryDate";
         self.imageKey = @"image";
         self.pullToRefreshEnabled = YES;
-        self.paginationEnabled = YES;
-        self.objectsPerPage = 9;
+        self.paginationEnabled = NO;
     }
     return self;
 }
@@ -96,8 +96,6 @@
     NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
     
     self.title = [[PFUser currentUser] objectForKey:@"displayName"];
-    
-    self->defaultPortrait = [UIImage imageNamed:@"buriedlogo80x80"];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -226,11 +224,11 @@
  */
 
 #pragma mark - UITableViewDelegate
-
+/*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
-
+*/
 // OLD METHODS
 
 /*
@@ -447,21 +445,22 @@
 
 
  #pragma mark - Table view delegate
- /*
- // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
  {
+     
  // Navigation logic may go here, for example:
  // Create the next view controller.
- LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+ LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
  
  // Pass the selected object to the new view controller.
+     capsuleViewController.capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
+     
+     NSLog(@"%@",capsuleViewController.capsule);
  
  // Push the view controller.
- [self.navigationController pushViewController:buryItViewController animated:YES];
- }
- */
+ [self.navigationController pushViewController:capsuleViewController animated:YES];
 
+ }
 
 
 @end

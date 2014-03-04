@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LTBuryItViewController.h"
 
 @interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate>
 {
