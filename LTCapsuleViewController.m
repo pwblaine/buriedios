@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    fullScreenThought.alpha = 0;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
@@ -41,29 +42,29 @@
     self->thoughtContainer.editable = NO;
     self->thoughtContainer.selectable = YES;
     self->thoughtContainer.text = thought;
+    self->fullScreenThought.text = thought;
+    self->fullScreenThought.alpha = 1;
+    self->fullScreenThought.editable = NO;
+    self->fullScreenThought.textAlignment = NSTextAlignmentCenter;
+    self->thoughtContainer.alpha = 0;
     
     PFFile *imageFile = [self.capsule objectForKey:@"image"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         UIImage *image = [UIImage imageWithData:data];
         
-    if (image)
-    {
-        self->imageContainer.image = image;
-        self->theImage = [image thumbnailImage:32 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationDefault];
-        
-        if (thought.length > 1)
+        if (thought.length > 1 && image)
         {
+            self->imageContainer.image = image;
+            self->fullScreenThought.alpha = 0;
+            self->thoughtContainer.alpha = 1;
         }
-        else if (self->theImage)
+        else if (image)
         {
-            self->imageContainer.frame = CGRectMake(40.0f, 109.f, 240.0f, 356.0f);
+            self->imageContainer.frame = CGRectMake(40.0f, 109.0f, 240.0f, 356.0f);
             self->imageContainer.image = image;
             self->thoughtContainer.alpha = 0;
+            self->fullScreenThought.alpha = 0;
         }
-       
-    } else {
-        self->thoughtContainer.frame = CGRectMake(40.0f, 109.f, 240.0f, 356.0f);
-    }
     }];
 }
 

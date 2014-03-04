@@ -13,6 +13,7 @@
 {
     IBOutlet UILabel *timestamp;
     IBOutlet UITextView *thoughtContainer;
+    IBOutlet UITextView *fullScreenThought;
     IBOutlet PFImageView *imageContainer;
     UIImage *theImage;
 }
