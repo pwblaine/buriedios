@@ -215,6 +215,26 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     return YES;
 }
 
+-(PFUser *)createUserFor:(FBGraphObject<FBGraphUser> *)fbUser
+{
+    PFUser *newUser = [PFUser user];
+    newUser.username = fbUser.id;
+    newUser.password = nil;
+    [newUser signUpInBackground];
+    return newUser;
+}
+
+-(NSArray *)createArrayOfUsers:(NSArray *)array
+{
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
+    for (id<FBGraphUser> user in array)
+    {
+        [mutableArray addObject:[self createUserFor:user]];
+    }
+    return [NSArray arrayWithArray:mutableArray];
+}
+
+#pragma mark
 -(IBAction)buryIt:(id)sender
 {
     PFUser *user = [PFUser currentUser];
@@ -238,8 +258,10 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"from"] = [[user objectForKey:@"profile"] objectForKey:@"email"];
-        
+        capsule[@"from"] = user.email;
+        capsule[@"fromUser"] = user;
+        capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
+
         // Resize image
         UIGraphicsBeginImageContext(CGSizeMake(640, 960));
         [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
@@ -477,8 +499,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             {
                 if ([friend.name isEqual:user.name])
                 {
-                    [self appendEmail:[NSString stringWithFormat:@"%@@facebook.com",friend.username]];
-                }
+                    NSString *fbEmail = [NSString stringWithFormat:@"%@@facebook.com",friend.username];
+                    [self appendEmail:fbEmail];
                 }
             }
             }];

@@ -91,7 +91,7 @@
     // Add the temporary title
     self.title = @"buried.";
     
-    // [self updateUserProfile];
+    [self updateUserProfile];
     
     NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
     
@@ -303,6 +303,9 @@
             // Parse the data received
             NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
             
+            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
+            {
+
             // TODO updateProfile
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
             
@@ -310,25 +313,19 @@
             
             [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
             [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-            
-            
-            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
-            {
                 
-                NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
+            NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
                 
                 if (![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
                 {
                     [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
-                    [[PFUser currentUser] setEmail:userData[@"email"]];
                     NSLog(@"adding/updating email");
                 }
                 
                 [[PFUser currentUser] saveInBackground];
                 
             } else {NSLog(@"user profile is up to date");}
-            
+            /*
             // Download the user's facebook profile picture
             profileImageData = [[NSMutableData alloc] init]; // the data will be loaded in here
             
@@ -345,7 +342,7 @@
             if (!urlConnection) {
                 NSLog(@"failed to download picture");
             }
-            
+            */
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];

@@ -24,9 +24,9 @@
     MBProgressHUD *refreshHUD;
 }
 
-- (IBAction)pickFriendsButtonClick:(id)sender;
+-(IBAction)pickFriendsButtonClick:(id)sender;
 
-- (IBAction)cameraButtonTapped:(id)sender;
+-(IBAction)cameraButtonTapped:(id)sender;
 -(void)discardPhoto;
 -(void)resetCamera;
 
@@ -35,6 +35,8 @@
 -(void)setMessageToUserForTimeframe;
 
 -(void)clearMessageToUser;
+
+-(PFUser *)createUserFor:(FBGraphObject<FBGraphUser> *)fbUser;
 
 -(BOOL)validateFields;
 -(BOOL)clearFields;
