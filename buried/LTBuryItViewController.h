@@ -36,11 +36,12 @@
 
 -(void)clearMessageToUser;
 
--(PFUser *)createUserFor:(FBGraphObject<FBGraphUser> *)fbUser;
-
 -(BOOL)validateFields;
 -(BOOL)clearFields;
 -(BOOL)checkForItems;
+
+-(PFUser *)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser;
+-(NSArray *)createArrayOfUsers:(NSArray *)array;
 
 //UITextField Delegate Methods
 -(BOOL)textFieldShouldReturn:(UITextField *)textField;

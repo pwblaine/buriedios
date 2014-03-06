@@ -29,20 +29,55 @@
 
 /* Login to facebook method */
 - (IBAction)loginButtonTouchHandler:(id)sender  {
+    NSLog(@"logging in");
     [(UIBarButtonItem*)sender setEnabled:NO];
     
     // The permissions requested from the user
     NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"email"];
-
-    else {
-      NSString *username = [FBuser name];
-      NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [FBuser username]]];
-    }
-  }];
-
+    
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
         [_activityIndicator stopAnimating]; // Hide loading indicator
+        
+        // Send request to Facebook
+        FBRequest *request = [FBRequest requestForMe];
+        [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            // handle response
+            if (!error) {
+                // Parse the data received
+                NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
+                // TODO updateProfile
+                
+                if (![[PFUser currentUser][@"profile"] isEqual:userData[@"profile"]])
+                {
+                
+                    [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                
+                // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                
+                [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+                [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+                [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                
+                }
+                
+                if (![[[PFUser currentUser] username] isEqualToString:userData[@"username"]])
+                {
+                    [[PFUser currentUser] setUsername:userData[@"id"]];
+                    [[PFUser currentUser] setPassword:@""];
+                }
+                if (![[[PFUser currentUser] email] isEqualToString:userData[@"email"]])
+                    {
+                        [[PFUser currentUser] setEmail:userData[@"email"]];
+                        NSLog(@"adding/updating email and username");
+                    }
+                
+                
+                [[PFUser currentUser] saveEventually];
+            }
+        }];
+
+        
         if (!user) {
             [(UIBarButtonItem*)sender setEnabled:YES];
             if (!error) {
@@ -51,22 +86,15 @@
             } else {
                 NSLog(@"uh oh. An error occurred: %@", error);
                 self.navigationItem.rightBarButtonItem.enabled = YES;
-                [user loginWithUsername:user.id password:nil];
+                [PFUser logInWithUsername:user[@"facebookId"] password:nil];
             }
         } else if (user.isNew) {
             NSLog(@"user with facebook signed up and logged in!");
             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            [[PFUser currentUser] setObject:[NSString stringWithFormat:@"%@",userData[@"facebookId"]] forKey@"username"]; 
-            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-            if (user.isAuthenticated)
-            {
-                NSLog(@"user.isAuthenticated saving...");
-                [[PFUser currentUser] saveInBackground];
-            }
         } else {
             NSLog(@"user with facebook logged in!");
-             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
             self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];

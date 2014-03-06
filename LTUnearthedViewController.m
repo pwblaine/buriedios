@@ -93,8 +93,6 @@
     
     [self updateUserProfile];
     
-    NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
-    
     self.title = [[PFUser currentUser] objectForKey:@"displayName"];
 }
 
@@ -300,6 +298,8 @@
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         // handle response
         if (!error) {
+            
+            NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
             // Parse the data received
             NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
             
@@ -343,6 +343,8 @@
                 NSLog(@"failed to download picture");
             }
             */
+            
+            self.title = [[PFUser currentUser] objectForKey:@"displayName"];
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];
@@ -357,6 +359,8 @@
 #pragma mark Logout methods
 
 - (void)logoutButtonTouchHandler:(id)sender {
+    
+    NSLog(@"logging out");
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller

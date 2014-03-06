@@ -215,13 +215,32 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     return YES;
 }
 
--(PFUser *)createUserFor:(FBGraphObject<FBGraphUser> *)fbUser
+-(id)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser
 {
-    PFUser *newUser = [PFUser user];
-    newUser.username = fbUser.id;
-    newUser.password = nil;
-    [newUser signUpInBackground];
-    return newUser;
+    NSLog(@"fbUser : %@",fbUser);
+    NSLog(@"pfUser : %@",pfUser);
+    if ([pfUser.username isEqualToString:fbUser.id])
+    {
+        NSLog(@"user account %@ linked to facebook id %@",pfUser.username,fbUser.id);
+        return pfUser;
+    }
+    
+        NSLog(@"looking for username in parse user db");
+        PFQuery *userQuery = [PFUser query];
+        [userQuery whereKey:@"username" equalTo:fbUser.id];
+        NSArray *objects = [userQuery findObjects];
+        NSLog(@"query executed");
+        if (objects.count < 1)
+        {
+            NSLog(@"matching username not found");
+            [pfUser setUsername:fbUser.id];
+            [pfUser setPassword:@""];
+            [pfUser signUp];
+            NSLog(@"username %@ signed up",pfUser.username);
+            return [self createUserFor:fbUser with:pfUser];
+        }
+    NSLog(@"located user in database");
+    return [self createUserFor:fbUser with:(PFUser *)[objects firstObject]]; // return nothing if the account already exists}
 }
 
 -(NSArray *)createArrayOfUsers:(NSArray *)array
@@ -229,8 +248,12 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
     for (id<FBGraphUser> user in array)
     {
-        [mutableArray addObject:[self createUserFor:user]];
+        PFUser *pfUser = [self createUserFor:user with:[PFUser user]];
+        if (pfUser)
+            [mutableArray addObject:pfUser];
+        
     }
+    NSLog(@"%@",mutableArray);
     return [NSArray arrayWithArray:mutableArray];
 }
 
@@ -240,9 +263,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     PFUser *user = [PFUser currentUser];
     NSString *email = @"";
     if (self.selectedFBEmailString.length > 0)
-        email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,[[user objectForKey:@"profile"] objectForKey:@"email"]];
+        email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,user.email];
     else
-        email = [[user objectForKey:@"profile"] objectForKey:@"email"];
+        email = [NSString stringWithFormat:@"%@",user.email];
     NSLog(@"Current recipients: %@",email);
     if ([self validateFields])
     {
@@ -252,13 +275,10 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
         
-        if ([email isEqualToString:@""])
-            email = [[user objectForKey:@"profile"] objectForKey:@"email"];
-        
+        capsule[@"from"] = user.email;
         capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"from"] = user.email;
         capsule[@"fromUser"] = user;
         capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
 
@@ -503,7 +523,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     [self appendEmail:fbEmail];
                 }
             }
-            }];
+            }}];
     }
     
     if (self.friendPickerController.selection.count >= 1) {
