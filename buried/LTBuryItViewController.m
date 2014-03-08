@@ -282,17 +282,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"fromUser"] = user;
         capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
 
-        // Resize image
-        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-        [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
-        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        if (theImage) {
+            // Resize image
+            UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+            [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
+            UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
         
-        NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+            NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
         
-        PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
+            PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
         
-        capsule[@"image"] = imageFile;
+            capsule[@"image"] = imageFile;
+        }
         
         HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
