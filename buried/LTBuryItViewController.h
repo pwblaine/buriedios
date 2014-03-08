@@ -24,9 +24,9 @@
     MBProgressHUD *refreshHUD;
 }
 
-- (IBAction)pickFriendsButtonClick:(id)sender;
+-(IBAction)pickFriendsButtonClick:(id)sender;
 
-- (IBAction)cameraButtonTapped:(id)sender;
+-(IBAction)cameraButtonTapped:(id)sender;
 -(void)discardPhoto;
 -(void)resetCamera;
 
@@ -39,6 +39,9 @@
 -(BOOL)validateFields;
 -(BOOL)clearFields;
 -(BOOL)checkForItems;
+
+-(PFUser *)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser;
+-(NSArray *)createArrayOfUsers:(NSArray *)array;
 
 //UITextField Delegate Methods
 -(BOOL)textFieldShouldReturn:(UITextField *)textField;

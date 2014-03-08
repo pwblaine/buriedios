@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Loftier Thoughts. All rights reserved.
 //
 
+#import "LTAppDelegate.h"
 #import "LTUnearthedViewController.h"
-#import <Parse/Parse.h>
+#import "LTBuryItViewController.h"
+#import "LTCapsuleViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
 
@@ -17,6 +19,7 @@
 
 @implementation LTUnearthedViewController
 
+/* DEFAULT UI VIEW METHOD
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -25,29 +28,221 @@
     }
     return self;
 }
+*/
+/* DEFAULT TABLE VIEW METHOD
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+*/
+
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self)
+    {
+        self.parseClassName = @"capsule";
+        self.textKey = @"deliveryDate";
+        self.imageKey = @"image";
+        self.pullToRefreshEnabled = YES;
+        self.paginationEnabled = NO;
+    }
+    return self;
+}
+
+- (PFQuery *)queryForTable {
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    
+    // If no objects are loaded in memory, we look to the cache
+    // first to fill the table and then subsequently do a query
+    // against the network.
+    if ([self.objects count] == 0) {
+        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    }
+    
+    [query whereKey:@"email" containsString:[[PFUser currentUser] email]];
+    [query whereKey:@"sent" equalTo:@YES];
+    
+    [query orderByDescending:@"deliveryDate"];
+    
+    return query;
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:YES];
     // Do any additional setup after loading the view from its nib.
     
+    // Add logout navigation bar button
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
+    self.navigationItem.leftBarButtonItem = logoutButton;
     
+    // Add camera navigation bar button
+    UIBarButtonItem *buryItButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(buryItButtonTouchHandler:)];
+    self.navigationItem.rightBarButtonItem = buryItButton;
+    
+    // Add the temporary title
+    self.title = @"buried.";
     
     [self updateUserProfile];
     
-    NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
+    self.title = [[PFUser currentUser] objectForKey:@"displayName"];
 }
 
+#pragma mark - PFQueryTableViewController
+
+- (void)objectsWillLoad {
+    [super objectsWillLoad];
+    
+    // This method is called before a PFQuery is fired to get more objects
+}
+
+- (void)objectsDidLoad:(NSError *)error {
+    [super objectsDidLoad:error];
+    
+    // This method is called every time objects are loaded from Parse via the PFQuery
+}
+
+/*
+ // Override to customize what kind of query to perform on the class. The default is to query for
+ // all objects ordered by createdAt descending.
+ - (PFQuery *)queryForTable {
+ PFQuery *query = [PFQuery queryWithClassName:self.className];
+ 
+ // If Pull To Refresh is enabled, query against the network by default.
+ if (self.pullToRefreshEnabled) {
+ query.cachePolicy = kPFCachePolicyNetworkOnly;
+ }
+ 
+ // If no objects are loaded in memory, we look to the cache first to fill the table
+ // and then subsequently do a query against the network.
+ if (self.objects.count == 0) {
+ query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+ }
+ 
+ [query orderByDescending:@"createdAt"];
+ 
+ return query;
+ }
+ */
+
+ // Override to customize the look of a cell representing an object. The default is to display
+ // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
+ // and the imageView being the imageKey in the object.
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+ static NSString *CellIdentifier = @"Cell";
+ 
+ PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+ }
+ 
+     // Configure the cell
+     cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+     NSString *thought = [object objectForKey:@"thought"];
+     if (cell.detailTextLabel.textColor != [UIColor blackColor])
+         cell.detailTextLabel.textColor = [UIColor blackColor];
+     if (thought.length > 1)
+         cell.detailTextLabel.text = thought;
+     else
+     {
+     cell.detailTextLabel.text = @"Picture";
+     cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+     }
+ 
+ return cell;
+ }
+
+/*
+ // Override if you need to change the ordering of objects in the table.
+ - (PFObject *)objectAtIndex:(NSIndexPath *)indexPath {
+ return [self.objects objectAtIndex:indexPath.row];
+ }
+ */
+
+/*
+ // Override to customize the look of the cell that allows the user to load the next page of objects.
+ // The default implementation is a UITableViewCellStyleDefault cell with simple labels.
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
+ static NSString *CellIdentifier = @"NextPage";
+ 
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ 
+ if (cell == nil) {
+ cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+ }
+ 
+ cell.selectionStyle = UITableViewCellSelectionStyleNone;
+ cell.textLabel.text = @"Load more...";
+ 
+ return cell;
+ }
+ */
+
+#pragma mark - UITableViewDataSource
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the object from Parse and reload the table view
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, and save it to Parse
+ }
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
+
+#pragma mark - UITableViewDelegate
+/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+}
+*/
+// OLD METHODS
+
+/*
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-
+*/
 #pragma mark - NSURLConnectionDataDelegate
 
-/* Callback delegate methods used for downloading the user's profile picture */
+// Callback delegate methods used for downloading the user's profile picture
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     // As chuncks of the image are received, we build our data file
@@ -68,8 +263,8 @@
     
     UIImage *image = [UIImage imageWithData:profileImageData];
     
-    UIImage *mediumRoundedImage = [image thumbnailImage:180 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationHigh];
-    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
+    UIImage *mediumRoundedImage = [image thumbnailImage:180 transparentBorder:0 cornerRadius:20 interpolationQuality:kCGInterpolationDefault];
+    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:8 interpolationQuality:kCGInterpolationDefault];
     
     NSData *mediumRoundedImageData = UIImagePNGRepresentation(mediumRoundedImage);
     NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
@@ -81,6 +276,7 @@
                 [[PFUser currentUser] setObject:fileMediumRoundedImage forKey:@"profilePictureMedium"];
                 [[PFUser currentUser] saveEventually];
                 NSLog(@"profile picture stored in medium size");
+                [[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]imageView ] setImage:mediumRoundedImage];
             }
         }];
     }
@@ -100,42 +296,42 @@
 
 - (void)updateUserProfile
 {
+    // disable navigation and wait for response from server
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         // handle response
         if (!error) {
+            
+            NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
             // Parse the data received
             NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
             
-            if (userData[@"name"]) {self.title = userData[@"name"];}
-            
-            /* TODO updateProfile  */
+            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
+            {
+
+            // TODO updateProfile
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
             
             // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-            
             [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
             [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-            
-            
-            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
-            {
                 
-                NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
+            NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
                 
                 if (![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
                 {
                     [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
-                    [[PFUser currentUser] setEmail:userData[@"email"]];
                     NSLog(@"adding/updating email");
                 }
                 
                 [[PFUser currentUser] saveInBackground];
                 
             } else {NSLog(@"user profile is up to date");}
-            
+            /*
             // Download the user's facebook profile picture
             profileImageData = [[NSMutableData alloc] init]; // the data will be loaded in here
             
@@ -152,12 +348,19 @@
             if (!urlConnection) {
                 NSLog(@"failed to download picture");
             }
-            
+             */
+            // renable navigation upon receipt of server response
+            self.navigationItem.leftBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.title = [[PFUser currentUser] objectForKey:@"displayName"];
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];
         } else {
             NSLog(@"some other error: %@", error);
+            // renable navigation upon receipt of server response
+            self.navigationItem.leftBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];
 }
@@ -167,11 +370,109 @@
 #pragma mark Logout methods
 
 - (void)logoutButtonTouchHandler:(id)sender {
+    
+    NSLog(@"logging out");
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
+
+- (void)buryItButtonTouchHandler:(id)sender {
+    [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
+    
+}
+/*
+#pragma mark - Parse Methods
+
+- (void)populateTable {
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    // Configure the cell...
+    
+    return cell;
+}
+ */
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
+
+
+ #pragma mark - Table view delegate
+ - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     
+ // Navigation logic may go here, for example:
+ // Create the next view controller.
+ LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
+ 
+ // Pass the selected object to the new view controller.
+     capsuleViewController.capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
+     
+     NSLog(@"%@",capsuleViewController.capsule);
+ 
+ // Push the view controller.
+ [self.navigationController pushViewController:capsuleViewController animated:YES];
+
+ }
+
 
 @end

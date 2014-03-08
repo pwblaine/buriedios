@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
-@interface LTUnearthedViewController : UIViewController <NSURLConnectionDelegate>
+@interface LTUnearthedViewController : PFQueryTableViewController <NSURLConnectionDelegate, UINavigationControllerDelegate>
 {
     NSMutableData *profileImageData;
+    UIImage *smallPortrait;
+    UIImage *defaultPortrait;
 }
 
 
 #pragma mark - Logout methods
 - (void)logoutButtonTouchHandler:(id)sender;
+- (void)buryItButtonTouchHandler:(id)sender;
 
 #pragma mark - NSURLConnectionDataDelegate
 

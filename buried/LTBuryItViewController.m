@@ -77,8 +77,8 @@
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
-    [self validateFields];
     [self.view endEditing:YES];
+    [self checkForItems];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -100,7 +100,6 @@
 -(void)clearMessageToUser
 {
     messagesToUserLabel.text = @"";
-    
 }
 
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField
@@ -139,15 +138,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(BOOL)checkForItems
 {
     // Test for items in the capsule if so change the button to cancel
-    if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0)
+    if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0 || self.friendPickerController.selection.count > 0)
     {
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
-    }
-    else if (self.navigationItem.leftBarButtonItem)
-    {
-        self.navigationItem.leftBarButtonItem.title = @"Log Out";
-    }
+        self.navigationItem.leftBarButtonItem.title = @"Clear";
         return YES;
+    } else {
+        self.navigationItem.leftBarButtonItem.title = @"Cancel";
+        return NO;}
 }
 
 -(BOOL)validateFields
@@ -172,13 +169,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         return YES;
     } else
         */
-    // either or for delivery
-        if (thought.length == 0 && !theImage) {
+    // either/or for delivery
+    if (thought.length == 0 && !theImage) {
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"nothing buried, nothing gained...";
         return NO;
-    } else {
-        [self setMessageToUserForTimeframe];
     }
     return YES;
 }
@@ -188,8 +183,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Add camera navigation bar button
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
-    
-    
 }
 
 -(void)discardPhoto
@@ -197,14 +190,16 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     theImage = nil;
     messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-    [self validateFields];
+    [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+    [self checkForItems];
 }
 
 -(BOOL)clearFields
 {
     emailTextField.text = @"";
     thoughtTextView.text = @"";
+    [self.friendPickerController clearSelection];
+    self.selectedFBEmailString = @"";
     
     [timeframeSegmentedControl setSelectedSegmentIndex:0];
     
@@ -217,18 +212,60 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     [self validateFields];
     
-    
     return YES;
 }
 
+-(id)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser
+{
+    NSLog(@"fbUser : %@",fbUser);
+    NSLog(@"pfUser : %@",pfUser);
+    if ([pfUser.username isEqualToString:fbUser.id])
+    {
+        NSLog(@"user account %@ linked to facebook id %@",pfUser.username,fbUser.id);
+        return pfUser;
+    }
+    
+        NSLog(@"looking for username in parse user db");
+        PFQuery *userQuery = [PFUser query];
+        [userQuery whereKey:@"username" equalTo:fbUser.id];
+        NSArray *objects = [userQuery findObjects];
+        NSLog(@"query executed");
+        if (objects.count < 1)
+        {
+            NSLog(@"matching username not found");
+            [pfUser setUsername:fbUser.id];
+            [pfUser setPassword:@""];
+            [pfUser signUp];
+            NSLog(@"username %@ signed up",pfUser.username);
+            return [self createUserFor:fbUser with:pfUser];
+        }
+    NSLog(@"located user in database");
+    return [self createUserFor:fbUser with:(PFUser *)[objects firstObject]]; // return nothing if the account already exists}
+}
+
+-(NSArray *)createArrayOfUsers:(NSArray *)array
+{
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
+    for (id<FBGraphUser> user in array)
+    {
+        PFUser *pfUser = [self createUserFor:user with:[PFUser user]];
+        if (pfUser)
+            [mutableArray addObject:pfUser];
+        
+    }
+    NSLog(@"%@",mutableArray);
+    return [NSArray arrayWithArray:mutableArray];
+}
+
+#pragma mark
 -(IBAction)buryIt:(id)sender
 {
     PFUser *user = [PFUser currentUser];
     NSString *email = @"";
     if (self.selectedFBEmailString.length > 0)
-        email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,[[user objectForKey:@"profile"] objectForKey:@"email"]];
+        email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,user.email];
     else
-        email = [[user objectForKey:@"profile"] objectForKey:@"email"];
+        email = [NSString stringWithFormat:@"%@",user.email];
     NSLog(@"Current recipients: %@",email);
     if ([self validateFields])
     {
@@ -238,25 +275,26 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
         
-        if ([email isEqualToString:@""])
-            email = [[user objectForKey:@"profile"] objectForKey:@"email"];
-        
+        capsule[@"from"] = user.email;
         capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"from"] = [[user objectForKey:@"profile"] objectForKey:@"email"];
+        capsule[@"fromUser"] = user;
+        capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
+
+        if (theImage) {
+            // Resize image
+            UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+            [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
+            UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
         
-        // Resize image
-        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-        [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
-        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+            NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
         
-        NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+            PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
         
-        PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
-        
-        capsule[@"image"] = imageFile;
+            capsule[@"image"] = imageFile;
+        }
         
         HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
@@ -289,11 +327,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
                 
+                [self clearFields];
+                [self checkForItems];
+                
                 messagesToUserLabel.textColor = successColor;
                 messagesToUserLabel.text = @"your thought has been buried...";
                 
-                [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-                [self clearFields];
+                [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
                 
             } else{
                 [HUD hide:YES];
@@ -360,11 +400,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         messagesToUserLabel.textColor = successColor;
         messagesToUserLabel.text = @"photo attached";
         
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
         
         theImage = image;
         
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
+        [self checkForItems];
         }
     } else {
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
@@ -375,11 +415,15 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     }
 }
 
-#pragma mark Logout methods
+#pragma mark Cancel Button methods
 
 - (void)cancelButtonTouchHandler:(id)sender {
-    theImage = nil;
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if ([self checkForItems])
+    {
+        [self clearFields];
+        [self checkForItems];
+    } else
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
@@ -404,6 +448,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     // Tint Camera button after picture taken
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+    
+    [self checkForItems];
     
     
 }
@@ -475,11 +521,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             {
                 if ([friend.name isEqual:user.name])
                 {
-                    [self appendEmail:[NSString stringWithFormat:@"%@@facebook.com",friend.username]];
-                }
+                    NSString *fbEmail = [NSString stringWithFormat:@"%@@facebook.com",friend.username];
+                    [self appendEmail:fbEmail];
                 }
             }
-            }];
+            }}];
     }
     
     if (self.friendPickerController.selection.count >= 1) {
@@ -502,7 +548,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (void)fillTextBoxAndDismiss:(NSString *)text {
     emailTextField.text = text;
-    
+    [self checkForItems];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
