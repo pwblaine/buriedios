@@ -4,6 +4,7 @@
 #import "LTLoginViewController.h"
 #import "LTUnearthedViewController.h"
 #import <Parse/Parse.h>
+#import "LTAppDelegate.h"
 
 @implementation LTLoginViewController
 
@@ -22,6 +23,18 @@
     // Add logout navigation bar button
     UIBarButtonItem *loginButton = [[UIBarButtonItem alloc] initWithTitle:@"Log In" style:UIBarButtonItemStyleBordered target:self action:@selector(loginButtonTouchHandler:)];
     self.navigationItem.rightBarButtonItem = loginButton;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:NO];
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    self.navigationItem.rightBarButtonItem.enabled = true;
 }
 
 
@@ -91,11 +104,9 @@
         } else if (user.isNew) {
             NSLog(@"user with facebook signed up and logged in!");
             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
-            self.navigationItem.rightBarButtonItem.enabled = YES;
         } else {
             NSLog(@"user with facebook logged in!");
             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
-            self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];
 }

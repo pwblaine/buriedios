@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Loftier Thoughts. All rights reserved.
 //
 
+#import "LTAppDelegate.h"
 #import "LTUnearthedViewController.h"
 #import "LTBuryItViewController.h"
 #import "LTCapsuleViewController.h"
@@ -78,6 +79,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:YES];
     // Do any additional setup after loading the view from its nib.
     
     // Add logout navigation bar button
@@ -293,6 +296,10 @@
 
 - (void)updateUserProfile
 {
+    // disable navigation and wait for response from server
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -310,7 +317,6 @@
             [[PFUser currentUser] setObject:userData forKey:@"profile"];
             
             // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-            
             [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
             [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
                 
@@ -342,14 +348,19 @@
             if (!urlConnection) {
                 NSLog(@"failed to download picture");
             }
-            */
-            
+             */
+            // renable navigation upon receipt of server response
+            self.navigationItem.leftBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
             self.title = [[PFUser currentUser] objectForKey:@"displayName"];
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];
         } else {
             NSLog(@"some other error: %@", error);
+            // renable navigation upon receipt of server response
+            self.navigationItem.leftBarButtonItem.enabled = YES;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];
 }

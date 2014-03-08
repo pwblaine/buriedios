@@ -5,6 +5,7 @@
 
 #import <Parse/Parse.h>
 #import "LTLoginViewController.h"
+#import "QuickAddView.h"
 
 @implementation LTAppDelegate
 
@@ -39,6 +40,10 @@
 
     // Override point for customization after application launch.
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];
+    UIView *quickAddView = [[QuickAddView alloc] initWithFrame:CGRectMake(0, 494, 320, 568)];
+    [self.window.rootViewController.view addSubview:quickAddView];
+    [self.window.rootViewController.view bringSubviewToFront:quickAddView];
+    [self showGrass:NO];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
@@ -67,6 +72,19 @@
      */
     
     [[PFFacebookUtils session] close];
+}
+
+-(void)showGrass:(BOOL)shouldShow {
+    // this method toggles the grass in the quick add field, it dissappears when its disabled
+    for (UIView *aView in self.window.rootViewController.view.subviews) {
+         NSLog(@"showGrass:%d",shouldShow);
+        // finds the grass container in array of active subviews for the rootNav controller
+        if ([aView isKindOfClass:[QuickAddView class]] && shouldShow) {
+            [[(QuickAddView *)aView grassButton] setHidden:NO];
+        } else if ([aView isKindOfClass:[QuickAddView class]] && !shouldShow) {
+            [[(QuickAddView *)aView grassButton] setHidden:YES];
+        }
+    }
 }
 
 @end
