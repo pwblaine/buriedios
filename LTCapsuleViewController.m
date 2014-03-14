@@ -36,8 +36,8 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
-    NSString *timestampString = [NSDateFormatter localizedStringFromDate:[self.capsule objectForKey:@"deliveryDate"] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-    self->timestamp.text = timestampString;
+    NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    self->timestamp.text = timestampString; // timestamp states created at date
     NSString *thought = [self.capsule objectForKey:@"thought"];
     self->thoughtContainer.editable = NO;
     self->thoughtContainer.selectable = YES;

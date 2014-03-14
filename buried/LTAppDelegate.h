@@ -7,4 +7,6 @@
 
 - (void)showGrass:(BOOL)shouldShow;
 
+-(IBAction)slideGrass:(id)sender;
+
 @end

@@ -40,10 +40,6 @@
 		2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2825D44F18CB70E300E971AB /* QuickAddView.xib */; };
 		2825D45518CB757E00E971AB /* QuickAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D45418CB757E00E971AB /* QuickAddView.m */; };
 		284B2CF918AC47A800BB976F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284B2CF818AC47A800BB976F /* FacebookSDK.framework */; };
-		284B2D0018AC4A4800BB976F /* Application.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFC18AC4A4800BB976F /* Application.xcconfig */; };
-		284B2D0118AC4A4800BB976F /* Project-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */; };
-		284B2D0218AC4A4800BB976F /* Project-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */; };
-		284B2D0318AC4A4800BB976F /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 284B2CFF18AC4A4800BB976F /* Project.xcconfig */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
@@ -359,7 +355,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = LT;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Loftier Thoughts";
 				TargetAttributes = {
 					44FC42A51862667700CC948C = {
@@ -393,7 +389,6 @@
 				28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */,
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
 				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
-				284B2D0218AC4A4800BB976F /* Project-Release.xcconfig in Resources */,
 				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
 				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
 				2825D44B18CB6D5600E971AB /* MainStoryboard.storyboard in Resources */,
@@ -409,8 +404,6 @@
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
 				28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */,
-				284B2D0118AC4A4800BB976F /* Project-Debug.xcconfig in Resources */,
-				284B2D0018AC4A4800BB976F /* Application.xcconfig in Resources */,
 				286D080218CB647E000B5EBE /* grassToolbar.png in Resources */,
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
@@ -419,7 +412,6 @@
 				2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
 				284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */,
-				284B2D0318AC4A4800BB976F /* Project.xcconfig in Resources */,
 				281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,7 +461,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -512,7 +503,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

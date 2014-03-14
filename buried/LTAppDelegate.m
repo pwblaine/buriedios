@@ -76,13 +76,35 @@
 
 -(void)showGrass:(BOOL)shouldShow {
     // this method toggles the grass in the quick add field, it dissappears when its disabled
-    for (UIView *aView in self.window.rootViewController.view.subviews) {
-         NSLog(@"showGrass:%d",shouldShow);
+    for (QuickAddView *aView in self.window.rootViewController.view.subviews) {
+        if ([aView isKindOfClass:[QuickAddView class]])
+        {        NSLog(@"showGrass:%d",shouldShow);   }
         // finds the grass container in array of active subviews for the rootNav controller
         if ([aView isKindOfClass:[QuickAddView class]] && shouldShow) {
             [[(QuickAddView *)aView grassButton] setHidden:NO];
         } else if ([aView isKindOfClass:[QuickAddView class]] && !shouldShow) {
             [[(QuickAddView *)aView grassButton] setHidden:YES];
+        }
+    }
+}
+
+-(IBAction)slideGrass:(id)sender {
+    // this method toggles the grass in the quick add field, it dissappears when its disabled
+    for (QuickAddView *aView in self.window.rootViewController.view.subviews) {
+        // finds the grass container in array of active subviews for the rootNav controller
+        if ([aView isKindOfClass:[QuickAddView class]] && (aView.center.y == 778.0f)) {
+            NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
+            NSLog(@"grassButtonCenter: (%f,%f)",aView.grassButton.center.x,aView.grassButton.center.y);
+            [aView setCenter:CGPointMake(aView.center.x, aView.frame.size.height/2)];
+            [aView setBackgroundColor:[UIColor blackColor]];
+            aView.grassButton.center = CGPointMake(aView.center.x, aView.grassButton.center.y*-1/8);
+            NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
+        } else if ([aView isKindOfClass:[QuickAddView class]]) {
+            NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
+            [aView setCenter:CGPointMake(aView.center.x, 778.0f)];
+            [aView setBackgroundColor:[UIColor clearColor]];
+            aView.grassButton.center = CGPointMake(aView.center.x, aView.grassButton.frame.size.height/2);
+            NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
         }
     }
 }
