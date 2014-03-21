@@ -58,21 +58,29 @@
 }
 
 - (PFQuery *)queryForTable {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     // If no objects are loaded in memory, we look to the cache
     // first to fill the table and then subsequently do a query
     // against the network.
     if ([self.objects count] == 0) {
-        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+        emailQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
+    PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    [query whereKey:@"email" containsString:[[PFUser currentUser] email]];
-    [query whereKey:@"sent" equalTo:@YES];
+    [fbQuery whereKey:@"email" containsString:[[[PFUser currentUser] objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
     
-    [query orderByDescending:@"deliveryDate"];
+   // [fbQuery whereKey:@"sent" equalTo:@YES];
     
-    return query;
+    [emailQuery whereKey:@"email" containsString:[[PFUser currentUser] email]];
+    
+    PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
+    
+    [compundQuery whereKey:@"sent" equalTo:@YES];
+    
+    [compundQuery orderByDescending:@"deliveryDate"];
+    
+    return compundQuery;
 }
 
 

@@ -35,6 +35,8 @@
     fullScreenThought.alpha = 0;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
+    NSString *fromUser = [self.capsule objectForKey:@"from"];
+    self.navigationItem.title = fromUser;
     
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
