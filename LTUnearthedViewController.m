@@ -104,7 +104,32 @@
     
     [self updateUserProfile];
     
-    self.title = [[PFUser currentUser] objectForKey:@"displayName"];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
+    
+    // If no objects are loaded in memory, we look to the cache
+    // first to fill the table and then subsequently do a query
+    // against the network.
+    if ([self.objects count] == 0) {
+        emailQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    }
+    PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
+    
+    [fbQuery whereKey:@"email" containsString:[[[PFUser currentUser] objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
+    
+    // [fbQuery whereKey:@"sent" equalTo:@YES];
+    
+    [emailQuery whereKey:@"email" containsString:[[PFUser currentUser] email]];
+    
+    PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
+    
+    [compundQuery whereKey:@"sent" notEqualTo:@YES];
+    // TODO calculate capsules that will unearth within a week
+    
+    if (compundQuery.countObjects > 0)
+        self.title = [NSString stringWithFormat:@"%i Await You",compundQuery.countObjects];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -157,6 +182,12 @@
  
      // Configure the cell
      cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+     if ([[object objectForKey:@"from"] isEqualToString:[[PFUser currentUser] email]] || [[object objectForKey:@"fromUser"] isEqual:[PFUser currentUser]])
+     {
+         cell.textLabel.textColor = [UIColor blueColor];
+     } else {
+         cell.textLabel.textColor = [UIColor greenColor];
+     }
      NSString *thought = [object objectForKey:@"thought"];
      if (cell.detailTextLabel.textColor != [UIColor blackColor])
          cell.detailTextLabel.textColor = [UIColor blackColor];
@@ -360,7 +391,7 @@
             // renable navigation upon receipt of server response
             self.navigationItem.leftBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            self.title = [[PFUser currentUser] objectForKey:@"displayName"];
+            // self.title = [[PFUser currentUser] objectForKey:@"displayName"];
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];

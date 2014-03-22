@@ -328,17 +328,17 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
                 
                 [self clearFields];
-                [self checkForItems];
-                
-                messagesToUserLabel.textColor = successColor;
-                messagesToUserLabel.text = @"your thought has been buried...";
-                
-                [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+                [self.navigationController popViewControllerAnimated:YES];
                 
             } else{
                 [HUD hide:YES];
                 // Log details of the failure
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
+                
+                messagesToUserLabel.textColor = errorColor;
+                messagesToUserLabel.text = @"burying your thought failed...";
+                
+                [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
             }
         }];
     }
