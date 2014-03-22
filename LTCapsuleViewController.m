@@ -35,14 +35,23 @@
     fullScreenThought.alpha = 0;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
-    self.title = @"Capsule";
+    NSString *toBeTitle = @"";
+    
+    NSString *from = [self.capsule objectForKey:@"from"];
+    
+    if (from.length > 0)
+        toBeTitle = from;
+    else
+        toBeTitle = @"Capsule";
+    
     PFUser *fromUser = [self.capsule objectForKey:@"fromUser"];
-    [fromUser fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        NSString *displayName = [object objectForKey:@"displayName"];
-        if (displayName.length > 0)
-            self.title = displayName;
-    }];
-        
+    [fromUser fetchIfNeeded];
+    NSString *displayName = [fromUser objectForKey:@"displayName"];
+    if (displayName.length > 0)
+            toBeTitle = displayName;
+    
+    self.title = toBeTitle;
+    
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
     NSString *thought = [self.capsule objectForKey:@"thought"];

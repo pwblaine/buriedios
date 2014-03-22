@@ -129,7 +129,7 @@
     // TODO calculate capsules that will unearth within a week
     
     if (compundQuery.countObjects > 0)
-        self.title = [NSString stringWithFormat:@"%d Await You",compundQuery.countObjects];
+        self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
 }
 
 #pragma mark - PFQueryTableViewController
