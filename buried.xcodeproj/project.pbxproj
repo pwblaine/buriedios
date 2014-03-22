@@ -10,7 +10,6 @@
 		280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */; };
 		28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */; };
 		28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */; };
-		281E7A35188E813A00C85066 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EF8FBC186959880091D178 /* Parse.framework */; };
 		281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A8A188EA66800C85066 /* 37x-Checkmark.png */; };
 		281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A92188EA66800C85066 /* buriedlogo_250height.png */; };
 		281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A93188EA66800C85066 /* Crowd.jpg */; };
@@ -33,13 +32,8 @@
 		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
-		2825D44618CB6C7000E971AB /* Child1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D44118CB6C7000E971AB /* Child1ViewController.m */; };
-		2825D44718CB6C7000E971AB /* Child2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D44318CB6C7000E971AB /* Child2ViewController.m */; };
-		2825D44818CB6C7000E971AB /* ParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D44518CB6C7000E971AB /* ParentViewController.m */; };
-		2825D44B18CB6D5600E971AB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2825D44918CB6D5500E971AB /* MainStoryboard.storyboard */; };
 		2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2825D44F18CB70E300E971AB /* QuickAddView.xib */; };
 		2825D45518CB757E00E971AB /* QuickAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D45418CB757E00E971AB /* QuickAddView.m */; };
-		284B2CF918AC47A800BB976F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284B2CF818AC47A800BB976F /* FacebookSDK.framework */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
@@ -48,6 +42,8 @@
 		286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
+		28C5931918DD32E300288764 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C5931718DD32E300288764 /* FacebookSDK.framework */; };
+		28C5931A18DD32E300288764 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C5931818DD32E300288764 /* Parse.framework */; };
 		28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D2A21218C33354007EB808 /* LTUnearthedViewController.m */; };
 		28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */; };
 		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
@@ -99,17 +95,9 @@
 		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
 		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
-		2825D44018CB6C7000E971AB /* Child1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Child1ViewController.h; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/Child1ViewController.h; sourceTree = "<group>"; };
-		2825D44118CB6C7000E971AB /* Child1ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Child1ViewController.m; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/Child1ViewController.m; sourceTree = "<group>"; };
-		2825D44218CB6C7000E971AB /* Child2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Child2ViewController.h; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/Child2ViewController.h; sourceTree = "<group>"; };
-		2825D44318CB6C7000E971AB /* Child2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Child2ViewController.m; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/Child2ViewController.m; sourceTree = "<group>"; };
-		2825D44418CB6C7000E971AB /* ParentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParentViewController.h; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/ParentViewController.h; sourceTree = "<group>"; };
-		2825D44518CB6C7000E971AB /* ParentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParentViewController.m; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/ParentViewController.m; sourceTree = "<group>"; };
-		2825D44A18CB6D5500E971AB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ../../Downloads/StateRestoreChildViews/StateRestoreChildViews/en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		2825D44F18CB70E300E971AB /* QuickAddView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickAddView.xib; sourceTree = SOURCE_ROOT; };
 		2825D45318CB757E00E971AB /* QuickAddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickAddView.h; sourceTree = "<group>"; };
 		2825D45418CB757E00E971AB /* QuickAddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickAddView.m; sourceTree = "<group>"; };
-		284B2CF818AC47A800BB976F /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -127,6 +115,8 @@
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
 		28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = "<group>"; };
+		28C5931718DD32E300288764 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
+		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
 		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
 		28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTUnearthedViewController.xib; sourceTree = "<group>"; };
@@ -156,8 +146,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				284B2CF918AC47A800BB976F /* FacebookSDK.framework in Frameworks */,
-				281E7A35188E813A00C85066 /* Parse.framework in Frameworks */,
+				28C5931918DD32E300288764 /* FacebookSDK.framework in Frameworks */,
+				28C5931A18DD32E300288764 /* Parse.framework in Frameworks */,
 				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
 				44FC42F2186267D800CC948C /* StoreKit.framework in Frameworks */,
 				44FC42F0186267D300CC948C /* Security.framework in Frameworks */,
@@ -176,24 +166,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2825D44C18CB6FA100E971AB /* ContainerView */ = {
-			isa = PBXGroup;
-			children = (
-				2825D44018CB6C7000E971AB /* Child1ViewController.h */,
-				2825D44118CB6C7000E971AB /* Child1ViewController.m */,
-				2825D44218CB6C7000E971AB /* Child2ViewController.h */,
-				2825D44318CB6C7000E971AB /* Child2ViewController.m */,
-				2825D44418CB6C7000E971AB /* ParentViewController.h */,
-				2825D44518CB6C7000E971AB /* ParentViewController.m */,
-				2825D44918CB6D5500E971AB /* MainStoryboard.storyboard */,
-			);
-			name = ContainerView;
-			sourceTree = "<group>";
-		};
 		284B2CFA18AC49D500BB976F /* Partner Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2825D44C18CB6FA100E971AB /* ContainerView */,
 				286E641118C30C9200CDB033 /* UIImage Categories */,
 				284B2D0A18AC4AB800BB976F /* FBFriendPicker */,
 				284B2D0418AC4A7D00BB976F /* MBProgressHUD */,
@@ -280,7 +255,8 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				284B2CF818AC47A800BB976F /* FacebookSDK.framework */,
+				28C5931718DD32E300288764 /* FacebookSDK.framework */,
+				28C5931818DD32E300288764 /* Parse.framework */,
 				30EF8FBC186959880091D178 /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
 				44FC42F1186267D800CC948C /* StoreKit.framework */,
@@ -391,7 +367,6 @@
 				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
 				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
 				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
-				2825D44B18CB6D5600E971AB /* MainStoryboard.storyboard in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
 				281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */,
@@ -432,29 +407,15 @@
 				28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */,
 				286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
-				2825D44618CB6C7000E971AB /* Child1ViewController.m in Sources */,
-				2825D44818CB6C7000E971AB /* ParentViewController.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
 				2825D45518CB757E00E971AB /* QuickAddView.m in Sources */,
 				281E7AC8188EA66800C85066 /* main.m in Sources */,
 				281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */,
-				2825D44718CB6C7000E971AB /* Child2ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		2825D44918CB6D5500E971AB /* MainStoryboard.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2825D44A18CB6D5500E971AB /* en */,
-			);
-			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		44FC42D91862667700CC948C /* Debug */ = {
@@ -541,8 +502,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/patrickblaine/Documents/buriedios,
-					/Users/patrickblaine/Documents/FacebookSDK,
+					"~/Documents",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -560,8 +520,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/patrickblaine/Documents/buriedios,
-					/Users/patrickblaine/Documents/FacebookSDK,
+					"~/Documents",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
