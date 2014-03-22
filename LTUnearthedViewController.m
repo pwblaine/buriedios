@@ -129,7 +129,7 @@
     // TODO calculate capsules that will unearth within a week
     
     if (compundQuery.countObjects > 0)
-        self.title = [NSString stringWithFormat:@"%i Await You",compundQuery.countObjects];
+        self.title = [NSString stringWithFormat:@"%d Await You",compundQuery.countObjects];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -186,8 +186,9 @@
      {
          cell.textLabel.textColor = [UIColor blueColor];
      } else {
-         cell.textLabel.textColor = [UIColor greenColor];
+         cell.textLabel.textColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
      }
+     cell.textLabel.textAlignment = NSTextAlignmentLeft;
      NSString *thought = [object objectForKey:@"thought"];
      if (cell.detailTextLabel.textColor != [UIColor blackColor])
          cell.detailTextLabel.textColor = [UIColor blackColor];
