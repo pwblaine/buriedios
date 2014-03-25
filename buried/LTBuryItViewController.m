@@ -280,6 +280,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
         capsule[@"fromUser"] = user;
+        capsule[@"read"] = @NO;
         capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
 
         if (theImage) {

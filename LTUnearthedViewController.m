@@ -130,6 +130,8 @@
     
     if (compundQuery.countObjects > 0)
         self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -196,10 +198,15 @@
          cell.detailTextLabel.text = thought;
      else
      {
-     cell.detailTextLabel.text = @"Picture";
-     cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+         cell.detailTextLabel.text = @"Picture";
+         cell.detailTextLabel.textColor = [UIColor blackColor];
+         
      }
- 
+     if (![[object objectForKey:@"read"] isEqual:@YES])
+     {
+         cell.detailTextLabel.text = [NSString stringWithFormat:@"• %@",cell.detailTextLabel.text];
+         cell.detailTextLabel.textColor = [UIColor brownColor];
+     }
  return cell;
  }
 
@@ -505,9 +512,14 @@
  LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
  
  // Pass the selected object to the new view controller.
-     capsuleViewController.capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
      
-     NSLog(@"%@",capsuleViewController.capsule);
+     PFObject *capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
+     capsuleViewController.capsule = capsule;
+     
+     capsule[@"read"] = @YES;
+     [capsule save];
+     
+     NSLog(@"%@",capsule);
  
  // Push the view controller.
  [self.navigationController pushViewController:capsuleViewController animated:YES];
