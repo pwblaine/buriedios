@@ -209,7 +209,7 @@
          
      }
     
-     // Unread code: if user isn't found in the readUsers tint brown.
+     // Unread code: if current user isn't found in the readUsers tint brown.
      
      NSArray *readUsers = [object objectForKey:@"readUsers"];
      
@@ -539,7 +539,7 @@
  // Create the next view controller.
  LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
  
- // Pass the selected object to the new view controller.
+ // Pass the selected object to the new view controller and add user to the readUsers array.
      
      PFObject *capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
      capsuleViewController.capsule = capsule;
