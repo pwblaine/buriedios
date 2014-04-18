@@ -183,7 +183,11 @@
  }
  
      // Configure the cell
+     
+     // Set left label to timestamp
      cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+     
+     // If sent to self set label to blue
      if ([[object objectForKey:@"from"] isEqualToString:[[PFUser currentUser] email]] || [[object objectForKey:@"fromUser"] isEqual:[PFUser currentUser]])
      {
          cell.textLabel.textColor = [UIColor blueColor];
@@ -192,8 +196,10 @@
      }
      cell.textLabel.textAlignment = NSTextAlignmentLeft;
      NSString *thought = [object objectForKey:@"thought"];
+     
      if (cell.detailTextLabel.textColor != [UIColor blackColor])
          cell.detailTextLabel.textColor = [UIColor blackColor];
+     
      if (thought.length > 1)
          cell.detailTextLabel.text = thought;
      else
@@ -202,11 +208,33 @@
          cell.detailTextLabel.textColor = [UIColor blackColor];
          
      }
-     if (![[object objectForKey:@"read"] isEqual:@YES])
+    
+     // Unread code: if user isn't found in the readUsers tint brown.
+     
+     NSArray *readUsers = [object objectForKey:@"readUsers"];
+     
+     BOOL userHasRead = NO;
+     
+     if ([readUsers count] > 0)
+     {
+     for (PFUser *user in readUsers) {
+         
+         [user fetchIfNeeded];
+         
+         if ([user objectForKey:@"id"] == [[PFUser currentUser] objectForKey:@"id"]) {
+             userHasRead = YES;
+             break;
+         }
+         
+        }
+     }
+     if (!userHasRead)
      {
          cell.detailTextLabel.text = [NSString stringWithFormat:@"• %@",cell.detailTextLabel.text];
          cell.detailTextLabel.textColor = [UIColor brownColor];
      }
+
+     
  return cell;
  }
 
@@ -516,7 +544,8 @@
      PFObject *capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
      capsuleViewController.capsule = capsule;
      
-     capsule[@"read"] = @YES;
+     [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
+     
      [capsule save];
      
      NSLog(@"%@",capsule);
