@@ -38,7 +38,7 @@
 
 -(BOOL)validateFields;
 -(BOOL)clearFields;
--(BOOL)checkForItems;
+-(BOOL)checkForItemsAndSetClearOrCancel;
 
 -(PFUser *)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser;
 -(NSArray *)createArrayOfUsers:(NSArray *)array;

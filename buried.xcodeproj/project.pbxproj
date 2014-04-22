@@ -123,8 +123,8 @@
 		28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTCapsuleViewController.h; sourceTree = "<group>"; };
 		28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTCapsuleViewController.m; sourceTree = "<group>"; };
 		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
+		28F9584B1906555F0017DCEA /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		28FB0ED818C8775E00A37A4B /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -248,7 +248,7 @@
 				284B2CFA18AC49D500BB976F /* Partner Classes */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,
-				28FB0ED818C8775E00A37A4B /* buried.app */,
+				28F9584B1906555F0017DCEA /* buried.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -321,7 +321,7 @@
 			);
 			name = buried.;
 			productName = buried.;
-			productReference = 28FB0ED818C8775E00A37A4B /* buried.app */;
+			productReference = 28F9584B1906555F0017DCEA /* buried.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -508,7 +508,10 @@
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "buried/buried-Info.plist";
-				OTHER_LDFLAGS = "-fobjc-arc";
+				OTHER_LDFLAGS = (
+					"-v",
+					"-fobjc-arc",
+				);
 				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
 			};
@@ -526,7 +529,10 @@
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "buried/buried-Info.plist";
-				OTHER_LDFLAGS = "-fobjc-arc";
+				OTHER_LDFLAGS = (
+					"-v",
+					"-fobjc-arc",
+				);
 				PRODUCT_NAME = buried;
 				WRAPPER_EXTENSION = app;
 			};

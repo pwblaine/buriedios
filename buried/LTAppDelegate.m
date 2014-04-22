@@ -6,6 +6,7 @@
 #import <Parse/Parse.h>
 #import "LTLoginViewController.h"
 #import "QuickAddView.h"
+#import "LTBuryItViewController.h"
 
 @implementation LTAppDelegate
 
@@ -88,7 +89,19 @@
     }
 }
 
+-(void)summonBuryItViewWithCamera {
+    NSLog(@"summonBuryItViewWithCamera");
+    LTBuryItViewController *controller = [[LTBuryItViewController alloc] init];
+    [(UINavigationController *)self.window.rootViewController pushViewController:controller animated:YES];
+    [controller cameraButtonTapped:self];
+    // if line above fails use this...
+    // [NSTimer scheduledTimerWithTimeInterval:1 target:controller selector:@selector(cameraButtonTapped:) userInfo:nil repeats:NO];
+}
+
 -(IBAction)slideGrass:(id)sender {
+    
+    [self summonBuryItViewWithCamera];
+    /*
     // this method toggles the grass in the quick add field, it dissappears when its disabled
     for (QuickAddView *aView in self.window.rootViewController.view.subviews) {
         // finds the grass container in array of active subviews for the rootNav controller
@@ -106,7 +119,7 @@
             aView.grassButton.center = CGPointMake(aView.center.x, aView.grassButton.frame.size.height/2);
             NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
         }
-    }
+    }*/
 }
 
 @end

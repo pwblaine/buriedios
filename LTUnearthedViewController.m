@@ -87,8 +87,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate showGrass:YES];
     // Do any additional setup after loading the view from its nib.
     
     // Add logout navigation bar button
@@ -140,12 +138,16 @@
     [super objectsWillLoad];
     
     // This method is called before a PFQuery is fired to get more objects
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:NO];
 }
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
     // This method is called every time objects are loaded from Parse via the PFQuery
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:YES];
 }
 
 /*
@@ -531,7 +533,9 @@
  */
 
 
- #pragma mark - Table view delegate
+#pragma mark - Table view UIImage *theImage;
+
+
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
  {
      

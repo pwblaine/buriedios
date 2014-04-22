@@ -10,6 +10,7 @@
 #import "LTPhotoDetailViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
+#import "LTAppDelegate.h"
 
 @interface LTBuryItViewController ()
 
@@ -30,6 +31,22 @@
 }
 
 #pragma mark View Lifecycle
+
+- (void) applyImagePreview {
+    
+    if (theImage)
+    {
+// Resize image
+UIGraphicsBeginImageContext(CGSizeMake(32, 32));
+[theImage drawInRect: CGRectMake(0, 0, 32, 32)];
+UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
+UIGraphicsEndImageContext();
+
+// Tint Camera button after picture taken
+self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+    }
+}
+
 
 - (void)viewDidLoad
 {
@@ -53,13 +70,20 @@
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
     
+    if (theImage)
+        [self applyImagePreview];
+    
+    if (theImage)
+        [self checkForItemsAndSetClearOrCancel];
+    
     // Add the temporary title
     self.title = @"New Capsule";
-    
     [self setMessageToUserForTimeframe];
     
     emailTextField.placeholder = @"for my eyes only";
     
+    LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate showGrass:NO];
 }
 
 
@@ -78,7 +102,7 @@
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
     [self.view endEditing:YES];
-    [self checkForItems];
+    [self checkForItemsAndSetClearOrCancel];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -135,16 +159,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     [self setMessageToUserForTimeframe];
 }
 
--(BOOL)checkForItems
+-(BOOL)checkForItemsAndSetClearOrCancel
 {
     // Test for items in the capsule if so change the button to cancel
     if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0 || self.friendPickerController.selection.count > 0)
     {
+        if (theImage)
+            [self applyImagePreview];
         self.navigationItem.leftBarButtonItem.title = @"Clear";
         return YES;
     } else {
         self.navigationItem.leftBarButtonItem.title = @"Cancel";
-        return NO;}
+        return NO;
+    }
 }
 
 -(BOOL)validateFields
@@ -191,7 +218,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
     [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-    [self checkForItems];
+    [self checkForItemsAndSetClearOrCancel];
 }
 
 -(BOOL)clearFields
@@ -209,8 +236,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
-    
-    [self validateFields];
     
     return YES;
 }
@@ -298,17 +323,27 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         }
         
         HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        
+        for (UIButton *button in self.view.subviews) {
+            button.enabled = NO;
+        };
+        
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        
         [self.view addSubview:HUD];
         
         // Set determinate mode
         HUD.mode = MBProgressHUDModeDeterminate;
         HUD.delegate = self;
-        HUD.labelText = @"Uploading";
+        HUD.labelText = @"burying";
         [HUD show:YES];
         
         // Save PFFile
         [capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
+                
+                HUD.progress = 1.0f;
                 
             //Hide determinate HUD
             [HUD hide:YES];
@@ -316,6 +351,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             // Show checkmark
             HUD = [[MBProgressHUD alloc] initWithView:self.view];
             [self.view addSubview:HUD];
+                
+                HUD.labelText = @"burying";
             
             // The sample image is based on the work by http://www.pixelpressicons.com, http://creativecommons.org/licenses/by/2.5/ca/
             // Make the customViews 37 by 37 pixels for best results (those are the bounds of the build-in progress indicators)
@@ -325,10 +362,15 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
             HUD.mode = MBProgressHUDModeCustomView;
             
             HUD.delegate = self;
+                
+                [HUD show:YES];
             
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
                 
+                
                 [self clearFields];
+                LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
+                [appDelegate showGrass:YES];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } else{
@@ -337,9 +379,16 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                 NSLog(@"Error: %@ %@", error, [error userInfo]);
                 
                 messagesToUserLabel.textColor = errorColor;
-                messagesToUserLabel.text = @"burying your thought failed...";
+                messagesToUserLabel.text = @":(";
                 
-                [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+                [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+                for (UIButton *button in self.view.subviews) {
+                    button.enabled = YES;
+                };
+                
+                self.navigationItem.leftBarButtonItem.enabled = YES;
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                
             }
         }];
     }
@@ -401,11 +450,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         messagesToUserLabel.textColor = successColor;
         messagesToUserLabel.text = @"photo attached";
         
-        [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-        
         theImage = image;
         
-        [self checkForItems];
+        [self checkForItemsAndSetClearOrCancel];
         }
     } else {
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
@@ -419,12 +466,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark Cancel Button methods
 
 - (void)cancelButtonTouchHandler:(id)sender {
-    if ([self checkForItems])
+    if ([self checkForItemsAndSetClearOrCancel])
     {
         [self clearFields];
-        [self checkForItems];
-    } else
+        messagesToUserLabel.text = @"capsule cleared";
+        messagesToUserLabel.textColor =  errorColor;
+        [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+        [self checkForItemsAndSetClearOrCancel];
+    } else {
+        
+        LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate showGrass:YES];
     [self.navigationController popViewControllerAnimated:YES];
+    }
     
 }
 
@@ -450,7 +504,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Tint Camera button after picture taken
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
     
-    [self checkForItems];
+    [self checkForItemsAndSetClearOrCancel];
     
     
 }
@@ -549,7 +603,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (void)fillTextBoxAndDismiss:(NSString *)text {
     emailTextField.text = text;
-    [self checkForItems];
+    [self checkForItemsAndSetClearOrCancel];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
