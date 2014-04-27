@@ -126,9 +126,9 @@
     [compundQuery whereKey:@"sent" notEqualTo:@YES];
     // TODO calculate capsules that will unearth within a week
     
-    if (compundQuery.countObjects > 0)
+    if (compundQuery.countObjects > 1)
         self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
-    else if (compundQuery.countObjects > 1)
+    else if (compundQuery.countObjects == 1)
         self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
     
     [self.tableView reloadData];
