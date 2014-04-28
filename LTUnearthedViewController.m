@@ -124,12 +124,14 @@
     PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
     
     [compundQuery whereKey:@"sent" notEqualTo:@YES];
-    // TODO calculate capsules that will unearth within a week
     
+    // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
     if (compundQuery.countObjects > 1)
         self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
     else if (compundQuery.countObjects == 1)
         self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
+    else
+        self.title = [NSString stringWithFormat:@"%@",[[PFUser currentUser] objectForKey:@"displayName"]];
     
     [self.tableView reloadData];
 }
@@ -417,7 +419,7 @@
             NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
             NSLog(@"profile picture URL created");
             
-            NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:pictureURL
+            NSMutableURLRequest*urlRequest = [NSMutableURLRequest requestWithURL:pictureURL
                                                                       cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                                   timeoutInterval:2.0f];
             // Run network request asynchronously
