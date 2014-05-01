@@ -573,8 +573,9 @@
      
      if (!hasRead)
      {
-         NSLog(@"user hasn't read capsule yet, adding to readUsers");
+         NSLog(@"user hasn't read capsule yet, adding to readUsers.");
          [capsule addObject:[PFUser currentUser] forKey:@"readUsers"];
+         NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUsers"] count]);
          
          PFInstallation *currentInstallation = [PFInstallation currentInstallation];
          if (currentInstallation.badge > 0) {
