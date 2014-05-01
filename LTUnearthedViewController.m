@@ -559,14 +559,37 @@
      PFObject *capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
      capsuleViewController.capsule = capsule;
      
-     [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
+     BOOL hasRead = false;
      
+     for (PFUser *user in (NSArray *)[capsule objectForKey:@"readUsers"])
+     {
+         NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[[PFUser currentUser] objectId]);
+         if ([[user objectId] isEqualToString:[[PFUser currentUser] objectId]])
+         {
+             hasRead = true;
+             NSLog(@"user found!");
+         }
+     }
+     
+     if (!hasRead)
+     {
+         NSLog(@"user hasn't read capsule yet, adding to readUsers");
+         [capsule addObject:[PFUser currentUser] forKey:@"readUsers"];
+         
+         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+         if (currentInstallation.badge > 0) {
+             currentInstallation.badge--;
+             [currentInstallation saveEventually];
+             NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
+         }
+         
      [capsule save];
+     }
      
      NSLog(@"%@",capsule);
  
- // Push the view controller.
- [self.navigationController pushViewController:capsuleViewController animated:YES];
+     // Push the view controller.
+     [self.navigationController pushViewController:capsuleViewController animated:YES];
 
  }
 
