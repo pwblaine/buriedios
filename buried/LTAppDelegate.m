@@ -130,6 +130,8 @@
 #pragma Push Notification Methods
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"Push notitifications registered successfully, saving installation data to Parse");
+    
     // Upon proper registration with push notifications, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];

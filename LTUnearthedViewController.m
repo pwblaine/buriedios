@@ -102,6 +102,13 @@
     
     [self updateUserProfile];
     
+    
+    // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    currentInstallation.channels = @[@"global", [[PFUser currentUser] objectId]];
+    [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
+    [currentInstallation saveInBackground];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

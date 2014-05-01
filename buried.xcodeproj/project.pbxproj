@@ -501,6 +501,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -514,6 +515,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
+				PROVISIONING_PROFILE = "AE749F1E-FE24-4149-BA88-63335CF5DFDC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -523,6 +525,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -536,6 +539,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
+				PROVISIONING_PROFILE = "AE749F1E-FE24-4149-BA88-63335CF5DFDC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
