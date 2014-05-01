@@ -40,6 +40,11 @@
 #endif
 
     // Override point for customization after application launch.
+    
+    // Register for Notification Center
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
+    
+    // Set up initial view
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];
     UIView *quickAddView = [[QuickAddView alloc] initWithFrame:CGRectMake(0, 494, 320, 568)];
     [self.window.rootViewController.view addSubview:quickAddView];
@@ -120,6 +125,31 @@
             NSLog(@"grassCenter: (%f,%f)",aView.center.x,aView.center.y);
         }
     }*/
+}
+
+#pragma Push Notification Methods
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Upon proper registration with push notifications, save the information to a Parse installation.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels = @[@"global"];
+    [currentInstallation saveInBackground];
+    
+    // on a class that uses this data [self loadInstallData]; must be envoked in the ViewDidLoad method
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    if (error.code == 3010) {
+        NSLog(@"Push notifications are not supported in the iOS Simulator.");
+    } else {
+        // show some alert or otherwise handle the failure to register.
+        NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 @end
