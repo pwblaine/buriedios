@@ -106,7 +106,7 @@
     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
-    // Register for additional channels
+    // Register for user specific channels
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"email"] forKey:@"channels"];
     [currentInstallation addUniqueObject:[NSString stringWithFormat:@"%@@facebook.com",[[PFUser currentUser] objectForKey:@"facebookUsername"]] forKey:@"channels"];
