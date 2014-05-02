@@ -117,7 +117,6 @@
     currentInstallation.channels = @[@"global"];
     
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
-    [currentInstallation addUniqueObject:[NSString stringWithFormat:@"facebookId%@",[[PFUser currentUser] objectForKey:@"facebookId"]] forKey:@"channels"];
     
     [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
     
