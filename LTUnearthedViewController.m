@@ -107,8 +107,9 @@
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
     // Register for additional channels
-    // TODO change to addUniqueObject
-    currentInstallation.channels = @[@"global", [[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"email"], [NSString stringWithFormat:@"%@@facebook.com",[[PFUser currentUser] objectForKey:@"facebookUsername"]]];
+    [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
+    [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"email"] forKey:@"channels"];
+    [currentInstallation addUniqueObject:[NSString stringWithFormat:@"%@@facebook.com",[[PFUser currentUser] objectForKey:@"facebookUsername"]] forKey:@"channels"];
     [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
     [currentInstallation saveInBackground];
     
