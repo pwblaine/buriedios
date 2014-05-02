@@ -110,8 +110,12 @@
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"email"] forKey:@"channels"];
     [currentInstallation addUniqueObject:[NSString stringWithFormat:@"%@@facebook.com",[[PFUser currentUser] objectForKey:@"facebookUsername"]] forKey:@"channels"];
+    
     [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
+    
     [currentInstallation saveInBackground];
+    
+    NSLog(@"current channels: %@", [currentInstallation channels]);
     
 }
 
