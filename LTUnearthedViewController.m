@@ -106,6 +106,9 @@
     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
+    // double check global is registered
+    [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
+    
     // Register for user specific channels
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"email"] forKey:@"channels"];
