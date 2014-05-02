@@ -286,6 +286,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(IBAction)buryIt:(id)sender
 {
     PFUser *user = [PFUser currentUser];
+    [user fetchIfNeeded];
     NSString *email = @"";
     if (self.selectedFBEmailString.length > 0)
         email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,user.email];
@@ -307,6 +308,33 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"fromUser"] = user;
         capsule[@"read"] = @NO;
         capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
+        
+        // create mutable arrays for user id testing
+        NSMutableArray *mutableToUserIds = [NSMutableArray arrayWithObject:user.objectId];
+        NSMutableArray *mutableToFbIds = [NSMutableArray array];
+        
+        // for everyone in the friendPicker, if they exist store the PFUser
+        // if they don't have a buried account, store the facebookId
+         for (id<FBGraphUser> fbUser in self.friendPickerController.selection)
+         {
+             PFQuery *userQuery = [PFUser query];
+             [userQuery whereKey:@"facebookId" equalTo:fbUser.id];
+             NSArray *objects = [userQuery findObjects];
+             NSLog(@"query executed");
+             if (objects.count < 1)
+             {
+                 NSLog(@"matching facebookId not found, storing facebookId");
+                 [mutableToFbIds addObject:[fbUser id]];
+             }
+             else
+             {
+                 [mutableToUserIds addObject:[[objects firstObject] objectId]];
+             }
+         }
+        
+        //convert the mutable arrays to NSArrays for storage;
+        capsule[@"toUserIds"] = [NSArray arrayWithArray:mutableToUserIds];
+        capsule[@"toFbIds"] = [NSArray arrayWithArray:mutableToFbIds];
 
         if (theImage) {
             // Resize image
@@ -366,6 +394,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                 [HUD show:YES];
             
                 NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
+                
+                NSLog(@"capsule contents: %@",capsule);
                 
                 
                 [self clearFields];

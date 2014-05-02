@@ -111,8 +111,13 @@
     
     // Register for user specific channels
     [[PFUser currentUser] fetchIfNeeded];
+    
+    // if there are existing channels overwrite them
+    if (currentInstallation.channels.count > 1)
+    currentInstallation.channels = @[@"global"];
+    
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
-    [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"facebookUsername"] forKey:@"channels"];
+    [currentInstallation addUniqueObject:[NSString stringWithFormat:@"facebookId%@",[[PFUser currentUser] objectForKey:@"facebookId"]] forKey:@"channels"];
     
     [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
     
