@@ -135,7 +135,7 @@
     // Upon proper registration with push notifications, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    currentInstallation.channels = @[@"global"];
+    [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
     [currentInstallation saveInBackground];
     
     // on a class that uses this data [self loadInstallData]; must be envoked in the ViewDidLoad method

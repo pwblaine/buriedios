@@ -105,7 +105,10 @@
     
     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    currentInstallation.channels = @[@"global", [[PFUser currentUser] objectId]];
+    
+    // Register for additional channels
+    // TODO change to addUniqueObject
+    currentInstallation.channels = @[@"global", [[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"email"], [NSString stringWithFormat:@"%@@facebook.com",[[PFUser currentUser] objectForKey:@"facebookUsername"]]];
     [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
     [currentInstallation saveInBackground];
     
@@ -574,7 +577,7 @@
      if (!hasRead)
      {
          NSLog(@"user hasn't read capsule yet, adding to readUsers.");
-         [capsule addObject:[PFUser currentUser] forKey:@"readUsers"];
+         [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
          NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUsers"] count]);
          
          PFInstallation *currentInstallation = [PFInstallation currentInstallation];
