@@ -17,7 +17,7 @@
     
     // Check if user is cached and linked to Facebook, if so, bypass login    
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+        [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
     }
     
     // Add logout navigation bar button
@@ -103,10 +103,10 @@
             }
         } else if (user.isNew) {
             NSLog(@"user with facebook signed up and logged in!");
-            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
         } else {
             NSLog(@"user with facebook logged in!");
-            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] init] animated:NO];
+            [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
         }
     }];
 }

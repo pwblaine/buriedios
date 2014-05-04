@@ -60,6 +60,10 @@
 - (PFQuery *)queryForTable {
     PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
+    PFUser *currentUser = [PFUser currentUser];
+    
+    [currentUser fetchIfNeeded];
+    
     // If no objects are loaded in memory, we look to the cache
     // first to fill the table and then subsequently do a query
     // against the network.
@@ -68,13 +72,13 @@
     }
     PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    [fbQuery whereKey:@"email" containsString:[[[PFUser currentUser] objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
+    [fbQuery whereKey:@"email" containsString:[[currentUser objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
     
-   // [fbQuery whereKey:@"sent" equalTo:@YES];
-    
-    [emailQuery whereKey:@"email" containsString:[[PFUser currentUser] email]];
+    [emailQuery whereKey:@"email" containsString:[currentUser email]];
     
     PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
+    
+    [compundQuery includeKey:@"fromUser"];
     
     [compundQuery whereKey:@"sent" equalTo:@YES];
     
@@ -129,6 +133,9 @@
 - (void)viewDidAppear:(BOOL)animated {
     PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
+    PFUser *currentUser = [PFUser currentUser];
+    [currentUser fetchIfNeeded];
+    
     // If no objects are loaded in memory, we look to the cache
     // first to fill the table and then subsequently do a query
     // against the network.
@@ -137,11 +144,11 @@
     }
     PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    [fbQuery whereKey:@"email" containsString:[[[PFUser currentUser] objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
+    [fbQuery whereKey:@"email" containsString:[[currentUser objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
     
     // [fbQuery whereKey:@"sent" equalTo:@YES];
     
-    [emailQuery whereKey:@"email" containsString:[[PFUser currentUser] email]];
+    [emailQuery whereKey:@"email" containsString:[currentUser email]];
     
     PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
     
@@ -153,7 +160,7 @@
     else if (compundQuery.countObjects == 1)
         self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
     else
-        self.title = [NSString stringWithFormat:@"%@",[[PFUser currentUser] objectForKey:@"displayName"]];
+        self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
     
     [self.tableView reloadData];
 }
@@ -212,11 +219,15 @@
  
      // Configure the cell
      
+     PFUser *currentUser = [PFUser currentUser];
+     
+     [currentUser fetchIfNeeded];
+     
      // Set left label to timestamp
      cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
      
      // If sent to self set label to blue
-     if ([[object objectForKey:@"from"] isEqualToString:[[PFUser currentUser] email]] || [[object objectForKey:@"fromUser"] isEqual:[PFUser currentUser]])
+     if ([[object objectForKey:@"from"] isEqualToString:[currentUser email]] || [[[object objectForKey:@"fromUser"] objectId] isEqualToString:[currentUser objectId]])
      {
          cell.textLabel.textColor = [UIColor blueColor];
      } else {
@@ -249,7 +260,7 @@
          
          [user fetchIfNeeded];
          
-         if ([user objectForKey:@"id"] == [[PFUser currentUser] objectForKey:@"id"]) {
+         if ([[user objectId] isEqualToString:[currentUser objectId]]) {
              userHasRead = YES;
              break;
          }
@@ -456,7 +467,8 @@
             self.navigationItem.leftBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.enabled = YES;
             // self.title = [[PFUser currentUser] objectForKey:@"displayName"];
-        } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
+        } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) {
+            // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"the facebook session was invalidated");
             [self logoutButtonTouchHandler:nil];
         } else {
@@ -576,10 +588,16 @@
      
      BOOL hasRead = false;
      
+     PFUser *currentUser = [PFUser currentUser];
+     
+     [currentUser fetchIfNeeded];
+     
      for (PFUser *user in (NSArray *)[capsule objectForKey:@"readUsers"])
      {
-         NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[[PFUser currentUser] objectId]);
-         if ([[user objectId] isEqualToString:[[PFUser currentUser] objectId]])
+         [user fetchIfNeeded];
+         
+         NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[currentUser objectId]);
+         if ([[user objectId] isEqualToString:[currentUser objectId]])
          {
              hasRead = true;
              NSLog(@"user found!");
