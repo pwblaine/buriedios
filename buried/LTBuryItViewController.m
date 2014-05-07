@@ -306,8 +306,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
         capsule[@"fromUser"] = user;
-        capsule[@"read"] = @NO;
-        capsule[@"toUsers"] = [self createArrayOfUsers:self.friendPickerController.selection];
         
         // create mutable arrays for user id testing
         NSMutableArray *mutableToUserIds = [NSMutableArray arrayWithObject:user.objectId];
@@ -337,15 +335,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"toFbIds"] = [NSArray arrayWithArray:mutableToFbIds];
 
         if (theImage) {
-            // Resize image
-            UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-            [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
-            UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
+            NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 0.05f);
         
-            NSData *selectedImageData = UIImageJPEGRepresentation(smallImage, 0.05f);
-        
-            PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:selectedImageData];
+            PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@_%@.jpg",user.objectId,[NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle]] data:selectedImageData];
         
             capsule[@"image"] = imageFile;
         }
