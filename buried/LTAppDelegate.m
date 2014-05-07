@@ -105,7 +105,7 @@
 
 -(IBAction)slideGrass:(id)sender {
     
-    [self summonBuryItViewWithCamera];
+    //[self summonBuryItViewWithCamera];
     /*
     // this method toggles the grass in the quick add field, it dissappears when its disabled
     for (QuickAddView *aView in self.window.rootViewController.view.subviews) {
