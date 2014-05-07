@@ -17,8 +17,8 @@
 		281E7AB7188EA66800C85066 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A95188EA66800C85066 /* Default.png */; };
 		281E7AB8188EA66800C85066 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A96188EA66800C85066 /* Default@2x.png */; };
 		281E7AB9188EA66800C85066 /* Desert.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A97188EA66800C85066 /* Desert.jpg */; };
-		281E7ABB188EA66800C85066 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9B188EA66800C85066 /* Icon.png */; };
-		281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9C188EA66800C85066 /* Icon@2x.png */; };
+		281E7ABB188EA66800C85066 /* ParseIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9B188EA66800C85066 /* ParseIcon.png */; };
+		281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9C188EA66800C85066 /* ParseIcon@2x.png */; };
 		281E7ABE188EA66800C85066 /* Lime.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9E188EA66800C85066 /* Lime.jpg */; };
 		281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A9F188EA66800C85066 /* login-button-small-pressed.png */; };
 		281E7AC0188EA66800C85066 /* login-button-small-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */; };
@@ -49,6 +49,16 @@
 		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
 		28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */; };
 		28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */; };
+		308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4763191ADADE0098AEFC /* buriedicon58x58white.png */; };
+		308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4764191ADADE0098AEFC /* buriedicon76x76.png */; };
+		308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4765191ADADE0098AEFC /* buriedicon114x114.png */; };
+		308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4766191ADADE0098AEFC /* buriedicon152x152white.png */; };
+		308D476F191ADADF0098AEFC /* buriedlogo29x29.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4767191ADADE0098AEFC /* buriedlogo29x29.png */; };
+		308D4770191ADADF0098AEFC /* buriedlogo57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4768191ADADE0098AEFC /* buriedlogo57x57.png */; };
+		308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4769191ADADE0098AEFC /* buriedlogo80x80.png */; };
+		308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D476A191ADADE0098AEFC /* buriedlogo120x120white.png */; };
+		308D4774191ADB220098AEFC /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4773191ADB220098AEFC /* Icon.png */; };
+		308D4776191ADB3E0098AEFC /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4775191ADB3E0098AEFC /* Icon@2x.png */; };
 		44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42A91862667700CC948C /* Foundation.framework */; };
 		44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AB1862667700CC948C /* CoreGraphics.framework */; };
 		44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44FC42AD1862667700CC948C /* UIKit.framework */; };
@@ -77,8 +87,8 @@
 		281E7A95188EA66800C85066 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = buried/Default.png; sourceTree = SOURCE_ROOT; };
 		281E7A96188EA66800C85066 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "buried/Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		281E7A97188EA66800C85066 /* Desert.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Desert.jpg; path = buried/Desert.jpg; sourceTree = SOURCE_ROOT; };
-		281E7A9B188EA66800C85066 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = buried/Icon.png; sourceTree = SOURCE_ROOT; };
-		281E7A9C188EA66800C85066 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "buried/Icon@2x.png"; sourceTree = SOURCE_ROOT; };
+		281E7A9B188EA66800C85066 /* ParseIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ParseIcon.png; path = buried/ParseIcon.png; sourceTree = SOURCE_ROOT; };
+		281E7A9C188EA66800C85066 /* ParseIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ParseIcon@2x.png"; path = "buried/ParseIcon@2x.png"; sourceTree = SOURCE_ROOT; };
 		281E7A9E188EA66800C85066 /* Lime.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Lime.jpg; path = buried/Lime.jpg; sourceTree = SOURCE_ROOT; };
 		281E7A9F188EA66800C85066 /* login-button-small-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small-pressed.png"; path = "buried/login-button-small-pressed.png"; sourceTree = SOURCE_ROOT; };
 		281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login-button-small-pressed@2x.png"; path = "buried/login-button-small-pressed@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -125,6 +135,16 @@
 		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
 		28F9584B1906555F0017DCEA /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		308D4763191ADADE0098AEFC /* buriedicon58x58white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon58x58white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon58x58white.png; sourceTree = SOURCE_ROOT; };
+		308D4764191ADADE0098AEFC /* buriedicon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon76x76.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon76x76.png; sourceTree = SOURCE_ROOT; };
+		308D4765191ADADE0098AEFC /* buriedicon114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon114x114.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon114x114.png; sourceTree = SOURCE_ROOT; };
+		308D4766191ADADE0098AEFC /* buriedicon152x152white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon152x152white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon152x152white.png; sourceTree = SOURCE_ROOT; };
+		308D4767191ADADE0098AEFC /* buriedlogo29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo29x29.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedlogo29x29.png; sourceTree = SOURCE_ROOT; };
+		308D4768191ADADE0098AEFC /* buriedlogo57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo57x57.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedlogo57x57.png; sourceTree = SOURCE_ROOT; };
+		308D4769191ADADE0098AEFC /* buriedlogo80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo80x80.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedlogo80x80.png; sourceTree = SOURCE_ROOT; };
+		308D476A191ADADE0098AEFC /* buriedlogo120x120white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo120x120white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedlogo120x120white.png; sourceTree = SOURCE_ROOT; };
+		308D4773191ADB220098AEFC /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = buried/Icon.png; sourceTree = SOURCE_ROOT; };
+		308D4775191ADB3E0098AEFC /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "buried/Icon@2x.png"; sourceTree = SOURCE_ROOT; };
 		30EF8FBC186959880091D178 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -282,14 +302,24 @@
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
 				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
+				308D4763191ADADE0098AEFC /* buriedicon58x58white.png */,
+				308D4764191ADADE0098AEFC /* buriedicon76x76.png */,
+				308D4765191ADADE0098AEFC /* buriedicon114x114.png */,
+				308D4766191ADADE0098AEFC /* buriedicon152x152white.png */,
+				308D4767191ADADE0098AEFC /* buriedlogo29x29.png */,
+				308D4768191ADADE0098AEFC /* buriedlogo57x57.png */,
+				308D4769191ADADE0098AEFC /* buriedlogo80x80.png */,
+				308D476A191ADADE0098AEFC /* buriedlogo120x120white.png */,
 				281E7A92188EA66800C85066 /* buriedlogo_250height.png */,
 				281E7A93188EA66800C85066 /* Crowd.jpg */,
 				281E7A94188EA66800C85066 /* Default-568h@2x.png */,
 				281E7A95188EA66800C85066 /* Default.png */,
 				281E7A96188EA66800C85066 /* Default@2x.png */,
 				281E7A97188EA66800C85066 /* Desert.jpg */,
-				281E7A9B188EA66800C85066 /* Icon.png */,
-				281E7A9C188EA66800C85066 /* Icon@2x.png */,
+				308D4773191ADB220098AEFC /* Icon.png */,
+				308D4775191ADB3E0098AEFC /* Icon@2x.png */,
+				281E7A9B188EA66800C85066 /* ParseIcon.png */,
+				281E7A9C188EA66800C85066 /* ParseIcon@2x.png */,
 				281E7A9E188EA66800C85066 /* Lime.jpg */,
 				281E7A9F188EA66800C85066 /* login-button-small-pressed.png */,
 				281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */,
@@ -363,20 +393,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */,
+				308D4776191ADB3E0098AEFC /* Icon@2x.png in Resources */,
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
-				281E7ABB188EA66800C85066 /* Icon.png in Resources */,
+				308D4770191ADADF0098AEFC /* buriedlogo57x57.png in Resources */,
+				281E7ABB188EA66800C85066 /* ParseIcon.png in Resources */,
 				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
-				281E7ABC188EA66800C85066 /* Icon@2x.png in Resources */,
+				308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */,
+				308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */,
+				281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
+				308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */,
 				281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */,
+				308D4774191ADB220098AEFC /* Icon.png in Resources */,
 				281E7AC0188EA66800C85066 /* login-button-small-pressed@2x.png in Resources */,
 				281E7AB8188EA66800C85066 /* Default@2x.png in Resources */,
 				281E7AB7188EA66800C85066 /* Default.png in Resources */,
 				281E7AB9188EA66800C85066 /* Desert.jpg in Resources */,
 				281E7AC2188EA66800C85066 /* login-button-small@2x.png in Resources */,
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
+				308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */,
+				308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
+				308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */,
 				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
 				28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */,
 				286D080218CB647E000B5EBE /* grassToolbar.png in Resources */,
@@ -387,6 +426,7 @@
 				2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
 				284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */,
+				308D476F191ADADF0098AEFC /* buriedlogo29x29.png in Resources */,
 				281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,6 +495,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "D23C9F6A-014C-4098-961F-0F49C70AD856";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -490,6 +531,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "D23C9F6A-014C-4098-961F-0F49C70AD856";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
@@ -501,7 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -515,7 +557,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "AE749F1E-FE24-4149-BA88-63335CF5DFDC";
+				PROVISIONING_PROFILE = "D23C9F6A-014C-4098-961F-0F49C70AD856";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -525,7 +567,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -539,7 +581,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "AE749F1E-FE24-4149-BA88-63335CF5DFDC";
+				PROVISIONING_PROFILE = "D23C9F6A-014C-4098-961F-0F49C70AD856";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
