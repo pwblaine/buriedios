@@ -83,7 +83,7 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
     emailTextField.placeholder = @"for my eyes only";
     
     LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showGrass:NO];
+    [appDelegate showGrass:YES];
 }
 
 
