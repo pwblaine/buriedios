@@ -36,7 +36,9 @@
     NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
     
     if (capsuleId.length > 0)
-    NSLog(@"Push for capsule %@ received",capsuleId);
+    {
+        NSLog(@"Push for capsule %@ received",capsuleId);
+    }
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
@@ -81,14 +83,15 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [FBAppEvents activateApp];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
-    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+    /*if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
     {
         NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
         // if so run the refresh method
         [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
     } else {
         NSLog(@"[[(UINavigationController *)self.window.rootViewController visibleViewController] class]:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
-    }
+    }*/
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -203,6 +206,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
         // if so run the refresh method
         [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
     } else {
         NSLog(@"self.window.rootViewController.navigationController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
     }

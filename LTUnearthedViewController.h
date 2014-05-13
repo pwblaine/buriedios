@@ -16,8 +16,11 @@
     UIImage *defaultPortrait;
 }
 
+#pragma mark - Capsule tracking UI methods
+- (void)updateTitleWithNumberOfBuriedCapsules;
 
 #pragma mark - Logout methods
+
 - (void)logoutButtonTouchHandler:(id)sender;
 - (void)buryItButtonTouchHandler:(id)sender;
 

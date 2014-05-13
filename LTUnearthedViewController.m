@@ -133,9 +133,8 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)updateTitleWithNumberOfBuriedCapsules {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
     PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     PFUser *currentUser = [PFUser currentUser];
@@ -166,6 +165,12 @@
         self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
     else
         self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    [self updateTitleWithNumberOfBuriedCapsules];
     
     [self.tableView reloadData];
 }
@@ -184,39 +189,10 @@
 }
 
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     [super objectsDidLoad:error];
     
-    PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    [currentUser fetchIfNeeded];
-    
-    // If no objects are loaded in memory, we look to the cache
-    // first to fill the table and then subsequently do a query
-    // against the network.
-    if ([self.objects count] == 0) {
-        emailQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    }
-    PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
-    
-    [fbQuery whereKey:@"email" containsString:[[currentUser objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
-    
-    // [fbQuery whereKey:@"sent" equalTo:@YES];
-    
-    [emailQuery whereKey:@"email" containsString:[currentUser email]];
-    
-    PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
-    
-    [compundQuery whereKey:@"sent" notEqualTo:@YES];
-    
-    // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
-    if (compundQuery.countObjects > 1)
-        self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
-    else if (compundQuery.countObjects == 1)
-        self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
-    else
-        self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
+    [self updateTitleWithNumberOfBuriedCapsules];
     
     // This method is called every time objects are loaded from Parse via the PFQuery
     LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -252,7 +228,6 @@
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
  static NSString *CellIdentifier = @"Cell";
  
  PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
