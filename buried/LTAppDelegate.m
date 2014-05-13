@@ -7,6 +7,7 @@
 #import "LTLoginViewController.h"
 #import "QuickAddView.h"
 #import "LTBuryItViewController.h"
+#import "LTUnearthedViewController.h"
 
 @implementation LTAppDelegate
 
@@ -151,7 +152,22 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    [PFPush handlePush:userInfo];
+    // This code runs when the application is not in the foreground
+    [PFPush handlePush:userInfo]; // ask Parse to create the Modal View and display the alert contents
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
+fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
+    
+    // This code runs if the app is open and a push notification comes in
+    
+    // Check if the visibleViewController is an LTUnearthedViewController
+    if ([self.window.rootViewController.navigationController.visibleViewController isKindOfClass:[LTUnearthedViewController class]])
+    {
+        // if so run the refresh method
+        [(LTUnearthedViewController *)[self.window.rootViewController.navigationController visibleViewController] viewDidAppear:NO];
+    }
 }
 
 @end

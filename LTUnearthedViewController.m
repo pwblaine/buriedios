@@ -116,9 +116,9 @@
     // Register for user specific channels
     [[PFUser currentUser] fetchIfNeeded];
     
-    // if there are existing channels overwrite them
+    /* if there are existing channels overwrite them
     if (currentInstallation.channels.count > 1)
-    currentInstallation.channels = @[@"global"];
+    currentInstallation.channels = @[@"global"];*/
     
     [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
     
