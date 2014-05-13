@@ -35,7 +35,8 @@
     // Create a pointer to the Photo object
     NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
     
-    NSLog(@"Push for capsule %@ received",capsuleId);
+    if ([capsuleId length] > 0)
+        NSLog(@"Push for capsule %@ received",capsuleId);
     
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
