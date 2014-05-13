@@ -35,8 +35,10 @@
     // Create a pointer to the Photo object
     NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
     
-    if ([capsuleId length] > 0)
-        NSLog(@"Push for capsule %@ received",capsuleId);
+    if (capsuleId.length > 0)
+    NSLog(@"Push for capsule %@ received",capsuleId);
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -71,15 +73,26 @@
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [FBAppEvents activateApp];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+    {
+        NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
+        // if so run the refresh method
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
+    } else {
+        NSLog(@"[[(UINavigationController *)self.window.rootViewController visibleViewController] class]:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     /*
      Called when the application is about to terminate.
      Save data if appropriate.
@@ -90,6 +103,7 @@
 }
 
 -(void)showGrass:(BOOL)shouldShow {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // this method toggles the grass in the quick add field, it dissappears when its disabled
     for (QuickAddView *aView in self.window.rootViewController.view.subviews) {
         if ([aView isKindOfClass:[QuickAddView class]])
@@ -104,6 +118,7 @@
 }
 
 -(void)summonBuryItViewWithCamera {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"summonBuryItViewWithCamera");
     LTBuryItViewController *controller = [[LTBuryItViewController alloc] init];
     [(UINavigationController *)self.window.rootViewController pushViewController:controller animated:YES];
@@ -113,7 +128,7 @@
 }
 
 -(IBAction)slideGrass:(id)sender {
-    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     //[self summonBuryItViewWithCamera];
     /*
     // this method toggles the grass in the quick add field, it dissappears when its disabled
@@ -139,6 +154,7 @@
 #pragma Push Notification Methods
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"Push notitifications registered successfully, saving installation data to Parse");
     
     // Upon proper registration with push notifications, save the information to a Parse installation.
@@ -151,6 +167,7 @@
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (error.code == 3010) {
         NSLog(@"Push notifications are not supported in the iOS Simulator.");
     } else {
@@ -160,6 +177,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // This code runs when the application is not in the foreground
     [PFPush handlePush:userInfo]; // ask Parse to create the Modal View and display the alert contents
 }
@@ -167,15 +185,26 @@
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     NSLog(@"Push notification received while app was open");
+    NSLog(@"Push notification contents:%@",userInfo);
     // This code runs if the app is open and a push notification comes in
     
+        // Create a pointer to the Photo object
+        NSString *capsuleId = [userInfo objectForKey:@"cid"];
+        
+        if (capsuleId.length > 0)
+            NSLog(@"Push for capsule %@ received",capsuleId);
+        
     // Check if the visibleViewController is an LTUnearthedViewController
-    if ([self.window.rootViewController.navigationController.visibleViewController isKindOfClass:[LTUnearthedViewController class]])
+    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
     {
+        NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
         // if so run the refresh method
-        [(LTUnearthedViewController *)[self.window.rootViewController.navigationController visibleViewController] viewDidAppear:NO];
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
+    } else {
+        NSLog(@"self.window.rootViewController.navigationController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
     }
 }
 
