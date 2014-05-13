@@ -30,6 +30,13 @@
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    // Create a pointer to the Photo object
+    NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
+    
+    NSLog(@"Push for capsule %@ received",capsuleId);
+    
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
@@ -169,5 +176,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         [(LTUnearthedViewController *)[self.window.rootViewController.navigationController visibleViewController] viewDidAppear:NO];
     }
 }
+
+
 
 @end
