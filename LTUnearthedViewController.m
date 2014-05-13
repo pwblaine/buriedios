@@ -45,6 +45,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self = [super initWithStyle:style];
     if (self)
     {
@@ -58,6 +59,7 @@
 }
 
 - (PFQuery *)queryForTable {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     PFUser *currentUser = [PFUser currentUser];
@@ -90,6 +92,7 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
@@ -131,6 +134,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     PFUser *currentUser = [PFUser currentUser];
@@ -168,6 +172,7 @@
 #pragma mark - PFQueryTableViewController
 
 - (void)objectsWillLoad {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super objectsWillLoad];
     
     // This method is called before a PFQuery is fired to get more objects
@@ -178,6 +183,7 @@
 }
 
 - (void)objectsDidLoad:(NSError *)error {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super objectsDidLoad:error];
     
     // This method is called every time objects are loaded from Parse via the PFQuery
@@ -214,6 +220,7 @@
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
  static NSString *CellIdentifier = @"Cell";
  
  PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -363,11 +370,13 @@
 // Callback delegate methods used for downloading the user's profile picture
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // As chuncks of the image are received, we build our data file
     [profileImageData appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // All data has been downloaded, now we can set the image in the header image view
     
     NSLog(@"profile picture downloaded");
@@ -414,6 +423,7 @@
 
 - (void)updateUserProfile
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // disable navigation and wait for response from server
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -489,7 +499,7 @@
 #pragma mark Logout methods
 
 - (void)logoutButtonTouchHandler:(id)sender {
-    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging out");
     [FBSession setActiveSession:nil];
     [PFUser logOut];
@@ -499,6 +509,7 @@
 }
 
 - (void)buryItButtonTouchHandler:(id)sender {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
     
 }
@@ -580,7 +591,7 @@
 
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
  {
-     
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
  // Navigation logic may go here, for example:
  // Create the next view controller.
  LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];

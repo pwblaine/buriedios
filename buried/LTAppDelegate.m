@@ -168,6 +168,7 @@
 didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
     
+    NSLog(@"Push notification received while app was open");
     // This code runs if the app is open and a push notification comes in
     
     // Check if the visibleViewController is an LTUnearthedViewController
