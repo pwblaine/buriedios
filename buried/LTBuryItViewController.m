@@ -335,11 +335,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"toFbIds"] = [NSArray arrayWithArray:mutableToFbIds];
 
         if (theImage) {
-            NSData *selectedImageData = UIImagePNGRepresentation(self->theImage);
+            /*
+             adjust rotation dimensions for portrait
+             -            UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+             -            [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
+             -            UIImage *rightedImage = UIGraphicsGetImageFromCurrentImageContext();
+             -            UIGraphicsEndImageContext();
+             */
+            
+            NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 0.05f);
         
             NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
             [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];
-            PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.png",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
+            PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.jpg",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
         
             capsule[@"image"] = imageFile;
         }
