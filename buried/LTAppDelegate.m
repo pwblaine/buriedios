@@ -94,10 +94,21 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [FBAppEvents activateApp];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    
+    // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
+    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+    {
+        NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
+        // if so run the refresh method
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+    } else {
+        NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     /*
      Called when the application is about to terminate.
      Save data if appropriate.
@@ -185,13 +196,23 @@
         NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
     }
 }
-
+/*
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     // This code runs when the application is not in the foreground
     [PFPush handlePush:userInfo]; // ask Parse to create the Modal View and display the alert contents
-}
+    
+    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+    {
+        NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
+        // if so run the refresh method
+        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+    } else {
+        NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+    }
+    
+}*/
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -207,7 +228,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         
     if (capsuleId.length > 0)
         NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
-    
+
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
         NSLog(@"Application is in foreground...");

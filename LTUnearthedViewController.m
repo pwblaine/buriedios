@@ -506,8 +506,16 @@
 - (void)logoutButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging out");
+    // remove user from device channels
+    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+    NSString *userObjectId = [[PFUser currentUser] objectId];
+    [mutableChannels removeObjectIdenticalTo:userObjectId];
+    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+    NSLog(@"removing user from push channels");
+    NSLog(@"active channels for push: %@",[[PFInstallation currentInstallation] channels]);
     [FBSession setActiveSession:nil];
     [PFUser logOut];
+    NSLog(@"user %@ successfully logged out", userObjectId);
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
     
