@@ -170,9 +170,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    [self updateTitleWithNumberOfBuriedCapsules];
-    
-    [self.tableView reloadData];
+    [self loadObjects];
 }
 
 #pragma mark - PFQueryTableViewController

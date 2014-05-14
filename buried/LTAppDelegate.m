@@ -15,6 +15,9 @@
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // ****************************************************************************
@@ -30,18 +33,6 @@
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
-    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-    
-    // Create a pointer to the Photo object
-    NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
-    
-    if (capsuleId.length > 0)
-    {
-        NSLog(@"Push for capsule %@ received",capsuleId);
-    }
-    
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
@@ -53,6 +44,26 @@
 #endif
 
     // Override point for customization after application launch.
+    
+    // retrieve and store any remote notification data
+    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    // test whether application was launched from a push notification or not
+    if (notificationPayload)
+    {
+        NSLog(@"App was launched from a push notification");
+        
+        // grab the capsuleId and check if the push was for a newly unearthed capsule
+        NSString *capsuleId = [notificationPayload objectForKey:@"cid"];
+        
+        if (capsuleId.length > 0)
+        {
+            NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
+        }
+        
+    } else {
+        NSLog(@"App was launched normally");
+    }
     
     // Register for Notification Center
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
@@ -83,15 +94,6 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [FBAppEvents activateApp];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
-    /*if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
-    {
-        NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
-        // if so run the refresh method
-        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
-        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
-    } else {
-        NSLog(@"[[(UINavigationController *)self.window.rootViewController visibleViewController] class]:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
-    }*/
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -104,6 +106,8 @@
     
     [[PFFacebookUtils session] close];
 }
+
+#pragma mark Grass methods
 
 -(void)showGrass:(BOOL)shouldShow {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -154,7 +158,7 @@
     }*/
 }
 
-#pragma Push Notification Methods
+#pragma mark Push Notification Methods
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -170,7 +174,10 @@
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    
+    // this code is run is user denies push notifications or they're not supported
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     if (error.code == 3010) {
         NSLog(@"Push notifications are not supported in the iOS Simulator.");
     } else {
@@ -181,6 +188,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     // This code runs when the application is not in the foreground
     [PFPush handlePush:userInfo]; // ask Parse to create the Modal View and display the alert contents
 }
@@ -190,25 +198,29 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    NSLog(@"Push notification received while app was open");
+    NSLog(@"Push notification received while app was open in background or foreground");
     NSLog(@"Push notification contents:%@",userInfo);
     // This code runs if the app is open and a push notification comes in
     
-        // Create a pointer to the Photo object
-        NSString *capsuleId = [userInfo objectForKey:@"cid"];
+    // grab the capsuleId and check if the push was for a newly unearthed capsule
+    NSString *capsuleId = [userInfo objectForKey:@"cid"];
         
-        if (capsuleId.length > 0)
-            NSLog(@"Push for capsule %@ received",capsuleId);
-        
-    // Check if the visibleViewController is an LTUnearthedViewController
-    if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+    if (capsuleId.length > 0)
+        NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
+    
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
-        NSLog(@"LTUnearthedViewController detected in foreground... refreshing");
-        // if so run the refresh method
-        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] viewDidAppear:NO];
-        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
-    } else {
-        NSLog(@"self.window.rootViewController.navigationController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+        NSLog(@"Application is in foreground...");
+        // Check if the visibleViewController is an LTUnearthedViewController
+        if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+        {
+            NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
+            // if so run the refresh method
+            [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+        } else {
+            NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+        }
+        
     }
 }
 
