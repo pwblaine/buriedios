@@ -607,60 +607,63 @@
  */
 
 
-#pragma mark - Table view UIImage *theImage;
+#pragma mark - Table view cell select
 
+- (void)presentCapsule:(NSString *)capsuleId
+{
+    // Create the next view controller.
+    LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
+    
+    // Pass the selected object to the new view controller and add user to the readUsers array.
+    
+    PFObject *capsule = [PFQuery getObjectOfClass:@"capsule" objectId:capsuleId];
+    capsuleViewController.capsule = capsule;
+    
+    BOOL hasRead = false;
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    [currentUser fetchIfNeeded];
+    
+    for (PFUser *user in (NSArray *)[capsule objectForKey:@"readUsers"])
+    {
+        [user fetchIfNeeded];
+        
+        NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[currentUser objectId]);
+        if ([[user objectId] isEqualToString:[currentUser objectId]])
+        {
+            hasRead = true;
+            NSLog(@"user found!");
+        }
+    }
+    
+    if (!hasRead)
+    {
+        NSLog(@"user hasn't read capsule yet, adding to readUsers.");
+        [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
+        NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUsers"] count]);
+        
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        if (currentInstallation.badge > 0) {
+            currentInstallation.badge--;
+            [currentInstallation saveEventually];
+            NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
+        }
+        
+        [capsule save];
+    }
+    
+    NSLog(@"%@",capsule);
+    
+    // Push the view controller.
+    [self.navigationController pushViewController:capsuleViewController animated:YES];
+}
 
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
  {
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
  // Navigation logic may go here, for example:
- // Create the next view controller.
- LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
- 
- // Pass the selected object to the new view controller and add user to the readUsers array.
-     
-     PFObject *capsule = [self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]];
-     capsuleViewController.capsule = capsule;
-     
-     BOOL hasRead = false;
-     
-     PFUser *currentUser = [PFUser currentUser];
-     
-     [currentUser fetchIfNeeded];
-     
-     for (PFUser *user in (NSArray *)[capsule objectForKey:@"readUsers"])
-     {
-         [user fetchIfNeeded];
-         
-         NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[currentUser objectId]);
-         if ([[user objectId] isEqualToString:[currentUser objectId]])
-         {
-             hasRead = true;
-             NSLog(@"user found!");
-         }
-     }
-     
-     if (!hasRead)
-     {
-         NSLog(@"user hasn't read capsule yet, adding to readUsers.");
-         [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
-         NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUsers"] count]);
-         
-         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-         if (currentInstallation.badge > 0) {
-             currentInstallation.badge--;
-             [currentInstallation saveEventually];
-             NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
-         }
-         
-     [capsule save];
-     }
-     
-     NSLog(@"%@",capsule);
- 
-     // Push the view controller.
-     [self.navigationController pushViewController:capsuleViewController animated:YES];
-
+     [self presentCapsule:[[self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]] objectId]];
  }
 
 
