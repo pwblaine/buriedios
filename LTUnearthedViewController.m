@@ -98,17 +98,13 @@
     
     // Add logout navigation bar button
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
+    [logoutButton setEnabled:NO];
     self.navigationItem.leftBarButtonItem = logoutButton;
     
     // Add camera navigation bar button
     UIBarButtonItem *buryItButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(buryItButtonTouchHandler:)];
+    [buryItButton setEnabled:NO];
     self.navigationItem.rightBarButtonItem = buryItButton;
-    
-    // Disable buttons until objects load
-    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    self.navigationItem.leftBarButtonItem.enabled = NO;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [appDelegate showGrass:NO];
     
     // Add the temporary title
     self.title = @"buried.";
@@ -436,8 +432,6 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // disable navigation and wait for response from server
-    self.navigationItem.leftBarButtonItem.enabled = NO;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
@@ -489,8 +483,6 @@
             }
              */
             // renable navigation upon receipt of server response
-            self.navigationItem.leftBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.enabled = YES;
             // self.title = [[PFUser currentUser] objectForKey:@"displayName"];
         } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) {
             // Since the request failed, we can check if it was due to an invalid session
@@ -499,8 +491,6 @@
         } else {
             NSLog(@"some other error: %@", error);
             // renable navigation upon receipt of server response
-            self.navigationItem.leftBarButtonItem.enabled = YES;
-            self.navigationItem.rightBarButtonItem.enabled = YES;
         }
     }];
 }

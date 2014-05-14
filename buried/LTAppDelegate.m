@@ -45,6 +45,12 @@
 
     // Override point for customization after application launch.
     
+    // Register for Notification Center
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
+    
+    // Set up initial view
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];
+    
     // retrieve and store any remote notification data
     NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
     
@@ -59,22 +65,33 @@
         if (capsuleId.length > 0)
         {
             NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
+            
+            // if user is logged in, send them through to the capsule from the push
+            if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+                LTUnearthedViewController *unearthedStream = [[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain];
+                [(UINavigationController *)self.window.rootViewController pushViewController:unearthedStream animated:NO];
+                [unearthedStream presentCapsule:capsuleId];
+                
+            }
+            
         }
         
     } else {
         NSLog(@"App was launched normally");
     }
     
-    // Register for Notification Center
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
-    
-    // Set up initial view
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];
+    // Add grass overlay
     UIView *quickAddView = [[QuickAddView alloc] initWithFrame:CGRectMake(0, 494, 320, 568)];
     [self.window.rootViewController.view addSubview:quickAddView];
     [self.window.rootViewController.view bringSubviewToFront:quickAddView];
+    
+    // hide grass
     [self showGrass:NO];
+    
+    // set app background to white
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    // make and display window
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -223,12 +240,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
     NSLog(@"Push notification contents:%@",userInfo);
     // This code runs if the app is open and a push notification comes in
     
-    // grab the capsuleId and check if the push was for a newly unearthed capsule
-    NSString *capsuleId = [userInfo objectForKey:@"cid"];
-        
-    if (capsuleId.length > 0)
-        NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
-
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
         NSLog(@"Application is in foreground...");
@@ -236,14 +247,35 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
         {
             NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
-            // if so run the refresh method
-            [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+                // if the push is to increase the awaits counter, run the refresh method on LTUnearthed
+                [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
         } else {
             NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
         }
+    } else {
+        NSLog(@"Application is in background...");
+        // Check if the visibleViewController is an LTUnearthedViewController
+        if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
+        {
+            NSLog(@"LTUnearthedViewController detected as current view controller");
+                  
+            // grab the capsuleId and check if the push was for a newly unearthed capsule
+            NSString *capsuleId = [userInfo objectForKey:@"cid"];
+            
+                // test for what type of push it is
+                if (capsuleId.length > 0)
+                {
+                // if the push is an unearthed capsule present it to the user
+                NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
+                NSLog(@"Presenting capsule view controller for the capsule in question");
+                [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] presentCapsule:capsuleId];
+                }
+            } else {
+            NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+            }
+        }
         
     }
-}
 
 
 

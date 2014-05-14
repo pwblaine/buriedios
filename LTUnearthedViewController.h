@@ -19,6 +19,9 @@
 #pragma mark - Capsule tracking UI methods
 - (void)updateTitleWithNumberOfBuriedCapsules;
 
+#pragma mark - Capsule presentation methods
+- (void)presentCapsule:(NSString *)capsuleId;
+
 #pragma mark - Logout methods
 
 - (void)logoutButtonTouchHandler:(id)sender;
