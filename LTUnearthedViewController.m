@@ -104,6 +104,12 @@
     UIBarButtonItem *buryItButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(buryItButtonTouchHandler:)];
     self.navigationItem.rightBarButtonItem = buryItButton;
     
+    // Disable buttons until objects load
+    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [appDelegate showGrass:NO];
+    
     // Add the temporary title
     self.title = @"buried.";
     
@@ -509,10 +515,12 @@
     // remove user from device channels
     NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
     NSString *userObjectId = [[PFUser currentUser] objectId];
-    [mutableChannels removeObjectIdenticalTo:userObjectId];
-    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+    [mutableChannels removeObject:userObjectId];
     NSLog(@"removing user from push channels");
-    NSLog(@"active channels for push: %@",[[PFInstallation currentInstallation] channels]);
+    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+    NSLog(@"saving new channels to Parse...");
+    [[PFInstallation currentInstallation] saveEventually];
+    NSLog(@"active channels for push: %@",mutableChannels);
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);
