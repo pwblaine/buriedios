@@ -14,10 +14,13 @@
     IBOutlet UIButton *discardButton;
     IBOutlet UIButton *keepButton;
     IBOutlet UIImageView *imageView;
+    IBOutlet UIToolbar *topToolbar;
+    IBOutlet UIBarButtonItem *trashButton;
 }
 
 @property UIImage *theImage;
 @property (retain) LTBuryItViewController *callingViewController;
+@property BOOL hidesLeftDeleteButton;
 
 -(IBAction)discardButtonTouched:(id)sender;
 

@@ -490,7 +490,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
         photoDetailViewController.theImage = theImage;
         photoDetailViewController.callingViewController = self;
-        photoDetailViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+        photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         [self presentViewController:photoDetailViewController animated:YES completion:nil];
     }
 }
