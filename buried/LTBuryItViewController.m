@@ -394,6 +394,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     capsule[@"image"] = imageFile;
                     
                     [capsule[@"image"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        
+                        if (succeeded)
+                        {
                         NSLog(@"image uploaded successfully");
                         HUD.mode = MBProgressHUDModeCustomView;
                         
@@ -409,6 +412,23 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                         [self clearFields];
                         
                         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                        } else {
+                            
+                            [HUD hide:YES];
+                            // Log details of the failure
+                            NSLog(@"Error: %@ %@", error, [error userInfo]);
+                            
+                            messagesToUserLabel.textColor = errorColor;
+                            messagesToUserLabel.text = @":(";
+                            
+                            [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+                            for (UIButton *button in self.view.subviews) {
+                                button.enabled = YES;
+                            };
+                            
+                            self.navigationItem.leftBarButtonItem.enabled = YES;
+                            self.navigationItem.rightBarButtonItem.enabled = YES;
+                        }
                         
                     } progressBlock:^(int percentDone) {
                         NSLog(@"%i%%",percentDone);
