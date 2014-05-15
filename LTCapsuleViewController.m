@@ -97,6 +97,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [UIView animateWithDuration:0.25f animations:^{
         self->grassImage.frame = CGRectMake(0, 474, 320, 144);
         self->grassImage.contentMode = UIViewContentModeScaleAspectFit;

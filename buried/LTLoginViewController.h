@@ -4,6 +4,9 @@
 #import <UIKit/UIKit.h>
 
 @interface LTLoginViewController : UIViewController
+{
+    IBOutlet UIImageView *grassImage;
+}
 
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
