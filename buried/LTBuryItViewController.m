@@ -130,20 +130,24 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 
 -(void)clearMessageToUser
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     messagesToUserLabel.text = @"";
 }
 
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     return YES;
 }
 
 -(BOOL)textViewDidBeginEditing:(UITextView *)textView
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     return YES;
 }
 
 -(void)setMessageToUserForTimeframe {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 messagesToUserLabel.textColor = [UIColor lightGrayColor];
     if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"soon"])
 messagesToUserLabel.text = @"will unearth in the next 24 hours";
@@ -163,11 +167,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(IBAction)timeframeClicked:(id)sender
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self setMessageToUserForTimeframe];
 }
 
 -(BOOL)checkForItemsAndSetClearOrCancel
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Test for items in the capsule if so change the button to cancel
     if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0 || self.friendPickerController.selection.count > 0)
     {
@@ -183,7 +189,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(BOOL)validateFields
 {
-    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Get contents of fields
    // NSString *email = emailTextField.text;
     NSString *thought = thoughtTextView.text;
@@ -214,6 +220,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(void)resetCamera
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Add camera navigation bar button
     UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraButtonTapped:)];
     self.navigationItem.rightBarButtonItem = cameraButton;
@@ -221,6 +228,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(void)discardPhoto
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     theImage = nil;
     messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
@@ -230,6 +239,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(BOOL)clearFields
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     emailTextField.text = @"";
     thoughtTextView.text = @"";
     [self.friendPickerController clearSelection];
@@ -249,6 +259,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(id)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"fbUser : %@",fbUser);
     NSLog(@"pfUser : %@",pfUser);
     if ([pfUser.username isEqualToString:fbUser.id])
@@ -277,6 +288,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 -(NSArray *)createArrayOfUsers:(NSArray *)array
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
     for (id<FBGraphUser> user in array)
     {
@@ -292,6 +304,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark
 -(IBAction)buryIt:(id)sender
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFUser *user = [PFUser currentUser];
     [user fetchIfNeeded];
     NSString *email = @"";
@@ -435,6 +448,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (IBAction)cameraButtonTapped:(id)sender
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (!theImage)
     {
     // Check for camera
@@ -503,6 +517,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark Cancel Button methods
 
 - (void)cancelButtonTouchHandler:(id)sender {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if ([self checkForItemsAndSetClearOrCancel])
     {
         [self clearFields];
@@ -520,6 +535,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Access the uncropped image from info dictionary
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
@@ -546,17 +562,20 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 #pragma mark MBProgressHUDDelegate methods
 
 - (void)hudWasHidden:(MBProgressHUD *)hud {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Remove HUD from screen when the HUD hides
     [HUD removeFromSuperview];
 	HUD = nil;
 }
 
 -(void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 #pragma mark FPFriendPickerDelegate methods
 
 - (IBAction)pickFriendsButtonClick:(id)sender {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // FBSample logic
     // if the session is open, then load the data for our view controller
     if (!FBSession.activeSession.isOpen) {
@@ -594,6 +613,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 }
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSMutableString *text = [[NSMutableString alloc] init];
     self.selectedFBEmailString = nil;
     
@@ -631,16 +651,19 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 }
 
 - (void)facebookViewControllerCancelWasPressed:(id)sender {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self fillTextBoxAndDismiss:emailTextField.text];
 }
 
 - (void)fillTextBoxAndDismiss:(NSString *)text {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     emailTextField.text = text;
     [self checkForItemsAndSetClearOrCancel];
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)appendEmail:(NSString *)email {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (!self.selectedFBEmailString)
         self.selectedFBEmailString = [[NSString alloc] init];
         self.selectedFBEmailString = [self.selectedFBEmailString stringByAppendingFormat:@"%@,",email];
