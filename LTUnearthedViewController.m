@@ -198,7 +198,7 @@
     LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.rightBarButtonItem.enabled = YES;
-    [appDelegate showGrass:YES];
+    [appDelegate showGrass:NO];
 }
 
 /*

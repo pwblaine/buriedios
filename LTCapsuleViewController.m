@@ -61,19 +61,24 @@
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
     self->imageButton.hidden = YES;
     [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
+        self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
         if (error) {
             self->thoughtContainer.text = @"couldn't find your capsule, please refresh";
         }
         else if (self->theThought.length > 1 && image)
         {
+            // this code is run with both a picture and a thought
             self->theImage = image;
             self->imageContainer.image = image;
             self->imageButton.hidden = NO;
+            self->thoughtContainer.frame = CGRectMake(0, 415, 320, 65);
+            self->thoughtButton.frame = CGRectMake(0, 415, 320, 65);
         }
         else if (image)
         {
+            // this code is run with just a picture
             self->theImage = image;
-            self->imageContainer.frame = CGRectMake(0, 115, 320, 365);
+            self->imageContainer.frame = CGRectMake(0, 130, 320, 365);
             self->imageButton.frame = self->imageContainer.frame;
             self->imageContainer.image = image;
             self->thoughtContainer.alpha = 0;
