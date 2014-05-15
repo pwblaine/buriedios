@@ -50,12 +50,16 @@
     [fromUser fetchIfNeeded];
     NSString *displayName = [fromUser objectForKey:@"displayName"];
     if (displayName.length > 0)
-            toBeTitle = displayName;
+        toBeTitle = displayName;
     
     self.title = toBeTitle;
     
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->theThought = [self.capsule objectForKey:@"thought"];
     self->thoughtContainer.text = self->theThought;
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
