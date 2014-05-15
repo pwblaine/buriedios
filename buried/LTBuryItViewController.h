@@ -40,9 +40,6 @@
 -(BOOL)clearFields;
 -(BOOL)checkForItemsAndSetClearOrCancel;
 
--(PFUser *)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser;
--(NSArray *)createArrayOfUsers:(NSArray *)array;
-
 //UITextField Delegate Methods
 -(BOOL)textFieldShouldReturn:(UITextField *)textField;
 -(BOOL)textFieldDidBeginEditing:(UITextField *)textField;

@@ -39,20 +39,20 @@
     self.navigationItem.leftBarButtonItem = backButton;
     NSString *toBeTitle = @"";
     
-    NSString *from = [self.capsule objectForKey:@"from"];
+    toBeTitle = @"Capsule";
     
-    if (from.length > 0)
-        toBeTitle = from;
-    else
-        toBeTitle = @"Capsule";
-    
-    PFUser *fromUser = [self.capsule objectForKey:@"fromUser"];
-    [fromUser fetchIfNeeded];
-    NSString *displayName = [fromUser objectForKey:@"displayName"];
-    if (displayName.length > 0)
-        toBeTitle = displayName;
-    
-    self.title = toBeTitle;
+    NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
+    PFQuery *fromUserIdQuery = [PFUser query];
+    [fromUserIdQuery whereKey:@"objectId" equalTo:fromUserId];
+    [fromUserIdQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error)
+        {
+            PFUser *user = [objects firstObject];
+            NSString *displayName = [user objectForKey:@"displayName"];
+            if (displayName.length > 0)
+                self.title = displayName;
+        }
+    }];
     
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
@@ -101,6 +101,8 @@
     [UIView animateWithDuration:0.25f animations:^{
         self->grassImage.frame = CGRectMake(0, 474, 320, 144);
         self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+        self->imageContainer.contentMode = UIViewContentModeCenter;
+        self->imageContainer.image = [UIImage imageNamed:@"burieddot152.png"];
     }];
 }
 

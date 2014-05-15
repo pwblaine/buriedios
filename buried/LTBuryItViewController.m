@@ -15,7 +15,6 @@
 @interface LTBuryItViewController ()
 
 @property (retain, nonatomic) FBFriendPickerViewController *friendPickerController;
-@property (retain, nonatomic) NSString *selectedFBEmailString;
 
 @end
 
@@ -40,14 +39,14 @@
     NSLog(@"shrinking image height/width for button, original sizing: %f x %f",self->theImage.size.width,self->theImage.size.height);
     if (theImage)
     {
-// Resize image
-UIGraphicsBeginImageContext(CGSizeMake(24, 24));
-[theImage drawInRect: CGRectMake(0, 0, 24, 24)];
-UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
-UIGraphicsEndImageContext();
+        // Resize image
+        UIGraphicsBeginImageContext(CGSizeMake(24, 24));
+        [theImage drawInRect: CGRectMake(0, 0, 24, 24)];
+        UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
 
-// replace camera with image
-self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+        // replace camera with image
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
     }
 }
 
@@ -170,7 +169,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Test for items in the capsule if so change the button to cancel
-    if (theImage || thoughtTextView.text.length > 0 || self.selectedFBEmailString.length > 0 || self.friendPickerController.selection.count > 0)
+    if (theImage || thoughtTextView.text.length > 0 || self.friendPickerController.selection.count > 0)
     {
         if (theImage)
             [self applyImagePreview];
@@ -193,26 +192,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(BOOL)validateFields
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // Get contents of fields
-   // NSString *email = emailTextField.text;
     NSString *thought = thoughtTextView.text;
-    
-    // create email validation regex & predicate
-   // NSString *emailRegEx = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-   // NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegEx];
-    
-    /*
-    if (([emailTest evaluateWithObject:email] == NO && ![email isEqualToString:@""]) || ([[[PFUser currentUser] email] isEqualToString:nil])) {
-        // test that email is in correct format
-         TODO removed due to change in app structure 2/12/2014
-         messagesToUserLabel.textColor = errorColor;
-        messagesToUserLabel.text = @"your thought needs someone to find it...";
-        return NO;
-     
-        return YES;
-    } else
-        */
-    // either/or for delivery
     if (thought.length == 0 && !theImage) {
         messagesToUserLabel.textColor = errorColor;
         messagesToUserLabel.text = @"nothing buried, nothing gained...";
@@ -232,7 +212,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 -(void)discardPhoto
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     theImage = nil;
     messagesToUserLabel.text = @"photo discarded";
     messagesToUserLabel.textColor =  errorColor;
@@ -246,7 +225,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     emailTextField.text = @"";
     thoughtTextView.text = @"";
     [self.friendPickerController clearSelection];
-    self.selectedFBEmailString = @"";
     
     [timeframeSegmentedControl setSelectedSegmentIndex:0];
     
@@ -260,62 +238,11 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     return YES;
 }
 
--(id)createUserFor:(id<FBGraphUser>)fbUser with:(PFUser *)pfUser
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"fbUser : %@",fbUser);
-    NSLog(@"pfUser : %@",pfUser);
-    if ([pfUser.username isEqualToString:fbUser.id])
-    {
-        NSLog(@"user account %@ linked to facebook id %@",pfUser.username,fbUser.id);
-        return pfUser;
-    }
-    
-        NSLog(@"looking for username in parse user db");
-        PFQuery *userQuery = [PFUser query];
-        [userQuery whereKey:@"username" equalTo:fbUser.id];
-        NSArray *objects = [userQuery findObjects];
-        NSLog(@"query executed");
-        if (objects.count < 1)
-        {
-            NSLog(@"matching username not found");
-            [pfUser setUsername:fbUser.id];
-            [pfUser setPassword:@""];
-            [pfUser signUp];
-            NSLog(@"username %@ signed up",pfUser.username);
-            return [self createUserFor:fbUser with:pfUser];
-        }
-    NSLog(@"located user in database");
-    return [self createUserFor:fbUser with:(PFUser *)[objects firstObject]]; // return nothing if the account already exists}
-}
-
--(NSArray *)createArrayOfUsers:(NSArray *)array
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
-    for (id<FBGraphUser> user in array)
-    {
-        PFUser *pfUser = [self createUserFor:user with:[PFUser user]];
-        if (pfUser)
-            [mutableArray addObject:pfUser];
-        
-    }
-    NSLog(@"%@",mutableArray);
-    return [NSArray arrayWithArray:mutableArray];
-}
-
 #pragma mark
 -(IBAction)buryIt:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFUser *user = [PFUser currentUser];
-    [user fetchIfNeeded];
-    NSString *email = @"";
-    if (self.selectedFBEmailString.length > 0)
-        email = [NSString stringWithFormat:@"%@%@",self.selectedFBEmailString,user.email];
-    else
-        email = [NSString stringWithFormat:@"%@",user.email];
-    NSLog(@"Current recipients: %@",email);
     if ([self validateFields])
     {
         NSLog(@"all fields validated successfully, sending...");
@@ -324,11 +251,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         
         NSString *timeframe = [timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex];
         
-        capsule[@"from"] = user.email;
-        capsule[@"email"] = email;
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
-        capsule[@"fromUser"] = user;
+        capsule[@"fromUserId"] = [user objectId];
         
         // create mutable arrays for user id testing
         NSMutableArray *mutableToUserIds = [NSMutableArray arrayWithObject:user.objectId];
@@ -425,7 +350,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                         
                         HUD.labelText = @"it's buried.";
                         
-                        NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
+                        NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"toUserIds"], capsule[@"fromUserId"], capsule[@"timeframe"]);
                             
                             capsule[@"image"] = imageFile;
                             
@@ -683,30 +608,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSMutableString *text = [[NSMutableString alloc] init];
-    self.selectedFBEmailString = nil;
-    
-    // we pick up the users from the selection, and create a string that we use to update the text view
-    // at the bottom of the display; note that self.selection is a property inherited from our base class
-    for (id<FBGraphUser> user in self.friendPickerController.selection) {
-        FBRequest *request = [FBRequest requestForMyFriends];
-            [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-            if (!error)
-            {
-            NSDictionary<FBGraphUser> *friends = (NSDictionary<FBGraphUser> *)[result objectForKey:@"data"];
-            for (id<FBGraphUser> friend in friends)
-            {
-                if ([friend.name isEqual:user.name])
-                {
-                    NSString *fbEmail = [NSString stringWithFormat:@"%@@facebook.com",friend.username];
-                    [self appendEmail:fbEmail];
-                }
-            }
-            }}];
-    }
-    
     if (self.friendPickerController.selection.count >= 1) {
         [text appendString:[[self.friendPickerController.selection objectAtIndex:0] name]];
-        if (self.friendPickerController.selection.count >                                                      1)
+        if (self.friendPickerController.selection.count > 1)
         [text appendFormat:@" + %@",[NSNumber numberWithDouble:(self.friendPickerController.selection.count - 1)]];
     }
     if (text.length > 0)
@@ -728,13 +632,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     emailTextField.text = text;
     [self checkForItemsAndSetClearOrCancel];
     [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-- (void)appendEmail:(NSString *)email {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if (!self.selectedFBEmailString)
-        self.selectedFBEmailString = [[NSString alloc] init];
-        self.selectedFBEmailString = [self.selectedFBEmailString stringByAppendingFormat:@"%@,",email];
 }
 
 @end

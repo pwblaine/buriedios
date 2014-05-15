@@ -60,33 +60,24 @@
 
 - (PFQuery *)queryForTable {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
+    PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     PFUser *currentUser = [PFUser currentUser];
-    
-    [currentUser fetchIfNeeded];
     
     // If no objects are loaded in memory, we look to the cache
     // first to fill the table and then subsequently do a query
     // against the network.
     if ([self.objects count] == 0) {
-        emailQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
+        toUserIdsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
-    PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    [fbQuery whereKey:@"email" containsString:[[currentUser objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
+    [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
     
-    [emailQuery whereKey:@"email" containsString:[currentUser email]];
+    [toUserIdsQuery whereKey:@"sent" equalTo:@YES];
     
-    PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
+    [toUserIdsQuery orderByDescending:@"deliveryDate"];
     
-    [compundQuery includeKey:@"fromUser"];
-    
-    [compundQuery whereKey:@"sent" equalTo:@YES];
-    
-    [compundQuery orderByDescending:@"deliveryDate"];
-    
-    return compundQuery;
+    return toUserIdsQuery;
 }
 
 
@@ -137,36 +128,31 @@
 
 - (void)updateTitleWithNumberOfBuriedCapsules {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    PFQuery *emailQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     PFUser *currentUser = [PFUser currentUser];
-    [currentUser fetchIfNeeded];
+    
+    PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     // If no objects are loaded in memory, we look to the cache
     // first to fill the table and then subsequently do a query
     // against the network.
     if ([self.objects count] == 0) {
-        emailQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
+        toUserIdsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
-    PFQuery *fbQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    [fbQuery whereKey:@"email" containsString:[[currentUser objectForKey:@"facebookUsername"] stringByAppendingString:@"@facebook.com"]];
+    [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
     
-    // [fbQuery whereKey:@"sent" equalTo:@YES];
+    [toUserIdsQuery whereKey:@"sent" notEqualTo:@YES];
     
-    [emailQuery whereKey:@"email" containsString:[currentUser email]];
-    
-    PFQuery *compundQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fbQuery, emailQuery, nil]];
-    
-    [compundQuery whereKey:@"sent" notEqualTo:@YES];
-    
-    // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
-    if (compundQuery.countObjects > 1)
-        self.title = [NSString stringWithFormat:@"%lg Await You",(double)compundQuery.countObjects];
-    else if (compundQuery.countObjects == 1)
-        self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)compundQuery.countObjects];
-    else
-        self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
+    [toUserIdsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
+        if (error)
+            self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
+        else if (objects.count > 1)
+            self.title = [NSString stringWithFormat:@"%lg Await You",(double)toUserIdsQuery.countObjects];
+        else if (objects.count == 1)
+            self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)toUserIdsQuery.countObjects];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -235,13 +221,11 @@
      
      PFUser *currentUser = [PFUser currentUser];
      
-     [currentUser fetchIfNeeded];
-     
      // Set left label to timestamp
      cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
      
      // If sent to self set label to blue
-     if ([[object objectForKey:@"from"] isEqualToString:[currentUser email]] || [[[object objectForKey:@"fromUser"] objectId] isEqualToString:[currentUser objectId]])
+     if ([[object objectForKey:@"fromUserId"] isEqualToString:currentUser.objectId])
      {
          cell.textLabel.textColor = [UIColor blueColor];
      } else {
@@ -264,17 +248,15 @@
     
      // Unread code: if current user isn't found in the readUsers tint brown.
      
-     NSArray *readUsers = [object objectForKey:@"readUsers"];
+     NSArray *readUserIds = [object objectForKey:@"readUserIds"];
      
      BOOL userHasRead = NO;
      
-     if ([readUsers count] > 0)
+     if ([readUserIds count] > 0)
      {
-     for (PFUser *user in readUsers) {
+     for (NSString *userId in readUserIds) {
          
-         [user fetchIfNeeded];
-         
-         if ([[user objectId] isEqualToString:[currentUser objectId]]) {
+         if ([userId isEqualToString:[currentUser objectId]]) {
              userHasRead = YES;
              break;
          }
@@ -609,14 +591,11 @@
     
     PFUser *currentUser = [PFUser currentUser];
     
-    [currentUser fetchIfNeeded];
-    
-    for (PFUser *user in (NSArray *)[capsule objectForKey:@"readUsers"])
+    for (NSString *userId in (NSArray *)[capsule objectForKey:@"readUserIds"])
     {
-        [user fetchIfNeeded];
         
-        NSLog(@"comparing %@ to %@ in readUsers",[user objectId],[currentUser objectId]);
-        if ([[user objectId] isEqualToString:[currentUser objectId]])
+        NSLog(@"comparing %@ to %@ in readUsers",userId,[currentUser objectId]);
+        if ([userId isEqualToString:[currentUser objectId]])
         {
             hasRead = true;
             NSLog(@"user found!");
@@ -626,8 +605,8 @@
     if (!hasRead)
     {
         NSLog(@"user hasn't read capsule yet, adding to readUsers.");
-        [capsule addUniqueObject:[PFUser currentUser] forKey:@"readUsers"];
-        NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUsers"] count]);
+        [capsule addUniqueObject:[currentUser objectId] forKey:@"readUserIds"];
+        NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUserIds"] count]);
         
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
         if (currentInstallation.badge > 0) {
@@ -636,7 +615,10 @@
             NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
         }
         
-        [capsule save];
+        [capsule saveEventually:^(BOOL succeeded, NSError *error) {
+            if (succeeded)
+                NSLog(@"capsule %@ has been saved",[currentUser objectId]);
+        }];
     }
     
     NSLog(@"%@",capsule);
