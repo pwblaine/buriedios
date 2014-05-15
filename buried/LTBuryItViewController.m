@@ -68,7 +68,7 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
     successColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
     
     // Add logout navigation bar button
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     
     // Add camera navigation bar button
@@ -112,18 +112,11 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self dismissKeyboardAndCheckInput:NULL];
-    return NO;
+    return YES;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // dismisses keyboard when the return key is pressed
-    
-    if([text isEqualToString:@"\n"]) {
-        [self dismissKeyboardAndCheckInput:NULL];
-        return NO;
-    }
     
     return YES;
 }
@@ -143,6 +136,8 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 -(BOOL)textViewDidBeginEditing:(UITextView *)textView
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissKeyboardAndCheckInput:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTouchHandler:)];
     return YES;
 }
 
@@ -179,10 +174,18 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     {
         if (theImage)
             [self applyImagePreview];
-        self.navigationItem.leftBarButtonItem.title = @"Clear";
+        else
+            [self resetCamera];
+        UIBarButtonItem *clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        self.navigationItem.leftBarButtonItem = clearButton;
         return YES;
     } else {
-        self.navigationItem.leftBarButtonItem.title = @"Cancel";
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonTouchHandler:)];
+        self.navigationItem.leftBarButtonItem = cancelButton;
+        if (theImage)
+            [self applyImagePreview];
+        else
+            [self resetCamera];
         return NO;
     }
 }
@@ -518,7 +521,12 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 - (void)cancelButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if ([self checkForItemsAndSetClearOrCancel])
+    if ([self->thoughtTextView isFirstResponder])
+    {
+        self->thoughtTextView.text = @"";
+        [self dismissKeyboardAndCheckInput:self];
+    }
+    else if ([self checkForItemsAndSetClearOrCancel])
     {
         [self clearFields];
         messagesToUserLabel.text = @"capsule cleared";
