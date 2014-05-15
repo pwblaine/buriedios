@@ -8,7 +8,7 @@
             <connections>
                 <outlet property="imageButton" destination="mfl-qq-4kq" id="4Dq-wG-lJt"/>
                 <outlet property="imageContainer" destination="SXu-Cg-vxo" id="SOm-tl-z7X"/>
-                <outlet property="thoughtButton" destination="XiR-1H-bWQ" id="gOO-JC-4a3"/>
+                <outlet property="thoughtButton" destination="XiR-1H-bWQ" id="PdJ-30-F6b"/>
                 <outlet property="thoughtContainer" destination="gHH-Yb-fWW" id="oOE-O9-xwC"/>
                 <outlet property="timestamp" destination="1mx-yr-bg7" id="cT3-3D-0gf"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -40,11 +40,11 @@
                         <action selector="thoughtButtonTapped:" destination="-1" eventType="touchUpInside" id="LaN-S0-ZvB"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
                     <rect key="frame" x="0.0" y="130" width="320" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfl-qq-4kq" userLabel="Image Button">
+                <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfl-qq-4kq" userLabel="Image Button">
                     <rect key="frame" x="0.0" y="130" width="320" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal">
