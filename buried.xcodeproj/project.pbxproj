@@ -38,6 +38,7 @@
 		286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */; };
 		286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */; };
 		286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */; };
+		28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */ = {isa = PBXBuildFile; fileRef = 28763EA71924F5940076A636 /* buried_text_250x94.png */; };
 		287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */; };
 		287BB8E919248FD4007DAA32 /* LTThoughtDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
@@ -119,6 +120,7 @@
 		286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+AlphaAdditions.m"; sourceTree = "<group>"; };
 		286E641618C30D3400CDB033 /* UIImage+RoundedCornerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCornerAdditions.h"; sourceTree = "<group>"; };
 		286E641718C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCornerAdditions.m"; sourceTree = "<group>"; };
+		28763EA71924F5940076A636 /* buried_text_250x94.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buried_text_250x94.png; path = buried/buried_text_250x94.png; sourceTree = SOURCE_ROOT; };
 		287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTThoughtDetailViewController.h; sourceTree = "<group>"; };
 		287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTThoughtDetailViewController.m; sourceTree = "<group>"; };
 		287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTThoughtDetailViewController.xib; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
 				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
@@ -413,6 +416,7 @@
 				287BB8E919248FD4007DAA32 /* LTThoughtDetailViewController.xib in Resources */,
 				281E7AC2188EA66800C85066 /* login-button-small@2x.png in Resources */,
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
+				28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */,
 				308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */,
 				308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,

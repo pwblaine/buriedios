@@ -25,7 +25,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="color" cocoaTouchSystemColor="darkTextColor"/>
                 </activityIndicatorView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="buriedlogo_250height.png" id="7Lz-sv-8Qg">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="buried_text_250x94.png" id="7Lz-sv-8Qg">
                     <rect key="frame" x="40" y="176" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -37,6 +37,7 @@
         </view>
     </objects>
     <resources>
+        <image name="buried_text_250x94.png" width="250" height="94"/>
         <image name="buriedlogo_250height.png" width="498" height="250"/>
     </resources>
 </document>

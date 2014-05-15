@@ -539,8 +539,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
     
     [self checkForItemsAndSetClearOrCancel];
-    
-    
+
 }
 
 #pragma mark - Partner Classes
