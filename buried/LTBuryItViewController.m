@@ -356,27 +356,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         //convert the mutable arrays to NSArrays for storage;
         capsule[@"toUserIds"] = [NSArray arrayWithArray:mutableToUserIds];
         capsule[@"toFbIds"] = [NSArray arrayWithArray:mutableToFbIds];
-
-        if (theImage) {
-            /*
-             adjust rotation dimensions for portrait
-             -            UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-             -            [theImage drawInRect: CGRectMake(0, 0, 640, 960)];
-             -            UIImage *rightedImage = UIGraphicsGetImageFromCurrentImageContext();
-             -            UIGraphicsEndImageContext();
-             */
-            
-            NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 1.0f);
-        
-            NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
-            [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];
-            PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.jpg",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
-        
-            capsule[@"image"] = imageFile;
-        }
-        
-        HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        
         for (UIButton *button in self.view.subviews) {
             button.enabled = NO;
         };
@@ -384,47 +363,78 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         self.navigationItem.leftBarButtonItem.enabled = NO;
         self.navigationItem.rightBarButtonItem.enabled = NO;
         
+        
+        HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:HUD];
         
-        // Set determinate mode
-        HUD.mode = MBProgressHUDModeDeterminate;
+        // Set indeterminate mode
+        HUD.mode = MBProgressHUDModeIndeterminate;
         HUD.delegate = self;
-        HUD.labelText = @"burying";
+        HUD.labelText = @"preparing capsule";
         [HUD show:YES];
         
-        // Save PFFile
+        // Save capsule
         [capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 
-                HUD.progress = 1.0f;
-                
-            //Hide determinate HUD
-            [HUD hide:YES];
-            
-            // Show checkmark
-            HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-                
-                HUD.labelText = @"burying";
-            
-            // The sample image is based on the work by http://www.pixelpressicons.com, http://creativecommons.org/licenses/by/2.5/ca/
-            // Make the customViews 37 by 37 pixels for best results (those are the bounds of the build-in progress indicators)
-            HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-            
-            // Set custom view mode
-            HUD.mode = MBProgressHUDModeCustomView;
-            
-            HUD.delegate = self;
-                
-                [HUD show:YES];
-            
-                NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
-                
-                NSLog(@"capsule contents: %@",capsule);
-                
-                
-                [self clearFields];
-                [self.navigationController popViewControllerAnimated:YES];
+                if (theImage) {
+                    
+                    NSLog(@"image detected, uploading...");
+                    
+                    // Set indeterminate mode
+                    HUD.mode = MBProgressHUDModeDeterminateHorizontalBar;
+                    HUD.labelText = @"digging the hole";
+                    
+                    NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 1.0f);
+                    
+                    NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
+                    [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];
+                    PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.jpg",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
+                    
+                    capsule[@"image"] = imageFile;
+                    
+                    [capsule[@"image"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        NSLog(@"image uploaded successfully");
+                        HUD.mode = MBProgressHUDModeCustomView;
+                        
+                        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+                        
+                        HUD.labelText = @"it's buried.";
+                        
+                        NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
+                        
+                        NSLog(@"capsule contents: %@",capsule);
+                        
+                        
+                        [self clearFields];
+                        
+                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                        
+                    } progressBlock:^(int percentDone) {
+                        NSLog(@"%i%%",percentDone);
+                        if (percentDone >= 70)
+                            HUD.labelText = @"piling on dirt";
+                        [HUD setProgress:(float)percentDone/100.0f];
+                    }];
+                } else {
+                    // Show checkmark
+                    
+                    HUD.labelText = @"it's buried.";
+                    
+                    HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+                    
+                    // Set custom view mode
+                    HUD.mode = MBProgressHUDModeCustomView;
+                    
+                    NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
+                    
+                    NSLog(@"capsule contents: %@",capsule);
+                    
+                    
+                    [self clearFields];
+                    
+                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                }
                 
             } else{
                 [HUD hide:YES];
