@@ -26,6 +26,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+        
     }
     return self;
 }
@@ -33,16 +35,18 @@
 #pragma mark View Lifecycle
 
 - (void) applyImagePreview {
-    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+
+    NSLog(@"shrinking image height/width for button, original sizing: %f x %f",self->theImage.size.width,self->theImage.size.height);
     if (theImage)
     {
 // Resize image
-UIGraphicsBeginImageContext(CGSizeMake(32, 32));
-[theImage drawInRect: CGRectMake(0, 0, 32, 32)];
+UIGraphicsBeginImageContext(CGSizeMake(24, 24));
+[theImage drawInRect: CGRectMake(0, 0, 24, 24)];
 UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
 UIGraphicsEndImageContext();
 
-// Tint Camera button after picture taken
+// replace camera with image
 self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
     }
 }
@@ -51,6 +55,7 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     /*Parse.com Object Submit Code
      PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
@@ -88,6 +93,7 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 
 
 - (void)viewDidUnload {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.friendPickerController = nil;
     
     [super viewDidUnload];
@@ -97,20 +103,24 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 -(IBAction)dismissKeyboardAndCheckInput:(id)sender
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.view endEditing:YES];
     [self checkForItemsAndSetClearOrCancel];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self dismissKeyboardAndCheckInput:NULL];
     return NO;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // dismisses keyboard when the return key is pressed
     
     if([text isEqualToString:@"\n"]) {
@@ -343,7 +353,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
              -            UIGraphicsEndImageContext();
              */
             
-            NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 0.05f);
+            NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 1.0f);
         
             NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
             [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];

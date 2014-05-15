@@ -15,19 +15,22 @@
 
 @implementation LTPhotoDetailViewController
 
-@synthesize theImage,callingViewController,hidesLeftDeleteButton;
+@synthesize theImage,callingViewController;
 
 - (void)viewDidLoad
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self->imageView.image = self.theImage;
     
-    // if the view is flagged to hide the delete button, remove it from the view
-    if (self.hidesLeftDeleteButton) {
+    // if the view is not LTBuryItViewController, remove it from the view
+    if (![self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    {
         NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self->topToolbar.items];
         [toolbarItems removeObject:self->trashButton];
         self->topToolbar.items = toolbarItems;
+        // TODO add action button for saving/sharing
     }
     
     // set top toolbar to transparent
@@ -36,29 +39,30 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 -(IBAction)discardButtonTouched:(id)sender
 {
+    // only occurs in a buryItView currently
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.theImage = nil;
-    [callingViewController resetCamera];
-    [callingViewController discardPhoto];
+    [(LTBuryItViewController *)self.callingViewController resetCamera];
+    [(LTBuryItViewController *)self.callingViewController discardPhoto];
     [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 -(IBAction)keepButtonTouched:(id)sender
 {
-    self.navigationController.navigationBar.translucent = NO;
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 @end

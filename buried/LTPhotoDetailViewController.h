@@ -7,23 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LTBuryItViewController.h"
 
 @interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate>
 {
-    IBOutlet UIButton *discardButton;
-    IBOutlet UIButton *keepButton;
     IBOutlet UIImageView *imageView;
     IBOutlet UIToolbar *topToolbar;
     IBOutlet UIBarButtonItem *trashButton;
 }
 
 @property UIImage *theImage;
-@property (retain) LTBuryItViewController *callingViewController;
-@property BOOL hidesLeftDeleteButton;
+@property (retain) UIViewController *callingViewController;
 
 -(IBAction)discardButtonTouched:(id)sender;
-
 -(IBAction)keepButtonTouched:(id)sender;
 
 @end

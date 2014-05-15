@@ -7,9 +7,10 @@
 //
 
 #import "LTCapsuleViewController.h"
-#import "UIBarButtonItem+_projectButtons.h"
 #import "LTPhotoDetailViewController.h"
+#import "LTThoughtDetailViewController.h"
 #import "UIImage+ResizeAdditions.h"
+#import "UIBarButtonItem+_projectButtons.h"
 
 @interface LTCapsuleViewController ()
 
@@ -24,15 +25,16 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    fullScreenThought.alpha = 0;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     NSString *toBeTitle = @"";
@@ -54,38 +56,35 @@
     
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
-    NSString *thought = [self.capsule objectForKey:@"thought"];
-    self->thoughtContainer.editable = NO;
-    self->thoughtContainer.selectable = YES;
-    self->thoughtContainer.text = thought;
-    self->fullScreenThought.text = thought;
-    self->fullScreenThought.alpha = 1;
-    self->fullScreenThought.editable = NO;
-    self->fullScreenThought.textAlignment = NSTextAlignmentCenter;
-    self->thoughtContainer.alpha = 0;
-    
-    PFFile *imageFile = [self.capsule objectForKey:@"image"];
-    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        UIImage *image = [UIImage imageWithData:data];
-        
-        if (thought.length > 1 && image)
+    self->theThought = [self.capsule objectForKey:@"thought"];
+    self->thoughtContainer.text = self->theThought;
+    self->imageContainer.file = [self.capsule objectForKey:@"image"];
+    self->imageButton.hidden = YES;
+    [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
+        if (error) {
+            self->thoughtContainer.text = @"couldn't find your capsule, please refresh";
+        }
+        else if (self->theThought.length > 1 && image)
         {
+            self->theImage = image;
             self->imageContainer.image = image;
-            self->fullScreenThought.alpha = 0;
-            self->thoughtContainer.alpha = 1;
+            self->imageButton.hidden = NO;
         }
         else if (image)
         {
-            self->imageContainer.frame = CGRectMake(40.0f, 109.0f, 240.0f, 356.0f);
+            self->theImage = image;
+            self->imageContainer.frame = CGRectMake(0, 115, 320, 365);
+            self->imageButton.frame = self->imageContainer.frame;
             self->imageContainer.image = image;
             self->thoughtContainer.alpha = 0;
-            self->fullScreenThought.alpha = 0;
+            self->thoughtButton.hidden = YES;
         }
     }];
 }
 
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -93,22 +92,28 @@
 
 - (void)backButtonTouchHandler:(id)sender
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)imageButtonTapped:(id)sender
+- (IBAction)imageButtonTapped:(id)sender
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
-    self->thoughtContainer.alpha = 0;
-    self->imageContainer.alpha = 1;
-
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
+    photoDetailViewController.callingViewController = self;
+    photoDetailViewController.theImage = self->theImage;
+    photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [self presentViewController:photoDetailViewController animated:YES completion:nil];
 }
 
-- (void)doneButtonTapped:(id)sender
+- (IBAction)thoughtButtonTapped:(id)sender
 {
-    self->thoughtContainer.alpha = 1;
-    self->imageContainer.alpha = 0;
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(imageButtonTapped:) withImage:self->theImage];
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    LTThoughtDetailViewController *thoughtDetailViewController = [[LTThoughtDetailViewController alloc] init];
+    thoughtDetailViewController.callingViewController = self;
+    thoughtDetailViewController.theThought = self->theThought;
+    thoughtDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [self presentViewController:thoughtDetailViewController animated:YES completion:nil];
 }
 
 @end

@@ -12,6 +12,7 @@
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     self.title = @"";
     
@@ -28,12 +29,14 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate showGrass:NO];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.navigationItem.rightBarButtonItem.enabled = true;
 }
 
@@ -42,6 +45,7 @@
 
 /* Login to facebook method */
 - (IBAction)loginButtonTouchHandler:(id)sender  {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging in");
     [(UIBarButtonItem*)sender setEnabled:NO];
     
