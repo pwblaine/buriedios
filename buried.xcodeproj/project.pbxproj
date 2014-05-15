@@ -41,6 +41,7 @@
 		28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */ = {isa = PBXBuildFile; fileRef = 28763EA71924F5940076A636 /* buried_text_250x94.png */; };
 		287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */; };
 		287BB8E919248FD4007DAA32 /* LTThoughtDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */; };
+		28824A1319254A2E005F24CC /* burieddot152.png in Resources */ = {isa = PBXBuildFile; fileRef = 28824A1219254A2E005F24CC /* burieddot152.png */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
 		28C5931918DD32E300288764 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C5931718DD32E300288764 /* FacebookSDK.framework */; };
@@ -124,6 +125,7 @@
 		287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTThoughtDetailViewController.h; sourceTree = "<group>"; };
 		287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTThoughtDetailViewController.m; sourceTree = "<group>"; };
 		287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTThoughtDetailViewController.xib; sourceTree = "<group>"; };
+		28824A1219254A2E005F24CC /* burieddot152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = burieddot152.png; path = buried/burieddot152.png; sourceTree = SOURCE_ROOT; };
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
 		28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28824A1219254A2E005F24CC /* burieddot152.png */,
 				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
@@ -426,6 +429,7 @@
 				286D080218CB647E000B5EBE /* grassToolbar.png in Resources */,
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
+				28824A1319254A2E005F24CC /* burieddot152.png in Resources */,
 				28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */,
 				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,

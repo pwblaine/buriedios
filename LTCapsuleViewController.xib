@@ -41,7 +41,7 @@
                         <action selector="thoughtButtonTapped:" destination="-1" eventType="touchUpInside" id="LaN-S0-ZvB"/>
                     </connections>
                 </button>
-                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="buriedlogo80x80.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="burieddot152.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
                     <rect key="frame" x="0.0" y="130" width="320" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -70,7 +70,7 @@
         </view>
     </objects>
     <resources>
-        <image name="buriedlogo80x80.png" width="80" height="80"/>
+        <image name="burieddot152.png" width="152" height="152"/>
         <image name="buriedlogo_250height.png" width="498" height="250"/>
     </resources>
 </document>
