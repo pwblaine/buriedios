@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTPhotoDetailViewController">
             <connections>
+                <outlet property="grassImage" destination="xNq-4i-cEa" id="iRp-LU-CtZ"/>
                 <outlet property="imageView" destination="9Vl-6O-3Od" id="Cjg-Ta-dGR"/>
                 <outlet property="topToolbar" destination="Kua-Jg-xdX" id="E8h-7Z-nRP"/>
                 <outlet property="trashButton" destination="sSt-go-cWi" id="mXo-BM-PgW"/>
@@ -17,8 +18,8 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Vl-6O-3Od">
-                    <rect key="frame" x="0.0" y="65" width="320" height="410"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Default.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Vl-6O-3Od">
+                    <rect key="frame" x="0.0" y="20" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kua-Jg-xdX">
@@ -38,8 +39,8 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="xNq-4i-cEa" userLabel="grass image">
-                    <rect key="frame" x="0.0" y="494" width="320" height="144"/>
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="xNq-4i-cEa" userLabel="grass image">
+                    <rect key="frame" x="0.0" y="424" width="320" height="144"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
@@ -49,6 +50,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Default.png" width="320" height="480"/>
         <image name="buriedlogo_250height.png" width="498" height="250"/>
     </resources>
 </document>

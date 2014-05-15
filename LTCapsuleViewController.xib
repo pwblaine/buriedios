@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTCapsuleViewController">
             <connections>
+                <outlet property="grassImage" destination="GvX-MW-dC4" id="NXI-xs-Rh3"/>
                 <outlet property="imageButton" destination="mfl-qq-4kq" id="4Dq-wG-lJt"/>
                 <outlet property="imageContainer" destination="SXu-Cg-vxo" id="SOm-tl-z7X"/>
                 <outlet property="thoughtButton" destination="XiR-1H-bWQ" id="PdJ-30-F6b"/>
@@ -23,8 +24,8 @@
                     <rect key="frame" x="0.0" y="494" width="320" height="144"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="loading..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="gHH-Yb-fWW">
-                    <rect key="frame" x="0.0" y="130" width="320" height="365"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gHH-Yb-fWW">
+                    <rect key="frame" x="20" y="130" width="280" height="350"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,7 +41,7 @@
                         <action selector="thoughtButtonTapped:" destination="-1" eventType="touchUpInside" id="LaN-S0-ZvB"/>
                     </connections>
                 </button>
-                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="buriedlogo80x80.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
                     <rect key="frame" x="0.0" y="130" width="320" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -69,6 +70,7 @@
         </view>
     </objects>
     <resources>
+        <image name="buriedlogo80x80.png" width="80" height="80"/>
         <image name="buriedlogo_250height.png" width="498" height="250"/>
     </resources>
 </document>

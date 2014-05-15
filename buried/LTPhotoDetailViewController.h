@@ -13,6 +13,7 @@
     IBOutlet UIImageView *imageView;
     IBOutlet UIToolbar *topToolbar;
     IBOutlet UIBarButtonItem *trashButton;
+    IBOutlet UIImageView *grassImage;
 }
 
 @property UIImage *theImage;

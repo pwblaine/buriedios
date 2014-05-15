@@ -18,6 +18,7 @@
     NSString *theThought;
     IBOutlet UIButton *imageButton;
     IBOutlet UIButton *thoughtButton;
+    IBOutlet UIImageView *grassImage;
 }
 
 @property PFObject *capsule;

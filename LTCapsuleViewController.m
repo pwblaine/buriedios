@@ -58,9 +58,8 @@
     self->timestamp.text = timestampString; // timestamp states created at date
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
-    self->thoughtContainer.text = @"loading...";
+    self->thoughtContainer.text = @"";
     self->theThought = [self.capsule objectForKey:@"thought"];
-    self->thoughtContainer.text = self->theThought;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -69,31 +68,38 @@
         self->thoughtButton.enabled = YES;
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
     [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
-        self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
         if (error) {
             self->thoughtContainer.text = @"couldn't find your capsule, please refresh";
         }
-        else if ((self->theThought.length > 1) && image)
+        else if (image)
         {
-            // this code is run with both a picture and a thought
+            // this code is run if a picture is downloaded
             self->theImage = image;
             self->imageContainer.image = image;
             self->imageContainer.frame = CGRectMake(0, 130, 320, 285);
-            self->thoughtContainer.frame = CGRectMake(0, 415, 320, 65);
+            self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
+            self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
             self->thoughtButton.frame = CGRectMake(0, 415, 320, 65);
             self->imageButton.enabled = YES;
+            if (!(self->theThought.length > 1) && (UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
+            {
+                [UIView animateWithDuration:0.75f animations:^{
+                    self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
+                    self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                }];
+            }
+        } else {
+            self->imageContainer.image = nil;
         }
-        else if (image)
-        {
-            // this code is run with just a picture
-            self->theImage = image;
-            self->imageContainer.frame = CGRectMake(0, 130, 320, 345);
-            self->imageContainer.image = image;
-            self->thoughtContainer.alpha = 0;
-            self->imageButton.enabled = YES;
-            self->imageButton.frame = CGRectMake(0, 130, 320, 345);
-            self->thoughtButton.enabled = NO;
-        }
+        self->thoughtContainer.text = self->theThought;
+    }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [UIView animateWithDuration:0.25f animations:^{
+        self->grassImage.frame = CGRectMake(0, 474, 320, 144);
+        self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
     }];
 }
 
