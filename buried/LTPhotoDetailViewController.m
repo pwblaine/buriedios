@@ -22,7 +22,11 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
     self->imageView.image = self.theImage;
+    self->scrollView.contentSize = self.theImage.size;
+    NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
+    NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);
     
     // if the view is not LTBuryItViewController, remove it from the view
     if (![self.callingViewController isKindOfClass:[LTBuryItViewController class]])

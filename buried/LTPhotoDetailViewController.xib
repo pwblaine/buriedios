@@ -6,8 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTPhotoDetailViewController">
             <connections>
-                <outlet property="grassImage" destination="xNq-4i-cEa" id="iRp-LU-CtZ"/>
                 <outlet property="imageView" destination="9Vl-6O-3Od" id="Cjg-Ta-dGR"/>
+                <outlet property="scrollView" destination="AhF-aT-Fca" id="JDp-iD-Qd6"/>
                 <outlet property="topToolbar" destination="Kua-Jg-xdX" id="E8h-7Z-nRP"/>
                 <outlet property="trashButton" destination="sSt-go-cWi" id="mXo-BM-PgW"/>
                 <outlet property="view" destination="1" id="5Jf-GV-U0L"/>
@@ -18,10 +18,19 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Default.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Vl-6O-3Od">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AhF-aT-Fca">
                     <rect key="frame" x="0.0" y="20" width="320" height="480"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Default.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Vl-6O-3Od">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                    </subviews>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="x9N-ZD-yTG"/>
+                    </connections>
+                </scrollView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kua-Jg-xdX">
                     <rect key="frame" x="0.0" y="21" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -39,8 +48,8 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="xNq-4i-cEa" userLabel="grass image">
-                    <rect key="frame" x="0.0" y="424" width="320" height="144"/>
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buried_text_250x94.png" translatesAutoresizingMaskIntoConstraints="NO" id="xNq-4i-cEa" userLabel="buried logo">
+                    <rect key="frame" x="100" y="500" width="120" height="68"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
@@ -51,6 +60,6 @@
     </objects>
     <resources>
         <image name="Default.png" width="320" height="480"/>
-        <image name="buriedlogo_250height.png" width="498" height="250"/>
+        <image name="buried_text_250x94.png" width="250" height="94"/>
     </resources>
 </document>

@@ -385,14 +385,37 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     HUD.mode = MBProgressHUDModeDeterminateHorizontalBar;
                     HUD.labelText = @"digging the hole";
                     
-                    NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 0.73f); // set to SQ2 compression for optimal resolution
+                    //shrink the stored image resolution to 1136x852 (the maximum that will be displayed while maintaining aspect resolution)
+                    UIImage *adjustedImage = [[UIImage alloc] init];
+                    
+                    if (self->theImage.size.width < 852 || self->theImage.size.height < 852)
+                    {
+                        NSLog(@"low quality image detected, no resizing needed.  %dx%f", self->theImage.size.width < 852, self->theImage.size.height);
+                    // test for portrait or landscape picture and set dimensions appropriately
+                    }
+                    else if (self->theImage.size.height > self->theImage.size.width)
+                    {
+                        NSLog(@"portrait image detected, setting resolution to 852x1136");
+                        UIGraphicsBeginImageContext(CGSizeMake(852, 1136));
+                        [self->theImage drawInRect: CGRectMake(0, 0, 852, 1136)];
+                        adjustedImage = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                    } else {
+                        NSLog(@"landscape image detected, setting resolution to 1136x852");
+                        UIGraphicsBeginImageContext(CGSizeMake(1136, 852));
+                        [self->theImage drawInRect: CGRectMake(0, 0, 1136, 852)];
+                        adjustedImage = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                    }
+                    
+                    // set to web average compression factor of 75%
+                    NSData *selectedImageData = UIImageJPEGRepresentation(adjustedImage, 0.75f);
                     
                     NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
                     [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];
                     PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.jpg",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
                     
                     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        
                         if (succeeded)
                         {
                         NSLog(@"image uploaded successfully");
@@ -411,14 +434,14 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                                 NSLog(@"capsule %@ is now linked to image %@",[capsule objectId],[imageFile name]);
                                 else
                                     NSLog(@"capsule %@ was not linked to image %@, please contact the developers",[capsule objectId],[imageFile name]);
-                                
                             }];
                             
                             NSLog(@"capsule contents: %@",capsule);
                         
-                        [self clearFields];
+                            [self clearFields];
                         
-                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                            [NSTimer scheduledTimerWithTimeInterval:1 target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                            
                         } else {
                             
                             [HUD hide:YES];
@@ -460,7 +483,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     
                     [self clearFields];
                     
-                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
+                    [NSTimer scheduledTimerWithTimeInterval:1 target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
                 }
                 
             } else{
