@@ -370,7 +370,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         // Set indeterminate mode
         HUD.mode = MBProgressHUDModeIndeterminate;
         HUD.delegate = self;
-        HUD.labelText = @"preparing capsule";
+        HUD.labelText = @"burying capsule";
         [HUD show:YES];
         
         // Save capsule
@@ -385,15 +385,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     HUD.mode = MBProgressHUDModeDeterminateHorizontalBar;
                     HUD.labelText = @"digging the hole";
                     
-                    NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 1.0f);
+                    NSData *selectedImageData = UIImageJPEGRepresentation(self->theImage, 0.73f); // set to SQ2 compression for optimal resolution
                     
                     NSDateFormatter *webSafeDateFormat = [[NSDateFormatter alloc] init];
                     [webSafeDateFormat setDateFormat:@"dd_MM_yyyy-HH_mm_ss-Z"];
                     PFFile *imageFile = [PFFile fileWithName:[NSString stringWithFormat:@"%@-%@.jpg",user.objectId,[webSafeDateFormat stringFromDate:[NSDate date]]] data:selectedImageData];
                     
-                    capsule[@"image"] = imageFile;
-                    
-                    [capsule[@"image"] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         
                         if (succeeded)
                         {
@@ -405,9 +403,18 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                         HUD.labelText = @"it's buried.";
                         
                         NSLog(@"a thought was buried for %@ by %@ and will be delivered %@",capsule[@"email"], capsule[@"from"], capsule[@"timeframe"]);
-                        
-                        NSLog(@"capsule contents: %@",capsule);
-                        
+                            
+                            capsule[@"image"] = imageFile;
+                            
+                            [capsule saveEventually:^(BOOL succeeded, NSError *error) {
+                                if (succeeded)
+                                NSLog(@"capsule %@ is now linked to image %@",[capsule objectId],[imageFile name]);
+                                else
+                                    NSLog(@"capsule %@ was not linked to image %@, please contact the developers",[capsule objectId],[imageFile name]);
+                                
+                            }];
+                            
+                            NSLog(@"capsule contents: %@",capsule);
                         
                         [self clearFields];
                         
@@ -432,7 +439,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                         
                     } progressBlock:^(int percentDone) {
                         NSLog(@"%i%%",percentDone);
-                        if (percentDone >= 70)
+                        if (percentDone >= 80)
                             HUD.labelText = @"piling on dirt";
                         [HUD setProgress:(float)percentDone/100.0f];
                     }];
