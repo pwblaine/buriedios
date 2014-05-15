@@ -83,7 +83,7 @@
             // this code is run with just a picture
             self->theImage = image;
             self->imageContainer.frame = CGRectMake(0, 130, 320, 365);
-            self->imageButton.frame = self->imageContainer.frame;
+            self->imageButton.frame = CGRectMake(0, 130, 320, 365);
             self->imageContainer.image = image;
             self->thoughtContainer.alpha = 0;
             self->thoughtButton.hidden = YES;

@@ -81,13 +81,14 @@
     }
     
     // Add grass overlay
+    /*
     UIView *quickAddView = [[QuickAddView alloc] initWithFrame:CGRectMake(0, 494, 320, 568)];
     [self.window.rootViewController.view addSubview:quickAddView];
     [self.window.rootViewController.view bringSubviewToFront:quickAddView];
     
     // hide grass
     [self showGrass:NO];
-    
+    */
     // set app background to white
     self.window.backgroundColor = [UIColor whiteColor];
     
