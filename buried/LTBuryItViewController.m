@@ -86,9 +86,6 @@ self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWith
     [self setMessageToUserForTimeframe];
     
     emailTextField.placeholder = @"for my eyes only";
-    
-    LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate showGrass:NO];
 }
 
 
@@ -411,8 +408,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                 
                 
                 [self clearFields];
-                LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
-                [appDelegate showGrass:NO];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             } else{
@@ -516,9 +511,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
         [self checkForItemsAndSetClearOrCancel];
     } else {
-        
-        LTAppDelegate *appDelegate = (LTAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate showGrass:NO];
     [self.navigationController popViewControllerAnimated:YES];
     }
     

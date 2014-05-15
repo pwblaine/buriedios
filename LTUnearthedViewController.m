@@ -182,10 +182,8 @@
     [super objectsWillLoad];
     
     // This method is called before a PFQuery is fired to get more objects
-    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    [appDelegate showGrass:NO];
 }
 
 - (void)objectsDidLoad:(NSError *)error {
@@ -195,10 +193,8 @@
     [self updateTitleWithNumberOfBuriedCapsules];
     
     // This method is called every time objects are loaded from Parse via the PFQuery
-    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.rightBarButtonItem.enabled = YES;
-    [appDelegate showGrass:NO];
 }
 
 /*

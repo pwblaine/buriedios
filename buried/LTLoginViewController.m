@@ -30,8 +30,6 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate showGrass:NO];
 }
 
 -(void) viewDidAppear:(BOOL)animated

@@ -5,8 +5,4 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-- (void)showGrass:(BOOL)shouldShow;
-
--(IBAction)slideGrass:(id)sender;
-
 @end

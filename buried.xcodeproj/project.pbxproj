@@ -32,8 +32,6 @@
 		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
-		2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2825D44F18CB70E300E971AB /* QuickAddView.xib */; };
-		2825D45518CB757E00E971AB /* QuickAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2825D45418CB757E00E971AB /* QuickAddView.m */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
@@ -107,9 +105,6 @@
 		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
 		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
-		2825D44F18CB70E300E971AB /* QuickAddView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickAddView.xib; sourceTree = SOURCE_ROOT; };
-		2825D45318CB757E00E971AB /* QuickAddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickAddView.h; sourceTree = "<group>"; };
-		2825D45418CB757E00E971AB /* QuickAddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickAddView.m; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -250,9 +245,6 @@
 				284B2CFB18AC4A3600BB976F /* Configurations */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
-				2825D45318CB757E00E971AB /* QuickAddView.h */,
-				2825D45418CB757E00E971AB /* QuickAddView.m */,
-				2825D44F18CB70E300E971AB /* QuickAddView.xib */,
 				280657AA18910008007AAB22 /* UIBarButtonItem+_projectButtons.h */,
 				280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */,
 				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
@@ -432,7 +424,6 @@
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
 				28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */,
 				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
-				2825D45018CB70E300E971AB /* QuickAddView.xib in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
 				284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */,
 				308D476F191ADADF0098AEFC /* buriedlogo29x29.png in Resources */,
@@ -459,7 +450,6 @@
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
 				287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */,
-				2825D45518CB757E00E971AB /* QuickAddView.m in Sources */,
 				281E7AC8188EA66800C85066 /* main.m in Sources */,
 				281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */,
 			);
