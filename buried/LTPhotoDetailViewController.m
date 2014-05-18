@@ -22,28 +22,61 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
-    self->imageView.image = self.theImage;
-    self->scrollView.contentSize = self.theImage.size;
-    NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
-    NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);
     
-    // if the view is not LTBuryItViewController, remove it from the view
-    if (![self.callingViewController isKindOfClass:[LTBuryItViewController class]])
-    {
-        NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self->topToolbar.items];
-        [toolbarItems removeObject:self->trashButton];
-        self->topToolbar.items = toolbarItems;
-        // TODO add action button for saving/sharing
-    }
+    self->imageView.image = self.theImage;
     
     // set top toolbar to transparent
-    [self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    //[self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    
+    // adjust top toolbar for calling view controller
+    NSMutableArray *mutableTopToolbarItems = [[self->topToolbar items] mutableCopy];
+    NSLog(@"%@ copied",mutableTopToolbarItems);
+    
+    if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    {
+        // if from bury it view, the picture can use: discard, actions, keep
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)]];
+        
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)]];
+        
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)]];
+    }
+    else
+    {
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)]];
+        
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)]];
+    }
+    
+    [self->topToolbar setItems:mutableTopToolbarItems animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
+
+    self->imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [UIView animateWithDuration:0.5 delay:1.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self->imageView.contentMode = UIViewContentModeScaleAspectFill;
+    } completion:^(BOOL finished) {
+        self->scrollView.contentSize = self.theImage.size;
+    
+    NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
+        NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);
+    }];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    NSLog(@"<%@:%@:%d>",NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,6 +100,12 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(IBAction)actionButtonTouched:(id)sender
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
 }
 
 @end

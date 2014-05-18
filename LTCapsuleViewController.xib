@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTCapsuleViewController">
             <connections>
+                <outlet property="activityIndicator" destination="UIx-Ai-R9H" id="fGy-z5-5q0"/>
                 <outlet property="grassImage" destination="GvX-MW-dC4" id="NXI-xs-Rh3"/>
                 <outlet property="imageButton" destination="mfl-qq-4kq" id="4Dq-wG-lJt"/>
                 <outlet property="imageContainer" destination="SXu-Cg-vxo" id="SOm-tl-z7X"/>
@@ -42,11 +43,11 @@
                     </connections>
                 </button>
                 <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="burieddot152.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
-                    <rect key="frame" x="0.0" y="130" width="320" height="285"/>
+                    <rect key="frame" x="20" y="130" width="285" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfl-qq-4kq" userLabel="Image Button">
-                    <rect key="frame" x="0.0" y="130" width="320" height="285"/>
+                    <rect key="frame" x="18" y="130" width="285" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -55,13 +56,17 @@
                         <action selector="imageButtonTapped:" destination="-1" eventType="touchUpInside" id="yeo-Rw-CCb"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mar 27, 2014 3:30 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mx-yr-bg7">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mx-yr-bg7">
                     <rect key="frame" x="0.0" y="65" width="320" height="65"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UIx-Ai-R9H">
+                    <rect key="frame" x="150" y="395" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

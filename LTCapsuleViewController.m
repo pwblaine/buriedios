@@ -32,14 +32,31 @@
 
 - (void)viewDidLoad
 {
+    
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view from its nib.
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
-    NSString *toBeTitle = @"";
     
-    toBeTitle = @"Capsule";
+    UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = actionButton;
+    
+    self->imageButton.enabled = NO;
+    self->thoughtButton.enabled = NO;
+    self->thoughtContainer.text = @"";
+    self.navigationItem.title = @"Loading...";
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    self->activityIndicator.alpha = 1;
+    self->theThought = [self.capsule objectForKey:@"thought"];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self->activityIndicator startAnimating];
     
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
     PFQuery *fromUserIdQuery = [PFUser query];
@@ -50,49 +67,54 @@
             PFUser *user = [objects firstObject];
             NSString *displayName = [user objectForKey:@"displayName"];
             if (displayName.length > 0)
-                self.title = displayName;
+                self.title = [NSString stringWithFormat:@"From, %@", displayName];
         }
     }];
     
-    NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-    self->timestamp.text = timestampString; // timestamp states created at date
-    self->imageButton.enabled = NO;
-    self->thoughtButton.enabled = NO;
-    self->thoughtContainer.text = @"";
-    self->theThought = [self.capsule objectForKey:@"thought"];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (self->theThought.length > 1)
         self->thoughtButton.enabled = YES;
+    
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
+    
     [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
         if (error) {
             self->thoughtContainer.text = @"couldn't find your capsule, please refresh";
         }
         else if (image)
         {
+            
             // this code is run if a picture is downloaded
-            self->theImage = image;
+            self->theImage = image; // store image in property
+
             self->imageContainer.image = image;
-            self->imageContainer.frame = CGRectMake(0, 130, 320, 285);
+            self->imageContainer.frame = CGRectMake((320-285)/2, 130, 285, 285);
+            self->imageButton.frame = CGRectMake((320-285)/2, 125, 285, 285);
+            
             self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
+            
             self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
-            self->thoughtButton.frame = CGRectMake(0, 415, 320, 65);
+            self->thoughtButton.frame = CGRectMake(20, 415, 280, 65);
+            
             self->imageButton.enabled = YES;
+            
             if (!(self->theThought.length > 1) && (UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
             {
                 [UIView animateWithDuration:0.75f animations:^{
-                    self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
+                    self->grassImage.frame = CGRectMake(-30, 459, 380, 204);
                     self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
                 }];
             }
         } else {
             self->imageContainer.image = nil;
         }
+        // this code runs whether there's an image or not after its been retrieved
         self->thoughtContainer.text = self->theThought;
+        [self->activityIndicator stopAnimating];
+        [self->activityIndicator setAlpha:0];
+        NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+        self->timestamp.text = timestampString; // timestamp states created at date
     }];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -103,7 +125,10 @@
         self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
         self->imageContainer.contentMode = UIViewContentModeCenter;
         self->imageContainer.image = [UIImage imageNamed:@"burieddot152.png"];
+        self->thoughtContainer.text = @"";
     }];
+    
+    self->timestamp.text = @"";
 }
 
 - (void)didReceiveMemoryWarning
@@ -141,6 +166,11 @@
     thoughtDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:thoughtDetailViewController animated:YES completion:nil];
     }
+}
+
+- (IBAction)actionButtonTapped:(id)sender
+{
+    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 @end

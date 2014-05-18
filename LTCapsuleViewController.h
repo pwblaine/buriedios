@@ -11,14 +11,22 @@
 
 @interface LTCapsuleViewController : UIViewController <UINavigationControllerDelegate>
 {
-    IBOutlet UILabel *timestamp;
-    IBOutlet UILabel *thoughtContainer;
-    IBOutlet PFImageView *imageContainer;
+    
     UIImage *theImage;
     NSString *theThought;
+    
+    IBOutlet UILabel *timestamp;
+    IBOutlet UILabel *thoughtContainer;
+    
+    IBOutlet PFImageView *imageContainer;
+    
     IBOutlet UIButton *imageButton;
     IBOutlet UIButton *thoughtButton;
+    
     IBOutlet UIImageView *grassImage;
+    
+    IBOutlet UIActivityIndicatorView *activityIndicator;
+    
 }
 
 @property PFObject *capsule;
@@ -26,5 +34,6 @@
 - (void)backButtonTouchHandler:(id)sender;
 - (IBAction)imageButtonTapped:(id)sender;
 - (IBAction)thoughtButtonTapped:(id)sender;
+- (IBAction)actionButtonTapped:(id)sender;
 
 @end

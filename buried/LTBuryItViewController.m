@@ -356,7 +356,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                             
                             [capsule saveEventually:^(BOOL succeeded, NSError *error) {
                                 if (succeeded)
-                                NSLog(@"capsule %@ is now linked to image %@",[capsule objectId],[imageFile name]);
+                                    NSLog(@"capsule %@ is now linked to image %@",[capsule objectId],[imageFile name]);
                                 else
                                     NSLog(@"capsule %@ was not linked to image %@, please contact the developers",[capsule objectId],[imageFile name]);
                             }];
