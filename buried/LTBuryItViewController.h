@@ -24,6 +24,9 @@
     MBProgressHUD *refreshHUD;
 }
 
+@property UIImage *capsuleImage;
+@property NSString *capsuleThought;
+
 -(IBAction)pickFriendsButtonClick:(id)sender;
 
 -(IBAction)cameraButtonTapped:(id)sender;

@@ -9,6 +9,7 @@
 #import "LTCapsuleViewController.h"
 #import "LTPhotoDetailViewController.h"
 #import "LTThoughtDetailViewController.h"
+#import "LTBuryItViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
 
@@ -42,6 +43,9 @@
     
     /* UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
     self.navigationItem.rightBarButtonItem = actionButton; */
+    
+    UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
+     self.navigationItem.rightBarButtonItem = forwardButton;
     
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
@@ -171,6 +175,15 @@
 - (IBAction)actionButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+- (IBAction)forwardButtonTapped:(id)sender
+{
+    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+    buryItViewController.capsuleImage = self->theImage;
+    buryItViewController.capsuleThought = self->theThought;
+    [self.navigationController pushViewController:buryItViewController animated:YES];
 }
 
 @end

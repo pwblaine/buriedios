@@ -70,10 +70,10 @@
     NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
 
     self->imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [UIView animateWithDuration:0.5 delay:1.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.5 delay:2.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self->imageView.contentMode = UIViewContentModeScaleAspectFill;
     } completion:^(BOOL finished) {
-        self->scrollView.contentSize = self.theImage.size;
+        self->scrollView.contentSize = self->imageView.frame.size;
     
     NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
         NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);

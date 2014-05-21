@@ -20,6 +20,8 @@
 
 @implementation LTBuryItViewController
 
+@synthesize capsuleImage, capsuleThought;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -56,6 +58,12 @@
     [super viewDidLoad];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
+    if (self.capsuleThought)
+        self->thoughtTextView.text = self.capsuleThought;
+    
+    if (self.capsuleImage)
+        self->theImage = self.capsuleImage;
+    
     /*Parse.com Object Submit Code
      PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
      testObject[@"foo"] = @"bar";
@@ -77,7 +85,6 @@
     if (theImage)
         [self applyImagePreview];
     
-    if (theImage)
         [self checkForItemsAndSetClearOrCancel];
     
     // Add the temporary title
