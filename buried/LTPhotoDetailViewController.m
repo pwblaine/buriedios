@@ -26,7 +26,7 @@
     self->imageView.image = self.theImage;
     
     // set top toolbar to transparent
-    //[self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+     [self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     
     // adjust top toolbar for calling view controller
     NSMutableArray *mutableTopToolbarItems = [[self->topToolbar items] mutableCopy];
@@ -34,18 +34,30 @@
     
     if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
     {
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
+        
         // if from bury it view, the picture can use: discard, actions, keep
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)]];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
+        self->leftButton = tempLeft;
         
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)]];
+        UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
         
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)]];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:tempMiddle];
+        self->middleButton = tempMiddle;
+        
+        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
+        self->rightButton = tempRight;
     }
     else
     {
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)]];
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
+        self->leftButton = tempLeft;
         
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)]];
+        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
+        self->rightButton = tempRight;
     }
     
     [self->topToolbar setItems:mutableTopToolbarItems animated:NO];
@@ -102,9 +114,31 @@
     [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (error) {
+        // Do anything needed to handle the error or display it to the user
+        NSLog(@"image did not save successfully, error: %@ contextInfo:%@", error, ctxInfo);
+    } else {
+        // .... do anything you want here to handle
+        // .... when the image has been saved in the photo album
+        NSLog(@"image did save successfully, contextInfo:%@", ctxInfo);
+        MBProgressHUD * HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+        HUD.mode = MBProgressHUDModeCustomView;
+        HUD.delegate = self;
+        HUD.labelText = @"image saved";
+        [self.view addSubview:HUD];
+        [HUD show:YES];
+        [HUD hide:YES afterDelay:1];
+    }
+    
+}
+
 -(IBAction)actionButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    UIImageWriteToSavedPhotosAlbum(self.theImage, self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     
 }
 

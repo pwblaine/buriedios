@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Loftier Thoughts. All rights reserved.
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
 
-@interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate>
+@interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate, MBProgressHUDDelegate>
 {
     IBOutlet UIScrollView *scrollView;
     IBOutlet UIImageView *imageView;

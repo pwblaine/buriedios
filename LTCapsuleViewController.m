@@ -40,8 +40,8 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
-    UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
-    self.navigationItem.rightBarButtonItem = actionButton;
+    /* UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = actionButton; */
     
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
@@ -67,7 +67,7 @@
             PFUser *user = [objects firstObject];
             NSString *displayName = [user objectForKey:@"displayName"];
             if (displayName.length > 0)
-                self.title = [NSString stringWithFormat:@"From, %@", displayName];
+                self.title = [NSString stringWithFormat:@"From %@", displayName];
         }
     }];
     
