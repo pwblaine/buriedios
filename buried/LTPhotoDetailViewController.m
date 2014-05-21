@@ -83,12 +83,11 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>",NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    NSLog(@"<%@:%@:%d>",NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 - (void)didReceiveMemoryWarning
