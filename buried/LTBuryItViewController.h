@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import "MBProgressHUD.h"
 
-@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate>
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, UIActionSheetDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -20,6 +20,8 @@
     UIColor *successColor;
     UIImage *theImage;
     
+    UIActionSheet *cameraActionSheet;
+    
     MBProgressHUD *HUD;
     MBProgressHUD *refreshHUD;
 }
@@ -28,8 +30,13 @@
 @property NSString *capsuleThought;
 
 -(IBAction)pickFriendsButtonClick:(id)sender;
+-(IBAction)presentActionSheetForImageUpload;
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
+
 
 -(IBAction)cameraButtonTapped:(id)sender;
+-(IBAction)showCamera:(id)sender;
+-(IBAction)showLibraryPicker:(id)sender;
 -(void)discardPhoto;
 -(void)resetCamera;
 

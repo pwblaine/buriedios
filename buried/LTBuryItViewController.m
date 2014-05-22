@@ -441,65 +441,32 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 #pragma mark - camera methods
 
+- (IBAction)presentActionSheetForImageUpload
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Bury An Image In The Capsule" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take A Photo",@"Choose From Library", nil];
+    self->cameraActionSheet = actionSheet;
+    [self->cameraActionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"buttonIndex == %ld", buttonIndex);
+    if (buttonIndex == self->cameraActionSheet.cancelButtonIndex)
+        [self checkForItemsAndSetClearOrCancel]; // if cancel button tapped cancel out
+    else if (buttonIndex == self->cameraActionSheet.firstOtherButtonIndex)
+        [self showCamera:self->cameraActionSheet]; // if camera button tapped show camera
+    else
+        [self showLibraryPicker:self->cameraActionSheet]; // if library button tapped show library
+}
+
 - (IBAction)cameraButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (!theImage)
     {
-    // Check for camera
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
-        // Create image picker controller
-        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-        
-        // Set source to the camera
-        imagePicker.sourceType =  UIImagePickerControllerSourceTypeCamera;
-        
-        // Delegate is self
-        imagePicker.delegate = self;
-        
-        // Show image picker
-        [self presentViewController:imagePicker animated:YES completion:nil];
-    }
-    else{
-        // Device has no camera
-        UIImage *image;
-        int r = arc4random() % 5;
-        switch (r) {
-            case 0:
-                image = [UIImage imageNamed:@"ParseLogo.jpg"];
-                break;
-            case 1:
-                image = [UIImage imageNamed:@"Crowd.jpg"];
-                break;
-            case 2:
-                image = [UIImage imageNamed:@"Desert.jpg"];
-                break;
-            case 3:
-                image = [UIImage imageNamed:@"Lime.jpg"];
-                break;
-            case 4:
-                image = [UIImage imageNamed:@"Sunflowers.jpg"];
-                break;
-            default:
-                break;
-        }
-        
-        // Resize image
-        UIGraphicsBeginImageContext(CGSizeMake(32, 32));
-        [image drawInRect: CGRectMake(0, 0, 32, 32)];
-        UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        // Tint Camera button after picture taken
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
-        
-        messagesToUserLabel.textColor = successColor;
-        messagesToUserLabel.text = @"photo attached";
-        
-        theImage = image;
-        
-        [self checkForItemsAndSetClearOrCancel];
-        }
+        [self presentActionSheetForImageUpload];
     } else {
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
         photoDetailViewController.theImage = theImage;
@@ -553,6 +520,9 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     
     // Tint Camera button after picture taken
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+    
+    messagesToUserLabel.textColor = successColor;
+    messagesToUserLabel.text = @"photo attached";
     
     [self checkForItemsAndSetClearOrCancel];
 
@@ -639,6 +609,83 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     emailTextField.text = text;
     [self checkForItemsAndSetClearOrCancel];
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(IBAction)showCamera:(id)sender
+{
+    
+    // Check for camera
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+        // Create image picker controller
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        
+        // Set source to the camera
+        imagePicker.sourceType =  UIImagePickerControllerSourceTypeCamera;
+        
+        // Delegate is self
+        imagePicker.delegate = self;
+        
+        // Show image picker
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
+    else{
+        // Device has no camera
+        UIImage *image;
+        int r = arc4random() % 5;
+        switch (r) {
+            case 0:
+                image = [UIImage imageNamed:@"ParseLogo.jpg"];
+                break;
+            case 1:
+                image = [UIImage imageNamed:@"Crowd.jpg"];
+                break;
+            case 2:
+                image = [UIImage imageNamed:@"Desert.jpg"];
+                break;
+            case 3:
+                image = [UIImage imageNamed:@"Lime.jpg"];
+                break;
+            case 4:
+                image = [UIImage imageNamed:@"Sunflowers.jpg"];
+                break;
+            default:
+                break;
+        }
+        
+        // Resize image
+        UIGraphicsBeginImageContext(CGSizeMake(32, 32));
+        [image drawInRect: CGRectMake(0, 0, 32, 32)];
+        UIImage *buttonImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        // Tint Camera button after picture taken
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem customNavBarButtonWithTarget:self action:@selector(cameraButtonTapped:) withImage:buttonImage];
+        
+        messagesToUserLabel.textColor = successColor;
+        messagesToUserLabel.text = @"photo attached";
+        
+        theImage = image;
+        
+        [self checkForItemsAndSetClearOrCancel];
+    }
+}
+
+-(IBAction)showLibraryPicker:(id)sender
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == YES) {
+        // Create image picker controller
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        
+        // Set source to the camera
+        imagePicker.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
+        
+        // Delegate is self
+        imagePicker.delegate = self;
+        
+        // Show image picker
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
 }
 
 @end

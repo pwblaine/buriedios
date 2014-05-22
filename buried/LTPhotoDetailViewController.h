@@ -10,7 +10,6 @@
 
 @interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate, MBProgressHUDDelegate>
 {
-    IBOutlet UIScrollView *scrollView;
     IBOutlet UIImageView *imageView;
     IBOutlet UIToolbar *topToolbar;
     IBOutlet UIBarButtonItem *leftButton;

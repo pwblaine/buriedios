@@ -25,6 +25,8 @@
     
     self->imageView.image = self.theImage;
     
+    self->imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
     // set top toolbar to transparent
      [self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     
@@ -68,16 +70,21 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
-
-    self->imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [UIView animateWithDuration:0.5 delay:2.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self->imageView.contentMode = UIViewContentModeScaleAspectFill;
-    } completion:^(BOOL finished) {
-        self->scrollView.contentSize = self->imageView.frame.size;
-    
-    NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
-        NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);
-    }];
+    if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    {
+        // This code is run if the view is called from a BuryItViewController
+    }
+    else {
+        /* This code is run if the view is called from any other controller
+        [UIView animateWithDuration:0.5 delay:2.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self->imageView.contentMode = UIViewContentModeScaleAspectFill;
+        } completion:^(BOOL finished) {
+            self->scrollView.contentSize = self->imageView.frame.size;
+        
+        NSLog(@"imageView is %f x %f",self->imageView.frame.size.width,self->imageView.frame.size.height);
+            NSLog(@"scrollView is %f x %f",self->scrollView.contentSize.width,self->scrollView.contentSize.height);
+        }]; */
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated
