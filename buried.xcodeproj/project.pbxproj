@@ -190,9 +190,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		280C85E9192D9C15009E6FE1 /* UIBarButtonItem Categories */ = {
+			isa = PBXGroup;
+			children = (
+				280657AA18910008007AAB22 /* UIBarButtonItem+_projectButtons.h */,
+				280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */,
+			);
+			name = "UIBarButtonItem Categories";
+			sourceTree = "<group>";
+		};
+		280C85EA192D9C4B009E6FE1 /* Interface Builder Files */ = {
+			isa = PBXGroup;
+			children = (
+				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
+				28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */,
+				28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */,
+				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
+				287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */,
+				281E7AAA188EA66800C85066 /* LTLoginViewController.xib */,
+			);
+			name = "Interface Builder Files";
+			sourceTree = "<group>";
+		};
+		280C85EB192D9C63009E6FE1 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				280C85EA192D9C4B009E6FE1 /* Interface Builder Files */,
+				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
+				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
+				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
+				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
+				28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */,
+				28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */,
+				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
+				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
+				287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */,
+				287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */,
+				281E7AA8188EA66800C85066 /* LTLoginViewController.h */,
+				281E7AA9188EA66800C85066 /* LTLoginViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		284B2CFA18AC49D500BB976F /* Partner Classes */ = {
 			isa = PBXGroup;
 			children = (
+				280C85E9192D9C15009E6FE1 /* UIBarButtonItem Categories */,
 				286E641118C30C9200CDB033 /* UIImage Categories */,
 				284B2D0A18AC4AB800BB976F /* FBFriendPicker */,
 				284B2D0418AC4A7D00BB976F /* MBProgressHUD */,
@@ -246,29 +289,10 @@
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
-				284B2CFB18AC4A3600BB976F /* Configurations */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
-				280657AA18910008007AAB22 /* UIBarButtonItem+_projectButtons.h */,
-				280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */,
-				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
-				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
-				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
-				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
-				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
-				28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */,
-				28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */,
-				28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */,
-				28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */,
-				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
-				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
-				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
-				287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */,
-				287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */,
-				287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */,
-				281E7AA8188EA66800C85066 /* LTLoginViewController.h */,
-				281E7AA9188EA66800C85066 /* LTLoginViewController.m */,
-				281E7AAA188EA66800C85066 /* LTLoginViewController.xib */,
+				280C85EB192D9C63009E6FE1 /* View Controllers */,
+				284B2CFB18AC4A3600BB976F /* Configurations */,
 				284B2CFA18AC49D500BB976F /* Partner Classes */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,
