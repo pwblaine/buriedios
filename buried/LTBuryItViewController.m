@@ -9,6 +9,7 @@
 #import "LTBuryItViewController.h"
 #import "LTPhotoDetailViewController.h"
 #import "UIImage+ResizeAdditions.h"
+#import "LTUnearthedViewController.h"
 #import "UIBarButtonItem+_projectButtons.h"
 #import "LTAppDelegate.h"
 
@@ -271,13 +272,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
          for (id<FBGraphUser> fbUser in self.friendPickerController.selection)
          {
              PFQuery *userQuery = [PFUser query];
-             [userQuery whereKey:@"facebookId" equalTo:fbUser.id];
+             [userQuery whereKey:@"facebookId" equalTo:fbUser.objectID];
              NSArray *objects = [userQuery findObjects];
              NSLog(@"query executed");
              if (objects.count < 1)
              {
                  NSLog(@"matching facebookId not found, storing facebookId");
-                 [mutableToFbIds addObject:[fbUser id]];
+                 [mutableToFbIds addObject:[fbUser objectID]];
              }
              else
              {
@@ -309,7 +310,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         [capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 
-                if (theImage) {
+                if (self->theImage) {
                     
                     NSLog(@"image detected, uploading...");
                     
@@ -318,7 +319,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     HUD.labelText = @"digging the hole";
                     
                     //shrink the stored image resolution to 1136x852 (the maximum that will be displayed while maintaining aspect resolution)
-                    UIImage *adjustedImage = [[UIImage alloc] init];
+                    UIImage *adjustedImage;
                     
                     if (self->theImage.size.width < 852 || self->theImage.size.height < 852)
                     {
@@ -452,7 +453,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"buttonIndex == %ld", buttonIndex);
+    NSLog(@"buttonIndex == %ld", (long)buttonIndex);
     if (buttonIndex == self->cameraActionSheet.cancelButtonIndex)
         [self checkForItemsAndSetClearOrCancel]; // if cancel button tapped cancel out
     else if (buttonIndex == self->cameraActionSheet.firstOtherButtonIndex)
@@ -493,7 +494,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
         [self checkForItemsAndSetClearOrCancel];
     } else {
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
     
 }

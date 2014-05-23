@@ -10,6 +10,7 @@
 #import "LTPhotoDetailViewController.h"
 #import "LTThoughtDetailViewController.h"
 #import "LTBuryItViewController.h"
+#import "LTUnearthedViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
 

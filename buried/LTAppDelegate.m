@@ -10,7 +10,6 @@
 
 @implementation LTAppDelegate
 
-
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -44,6 +43,8 @@
 
     // Override point for customization after application launch.
     
+    self->initialLoad = YES;
+    
     // Register for Notification Center
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
     
@@ -69,8 +70,14 @@
             if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
                 LTUnearthedViewController *unearthedStream = [[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain];
                 [(UINavigationController *)self.window.rootViewController pushViewController:unearthedStream animated:NO];
-                [unearthedStream presentCapsule:capsuleId];
+                [unearthedStream presentCapsule:capsuleId fromSelectedCell:nil];
                 
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                if (currentInstallation.badge > 0) {
+                    currentInstallation.badge--;
+                    [currentInstallation saveEventually];
+                    NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
+                }
             }
             
         }
@@ -115,12 +122,19 @@
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
     if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
     {
-        NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
-        // if so run the refresh method
-        [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+        if (!self->initialLoad)
+        {
+            //NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
+            // if so run the refresh method
+            [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
+            [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] updateTitleWithNumberOfBuriedCapsules];
+        }
     } else {
         NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
     }
+    
+    if (self->initialLoad)
+        self->initialLoad = NO;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -196,7 +210,10 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
         {
             NSLog(@"LTUnearthedViewController detected as current view controller... refreshing UI");
-                // if the push is to increase the awaits counter, run the refresh method on LTUnearthed
+                // if the push is to increase the awaits counter or something has unearthed, run the refresh method on LTUnearthed
+                [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] updateTitleWithNumberOfBuriedCapsules];
+            // if the capsule contains cid info then also upload the capsule list
+            if ([[userInfo objectForKey:@"cid"] length] > 0)
                 [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] loadObjects];
         } else {
             NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
@@ -206,10 +223,10 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         // Check if the visibleViewController is an LTUnearthedViewController
         if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])
         {
-            NSLog(@"LTUnearthedViewController detected as current view controller");
+                NSLog(@"LTUnearthedViewController detected as current view controller");
                   
-            // grab the capsuleId and check if the push was for a newly unearthed capsule
-            NSString *capsuleId = [userInfo objectForKey:@"cid"];
+                // grab the capsuleId and check if the push was for a newly unearthed capsule
+                NSString *capsuleId = [userInfo objectForKey:@"cid"];
             
                 // test for what type of push it is
                 if (capsuleId.length > 0)
@@ -217,7 +234,14 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
                 // if the push is an unearthed capsule present it to the user
                 NSLog(@"Push was for newly unearthed capsule %@",capsuleId);
                 NSLog(@"Presenting capsule view controller for the capsule in question");
-                [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] presentCapsule:capsuleId];
+                [(LTUnearthedViewController *)[(UINavigationController *)self.window.rootViewController visibleViewController] presentCapsule:capsuleId fromSelectedCell:nil];
+                    
+                    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                    if (currentInstallation.badge > 0) {
+                        currentInstallation.badge--;
+                        [currentInstallation saveEventually];
+                        NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
+                    }
                 }
             } else {
             NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);

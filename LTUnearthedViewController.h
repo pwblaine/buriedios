@@ -14,13 +14,14 @@
     NSMutableData *profileImageData;
     UIImage *smallPortrait;
     UIImage *defaultPortrait;
+    BOOL initialLoad;
 }
 
 #pragma mark - Capsule tracking UI methods
 - (void)updateTitleWithNumberOfBuriedCapsules;
 
 #pragma mark - Capsule presentation methods
-- (void)presentCapsule:(NSString *)capsuleId;
+- (void)presentCapsule:(NSString *)capsuleId fromSelectedCell:(UITableViewCell *)cell;
 
 #pragma mark - Logout methods
 

@@ -38,11 +38,13 @@
     self.navigationItem.rightBarButtonItem.enabled = true;
     if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
     {
+        // configure view for iPhone 5
         [UIView animateWithDuration:1.5f animations:^{
             self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
             self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
         }];
     } else if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-480)?NO:YES)) {
+        // configure view for iPhone 4
         [UIView animateWithDuration:1.5f animations:^{
             self->grassImage.frame = CGRectMake(-30, 374.0f, 380, 204);
             self->grassImage.contentMode = UIViewContentModeScaleAspectFill;

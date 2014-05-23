@@ -54,6 +54,7 @@
         self.imageKey = @"image";
         self.pullToRefreshEnabled = YES;
         self.paginationEnabled = NO;
+        initialLoad = YES;
     }
     return self;
 }
@@ -102,9 +103,10 @@
     
     [self updateUserProfile];
     
-    
-    // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
+    
+    
     
     // double check global is registered
     [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
@@ -124,6 +126,8 @@
     
     NSLog(@"current channels: %@", [currentInstallation channels]);
     
+    [self updateTitleWithNumberOfBuriedCapsules];
+    
 }
 
 - (void)updateTitleWithNumberOfBuriedCapsules {
@@ -133,38 +137,48 @@
     
     PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
     
-    // If no objects are loaded in memory, we look to the cache
-    // first to fill the table and then subsequently do a query
-    // against the network.
-    if ([self.objects count] == 0) {
-        toUserIdsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    }
-    
     [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
     
     [toUserIdsQuery whereKey:@"sent" notEqualTo:@YES];
     
-    [toUserIdsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [toUserIdsQuery countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
         // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
         if (error)
+            NSLog(@"updating title received error: %@",error);
+        else if (count > 1)
+            self.title = [NSString stringWithFormat:@"%i Await You",count];
+        else if (count == 1)
+            self.title = [NSString stringWithFormat:@"%i Awaits You",count];
+        else
             self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
-        else if (objects.count > 1)
-            self.title = [NSString stringWithFormat:@"%lg Await You",(double)toUserIdsQuery.countObjects];
-        else if (objects.count == 1)
-            self.title = [NSString stringWithFormat:@"%lg Awaits You",(double)toUserIdsQuery.countObjects];
     }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (initialLoad)
+        initialLoad = NO;
+    else
+    {
+        [self loadObjects];
+         [self updateTitleWithNumberOfBuriedCapsules];
+    }
     
-    [self loadObjects];
+    // if user is looking at the full capsule view, they've been notified of everything already, clear the badges
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    if (currentInstallation.badge > 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+        NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
+    }
 }
 
 #pragma mark - PFQueryTableViewController
 
 - (void)objectsWillLoad {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     [super objectsWillLoad];
     
     // This method is called before a PFQuery is fired to get more objects
@@ -175,8 +189,6 @@
 - (void)objectsDidLoad:(NSError *)error {
     
     [super objectsDidLoad:error];
-    
-    [self updateTitleWithNumberOfBuriedCapsules];
     
     // This method is called every time objects are loaded from Parse via the PFQuery
     self.navigationItem.leftBarButtonItem.enabled = YES;
@@ -222,28 +234,38 @@
      PFUser *currentUser = [PFUser currentUser];
      
      // Set left label to timestamp
-     cell.textLabel.text = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+     NSString *timestampString = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+     if (![cell.textLabel.text isEqualToString:timestampString])
+     cell.textLabel.text = timestampString;
      
      // If sent to self set label to blue
      if ([[object objectForKey:@"fromUserId"] isEqualToString:currentUser.objectId])
      {
+         if (![cell.textLabel.textColor isEqual:[UIColor blueColor]])
          cell.textLabel.textColor = [UIColor blueColor];
      } else {
+         if (![cell.textLabel.textColor isEqual:[UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f]])
          cell.textLabel.textColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
      }
-     cell.textLabel.textAlignment = NSTextAlignmentLeft;
+    
+     if (cell.textLabel.textAlignment != NSTextAlignmentLeft)
+         cell.textLabel.textAlignment = NSTextAlignmentLeft;
+     
      NSString *thought = [object objectForKey:@"thought"];
      
      if (cell.detailTextLabel.textColor != [UIColor blackColor])
          cell.detailTextLabel.textColor = [UIColor blackColor];
      
      if (thought.length > 1)
+     {
+         if (![cell.detailTextLabel.text isEqualToString:thought])
          cell.detailTextLabel.text = thought;
+     }
      else
      {
-         cell.detailTextLabel.text = @"Picture";
-         cell.detailTextLabel.textColor = [UIColor blackColor];
-         
+         NSString *picturePlaceholderString = @"Picture";
+         if (![cell.detailTextLabel.text isEqualToString:picturePlaceholderString])
+         cell.detailTextLabel.text = picturePlaceholderString;
      }
     
      // Unread code: if current user isn't found in the readUsers tint brown.
@@ -577,7 +599,7 @@
 
 #pragma mark - Table view cell select
 
-- (void)presentCapsule:(NSString *)capsuleId
+- (void)presentCapsule:(NSString *)capsuleId fromSelectedCell:(UITableViewCell *)cell
 {
     // Create the next view controller.
     LTCapsuleViewController *capsuleViewController = [[LTCapsuleViewController alloc] init];
@@ -604,6 +626,9 @@
     
     if (!hasRead)
     {
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.text = [capsule objectForKey:@"thought"];
+        
         NSLog(@"user hasn't read capsule yet, adding to readUsers.");
         [capsule addUniqueObject:[currentUser objectId] forKey:@"readUserIds"];
         NSLog(@"readUser count: %d",(int)[(NSArray *)[capsule objectForKey:@"readUserIds"] count]);
@@ -631,7 +656,7 @@
  {
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
  // Navigation logic may go here, for example:
-     [self presentCapsule:[[self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]] objectId]];
+     [self presentCapsule:[[self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]] objectId] fromSelectedCell:[tableView cellForRowAtIndexPath:indexPath]];
  }
 
 
