@@ -29,11 +29,12 @@
     
     if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
     {
-        CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-        
-        self->imageView.frame = CGRectMake(0, statusBarFrame.size.height, self->imageView.frame.size.width, self->imageView.frame.size.height);
     }
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    NSLog(@"statusBarFrame.height = %f",statusBarFrame.size.height);
     
+        self->imageView.frame = CGRectMake(0, statusBarFrame.size.height, self->imageView.frame.size.width, (self->imageView.frame.size.height - statusBarFrame.size.height));
+
     // set top toolbar to transparent
      [self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     

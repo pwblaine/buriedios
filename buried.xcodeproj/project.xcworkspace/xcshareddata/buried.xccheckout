@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>A22F3CDB-0E3A-4509-AD89-33D9FFAC14D6</string>
+	<string>7D7DD873-052F-4E2B-801B-B7E024B2F625</string>
 	<key>IDESourceControlProjectName</key>
 	<string>buried</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>C4121818-B76E-48FD-B57D-8C9358E19976</key>
-		<string>https://github.com/buried/buriedios.git</string>
+		<key>97E42A3D-9CA6-408B-B9BD-4554E11B35E9</key>
+		<string>https://github.com/pwblaine/buriedios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>buried.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>C4121818-B76E-48FD-B57D-8C9358E19976</key>
+		<key>97E42A3D-9CA6-408B-B9BD-4554E11B35E9</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/buried/buriedios.git</string>
+	<string>https://github.com/pwblaine/buriedios.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>C4121818-B76E-48FD-B57D-8C9358E19976</string>
+	<string>97E42A3D-9CA6-408B-B9BD-4554E11B35E9</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>C4121818-B76E-48FD-B57D-8C9358E19976</string>
+			<string>97E42A3D-9CA6-408B-B9BD-4554E11B35E9</string>
 			<key>IDESourceControlWCCName</key>
-			<string>buriedios</string>
+			<string>3-view-application</string>
 		</dict>
 	</array>
 </dict>

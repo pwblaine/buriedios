@@ -272,13 +272,13 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
          for (id<FBGraphUser> fbUser in self.friendPickerController.selection)
          {
              PFQuery *userQuery = [PFUser query];
-             [userQuery whereKey:@"facebookId" equalTo:fbUser.objectID];
+             [userQuery whereKey:@"facebookId" equalTo:[fbUser id]];
              NSArray *objects = [userQuery findObjects];
              NSLog(@"query executed");
              if (objects.count < 1)
              {
                  NSLog(@"matching facebookId not found, storing facebookId");
-                 [mutableToFbIds addObject:[fbUser objectID]];
+                 [mutableToFbIds addObject:[fbUser id]];
              }
              else
              {
@@ -319,7 +319,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     HUD.labelText = @"digging the hole";
                     
                     //shrink the stored image resolution to 1136x852 (the maximum that will be displayed while maintaining aspect resolution)
-                    UIImage *adjustedImage;
+                    UIImage *adjustedImage = self->theImage;
                     
                     if (self->theImage.size.width < 852 || self->theImage.size.height < 852)
                     {
@@ -504,14 +504,14 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // Access the uncropped image from info dictionary
+    
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     // Save the image
-    theImage = image;
+    self->theImage = image;
     
     // Resize image
     UIGraphicsBeginImageContext(CGSizeMake(32, 32));

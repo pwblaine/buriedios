@@ -106,13 +106,15 @@
             {
                 [UIView animateWithDuration:0.75f animations:^{
                     self->grassImage.frame = CGRectMake(-30, 459, 380, 204);
-                    self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                    // self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
                 }];
             }
         } else {
             self->imageContainer.image = nil;
         }
         // this code runs whether there's an image or not after its been retrieved
+        if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
+            self->imageContainer.image = nil;
         self->thoughtContainer.text = self->theThought;
         [self->activityIndicator stopAnimating];
         [self->activityIndicator setAlpha:0];
