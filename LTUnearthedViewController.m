@@ -502,6 +502,15 @@
 - (void)logoutButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging out");
+    
+    // clear any badges
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    if (currentInstallation.badge > 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+        NSLog(@"clearing badges for user.  badges: %d",(int)currentInstallation.badge);
+    }
+    
     // remove user from device channels
     NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
     NSString *userObjectId = [[PFUser currentUser] objectId];
