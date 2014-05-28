@@ -39,6 +39,8 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
+    self->thoughtTextView.alpha = 0;
+    
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
@@ -111,6 +113,13 @@
             }
         } else {
             self->imageContainer.image = nil;
+            if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
+            {
+                [UIView animateWithDuration:0.75f animations:^{
+                    self->grassImage.frame = CGRectMake(-30, 459, 380, 204);
+                    // self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                }];
+            }
         }
         // this code runs whether there's an image or not after its been retrieved
         if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
