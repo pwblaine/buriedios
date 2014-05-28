@@ -39,8 +39,6 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
-    self->thoughtTextView.alpha = 0;
-    
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     

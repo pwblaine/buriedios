@@ -12,7 +12,6 @@
                 <outlet property="imageContainer" destination="SXu-Cg-vxo" id="SOm-tl-z7X"/>
                 <outlet property="thoughtButton" destination="XiR-1H-bWQ" id="PdJ-30-F6b"/>
                 <outlet property="thoughtContainer" destination="gHH-Yb-fWW" id="oOE-O9-xwC"/>
-                <outlet property="thoughtTextView" destination="X37-pa-2ej" id="7Fa-0N-IWg"/>
                 <outlet property="timestamp" destination="1mx-yr-bg7" id="cT3-3D-0gf"/>
                 <outlet property="view" destination="1" id="pjU-Hu-W3F"/>
             </connections>
@@ -64,13 +63,6 @@
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X37-pa-2ej">
-                    <rect key="frame" x="40" y="220" width="240" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UIx-Ai-R9H">
                     <rect key="frame" x="150" y="395" width="20" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

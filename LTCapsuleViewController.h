@@ -17,7 +17,6 @@
     
     IBOutlet UILabel *timestamp;
     IBOutlet UILabel *thoughtContainer;
-    IBOutlet UITextView *thoughtTextView;
     
     IBOutlet PFImageView *imageContainer;
     
