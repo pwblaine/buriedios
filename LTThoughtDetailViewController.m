@@ -7,6 +7,7 @@
 //
 
 #import "LTThoughtDetailViewController.h"
+#import "LTBuryItViewController.h"
 
 @interface LTThoughtDetailViewController ()
 
@@ -54,6 +55,15 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)forwardButtonTapped:(id)sender
+{
+    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+    
+    buryItViewController.capsuleThought = self.theThought;
+    [self.navigationController pushViewController:buryItViewController animated:YES];
 }
 
 @end

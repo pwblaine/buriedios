@@ -156,4 +156,15 @@
     
 }
 
+- (IBAction)forwardButtonTapped:(id)sender
+{
+    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+    
+    buryItViewController.capsuleImage = self->theImage;
+    [self.navigationController pushViewController:buryItViewController animated:YES];
+}
+
+
+
 @end
