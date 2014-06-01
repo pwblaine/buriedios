@@ -31,9 +31,11 @@
 
 @property PFObject *capsule;
 
-- (void)backButtonTouchHandler:(id)sender;
+- (IBAction)backButtonTouchHandler:(id)sender;
 - (IBAction)imageButtonTapped:(id)sender;
 - (IBAction)thoughtButtonTapped:(id)sender;
 - (IBAction)actionButtonTapped:(id)sender;
+- (IBAction)forwardButtonTapped:(id)sender;
+- (IBAction)trashButtonTapped:(id)sender;
 
 @end

@@ -45,8 +45,8 @@
     /* UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
     self.navigationItem.rightBarButtonItem = actionButton; */
     
-    UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
-     self.navigationItem.rightBarButtonItem = forwardButton;
+    UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonTapped:)];
+     self.navigationItem.rightBarButtonItem = trashButton;
     
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
@@ -191,9 +191,25 @@
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+
     buryItViewController.capsuleImage = self->theImage;
     buryItViewController.capsuleThought = self->theThought;
     [self.navigationController pushViewController:buryItViewController animated:YES];
+}
+
+- (IBAction)trashButtonTapped:(id)sender
+{
+    NSString *capsuleId = [self.capsule objectId];
+    [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded)
+        {
+        NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
+        }
+        
+    }];
 }
 
 @end
