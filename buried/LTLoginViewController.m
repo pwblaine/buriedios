@@ -30,12 +30,29 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->lastLoggedInLabel.text = @"";
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.navigationItem.rightBarButtonItem.enabled = true;
+    
+    // if installation data found, retrieve all fields simultaneously testing for network connection
+    [[PFInstallation currentInstallation] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (error)
+            NSLog(@"unable to fetch current installation");
+        else {
+            // if connection is successful, welcome last logged in user and update label
+        NSString *lastLoggedInUserId = [[PFInstallation currentInstallation] objectForKey:@"lastLoggedInUserId"];
+        PFQuery *userQuery = [PFUser query];
+        NSString *displayName = [[userQuery getObjectWithId:lastLoggedInUserId] objectForKey:@"displayName"];
+        NSLog(@"display name of last logged in user is %@",displayName);
+        if (displayName.length > 0)
+            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+        }
+    }];
+    
     if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
     {
         // configure view for iPhone 5

@@ -169,6 +169,8 @@
     
     if (currentInstallation.badge > 0) {
         currentInstallation.badge = 0;
+        // test for capable device
+        if (currentInstallation.deviceToken.length > 0)
         [currentInstallation saveEventually];
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
@@ -507,6 +509,9 @@
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     if (currentInstallation.badge > 0) {
         currentInstallation.badge = 0;
+        
+        // test for capable device
+        if (currentInstallation.deviceToken.length > 0)
         [currentInstallation saveEventually];
         NSLog(@"clearing badges for user.  badges: %d",(int)currentInstallation.badge);
     }
@@ -517,9 +522,14 @@
     [mutableChannels removeObject:userObjectId];
     NSLog(@"removing user from push channels");
     [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-    NSLog(@"saving new channels to Parse...");
+    NSLog(@"storing userId as last logged in...");
+    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
+    NSLog(@"saving updated installation data to Parse...");
+    // test for capable device
+    if (currentInstallation.deviceToken.length > 0)
     [[PFInstallation currentInstallation] saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
+
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);
@@ -645,6 +655,9 @@
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
         if (currentInstallation.badge > 0) {
             currentInstallation.badge--;
+            
+            // test for capable device
+            if (currentInstallation.deviceToken.length > 0)
             [currentInstallation saveEventually];
             NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
         }
