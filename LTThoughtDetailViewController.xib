@@ -6,7 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTThoughtDetailViewController">
             <connections>
-                <outlet property="actionButton" destination="qW0-eA-wGA" id="sgD-16-bSx"/>
                 <outlet property="thoughtView" destination="rll-61-Lsb" id="pw6-2i-6PI"/>
                 <outlet property="topToolbar" destination="GcS-SJ-AFc" id="P8U-dH-S05"/>
                 <outlet property="view" destination="fcy-rN-b0f" id="Evq-X8-S01"/>
@@ -33,11 +32,7 @@
                     <rect key="frame" x="0.0" y="21" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <items>
-                        <barButtonItem systemItem="action" id="qW0-eA-wGA">
-                            <connections>
-                                <action selector="actionButtonTouched:" destination="-1" id="iPG-6a-8OE"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem systemItem="reply" id="qW0-eA-wGA"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Ifk-BW-9ZV"/>
                         <barButtonItem systemItem="stop" id="NeC-XD-e0z">
                             <connections>

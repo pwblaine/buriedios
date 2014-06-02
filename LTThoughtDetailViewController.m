@@ -31,10 +31,11 @@
     self->thoughtView.text = self.theThought;
     
     // TODO in the future actions (sharing/saving) may be implemented, remove the icon for now
+    /*
         NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self->topToolbar.items];
         [toolbarItems removeObject:self->actionButton];
         self->topToolbar.items = toolbarItems;
-    
+    */
     // set top toolbar to transparent
     [self->topToolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 }

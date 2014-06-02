@@ -61,11 +61,18 @@
     }
     else
     {
-        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
+        
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
         self->leftButton = tempLeft;
         
+        UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
+        
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:tempMiddle];
+        self->middleButton = tempMiddle;
+        
         UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
         self->rightButton = tempRight;
     }
@@ -162,7 +169,11 @@
     LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
     
     buryItViewController.capsuleImage = self->theImage;
-    [self.navigationController pushViewController:buryItViewController animated:YES];
+    
+    [self.callingViewController dismissViewControllerAnimated:YES completion:^{
+        [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
+    }];
+    
 }
 
 
