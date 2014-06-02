@@ -75,8 +75,6 @@
                 PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                 if (currentInstallation.badge > 0) {
                     currentInstallation.badge--;
-                    // test for capable device
-                    if (currentInstallation.deviceToken.length > 0)
                     [currentInstallation saveEventually];
                     NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
                 }
@@ -241,8 +239,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
                     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                     if (currentInstallation.badge > 0) {
                         currentInstallation.badge--;
-                        // test for capable device
-                        if (currentInstallation.deviceToken.length > 0)
                         [currentInstallation saveEventually];
                         NSLog(@"decrementing badge number.  badges: %d",(int)currentInstallation.badge);
                     }
