@@ -501,6 +501,18 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
 
 #pragma mark UIImagePickerControllerDelegate methods
 
+- (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (error) {
+        // Do anything needed to handle the error or display it to the user
+        NSLog(@"image did not save successfully, error: %@ contextInfo:%@", error, ctxInfo);
+    } else {
+        // .... do anything you want here to handle
+        // .... when the image has been saved in the photo album
+        NSLog(@"image did save successfully, contextInfo:%@", ctxInfo);
+    }
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -510,8 +522,17 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    // Save the image
+    // store the image in a variable
     self->theImage = image;
+    
+    // save the image to the library if taken from a camera
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
+    {
+        NSLog(@"imagePicker used camera, saving the picture to the library");
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    } else {
+        NSLog(@"imagePicker did not use camera");
+    }
     
     // Resize image
     UIGraphicsBeginImageContext(CGSizeMake(32, 32));

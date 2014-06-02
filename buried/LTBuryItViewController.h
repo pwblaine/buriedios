@@ -60,5 +60,7 @@
 
 -(IBAction)buryIt:(id)sender;
 
+- (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo;
+
 
 @end
