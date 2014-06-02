@@ -8,6 +8,7 @@
 
 #import "LTThoughtDetailViewController.h"
 #import "LTBuryItViewController.h"
+#import "LTCapsuleViewController.h"
 
 @interface LTThoughtDetailViewController ()
 
@@ -61,10 +62,30 @@
 - (IBAction)forwardButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Forward To New Capsule" message:@"Which would you like to forward to start a new capsule with" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Just This", @"All Of It", nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    // only occurs in a buryItView currently
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    buryItViewController.capsuleThought = self.theThought;
-    [self.navigationController pushViewController:buryItViewController animated:YES];
+    
+        if (buttonIndex != alertView.cancelButtonIndex)
+        {
+            // code for the forwarding alert
+            LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+                buryItViewController.capsuleThought = self.theThought;
+            if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                buryItViewController.capsuleImage = [(LTCapsuleViewController *)self.callingViewController theImage];
+            
+            [self.callingViewController dismissViewControllerAnimated:YES completion:^{
+                [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
+            }];
+        }
+    
+    
 }
 
 @end

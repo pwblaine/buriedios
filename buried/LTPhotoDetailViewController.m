@@ -8,6 +8,7 @@
 
 #import "LTBuryItViewController.h"
 #import "LTPhotoDetailViewController.h"
+#import "LTCapsuleViewController.h"
 
 @interface LTPhotoDetailViewController ()
 
@@ -121,12 +122,43 @@
 
 -(IBAction)discardButtonTouched:(id)sender
 {
-    // only occurs in a buryItView currently
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self.theImage = nil;
-    [(LTBuryItViewController *)self.callingViewController resetCamera];
-    [(LTBuryItViewController *)self.callingViewController discardPhoto];
-    [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Discard Photo" message:@"Do you really want to discard this?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView setTag:1];
+    [alertView show];
+}
+    
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+    {
+        // only occurs in a buryItView currently
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+        
+        if (alertView.tag == 1)
+        {
+            // code for the discard alert
+            if (buttonIndex == alertView.firstOtherButtonIndex)
+            {
+            self.theImage = nil;
+            [(LTBuryItViewController *)self.callingViewController resetCamera];
+            [(LTBuryItViewController *)self.callingViewController discardPhoto];
+            [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
+        }
+        if (alertView.tag == 2)
+        {
+            if (buttonIndex != alertView.cancelButtonIndex)
+            {
+            // code for the forwarding alert
+            LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+            buryItViewController.capsuleImage = self->theImage;
+            if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                buryItViewController.capsuleThought = [(LTCapsuleViewController *)self.callingViewController theThought];
+            
+            [self.callingViewController dismissViewControllerAnimated:YES completion:^{
+                [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
+                }];
+            }
+        }
+    
 }
 
 -(IBAction)keepButtonTouched:(id)sender
@@ -166,14 +198,9 @@
 - (IBAction)forwardButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
-    
-    buryItViewController.capsuleImage = self->theImage;
-    
-    [self.callingViewController dismissViewControllerAnimated:YES completion:^{
-        [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
-    }];
-    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Forward To New Capsule" message:@"Which would you like to forward to start a new capsule with..." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Just This", @"All Of It", nil];
+    [alertView setTag:2];
+    [alertView show];
 }
 
 

@@ -31,6 +31,7 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->lastLoggedInLabel.text = @"";
+    self->lastLoggedInLabel.alpha = 0;
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -50,6 +51,12 @@
         NSLog(@"display name of last logged in user is %@",displayName);
         if (displayName.length > 0)
             self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+            [UIView animateWithDuration:1.0f animations:^{
+                self->lastLoggedInLabel.alpha = 1;
+            } completion:^(BOOL finished) {
+                if (finished)
+                    NSLog(@"lastLoggedInLabel loaded");
+            }];
         }
     }];
     
@@ -74,6 +81,7 @@
         NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
         self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
         self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+    self->lastLoggedInLabel.alpha = 0;
 }
 
 

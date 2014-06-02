@@ -20,7 +20,7 @@
 
 @implementation LTCapsuleViewController
 
-@synthesize capsule;
+@synthesize capsule,theImage,theThought;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -199,17 +199,26 @@
 
 - (IBAction)trashButtonTapped:(id)sender
 {
-    NSString *capsuleId = [self.capsule objectId];
-    [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded)
-        {
-        NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
-        }
-        
-    }];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Capsule" message:@"Are you sure you want to delete this capsule permanently?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == alertView.firstOtherButtonIndex)
+    {
+        NSString *capsuleId = [self.capsule objectId];
+        [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded)
+            {
+                NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
+            }
+            
+        }];
+    }
 }
 
 @end

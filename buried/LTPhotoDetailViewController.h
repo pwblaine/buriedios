@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-@interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate, MBProgressHUDDelegate>
+@interface LTPhotoDetailViewController : UIViewController <UINavigationControllerDelegate, MBProgressHUDDelegate, UIAlertViewDelegate>
 {
     IBOutlet UIImageView *imageView;
     IBOutlet UIToolbar *topToolbar;
@@ -23,5 +23,6 @@
 -(IBAction)discardButtonTouched:(id)sender;
 -(IBAction)actionButtonTouched:(id)sender;
 -(IBAction)keepButtonTouched:(id)sender;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
 @end
