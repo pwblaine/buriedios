@@ -221,7 +221,7 @@
             if (succeeded && ([[self.capsule objectForKey:@"toUserIds"] count] == 0) && ([[self.capsule objectForKey:@"toFbIds"] count] == 0))
             {
                 NSLog(@"capsule left in database with no users, popping to unearthed view");
-                [self.navigationController popViewControllerAnimated:YES];
+                
                 /*NSLog(@"capsule identified as empty, removing from db...");
                 [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (succeeded)
@@ -233,16 +233,15 @@
                     }
                     
                 }];*/
+            } else if ([[self.capsule objectForKey:@"toUserIds"] count] != 0)
+            {
+                NSLog(@"toUserIds for capsule %@: %@, popping to unearthed view...",capsuleId,toUsersArray);
             }
-            else if (error)
+            if (error)
             {
                 NSLog(@"saving capsule %@ failed with error: %@",capsuleId,error);
             }
-            else if ([[self.capsule objectForKey:@"toUserIds"] count] != 0)
-            {
-                NSLog(@"toUserIds for capsule %@: %@, popping to unearthed view...",capsuleId,toUsersArray);
-                [self.navigationController popViewControllerAnimated:YES];
-            }
+            [self.navigationController popViewControllerAnimated:YES];
         }];
     }
 }
