@@ -32,15 +32,15 @@
                     <rect key="frame" x="0.0" y="21" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <items>
-                        <barButtonItem systemItem="reply" id="qW0-eA-wGA">
+                        <barButtonItem systemItem="stop" id="qW0-eA-wGA">
                             <connections>
-                                <action selector="forwardButtonTapped:" destination="-1" id="yS4-mE-z2w"/>
+                                <action selector="doneButtonTouched:" destination="-1" id="Ych-Jd-iI2"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Ifk-BW-9ZV"/>
-                        <barButtonItem systemItem="stop" id="NeC-XD-e0z">
+                        <barButtonItem systemItem="reply" id="NeC-XD-e0z">
                             <connections>
-                                <action selector="doneButtonTouched:" destination="-1" id="07R-yv-b3t"/>
+                                <action selector="forwardButtonTapped:" destination="-1" id="pdn-WJ-bMX"/>
                             </connections>
                         </barButtonItem>
                     </items>
