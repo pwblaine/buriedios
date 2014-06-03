@@ -220,6 +220,8 @@
             // if capsule is no longer attached to any users, remove from db.
             if (succeeded && ([[self.capsule objectForKey:@"toUserIds"] count] == 0) && ([[self.capsule objectForKey:@"toFbIds"] count] == 0))
             {
+                NSLog(@"capsule left in database with no users, popping to unearthed view");
+                [self.navigationController popViewControllerAnimated:YES];
                 /*NSLog(@"capsule identified as empty, removing from db...");
                 [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (succeeded)
