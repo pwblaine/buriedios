@@ -208,15 +208,39 @@
     if (buttonIndex == alertView.firstOtherButtonIndex)
     {
         NSString *capsuleId = [self.capsule objectId];
-        [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded)
+        NSMutableArray *toUsersArray = [[NSMutableArray alloc] initWithArray:[self.capsule objectForKey:@"toUserIds"]];
+        NSLog(@"userIdArray: %@",toUsersArray);
+        NSString *userId = [[PFUser currentUser] objectId];
+        NSLog(@"toUserIds for capsule %@: %@",capsuleId,toUsersArray);
+        if ([toUsersArray containsObject:userId])
+            [toUsersArray removeObject:userId];
+        NSLog(@"userId %@ removed from capsule %@",userId,capsuleId);
+        [self.capsule setObject:[[NSArray alloc] initWithArray:toUsersArray] forKey:@"toUserIds"];
+        [self.capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            // if capsule is no longer attached to any users, remove from db.
+            if (succeeded && ([[self.capsule objectForKey:@"toUserIds"] count] == 0) && ([[self.capsule objectForKey:@"toFbIds"] count] == 0))
             {
-                NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
-                [self.navigationController popViewControllerAnimated:YES];
-            } else {
-                NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
+                /*NSLog(@"capsule identified as empty, removing from db...");
+                [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (succeeded)
+                    {
+                        NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
+                        [self.navigationController popViewControllerAnimated:YES];
+                    } else {
+                        NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
+                    }
+                    
+                }];*/
             }
-            
+            else if (error)
+            {
+                NSLog(@"saving capsule %@ failed with error: %@",capsuleId,error);
+            }
+            else if ([[self.capsule objectForKey:@"toUserIds"] count] != 0)
+            {
+                NSLog(@"toUserIds for capsule %@: %@, popping to unearthed view...",capsuleId,toUsersArray);
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }];
     }
 }
