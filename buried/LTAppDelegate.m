@@ -104,8 +104,11 @@
     [self.window makeKeyAndVisible];
     self.grassImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriedlogo_250height.png"]];
     [self showGrass:NO animated:NO];
+    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
+    {
     [self.window.rootViewController.view addSubview:self.grassImage];
     [self.window.rootViewController.view bringSubviewToFront:self.grassImage];
+    }
     
     return YES;
 }
@@ -267,6 +270,8 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"Toggling grass: %i animated: %i",shouldShow,shouldAnimate);
+    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
+    {
     if (shouldAnimate)
     {
         if (shouldShow)
@@ -296,6 +301,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
             self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
             self.grassIsShowing = NO;
         }
+    }
     }
 }
 
