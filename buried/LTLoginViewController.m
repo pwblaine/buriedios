@@ -32,6 +32,8 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->lastLoggedInLabel.text = @"";
     self->lastLoggedInLabel.alpha = 0;
+    self->notYouButton.alpha = 0;
+    self->notYouButton.enabled = NO;
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -46,18 +48,28 @@
         else {
             // if connection is successful, welcome last logged in user and update label
         NSString *lastLoggedInUserId = [[PFInstallation currentInstallation] objectForKey:@"lastLoggedInUserId"];
-        PFQuery *userQuery = [PFUser query];
-        NSString *displayName = [[userQuery getObjectWithId:lastLoggedInUserId] objectForKey:@"displayName"];
-        NSLog(@"display name of last logged in user is %@",displayName);
-        if (displayName.length > 0)
-            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
-            [UIView animateWithDuration:1.0f animations:^{
-                self->lastLoggedInLabel.alpha = 1;
-            } completion:^(BOOL finished) {
-                if (finished)
-                    NSLog(@"lastLoggedInLabel loaded");
-            }];
-        }
+            PFQuery *userQuery = [PFUser query];
+            // check that a userId is stored to avoid a null user get attempt
+            if (lastLoggedInUserId.length > 0)
+            {
+                NSString *displayName = [[userQuery getObjectWithId:lastLoggedInUserId] objectForKey:@"displayName"];
+                NSLog(@"display name of last logged in user is %@",displayName);
+                // ensure the user has a display name set before attempting to presetn
+                if (displayName.length > 0)
+                    self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+                    [UIView animateWithDuration:1.0f animations:^{
+                        self->lastLoggedInLabel.alpha = 1;
+                        self->notYouButton.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        if (finished)
+                        {
+                            NSLog(@"lastLoggedInLabel loaded");
+                                    self->notYouButton.enabled = YES;
+                                    NSLog(@"notYouButton loaded and enabled");
+                        }
+                    }];
+                }
+            }
     }];
     
     [UIView animateWithDuration:1.5f animations:^{
@@ -146,6 +158,29 @@
             NSLog(@"user with facebook logged in!");
             [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
         }
+    }];
+}
+
+- (IBAction)notYouButtonTouched:(id)sender
+{
+    // as of this moment ass this button does is to clear the stored userId for the last logged in user to remove the greeting, however, with the new account management branch, this will play an integral role in switching accounts and allowing the user to authenticate again as someone else
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setObject:@"" forKey:@"lastLoggedInUserId"];
+    [currentInstallation saveEventually:^(BOOL succeeded, NSError *error) {
+        NSLog(@"currently stored last logged in user: %@",[currentInstallation objectForKey:@"lastLoggedInUserId"]);
+        if (succeeded)
+            NSLog(@"lastLoggedInUserId cleared successfully and sync'd with parse");
+        else
+            NSLog(@"unabled to save the clearing of the last login to parse, please contact the team.");
+    }];
+    self->notYouButton.enabled = NO;
+    [UIView animateWithDuration:0.3f animations:^{
+        self->lastLoggedInLabel.alpha = 0;
+        self->notYouButton.alpha = 0;
+        } completion:^(BOOL finished) {
+            if (finished)
+            NSLog(@"notYouButton and lastLoggedInLabel hidden");
     }];
 }
 
