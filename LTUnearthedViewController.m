@@ -101,31 +101,6 @@
     // Add the temporary title
     self.title = @"buried.";
     
-    [self updateUserProfile];
-    
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
-    
-    
-    
-    // double check global is registered
-    [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
-    
-    // Register for user specific channels
-    [[PFUser currentUser] fetchIfNeeded];
-    
-    /* if there are existing channels overwrite them
-    if (currentInstallation.channels.count > 1)
-    currentInstallation.channels = @[@"global"];*/
-    
-    [currentInstallation addUniqueObject:[[PFUser currentUser] objectId] forKey:@"channels"];
-    
-    [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
-    
-    [currentInstallation saveInBackground];
-    
-    NSLog(@"current channels: %@", [currentInstallation channels]);
-    
     [self updateTitleWithNumberOfBuriedCapsules];
     
 }
@@ -172,6 +147,9 @@
         [currentInstallation saveEventually];
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
+    
+    LTAppDelegate *app = [[UIApplication sharedApplication] delegate];
+    [app showGrass:NO animated:animated];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -428,74 +406,6 @@
     }
 }
 
-- (void)updateUserProfile
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // disable navigation and wait for response from server
-    
-    // Send request to Facebook
-    FBRequest *request = [FBRequest requestForMe];
-    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        // handle response
-        if (!error) {
-            
-            NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
-            // Parse the data received
-            NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
-            
-            if (![[PFUser currentUser][@"profile"] isEqual:userData] || ![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
-            {
-
-            // TODO updateProfile
-            [[PFUser currentUser] setObject:userData forKey:@"profile"];
-            
-            // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-            [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-            [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                
-            NSLog(@"new profile data found\nupdating profile data...\n%@",userData);
-                
-                if (![PFUser currentUser].email || ![[PFUser currentUser][@"email"] isEqualToString:userData[@"email"]])
-                {
-                    [[PFUser currentUser] setObject:userData[@"email"] forKey:@"email"];
-                    NSLog(@"adding/updating email");
-                }
-                
-                [[PFUser currentUser] saveInBackground];
-                
-            } else {NSLog(@"user profile is up to date");}
-            /*
-            // Download the user's facebook profile picture
-            profileImageData = [[NSMutableData alloc] init]; // the data will be loaded in here
-            
-            NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
-            NSLog(@"profile picture URL created");
-            
-            NSMutableURLRequest*urlRequest = [NSMutableURLRequest requestWithURL:pictureURL
-                                                                      cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                                                  timeoutInterval:2.0f];
-            // Run network request asynchronously
-            NSURLConnection *urlConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
-            
-            NSLog(@"profile picture download initiated");
-            if (!urlConnection) {
-                NSLog(@"failed to download picture");
-            }
-             */
-            // renable navigation upon receipt of server response
-            // self.title = [[PFUser currentUser] objectForKey:@"displayName"];
-        } else if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"]) {
-            // Since the request failed, we can check if it was due to an invalid session
-            NSLog(@"the facebook session was invalidated");
-            [self logoutButtonTouchHandler:nil];
-        } else {
-            NSLog(@"some other error: %@", error);
-            // renable navigation upon receipt of server response
-        }
-    }];
-}
-
-
 
 #pragma mark Logout methods
 
@@ -523,9 +433,21 @@
     [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
 
+    // write to user defaults
+    NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
+    if (![displayName isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"]])
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"displayName"];
+     NSLog(@"written to NSUserDefaults for offline/immediate access: displayName/%@",displayName);
+    }
+    
+    
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);
+    
+    
+    
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
     
@@ -533,6 +455,7 @@
 
 - (void)buryItButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
     [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
     
 }

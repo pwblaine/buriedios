@@ -27,13 +27,15 @@
 		281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA4188EA66800C85066 /* LTAppDelegate.m */; };
 		281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA6188EA66800C85066 /* LTBuryItViewController.m */; };
 		281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */; };
-		281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AA9188EA66800C85066 /* LTLoginViewController.m */; };
-		281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAA188EA66800C85066 /* LTLoginViewController.xib */; };
 		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
+		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
+		2858DA581944C33900BDAB3A /* LTStartScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */; };
+		2858DA611944DA2100BDAB3A /* x-mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */; };
+		2858DA621944DB5B00BDAB3A /* x-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5B1944D65C00BDAB3A /* x-mark.png */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
 		286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */; };
 		286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */; };
@@ -101,9 +103,6 @@
 		281E7AA5188EA66800C85066 /* LTBuryItViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTBuryItViewController.h; path = buried/LTBuryItViewController.h; sourceTree = SOURCE_ROOT; };
 		281E7AA6188EA66800C85066 /* LTBuryItViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTBuryItViewController.m; path = buried/LTBuryItViewController.m; sourceTree = SOURCE_ROOT; };
 		281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTBuryItViewController.xib; path = buried/LTBuryItViewController.xib; sourceTree = SOURCE_ROOT; };
-		281E7AA8188EA66800C85066 /* LTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LTLoginViewController.h; path = buried/LTLoginViewController.h; sourceTree = SOURCE_ROOT; };
-		281E7AA9188EA66800C85066 /* LTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LTLoginViewController.m; path = buried/LTLoginViewController.m; sourceTree = SOURCE_ROOT; };
-		281E7AAA188EA66800C85066 /* LTLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTLoginViewController.xib; path = buried/LTLoginViewController.xib; sourceTree = SOURCE_ROOT; };
 		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
 		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
@@ -114,6 +113,12 @@
 		284B2D0518AC4A9000BB976F /* FPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPViewController.h; sourceTree = "<group>"; };
 		284B2D0618AC4A9000BB976F /* FPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPViewController.m; sourceTree = "<group>"; };
 		284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FPViewController_iPhone.xib; sourceTree = "<group>"; };
+		2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTStartScreenViewController.h; sourceTree = "<group>"; };
+		2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTStartScreenViewController.m; sourceTree = "<group>"; };
+		2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTStartScreenViewController.xib; sourceTree = "<group>"; };
+		2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark@2x.png"; path = "buried/37x-Checkmark@2x.png"; sourceTree = "<group>"; };
+		2858DA5B1944D65C00BDAB3A /* x-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "x-mark.png"; path = "/Users/patrickblaine/Documents/3-view-application/buried/x-mark.png"; sourceTree = "<absolute>"; };
+		2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "x-mark@2x.png"; path = "/Users/patrickblaine/Documents/3-view-application/buried/x-mark@2x.png"; sourceTree = "<absolute>"; };
 		286D080118CB647E000B5EBE /* grassToolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassToolbar.png; sourceTree = SOURCE_ROOT; };
 		286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
 		286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
@@ -206,7 +211,7 @@
 				28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */,
 				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
 				287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */,
-				281E7AAA188EA66800C85066 /* LTLoginViewController.xib */,
+				2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */,
 			);
 			name = "Interface Builder Files";
 			sourceTree = "<group>";
@@ -225,8 +230,8 @@
 				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
 				287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */,
 				287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */,
-				281E7AA8188EA66800C85066 /* LTLoginViewController.h */,
-				281E7AA9188EA66800C85066 /* LTLoginViewController.m */,
+				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
+				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -328,9 +333,12 @@
 				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
+				2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */,
 				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				308D4763191ADADE0098AEFC /* buriedicon58x58white.png */,
+				2858DA5B1944D65C00BDAB3A /* x-mark.png */,
+				2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */,
 				308D4764191ADADE0098AEFC /* buriedicon76x76.png */,
 				308D4765191ADADE0098AEFC /* buriedicon114x114.png */,
 				308D4766191ADADE0098AEFC /* buriedicon152x152white.png */,
@@ -421,6 +429,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2858DA611944DA2100BDAB3A /* x-mark@2x.png in Resources */,
 				28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */,
 				308D4776191ADB3E0098AEFC /* Icon@2x.png in Resources */,
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
@@ -444,6 +453,7 @@
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
 				28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */,
 				308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */,
+				2858DA621944DB5B00BDAB3A /* x-mark.png in Resources */,
 				308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */,
@@ -453,12 +463,12 @@
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
 				28824A1319254A2E005F24CC /* burieddot152.png in Resources */,
+				2858DA581944C33900BDAB3A /* LTStartScreenViewController.xib in Resources */,
 				28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */,
 				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
 				284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */,
 				308D476F191ADADF0098AEFC /* buriedlogo29x29.png in Resources */,
-				281E7AC7188EA66800C85066 /* LTLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,10 +489,10 @@
 				286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
+				2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */,
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
 				287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */,
 				281E7AC8188EA66800C85066 /* main.m in Sources */,
-				281E7AC6188EA66800C85066 /* LTLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,7 +535,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -23,7 +23,6 @@
     UIActionSheet *cameraActionSheet;
     
     MBProgressHUD *HUD;
-    MBProgressHUD *refreshHUD;
 }
 
 @property UIImage *capsuleImage;
@@ -61,6 +60,8 @@
 -(IBAction)buryIt:(id)sender;
 
 - (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo;
+
+- (void)hudWasHidden:(MBProgressHUD *)hud;
 
 
 @end

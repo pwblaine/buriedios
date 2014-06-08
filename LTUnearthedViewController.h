@@ -33,6 +33,5 @@
 /* Callback delegate methods used for downloading the user's profile picture */
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection;
-- (void)updateUserProfile;
 
 @end

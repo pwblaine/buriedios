@@ -4,11 +4,13 @@
 #import "LTAppDelegate.h"
 
 #import <Parse/Parse.h>
-#import "LTLoginViewController.h"
+#import "LTStartScreenViewController.h"
 #import "LTBuryItViewController.h"
 #import "LTUnearthedViewController.h"
 
 @implementation LTAppDelegate
+
+@synthesize grassImage;
 
 #pragma mark - UIApplicationDelegate
 
@@ -49,7 +51,7 @@
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
     
     // Set up initial view
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTLoginViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTStartScreenViewController alloc] init]];
     
     // retrieve and store any remote notification data
     NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -100,6 +102,11 @@
     
     // make and display window
     [self.window makeKeyAndVisible];
+    self.grassImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriedlogo_250height.png"]];
+    [self showGrass:NO animated:NO];
+    [self.window.rootViewController.view addSubview:self.grassImage];
+    [self.window.rootViewController.view bringSubviewToFront:self.grassImage];
+    
     return YES;
 }
 
@@ -135,6 +142,12 @@
     
     if (self->initialLoad)
         self->initialLoad = NO;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -250,6 +263,40 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         
     }
 
-
+-(void)showGrass:(BOOL)shouldShow animated:(BOOL)shouldAnimate
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"Toggling grass: %i animated: %i",shouldShow,shouldAnimate);
+    if (shouldAnimate)
+    {
+        if (shouldShow)
+        {
+            [UIView animateWithDuration:0.75f animations:^{
+                self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
+                self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+            } completion:^(BOOL finished) {
+                self.grassIsShowing = YES;
+            }];
+        } else {
+            [UIView animateWithDuration:0.75f animations:^{
+                self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
+                self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+            } completion:^(BOOL finished) {
+                self.grassIsShowing = NO;
+            }];
+        }
+    } else {
+        if (shouldShow)
+        {
+                self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
+                self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                self.grassIsShowing = YES;
+        } else {
+            self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
+            self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+            self.grassIsShowing = NO;
+        }
+    }
+}
 
 @end
