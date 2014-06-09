@@ -37,10 +37,16 @@
         [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
     }
     
-    // Add logout navigation bar button
-    UIBarButtonItem *loginButton = [[UIBarButtonItem alloc] initWithTitle:@"Log In" style:UIBarButtonItemStyleBordered target:self action:@selector(loginButtonTouchHandler:)];
-    self.navigationItem.rightBarButtonItem = loginButton;
+    // Add signup navigation bar button
+    UIBarButtonItem *signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign Up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
+    self.navigationItem.leftBarButtonItem = signUpButton;
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    
+    // Add login/sign in navigation bar button
+    UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+    self.navigationItem.rightBarButtonItem = signInButton;
     self.navigationItem.rightBarButtonItem.enabled = YES;
+    
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -50,6 +56,19 @@
     self->lastLoggedInLabel.alpha = 0;
     self->notYouButton.alpha = 0;
     self->notYouButton.enabled = NO;
+    
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"] length] > 0)
+    {
+        UIBarButtonItem *continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
+        self.navigationItem.rightBarButtonItem = continueButton;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    } else {
+        
+        // Add login/sign in navigation bar button
+        UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+        self.navigationItem.rightBarButtonItem = signInButton;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -64,21 +83,10 @@
                 NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"];
                 
                 NSLog(@"display name of last logged in user is %@",displayName);
-                // ensure the user has a display name set before attempting to presetn
+                // ensure the user has a display name set before attempting to preset
                 
-                if (displayName.length > 0)
-                    self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
-                [UIView animateWithDuration:1.0f animations:^{
-                    self->lastLoggedInLabel.alpha = 1;
-                    self->notYouButton.alpha = 1;
-                } completion:^(BOOL finished) {
-                    if (finished)
-                    {
-                        NSLog(@"lastLoggedInLabel loaded");
-                        self->notYouButton.enabled = YES;
-                        NSLog(@"notYouButton loaded and enabled");
-                    }
-                }];
+                [self changeButtonsForContinuingUser:displayName];
+                
             }
     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
     
@@ -87,15 +95,70 @@
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->lastLoggedInLabel.alpha = 0;
-    
+    // Add login/sign in navigation bar button
+    UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+    self.navigationItem.rightBarButtonItem = signInButton;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     [self->HUD hide:YES];
 }
 
+-(void)changeButtonsForContinuingUser:(NSString *)displayName
+{
+    if (displayName.length > 0)
+    {
+    self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+    [UIView animateWithDuration:1.0f animations:^{
+        self->lastLoggedInLabel.alpha = 1;
+        self->notYouButton.alpha = 1;
+        if (![self.navigationItem.rightBarButtonItem.title isEqualToString:@"Continue"])
+        {
+        self.navigationItem.rightBarButtonItem.title = @"Continue";
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        }
+    } completion:^(BOOL finished) {
+        if (finished)
+        {
+            UIBarButtonItem *continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
+            self.navigationItem.rightBarButtonItem = continueButton;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            NSLog(@"lastLoggedInLabel loaded");
+            self->notYouButton.enabled = YES;
+            NSLog(@"notYouButton loaded and enabled");
+        }
+        }];
+    } else {
+        if (![PFUser currentUser])
+            NSLog(@"no logged in or stored users detected");
+        else
+             NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
+    }
+}
 
-#pragma mark - Login mehtods
+#pragma mark - SignUp methods
+- (IBAction)signUpButtonTouchHandler:(id)sender  {
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    PFSignUpViewController *signUpVC = [[PFSignUpViewController alloc] init];
+    signUpVC.fields = PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsEmail | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton;
+    signUpVC.delegate = self;
+    [self presentViewController:signUpVC animated:YES completion:^{
+        NSLog(@"presenting signUpVC");
+    }];
+}
 
+#pragma mark - Sign In methods
+- (IBAction)signInButtonTouchHandler:(id)sender  {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    PFLogInViewController *signInVC = [[PFLogInViewController alloc] init];
+    signInVC.fields = PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsEmail | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton;
+    signInVC.delegate = self;
+    [self presentViewController:signInVC animated:YES completion:^{
+        NSLog(@"presenting signInVC");
+    }];
+}
+
+#pragma mark - Continue mehtods
 /* Login to facebook method */
-- (IBAction)loginButtonTouchHandler:(id)sender  {
+- (IBAction)continueButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging in");
     //[(UIBarButtonItem*)sender setEnabled:NO];
@@ -113,7 +176,6 @@
     
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
-        
         if (!user) {
             [(UIBarButtonItem*)sender setEnabled:YES];
             
@@ -135,6 +197,33 @@
                 // handle response
                 if (!error) {
                     
+                    // Parse the data received
+                    NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
+                    NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
+                    
+                    if (![storedData[@"updated_time"] isEqualToString:userData[@"updated_time"]])
+                        {
+                            
+                            [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                            
+                            // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                            
+                            [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+                            [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+                            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                            
+                            NSLog(@"updating profile and saving to parse");
+                            
+                            [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+                                if (succeeded)
+                                    NSLog(@"new user profile successfully saved to parse");
+                                else
+                                    NSLog(@"profile updating failed with error: %@",error);
+                            }];
+                        } else {
+                            NSLog(@"profile is up to date");
+                        }
+                    
                     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
                     
@@ -150,9 +239,10 @@
                     
                     [currentInstallation addUniqueObject:[currentUser objectId] forKey:@"channels"];
                     
-                    [currentInstallation setObject:currentUser forKey:@"user"];
+                    PFUser *pointerToUser = [PFUser user];
+                    pointerToUser.objectId = currentUser.objectId;
                     
-                    [currentInstallation setObject:[currentUser objectId] forKey:@"lastLoggedInUserId"];
+                    [currentInstallation setObject:pointerToUser forKey:@"user"];
                     
                     [currentInstallation saveInBackground];
                     
@@ -160,35 +250,19 @@
                     
                     // write to user defaults
                     NSString *lastLoggedInUserId = [user objectId];
-                    [[NSUserDefaults standardUserDefaults] setObject:[user objectId] forKey:@"lastLoggedInUserId"];
+                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
                     
-                    NSString *displayName = [user objectForKey:@"displayName"];
-                    if (![displayName isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"]])
-                        [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"displayName"];
+                    NSString *lastLoggedInFacebookId = [userData objectForKey:@"id"];
+                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
                     
-                    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@",lastLoggedInUserId,displayName);
+                    NSString *lastLoggedInDisplayName = [user objectForKey:@"displayName"];
+                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
                     
-                    // Parse the data received
-                    NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
-                    // TODO updateProfile
+                    NSString *lastLoggedInUserName = [user username];
+                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
                     
-                    if (![[PFUser currentUser][@"profile"] isEqual:userData[@"profile"]])
-                    {
+                    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
                         
-                        [[PFUser currentUser] setObject:userData forKey:@"profile"];
-                        
-                        // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-                        
-                        [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-                        [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                        [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-                        
-                    } else {
-                        NSLog(@"profile is up to date");
-                    }
-                    
-                    [user saveEventually];
-                    
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
@@ -241,15 +315,170 @@
     [UIView animateWithDuration:0.3f animations:^{
         self->lastLoggedInLabel.alpha = 0;
         self->notYouButton.alpha = 0;
+        self.navigationItem.rightBarButtonItem.title = @"Sign In";
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     } completion:^(BOOL finished) {
         if (finished)
             NSLog(@"notYouButton and lastLoggedInLabel hidden");
+        UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+        self.navigationItem.rightBarButtonItem = signInButton;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        NSLog(@"Sign In button restored");
     }];
 }
 
 - (void)hudWasHidden:(MBProgressHUD *)hud
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    return YES;
+}
+
+/// Sent to the delegate when a PFUser is signed up.
+- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [signUpController dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"signUpViewController dismissed with successful login, current user: %@",[PFUser currentUser]);
+        
+        if (user) {
+        
+        //write to user defaults and update buttons
+        [self changeButtonsForContinuingUser:[user username]];
+        
+        NSString *lastLoggedInUserId = [user objectId];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+        
+        NSString *lastLoggedInFacebookId = @"";
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+        
+        NSString *lastLoggedInDisplayName = @"";
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+        
+        NSString *lastLoggedInUserName = [user username];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+        }
+    }];
+}
+
+/// Sent to the delegate when the sign up attempt fails.
+- (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+/// Sent to the delegate when the sign up screen is dismissed.
+- (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+/*
+ Sent to the delegate to determine whether the log in request should be submitted to the server.
+@param username the username the user tries to log in with.
+@param password the password the user tries to log in with.
+@result a boolean indicating whether the log in should proceed.
+*/
+- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
+{
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    return YES;
+}
+
+/*! @name Responding to Actions */
+/// Sent to the delegate when a PFUser is logged in.
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
+{
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [logInController dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"loginviewController dismissed with successful login, current user: %@",[PFUser currentUser]);
+        
+        NSString *lastLoggedInUserId = nil;
+        NSString *lastLoggedInFacebookId = nil;
+        NSString *lastLoggedInDisplayName = nil;
+        NSString *lastLoggedInUserName = nil;
+        
+        //write to user defaults and update buttons
+        if ([PFFacebookUtils isLinkedWithUser:user])
+        {
+            NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
+            
+            [self changeButtonsForContinuingUser:[user objectForKey:@"displayName"]];
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
+        lastLoggedInDisplayName = [user objectForKey:@"displayName"];
+        lastLoggedInUserName = [user username];
+            
+    } else {
+        //write to user defaults and update buttons
+        [self changeButtonsForContinuingUser:[user username]];
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = @"";
+        lastLoggedInDisplayName = @"";
+        lastLoggedInUserName = [user username];
+    }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"] ;
+    }];
+}
+
+/// Sent to the delegate when the log in attempt fails.
+- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
+{
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+/// Sent to the delegate when the log in screen is dismissed.
+- (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
+{
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+- (void)updateFbProfileForUser:(PFUser *)user
+{
+    // Send request to Facebook
+    FBRequest *request = [FBRequest requestForMe];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        // handle response
+        if (!error) {
+            
+            // Parse the data received
+            NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
+             NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
+            
+                if (![userData[@"updated_time"] isEqualToString:storedData[@"updated_time"]])
+                {
+                    
+                    [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                    
+                    // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                    
+                    [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+                    [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+                    [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                    
+                    [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+                        if (succeeded)
+                            NSLog(@"new user profile successfully saved to parse");
+                        else
+                            NSLog(@"profile updating failed with error: %@",error);
+                    }];
+                } else {
+                    NSLog(@"profile is up to date, no change");
+                }
+        } else {
+            NSLog(@"unable to update profile");
+        }
+    }];
 }
 
 @end
