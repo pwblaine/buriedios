@@ -274,16 +274,16 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         
         // for everyone in the friendPicker, if they exist store the PFUser
         // if they don't have a buried account, store the facebookId
-         for (id<FBGraphUser> fbUser in self.friendPickerController.selection)
+         for (FBGraphObject<FBGraphUser> *fbUser in self.friendPickerController.selection)
          {
              PFQuery *userQuery = [PFUser query];
-             [userQuery whereKey:@"facebookId" equalTo:[fbUser id]];
+             [userQuery whereKey:@"facebookId" equalTo:[fbUser objectID]];
              NSArray *objects = [userQuery findObjects];
              NSLog(@"query executed");
              if (objects.count < 1)
              {
                  NSLog(@"matching facebookId not found, storing facebookId");
-                 [mutableToFbIds addObject:[fbUser id]];
+                 [mutableToFbIds addObject:[fbUser objectID]];
              }
              else
              {
