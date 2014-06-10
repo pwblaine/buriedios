@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
+#import "LTPINVerificationViewController.h"
 
 @interface LTStartScreenViewController ()
 
@@ -348,20 +349,10 @@
         if (user) {
         
         //write to user defaults and update buttons
-        [self changeButtonsForContinuingUser:[user username]];
-        
-        NSString *lastLoggedInUserId = [user objectId];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-        
-        NSString *lastLoggedInFacebookId = @"";
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-        
-        NSString *lastLoggedInDisplayName = @"";
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-        
-        NSString *lastLoggedInUserName = [user username];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+            [self changeButtonsForContinuingUser:[user username]];
         }
+            // save working login data and pass it to PIN controller to be saved on submission
+        // TODO instantiate PIN View
     }];
 }
 
@@ -423,11 +414,8 @@
         lastLoggedInDisplayName = @"";
         lastLoggedInUserName = [user username];
     }
-        
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"] ;
+        // save working login data and pass it to PIN controller to be saved on submission
+        // TODO instantiate PIN View
     }];
 }
 

@@ -14,8 +14,11 @@
 
 @implementation LTPINVerificationViewController
 
+@synthesize lastLoggedInDisplayName, lastLoggedInFacebookId, lastLoggedInUserName, lastLoggedInUserId;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -25,14 +28,29 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)submitButtonTouched:(id)sender
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+}
+
+-(IBAction)cancelButtonTouched:(id)sender
+{
+   NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"PIN view cancelled and dismissed");
+    }];
 }
 
 @end
