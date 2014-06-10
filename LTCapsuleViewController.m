@@ -20,7 +20,7 @@
 
 @implementation LTCapsuleViewController
 
-@synthesize capsule;
+@synthesize capsule,theImage,theThought;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,8 +45,8 @@
     /* UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
     self.navigationItem.rightBarButtonItem = actionButton; */
     
-    UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
-     self.navigationItem.rightBarButtonItem = forwardButton;
+    UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonTapped:)];
+     self.navigationItem.rightBarButtonItem = trashButton;
     
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
@@ -191,9 +191,59 @@
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
+
     buryItViewController.capsuleImage = self->theImage;
     buryItViewController.capsuleThought = self->theThought;
     [self.navigationController pushViewController:buryItViewController animated:YES];
+}
+
+- (IBAction)trashButtonTapped:(id)sender
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Capsule" message:@"Are you sure you want to delete this capsule permanently?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == alertView.firstOtherButtonIndex)
+    {
+        NSString *capsuleId = [self.capsule objectId];
+        NSMutableArray *toUsersArray = [[NSMutableArray alloc] initWithArray:[self.capsule objectForKey:@"toUserIds"]];
+        NSLog(@"userIdArray: %@",toUsersArray);
+        NSString *userId = [[PFUser currentUser] objectId];
+        NSLog(@"toUserIds for capsule %@: %@",capsuleId,toUsersArray);
+        if ([toUsersArray containsObject:userId])
+            [toUsersArray removeObject:userId];
+        NSLog(@"userId %@ removed from capsule %@",userId,capsuleId);
+        [self.capsule setObject:[[NSArray alloc] initWithArray:toUsersArray] forKey:@"toUserIds"];
+        [self.capsule saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            // if capsule is no longer attached to any users, remove from db.
+            if (succeeded && ([[self.capsule objectForKey:@"toUserIds"] count] == 0) && ([[self.capsule objectForKey:@"toFbIds"] count] == 0))
+            {
+                NSLog(@"capsule left in database with no users, popping to unearthed view");
+                
+                /*NSLog(@"capsule identified as empty, removing from db...");
+                [self.capsule deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (succeeded)
+                    {
+                        NSLog(@"capsule %@ has been successfully removed from the database, popping to unearthed view",capsuleId);
+                        [self.navigationController popViewControllerAnimated:YES];
+                    } else {
+                        NSLog(@"deleting capsule %@ failed with error %@, please try again",error,capsuleId);
+                    }
+                    
+                }];*/
+            } else if ([[self.capsule objectForKey:@"toUserIds"] count] != 0)
+            {
+                NSLog(@"toUserIds for capsule %@: %@, popping to unearthed view...",capsuleId,toUsersArray);
+            }
+            if (error)
+            {
+                NSLog(@"saving capsule %@ failed with error: %@",capsuleId,error);
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+    }
 }
 
 @end

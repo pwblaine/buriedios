@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LTThoughtDetailViewController : UIViewController
+@interface LTThoughtDetailViewController : UIViewController <UIAlertViewDelegate>
 {
     IBOutlet UITextView *thoughtView;
     IBOutlet UIToolbar *topToolbar;
@@ -20,5 +20,6 @@
 
 -(IBAction)actionButtonTouched:(id)sender;
 -(IBAction)doneButtonTouched:(id)sender;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
 @end

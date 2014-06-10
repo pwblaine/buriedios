@@ -30,26 +30,40 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->lastLoggedInLabel.text = @"";
+    self->lastLoggedInLabel.alpha = 0;
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.navigationItem.rightBarButtonItem.enabled = true;
-    if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
-    {
-        // configure view for iPhone 5
-        [UIView animateWithDuration:1.5f animations:^{
+    
+    // if installation data found, retrieve all fields simultaneously testing for network connection
+    [[PFInstallation currentInstallation] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (error)
+            NSLog(@"unable to fetch current installation");
+        else {
+            // if connection is successful, welcome last logged in user and update label
+        NSString *lastLoggedInUserId = [[PFInstallation currentInstallation] objectForKey:@"lastLoggedInUserId"];
+        PFQuery *userQuery = [PFUser query];
+        NSString *displayName = [[userQuery getObjectWithId:lastLoggedInUserId] objectForKey:@"displayName"];
+        NSLog(@"display name of last logged in user is %@",displayName);
+        if (displayName.length > 0)
+            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+            [UIView animateWithDuration:1.0f animations:^{
+                self->lastLoggedInLabel.alpha = 1;
+            } completion:^(BOOL finished) {
+                if (finished)
+                    NSLog(@"lastLoggedInLabel loaded");
+            }];
+        }
+    }];
+    
+    [UIView animateWithDuration:1.5f animations:^{
             self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
             self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
         }];
-    } else if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-480)?NO:YES)) {
-        // configure view for iPhone 4
-        [UIView animateWithDuration:1.5f animations:^{
-            self->grassImage.frame = CGRectMake(-30, 374.0f, 380, 204);
-            self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
-        }];
-    }
     
 }
 
@@ -57,6 +71,7 @@
         NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
         self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
         self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+        self->lastLoggedInLabel.alpha = 0;
 }
 
 

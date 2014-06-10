@@ -517,9 +517,12 @@
     [mutableChannels removeObject:userObjectId];
     NSLog(@"removing user from push channels");
     [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-    NSLog(@"saving new channels to Parse...");
-    [[PFInstallation currentInstallation] saveEventually];
+    NSLog(@"storing userId as last logged in...");
+    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
+    NSLog(@"saving updated installation data to Parse...");
+    [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
+
     [FBSession setActiveSession:nil];
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);

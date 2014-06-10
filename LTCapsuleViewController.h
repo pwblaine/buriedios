@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface LTCapsuleViewController : UIViewController <UINavigationControllerDelegate>
+@interface LTCapsuleViewController : UIViewController <UINavigationControllerDelegate, UIAlertViewDelegate>
 {
     
     UIImage *theImage;
@@ -30,10 +30,15 @@
 }
 
 @property PFObject *capsule;
+@property UIImage *theImage;
+@property NSString *theThought;
 
-- (void)backButtonTouchHandler:(id)sender;
+- (IBAction)backButtonTouchHandler:(id)sender;
 - (IBAction)imageButtonTapped:(id)sender;
 - (IBAction)thoughtButtonTapped:(id)sender;
 - (IBAction)actionButtonTapped:(id)sender;
+- (IBAction)forwardButtonTapped:(id)sender;
+- (IBAction)trashButtonTapped:(id)sender;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
 @end

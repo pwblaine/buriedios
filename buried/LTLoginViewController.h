@@ -6,6 +6,7 @@
 @interface LTLoginViewController : UIViewController
 {
     IBOutlet UIImageView *grassImage;
+    IBOutlet UILabel *lastLoggedInLabel;
 }
 
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
