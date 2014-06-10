@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		112B79081946FD9200558BE1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B79071946FD9200558BE1 /* Social.framework */; };
-		112B790C1946FEC700558BE1 /* x-mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */; };
+		112B790D1947015E00558BE1 /* x-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5B1944D65C00BDAB3A /* x-mark.png */; };
+		112B790F1947019C00558BE1 /* x-mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */; };
 		280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */; };
 		28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */; };
 		28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */; };
@@ -120,8 +121,8 @@
 		2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTStartScreenViewController.m; sourceTree = "<group>"; };
 		2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTStartScreenViewController.xib; sourceTree = "<group>"; };
 		2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark@2x.png"; path = "buried/37x-Checkmark@2x.png"; sourceTree = "<group>"; };
-		2858DA5B1944D65C00BDAB3A /* x-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "x-mark.png"; path = "/Users/april/Documents/buriedios/x-mark.png"; sourceTree = "<absolute>"; };
-		2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "x-mark@2x.png"; path = "/Users/april/Documents/buriedios/x-mark@2x.png"; sourceTree = "<absolute>"; };
+		2858DA5B1944D65C00BDAB3A /* x-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark.png"; sourceTree = SOURCE_ROOT; };
+		2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark@2x.png"; sourceTree = SOURCE_ROOT; };
 		286D080118CB647E000B5EBE /* grassToolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassToolbar.png; sourceTree = SOURCE_ROOT; };
 		286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
 		286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
@@ -440,7 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				112B790C1946FEC700558BE1 /* x-mark@2x.png in Resources */,
+				112B790D1947015E00558BE1 /* x-mark.png in Resources */,
 				28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */,
 				308D4776191ADB3E0098AEFC /* Icon@2x.png in Resources */,
 				28A3E22D1945242700250FA2 /* LTPINVerificationViewController.xib in Resources */,
@@ -465,6 +466,7 @@
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
 				28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */,
 				308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */,
+				112B790F1947019C00558BE1 /* x-mark@2x.png in Resources */,
 				308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */,
