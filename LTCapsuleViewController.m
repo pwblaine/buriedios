@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Loftier Thoughts. All rights reserved.
 //
 
+#import "LTAppDelegate.h"
 #import "LTCapsuleViewController.h"
 #import "LTPhotoDetailViewController.h"
 #import "LTThoughtDetailViewController.h"
@@ -76,9 +77,6 @@
         }
     }];
     
-    if (self->theThought.length > 1)
-        self->thoughtButton.enabled = YES;
-    
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
     
     [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
@@ -102,24 +100,22 @@
             
             self->imageButton.enabled = YES;
             
-            if (!(self->theThought.length > 1) && (UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
-            {
-                [UIView animateWithDuration:0.75f animations:^{
-                    self->grassImage.frame = CGRectMake(-30, 459, 380, 204);
-                    // self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
-                }];
-            }
+            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
+            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
+            
         } else {
             self->imageContainer.image = nil;
-            if ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES))
-            {
-                [UIView animateWithDuration:0.75f animations:^{
-                    self->grassImage.frame = CGRectMake(-30, 459, 380, 204);
-                    // self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
-                }];
-            }
+            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
+            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
         }
         // this code runs whether there's an image or not after its been retrieved
+                if (self->theThought.length > 1)
+                self->thoughtButton.enabled = YES;
+                else
+        {
+            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
+            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
+        }
         if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
             self->imageContainer.image = nil;
         self->thoughtContainer.text = self->theThought;
@@ -135,8 +131,6 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [UIView animateWithDuration:0.25f animations:^{
-        self->grassImage.frame = CGRectMake(0, 474, 320, 144);
-        self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
         self->imageContainer.contentMode = UIViewContentModeCenter;
         self->imageContainer.image = [UIImage imageNamed:@"burieddot152.png"];
         self->thoughtContainer.text = @"";
@@ -167,6 +161,7 @@
     photoDetailViewController.theImage = self->theImage;
     photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:photoDetailViewController animated:YES completion:nil];
+    
 }
 
 - (IBAction)thoughtButtonTapped:(id)sender

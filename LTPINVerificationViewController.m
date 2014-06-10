@@ -7,6 +7,8 @@
 //
 
 #import "LTPINVerificationViewController.h"
+#import "LTAppDelegate.h"
+#import "LTStartScreenViewController.h"
 
 @interface LTPINVerificationViewController ()
 
@@ -33,6 +35,12 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void) viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if ([(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing])
+    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
+}
+
 - (void)didReceiveMemoryWarning
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -43,6 +51,10 @@
 -(IBAction)submitButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self dismissViewControllerAnimated:YES completion:^{
+// TODO temporatily this will be a way to progress until the PIN view is done, a linked FB account is current REQUIRED
+        [(LTStartScreenViewController *)self.presentingViewController performSelector:@selector(continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:) withObject:self];
+    }];
 }
 
 -(IBAction)cancelButtonTouched:(id)sender

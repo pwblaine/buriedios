@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Loftier Thoughts. All rights reserved.
 //
 
+#import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
@@ -24,6 +25,8 @@
 - (IBAction)signInButtonTouchHandler:(id)sender;
 - (IBAction)continueButtonTouchHandler:(id)sender;
 - (IBAction)notYouButtonTouched:(id)sender;
+
+- (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender;
 
 - (void)changeButtonsForContinuingUser:(NSString *)displayName;
 

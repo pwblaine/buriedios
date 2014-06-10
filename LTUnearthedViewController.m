@@ -148,8 +148,8 @@
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
     
-    LTAppDelegate *app = [[UIApplication sharedApplication] delegate];
-    [app showGrass:NO animated:animated];
+    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
+    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -200,6 +200,12 @@
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+     
+     if ((self.objects.count > 9) && ([indexPath row] == (self.objects.count - 1)) && [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing])
+     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
+else if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] && ([indexPath row] < (self.objects.count - self.tableView.visibleCells.count - 1)) && ![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass])
+     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
+     
  static NSString *CellIdentifier = @"Cell";
  
  PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -231,19 +237,20 @@
      
      NSString *thought = [object objectForKey:@"thought"];
      
-     if (cell.detailTextLabel.textColor != [UIColor blackColor])
-         cell.detailTextLabel.textColor = [UIColor blackColor];
-     
      if (thought.length > 1)
      {
          if (![cell.detailTextLabel.text isEqualToString:thought])
          cell.detailTextLabel.text = thought;
+         if (cell.detailTextLabel.textColor != [UIColor blackColor])
+         cell.detailTextLabel.textColor = [UIColor blackColor];
      }
      else
      {
          NSString *picturePlaceholderString = @"Picture";
          if (![cell.detailTextLabel.text isEqualToString:picturePlaceholderString])
          cell.detailTextLabel.text = picturePlaceholderString;
+         if (cell.detailTextLabel.textColor != [UIColor lightGrayColor])
+         cell.detailTextLabel.textColor = [UIColor lightGrayColor];
      }
     
      // Unread code: if current user isn't found in the readUsers tint brown.
@@ -455,7 +462,6 @@
 
 - (void)buryItButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
     [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
     
 }

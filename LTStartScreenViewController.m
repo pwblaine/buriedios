@@ -89,17 +89,14 @@
                 [self changeButtonsForContinuingUser:displayName];
                 
             }
+    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
     
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self->lastLoggedInLabel.alpha = 0;
     // Add login/sign in navigation bar button
-    UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
-    self.navigationItem.rightBarButtonItem = signInButton;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
     [self->HUD hide:YES];
 }
 
@@ -146,11 +143,11 @@
     }];
 }
 
-#pragma mark - Sign In methods
+#pragma mark - SignIn methods
 - (IBAction)signInButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFLogInViewController *signInVC = [[PFLogInViewController alloc] init];
-    signInVC.fields = PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsEmail | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton;
+    signInVC.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsFacebook | PFLogInFieldsDismissButton;
     signInVC.delegate = self;
     [self presentViewController:signInVC animated:YES completion:^{
         NSLog(@"presenting signInVC");
@@ -161,6 +158,16 @@
 /* Login to facebook method */
 - (IBAction)continueButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    /* TODO implement PIN VC
+     [self presentViewController:[[LTPINVerificationViewController alloc] init] animated:YES completion:^{
+        NSLog(@"PinVC presented successfully");
+    }];
+     */ [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
+}
+
+- (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:
+    (id)sender
+{
     NSLog(@"logging in");
     //[(UIBarButtonItem*)sender setEnabled:NO];
     
@@ -178,7 +185,6 @@
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
         if (!user) {
-            [(UIBarButtonItem*)sender setEnabled:YES];
             
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
@@ -203,27 +209,27 @@
                     NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
                     
                     if (![storedData[@"updated_time"] isEqualToString:userData[@"updated_time"]])
-                        {
-                            
-                            [[PFUser currentUser] setObject:userData forKey:@"profile"];
-                            
-                            // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-                            
-                            [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-                            [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                            [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-                            
-                            NSLog(@"updating profile and saving to parse");
-                            
-                            [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
-                                if (succeeded)
-                                    NSLog(@"new user profile successfully saved to parse");
-                                else
-                                    NSLog(@"profile updating failed with error: %@",error);
-                            }];
-                        } else {
-                            NSLog(@"profile is up to date");
-                        }
+                    {
+                        
+                        [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                        
+                        // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                        
+                        [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+                        [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+                        [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                        
+                        NSLog(@"updating profile and saving to parse");
+                        
+                        [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+                            if (succeeded)
+                            NSLog(@"new user profile successfully saved to parse");
+                            else
+                            NSLog(@"profile updating failed with error: %@",error);
+                        }];
+                    } else {
+                        NSLog(@"profile is up to date");
+                    }
                     
                     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
@@ -251,23 +257,22 @@
                     
                     // write to user defaults
                     NSString *lastLoggedInUserId = [user objectId];
-                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
                     
                     NSString *lastLoggedInFacebookId = [userData objectForKey:@"id"];
-                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
                     
                     NSString *lastLoggedInDisplayName = [user objectForKey:@"displayName"];
-                        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
                     
                     NSString *lastLoggedInUserName = [user username];
                     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
                     
                     NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
-                        
+                    
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
                     
                 } else {
                     
@@ -283,12 +288,12 @@
                         self->HUD.mode = MBProgressHUDModeCustomView;
                         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
                         [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                        [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
                     }
                 }
             }];
         }
     }];
+
 }
 
 - (IBAction)notYouButtonTouched:(id)sender
@@ -345,14 +350,18 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [signUpController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"signUpViewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        
+        /* TODO handle signup vc successful completion
         if (user) {
         
         //write to user defaults and update buttons
             [self changeButtonsForContinuingUser:[user username]];
         }
-            // save working login data and pass it to PIN controller to be saved on submission
-        // TODO instantiate PIN View
+        
+        // save working login data and pass it to PIN controller to be saved on submission
+        LTPINVerificationViewController *pinVC = [[LTPINVerificationViewController alloc] init];
+        [self presentViewController:pinVC animated:YES completion:^{
+            NSLog(@"pinVC succesfully presented");
+        }];*/
     }];
 }
 
@@ -405,7 +414,10 @@
         lastLoggedInDisplayName = [user objectForKey:@"displayName"];
         lastLoggedInUserName = [user username];
             
+            [self continueButtonTouchHandler:self];
+            
     } else {
+        
         //write to user defaults and update buttons
         [self changeButtonsForContinuingUser:[user username]];
         
@@ -414,8 +426,11 @@
         lastLoggedInDisplayName = @"";
         lastLoggedInUserName = [user username];
     }
-        // save working login data and pass it to PIN controller to be saved on submission
-        // TODO instantiate PIN View
+        /* TODO save working login data and pass it to PIN controller to be saved on submission
+        LTPINVerificationViewController *pinVC = [[LTPINVerificationViewController alloc] init];
+        [self presentViewController:pinVC animated:YES completion:^{
+            NSLog(@"pinVC succesfully presented");
+        }];*/
     }];
 }
 
@@ -429,6 +444,7 @@
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
 }
 
 - (void)updateFbProfileForUser:(PFUser *)user

@@ -55,7 +55,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:animated];
+    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
+    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
 }
 
 
@@ -379,7 +380,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                             [self clearFields];
                         
                             [NSTimer scheduledTimerWithTimeInterval:1 target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
-                            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
                         } else {
                             
                             [HUD hide:YES];
@@ -422,7 +422,7 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                     [self clearFields];
                     
                     [NSTimer scheduledTimerWithTimeInterval:1 target:self.navigationController selector:@selector(popViewControllerAnimated:) userInfo:@YES repeats:NO];
-                    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
+                    
                 }
                 
             } else{
@@ -501,7 +501,6 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         [self checkForItemsAndSetClearOrCancel];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
-        [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
     }
     
 }

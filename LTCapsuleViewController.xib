@@ -7,7 +7,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTCapsuleViewController">
             <connections>
                 <outlet property="activityIndicator" destination="UIx-Ai-R9H" id="fGy-z5-5q0"/>
-                <outlet property="grassImage" destination="GvX-MW-dC4" id="NXI-xs-Rh3"/>
                 <outlet property="imageButton" destination="mfl-qq-4kq" id="4Dq-wG-lJt"/>
                 <outlet property="imageContainer" destination="SXu-Cg-vxo" id="SOm-tl-z7X"/>
                 <outlet property="thoughtButton" destination="XiR-1H-bWQ" id="PdJ-30-F6b"/>
@@ -21,10 +20,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="GvX-MW-dC4" userLabel="grass image">
-                    <rect key="frame" x="0.0" y="494" width="320" height="144"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gHH-Yb-fWW">
                     <rect key="frame" x="20" y="130" width="280" height="350"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -76,6 +71,5 @@
     </objects>
     <resources>
         <image name="burieddot152.png" width="152" height="152"/>
-        <image name="buriedlogo_250height.png" width="498" height="250"/>
     </resources>
 </document>

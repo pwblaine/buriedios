@@ -45,7 +45,12 @@
 
     // Override point for customization after application launch.
     
+    // set defaults
     self->initialLoad = YES;
+    self->grownGrassFrame = CGRectMake(-30, 459.0f, 380, 204);
+    self->hiddenGrassFrame = CGRectMake(0, 568.0f, 320, 144);
+    self->shrunkGrassFrame = CGRectMake(-15, 494, 350, 174);
+    
     
     // Register for Notification Center
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
@@ -103,6 +108,7 @@
     // make and display window
     [self.window makeKeyAndVisible];
     self.grassImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriedlogo_250height.png"]];
+    self.grassImage.contentMode = UIViewContentModeScaleAspectFit;
     [self showGrass:NO animated:NO];
     if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
     {
@@ -274,34 +280,65 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
     {
     if (shouldAnimate)
     {
+        self.isAnimatingGrass = YES;
         if (shouldShow)
         {
             [UIView animateWithDuration:0.75f animations:^{
-                self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
-                self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                self->grassImage.frame = self->grownGrassFrame;
             } completion:^(BOOL finished) {
                 self.grassIsShowing = YES;
+                self.grassIsShrunk = NO;
+                self.isAnimatingGrass = NO;
             }];
         } else {
             [UIView animateWithDuration:0.75f animations:^{
-                self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
-                self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+                self->grassImage.frame = self->hiddenGrassFrame;
             } completion:^(BOOL finished) {
                 self.grassIsShowing = NO;
+                self.grassIsShrunk = NO;
+                self.isAnimatingGrass = NO;
             }];
         }
     } else {
         if (shouldShow)
         {
-                self->grassImage.frame = CGRectMake(-30, 459.0f, 380, 204);
-                self->grassImage.contentMode = UIViewContentModeScaleAspectFill;
+                self->grassImage.frame = self->grownGrassFrame;
                 self.grassIsShowing = YES;
+            self.grassIsShrunk = NO;
         } else {
-            self->grassImage.frame = CGRectMake(0, 568.0f, 320, 144);
-            self->grassImage.contentMode = UIViewContentModeScaleAspectFit;
+            self->grassImage.frame = self->hiddenGrassFrame;
             self.grassIsShowing = NO;
+            self.grassIsShrunk = NO;
         }
     }
+    }
+}
+
+-(void)shrinkGrassAnimated:(BOOL)shouldAnimate
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"Shrinking grass animated: %i",shouldAnimate);
+    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
+    {
+        if (shouldAnimate)
+        {
+            self.isAnimatingGrass = YES;
+            
+                [UIView animateWithDuration:0.75f animations:^{
+                    self->grassImage.frame = self->shrunkGrassFrame;
+                } completion:^(BOOL finished) {
+                    self.grassIsShowing = YES;
+                    self.isAnimatingGrass = NO;
+                    self.grassIsShrunk = YES;
+                }];
+            
+        } else {
+            
+                self->grassImage.frame = self->shrunkGrassFrame;
+                self.grassIsShowing = YES;
+                self.grassIsShrunk = YES;
+        }
+    
     }
 }
 
