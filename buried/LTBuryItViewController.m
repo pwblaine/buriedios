@@ -158,13 +158,13 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 messagesToUserLabel.textColor = [UIColor lightGrayColor];
     if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"soon"])
-messagesToUserLabel.text = @"will unearth in the next 24 hours";
+messagesToUserLabel.text = @"will unearth within a week ";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"later"])
-        messagesToUserLabel.text = @"will unearth in the next 2-7 days";
+        messagesToUserLabel.text = @"will unearth within a month";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"someday"])
-        messagesToUserLabel.text = @"will unearth in the next 1-4 weeks";
+        messagesToUserLabel.text = @"will unearth within a few months";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"forgotten"])
-        messagesToUserLabel.text = @"will unearth in the next 1-3 months";
+        messagesToUserLabel.text = @"will unearth within a year";
     else
     {
         messagesToUserLabel.textColor = errorColor;
