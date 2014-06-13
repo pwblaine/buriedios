@@ -16,6 +16,8 @@
     IBOutlet UITextView *thoughtTextView;
     IBOutlet UISegmentedControl *timeframeSegmentedControl;
     IBOutlet UILabel *messagesToUserLabel;
+    IBOutlet UIButton   *buryItButton;
+    
     UIColor *errorColor;
     UIColor *successColor;
     UIImage *theImage;
@@ -27,11 +29,11 @@
 
 @property UIImage *capsuleImage;
 @property NSString *capsuleThought;
+@property enum UIImagePickerControllerSourceType source;
 
 -(IBAction)pickFriendsButtonClick:(id)sender;
 -(IBAction)presentActionSheetForImageUpload;
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex;
-
 
 -(IBAction)cameraButtonTapped:(id)sender;
 -(IBAction)showCamera:(id)sender;

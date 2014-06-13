@@ -10,13 +10,6 @@
     float grassAnimationDuration;
 }
 
-typedef NS_ENUM(NSInteger, LTGrassState) {
-    LTGrassStateAnimating,
-    LTGrassStateHidden,
-    LTGrassStateShrunk,
-    LTGrassStateGrown
-};
-
 @property (strong, nonatomic) UIWindow *window;
 
 @property UIImageView *grassImage;
@@ -29,6 +22,15 @@ typedef NS_ENUM(NSInteger, LTGrassState) {
 - (void)showGrass:(BOOL)shouldShow animated:(BOOL)shouldAnimate;
 
 -(void)shrinkGrassAnimated:(BOOL)shouldAnimate;
+
+#pragma mark LTGrassStates
+
+typedef NS_ENUM(NSInteger, LTGrassState) {
+    LTGrassStateAnimating,
+    LTGrassStateHidden,
+    LTGrassStateShrunk,
+    LTGrassStateGrown
+};
 
 -(LTGrassState)setGrassState:(LTGrassState)newGrassState animated:(BOOL)isAnimated;
 

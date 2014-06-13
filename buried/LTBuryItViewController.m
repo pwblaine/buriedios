@@ -21,7 +21,7 @@
 
 @implementation LTBuryItViewController
 
-@synthesize capsuleImage, capsuleThought;
+@synthesize capsuleImage, capsuleThought, source;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -64,6 +64,12 @@
 {
     [super viewDidLoad];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    // adjust bury it button for iphone 4s
+    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
+    {
+        [self->buryItButton titleLabel];
+    }
     
     if (self.capsuleThought)
         self->thoughtTextView.text = self.capsuleThought;
@@ -159,9 +165,9 @@
 messagesToUserLabel.textColor = [UIColor lightGrayColor];
     if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"soon"])
 messagesToUserLabel.text = @"will unearth within a week ";
-    else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"later"])
-        messagesToUserLabel.text = @"will unearth within a month";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"someday"])
+        messagesToUserLabel.text = @"will unearth within a month";
+    else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"eventually"])
         messagesToUserLabel.text = @"will unearth within a few months";
     else if ([[timeframeSegmentedControl titleForSegmentAtIndex:timeframeSegmentedControl.selectedSegmentIndex] isEqualToString:@"forgotten"])
         messagesToUserLabel.text = @"will unearth within a year";
@@ -240,7 +246,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
     thoughtTextView.text = @"";
     [self.friendPickerController clearSelection];
     
-    [timeframeSegmentedControl setSelectedSegmentIndex:0];
+    [timeframeSegmentedControl setSelectedSegmentIndex:1];
     
     theImage = nil;
     [self resetCamera];
@@ -532,16 +538,15 @@ messagesToUserLabel.text = @"will unearth within a week ";
         photoVC.callingViewController = self;
 
         // save the image to the library if taken from a camera
-        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
+        if (self.source != UIImagePickerControllerSourceTypeCamera)
         {
-            NSLog(@"imagePicker used camera");
-        } else {
             NSLog(@"imagePicker did not use camera");
             photoVC.launchedFromLibrary = true;
+            [self presentViewController:photoVC animated:NO completion:^{
+                NSLog(@"photoVC presented");
+            }];
+
         }
-        [self presentViewController:photoVC animated:NO completion:^{
-            NSLog(@"photoVC presented");
-        }];
     }];
     
     // store the image in a variable
@@ -662,7 +667,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
         
         // Show image picker
         [self presentViewController:imagePicker animated:YES completion:^{
-            
+            self.source = imagePicker.sourceType;
         }];
     }
     else{
@@ -721,7 +726,9 @@ messagesToUserLabel.text = @"will unearth within a week ";
         imagePicker.delegate = self;
         
         // Show image picker
-        [self presentViewController:imagePicker animated:YES completion:nil];
+        [self presentViewController:imagePicker animated:YES completion:^{
+            self.source = imagePicker.sourceType;
+        }];
     }
 }
 

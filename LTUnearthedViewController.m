@@ -107,18 +107,19 @@
 
 - (void)checkAndChangeGrassStateFor:(LTAppDelegate *)grassDelegate
 {
-    // if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
-    // hide the grass
-    if (self.objects.count <= 9)
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+     /*if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
+     hide the grass
+   */ if (self.objects.count <= 9)
     {
         NSLog(@"there aren't enough capsules to cover the grass, it will not be moved from load state");
-        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
-    }
-    else if ([[self objectAtIndexPath:[[self.tableView indexPathsForVisibleRows] lastObject]].objectId isEqualToString:[self.objects.lastObject objectId]])
-    {
         NSLog(@"the last capsule is occupying the last visible row, grass is covering the last capsule, the grass must be hidden");
+        
+        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
+        
+    } else if (self->isAtBottom)
         [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
-    } else
+                else
         [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
 }
 
@@ -166,6 +167,7 @@
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
     
+    [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -218,11 +220,17 @@
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+     
+     NSIndexPath *last = [[self.tableView indexPathsForVisibleRows] lastObject];
+     
+     if (([indexPath compare:last] == NSOrderedSame) && (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass]))
      {
+         self->isAtBottom = YES;
          [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
-}
-     
-     
+     } else if (self->isAtBottom) {
+         self->isAtBottom = NO;
+         [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
+     }
  static NSString *CellIdentifier = @"Cell";
  
  PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];

@@ -44,55 +44,61 @@
     // adjust top toolbar for calling view controller
     NSMutableArray *mutableTopToolbarItems = [[self->topToolbar items] mutableCopy];
     NSLog(@"%@ copied",mutableTopToolbarItems);
-    
-    if (launchedFromLibrary)
-    {
-        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
-        
-        // if from bury it view, the picture can use: discard, actions, keep
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
-        self->leftButton = tempLeft;
-        
-        [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
-        
-        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(discardButtonTouched:)];
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
-        self->rightButton = tempRight;
 
-    }
-    else if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    
+    if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
     {
-        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        if (([(LTBuryItViewController *)self.callingViewController source] != UIImagePickerControllerSourceTypeCamera) && self.launchedFromLibrary)
+        {
+            UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(goBackToLibrary:)];
+            
+            // if from bury it view, the picture can use: discard, actions, keep
+            [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
+            self->rightButton = tempRight;
+            
+            [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
+            
+            UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+            [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
+            self->leftButton = tempLeft;
+            
+        } else {
+        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
         
         // if from bury it view, the picture can use: discard, actions, keep
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
-        self->leftButton = tempLeft;
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempRight];
+        self->leftButton = tempRight;
         
-        UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(actionButtonTouched:)];
+            if ([(LTBuryItViewController *)self.callingViewController source] == 0)
+            {
+        UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
         
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:tempMiddle];
         self->middleButton = tempMiddle;
+            } else
+                [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
         
-        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
-        self->rightButton = tempRight;
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempLeft];
+        self->rightButton = tempLeft;
+        }
     }
     else
     {
-        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        UIBarButtonItem *tempRight = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
         
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
-        self->leftButton = tempLeft;
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
+        self->rightButton = tempRight;
         
         UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
         
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton] withObject:tempMiddle];
         self->middleButton = tempMiddle;
         
-        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(forwardButtonTapped:)];
         
-        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
-        self->rightButton = tempRight;
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
+        self->leftButton = tempLeft;
     }
     
     [self->topToolbar setItems:mutableTopToolbarItems animated:NO];
@@ -181,7 +187,16 @@
 -(IBAction)keepButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+        {
+        if ([(LTBuryItViewController *)self.callingViewController source] != UIImagePickerControllerSourceTypeCamera)
+        {
+            self.launchedFromLibrary = NO;
+        }
+        }
+    }];
 }
 
 - (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
@@ -218,6 +233,16 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Forward To New Capsule" message:@"Which would you like to forward to start a new capsule with..." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Just This", @"All Of It", nil];
     [alertView setTag:2];
     [alertView show];
+}
+
+
+- (IBAction)goBackToLibrary:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [(LTBuryItViewController *)self.callingViewController discardPhoto];
+        [(LTBuryItViewController *)self.callingViewController resetCamera];
+        [(LTBuryItViewController *)self.callingViewController showLibraryPicker:self.callingViewController];
+    }];
 }
 
 

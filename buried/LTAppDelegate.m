@@ -326,6 +326,8 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"Shrinking grass animated: %i",shouldAnimate);
+    
+    // This short if statement is used to specialize UI for iphone 5 screens
     if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
     {
         if (shouldAnimate)
