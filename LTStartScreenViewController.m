@@ -180,7 +180,7 @@
     [HUD show:YES];
     
     // The permissions requested from the user
-    NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"email"];
+    NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
     
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
