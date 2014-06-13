@@ -50,13 +50,13 @@
 -(IBAction)actionButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction)doneButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)forwardButtonTapped:(id)sender
@@ -80,7 +80,7 @@
             if (buttonIndex == alertView.firstOtherButtonIndex + 1)
                 buryItViewController.capsuleImage = [(LTCapsuleViewController *)self.callingViewController theImage];
             
-            [self.callingViewController dismissViewControllerAnimated:YES completion:^{
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
                 [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
             }];
         }

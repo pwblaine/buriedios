@@ -16,13 +16,15 @@
 
 @implementation LTPhotoDetailViewController
 
-@synthesize theImage,callingViewController;
+@synthesize theImage,callingViewController,launchedFromLibrary;
 
 - (void)viewDidLoad
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    NSLog(@"%@",[self class]);
     
     self->imageView.image = self.theImage;
     
@@ -43,7 +45,22 @@
     NSMutableArray *mutableTopToolbarItems = [[self->topToolbar items] mutableCopy];
     NSLog(@"%@ copied",mutableTopToolbarItems);
     
-    if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    if (launchedFromLibrary)
+    {
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        
+        // if from bury it view, the picture can use: discard, actions, keep
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
+        self->leftButton = tempLeft;
+        
+        [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
+        
+        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
+        [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
+        self->rightButton = tempRight;
+
+    }
+    else if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
     {
         UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
         
@@ -86,7 +103,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     NSLog(@"image is %f x %f",self.theImage.size.width,self.theImage.size.height);
-    if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+    if ([self.presentingViewController isKindOfClass:[LTBuryItViewController class]])
     {
         // This code is run if the view is called from a BuryItViewController
     }
@@ -140,7 +157,7 @@
             self.theImage = nil;
             [(LTBuryItViewController *)self.callingViewController resetCamera];
             [(LTBuryItViewController *)self.callingViewController discardPhoto];
-            [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }
         }
         if (alertView.tag == 2)
@@ -153,7 +170,7 @@
             if (buttonIndex == alertView.firstOtherButtonIndex + 1)
                 buryItViewController.capsuleThought = [(LTCapsuleViewController *)self.callingViewController theThought];
             
-            [self.callingViewController dismissViewControllerAnimated:YES completion:^{
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
                 [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
                 }];
             }
@@ -164,7 +181,7 @@
 -(IBAction)keepButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self.callingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {

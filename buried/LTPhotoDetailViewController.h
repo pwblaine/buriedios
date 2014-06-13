@@ -19,6 +19,7 @@
 
 @property UIImage *theImage;
 @property (retain) UIViewController *callingViewController;
+@property BOOL launchedFromLibrary;
 
 -(IBAction)discardButtonTouched:(id)sender;
 -(IBAction)actionButtonTouched:(id)sender;

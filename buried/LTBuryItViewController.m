@@ -477,8 +477,8 @@ messagesToUserLabel.text = @"will unearth within a week ";
     } else {
         LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
         photoDetailViewController.theImage = theImage;
-        photoDetailViewController.callingViewController = self;
         photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        photoDetailViewController.callingViewController = self;
         [self presentViewController:photoDetailViewController animated:YES completion:nil];
     }
 }
@@ -526,19 +526,26 @@ messagesToUserLabel.text = @"will unearth within a week ";
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     // Dismiss controller
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:NO completion:^{
+        LTPhotoDetailViewController *photoVC = [[LTPhotoDetailViewController alloc] init];
+        photoVC.theImage = image;
+        photoVC.callingViewController = self;
+
+        // save the image to the library if taken from a camera
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
+        {
+            NSLog(@"imagePicker used camera");
+        } else {
+            NSLog(@"imagePicker did not use camera");
+            photoVC.launchedFromLibrary = true;
+        }
+        [self presentViewController:photoVC animated:NO completion:^{
+            NSLog(@"photoVC presented");
+        }];
+    }];
     
     // store the image in a variable
     self->theImage = image;
-    
-    // save the image to the library if taken from a camera
-    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
-    {
-        NSLog(@"imagePicker used camera, saving the picture to the library");
-        UIImageWriteToSavedPhotosAlbum(image, self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
-    } else {
-        NSLog(@"imagePicker did not use camera");
-    }
     
     // Resize image
     UIGraphicsBeginImageContext(CGSizeMake(32, 32));
@@ -654,7 +661,9 @@ messagesToUserLabel.text = @"will unearth within a week ";
         imagePicker.delegate = self;
         
         // Show image picker
-        [self presentViewController:imagePicker animated:YES completion:nil];
+        [self presentViewController:imagePicker animated:YES completion:^{
+            
+        }];
     }
     else{
         // Device has no camera

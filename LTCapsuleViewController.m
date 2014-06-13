@@ -157,8 +157,8 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
-    photoDetailViewController.callingViewController = self;
     photoDetailViewController.theImage = self->theImage;
+    photoDetailViewController.callingViewController = self;
     photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:photoDetailViewController animated:YES completion:nil];
     
@@ -170,7 +170,6 @@
     if (self->theThought.length > 1)
     {
     LTThoughtDetailViewController *thoughtDetailViewController = [[LTThoughtDetailViewController alloc] init];
-    thoughtDetailViewController.callingViewController = self;
     thoughtDetailViewController.theThought = self->theThought;
     thoughtDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:thoughtDetailViewController animated:YES completion:nil];

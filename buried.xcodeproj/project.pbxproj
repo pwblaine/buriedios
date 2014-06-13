@@ -604,7 +604,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
-					/Users/Mitch/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -615,7 +614,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "88549EB7-3E76-4EAD-8EB2-722C3420F67F";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -630,7 +629,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
-					/Users/Mitch/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -641,7 +639,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "88549EB7-3E76-4EAD-8EB2-722C3420F67F";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
