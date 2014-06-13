@@ -105,6 +105,24 @@
     
 }
 
+- (void)checkAndChangeGrassStateFor:(LTAppDelegate *)grassDelegate
+{
+    // if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
+    // hide the grass
+    if (self.objects.count <= 9)
+    {
+        NSLog(@"there aren't enough capsules to cover the grass, it will not be moved from load state");
+        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
+    }
+    else if ([[self objectAtIndexPath:[[self.tableView indexPathsForVisibleRows] lastObject]].objectId isEqualToString:[self.objects.lastObject objectId]])
+    {
+        NSLog(@"the last capsule is occupying the last visible row, grass is covering the last capsule, the grass must be hidden");
+        [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
+    } else
+        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
+}
+
+
 - (void)updateTitleWithNumberOfBuriedCapsules {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
@@ -148,8 +166,6 @@
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
     
-    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -195,16 +211,17 @@
  return query;
  }
  */
+        
+
 
  // Override to customize the look of a cell representing an object. The default is to display
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+     {
+         [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
+}
      
-     if ((self.objects.count > 9) && ([indexPath row] == (self.objects.count - 1)) && [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing])
-     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
-else if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] && ([indexPath row] < (self.objects.count - self.tableView.visibleCells.count - 1)) && ![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass])
-     [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
      
  static NSString *CellIdentifier = @"Cell";
  

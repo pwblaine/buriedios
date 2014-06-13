@@ -8,6 +8,13 @@
 #import "LTBuryItViewController.h"
 #import "LTUnearthedViewController.h"
 
+@interface LTAppDelegate ()
+{
+    LTGrassState currentGrassState;
+}
+
+@end
+
 @implementation LTAppDelegate
 
 @synthesize grassImage;
@@ -50,6 +57,7 @@
     self->grownGrassFrame = CGRectMake(-30, 459.0f, 380, 204);
     self->hiddenGrassFrame = CGRectMake(0, 568.0f, 320, 144);
     self->shrunkGrassFrame = CGRectMake(-15, 494, 350, 174);
+    self->grassAnimationDuration = 0.75f;
     
     
     // Register for Notification Center
@@ -304,7 +312,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         {
                 self->grassImage.frame = self->grownGrassFrame;
                 self.grassIsShowing = YES;
-            self.grassIsShrunk = NO;
+                self.grassIsShrunk = NO;
         } else {
             self->grassImage.frame = self->hiddenGrassFrame;
             self.grassIsShowing = NO;
@@ -340,6 +348,74 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         }
     
     }
+}
+
+/*  - setGrassState:animated:
+    
+    @returns LTGrassState
+    @params (LTGrassState)newGrassState:(BOOL)isAnimated
+ 
+    This method will update the placement of the grassImage if the request is valid and return the new LTGrassState; will return a value of LTGrassStateAnimating if the grass is currently busy animating, or will return the current state without updating if it doesn't differ.
+ */
+
+#pragma grass methods
+
+-(LTGrassState)setGrassState:(LTGrassState)newGrassState animated:(BOOL)isAnimated
+{
+    // test first if the grass is currently animating and not able to execute new requests.
+    if (self.isAnimatingGrass || newGrassState == LTGrassStateAnimating)
+    {
+        newGrassState = LTGrassStateAnimating;
+        // the flow quits out with a value of LTGrassStatAnimating
+    }
+    else if (self->currentGrassState != newGrassState)
+    {
+        // secondly test for whether any update is needed, if not, quits out with the current grassState
+        
+        // if an update is needed, the animation status is initialized to the passed in value and the frame it will update to is initialized and filled with the coordinates for each case
+        
+        self->currentGrassState = newGrassState;
+        self.isAnimatingGrass = isAnimated;
+        CGRect newFrame = CGRectNull;
+        
+        switch (newGrassState) {
+            case LTGrassStateHidden:
+                newFrame = CGRectMake(0, 568.0f, 320, 144);
+                break;
+            case LTGrassStateShrunk:
+                newFrame = CGRectMake(-15, 494, 350, 174);
+                break;
+            case LTGrassStateGrown:
+                newFrame = CGRectMake(-30, 459.0f, 380, 204);
+                break;
+            default:
+                break;
+        }
+        
+        // the animation block that will be either commited with duration is initialized to the newFrame
+        void (^animation)(void) = ^{
+            self.grassImage.frame = newFrame;
+        };
+        
+        //
+        if (isAnimated)
+        {
+            [UIView animateWithDuration:self->grassAnimationDuration animations:animation completion:^(BOOL finished) {
+                    // when the animation splits the code to asynchronous, follow up and make sure the animation visibility process is up to date
+                    if (finished)
+                        self.isAnimatingGrass = NO;
+                    }];
+        } else {
+            animation(); // if the isAnimated boolean is negative then invoke the animation block
+        }
+            
+    }
+    return newGrassState; // returns an LTGrassState object
+};
+
+-(LTGrassState)grassState
+{
+    return self->currentGrassState;
 }
 
 @end

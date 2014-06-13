@@ -7,16 +7,31 @@
     CGRect grownGrassFrame;
     CGRect shrunkGrassFrame;
     CGRect hiddenGrassFrame;
+    float grassAnimationDuration;
 }
+
+typedef NS_ENUM(NSInteger, LTGrassState) {
+    LTGrassStateAnimating,
+    LTGrassStateHidden,
+    LTGrassStateShrunk,
+    LTGrassStateGrown
+};
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property UIImageView *grassImage;
-@property BOOL grassIsShowing;
+
 @property BOOL isAnimatingGrass;
+
 @property BOOL grassIsShrunk;
+@property BOOL grassIsShowing;
 
 - (void)showGrass:(BOOL)shouldShow animated:(BOOL)shouldAnimate;
+
 -(void)shrinkGrassAnimated:(BOOL)shouldAnimate;
+
+-(LTGrassState)setGrassState:(LTGrassState)newGrassState animated:(BOOL)isAnimated;
+
+-(LTGrassState)grassState;
 
 @end

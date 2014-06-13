@@ -15,6 +15,7 @@
     UIImage *smallPortrait;
     UIImage *defaultPortrait;
     BOOL initialLoad;
+    BOOL isAtBottom;
 }
 
 #pragma mark - Capsule tracking UI methods
