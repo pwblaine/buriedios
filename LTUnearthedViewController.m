@@ -113,7 +113,7 @@
      /*if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
      hide the grass
    */
-    if (self->comingInFromOtherPage || !(self->isAtBottom))
+    if (self->comingInFromOtherPage)
     {
         NSLog(@"there aren't enough capsules to cover the grass, it will not be moved from load state");
         NSLog(@"the last capsule is occupying the last visible row, grass is covering the last capsule, the grass must be hidden");
@@ -121,6 +121,8 @@
         [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
         self->comingInFromOtherPage = NO;
     }
+    else if (!(self->isAtBottom))
+             [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
     else
         [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
 }
@@ -168,6 +170,7 @@
         [currentInstallation saveEventually];
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
+    [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -221,17 +224,11 @@
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
      
-     // logic for presenting grass, if the last capsule is the last visible and nothing's animating queue one, after that, if it's still at the bottom and not animating slide up
-     NSIndexPath *lastInViewIndexPath = [[self.tableView indexPathsForVisibleRows] lastObject];
-     NSString *lastInViewObjectId = [[self objectAtIndexPath:lastInViewIndexPath] objectId];
-     NSIndexPath *lastInObjects;
-     NSString *lastObjectId = [[self objectAtIndexPath:lastInObjects] objectId];
-     
-    
+     if ([[object objectId] isEqualToString:[[self.objects lastObject] objectId]])
      {
          self->isAtBottom = YES;
          [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
-     } else if (self->isAtBottom && (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass])) {
+     } else if (self->isAtBottom && ![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass]) {
          self->isAtBottom = NO;
          [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
      }
