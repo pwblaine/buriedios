@@ -54,7 +54,9 @@
         self.imageKey = @"image";
         self.pullToRefreshEnabled = YES;
         self.paginationEnabled = NO;
-        initialLoad = YES;
+        self->initialLoad = YES;
+        self->comingInFromOtherPage = YES;
+        
     }
     return self;
 }
@@ -110,17 +112,17 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
      /*if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
      hide the grass
-   */ if (self.objects.count <= 9)
+   */
+    if (self->comingInFromOtherPage || !(self->isAtBottom))
     {
         NSLog(@"there aren't enough capsules to cover the grass, it will not be moved from load state");
         NSLog(@"the last capsule is occupying the last visible row, grass is covering the last capsule, the grass must be hidden");
         
         [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
-        
-    } else if (self->isAtBottom)
+        self->comingInFromOtherPage = NO;
+    }
+    else
         [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
-                else
-        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
 }
 
 
@@ -166,8 +168,6 @@
         [currentInstallation saveEventually];
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
-    
-    [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -221,16 +221,21 @@
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
      
-     NSIndexPath *last = [[self.tableView indexPathsForVisibleRows] lastObject];
+     // logic for presenting grass, if the last capsule is the last visible and nothing's animating queue one, after that, if it's still at the bottom and not animating slide up
+     NSIndexPath *lastInViewIndexPath = [[self.tableView indexPathsForVisibleRows] lastObject];
+     NSString *lastInViewObjectId = [[self objectAtIndexPath:lastInViewIndexPath] objectId];
+     NSIndexPath *lastInObjects;
+     NSString *lastObjectId = [[self objectAtIndexPath:lastInObjects] objectId];
      
-     if (([indexPath compare:last] == NSOrderedSame) && (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass]))
+    
      {
          self->isAtBottom = YES;
          [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
-     } else if (self->isAtBottom) {
+     } else if (self->isAtBottom && (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass])) {
          self->isAtBottom = NO;
          [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
      }
+     
  static NSString *CellIdentifier = @"Cell";
  
  PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -481,12 +486,13 @@
     
     
     // Return to login view controller
+    self->comingInFromOtherPage = YES;
     [self.navigationController popToRootViewControllerAnimated:YES];
-    
 }
 
 - (void)buryItButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->comingInFromOtherPage = YES;
     [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
     
 }
@@ -615,6 +621,7 @@
     NSLog(@"%@",capsule);
     
     // Push the view controller.
+    self->comingInFromOtherPage = YES;
     [self.navigationController pushViewController:capsuleViewController animated:YES];
 }
 

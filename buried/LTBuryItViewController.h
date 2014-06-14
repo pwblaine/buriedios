@@ -30,6 +30,8 @@
 @property UIImage *capsuleImage;
 @property NSString *capsuleThought;
 @property enum UIImagePickerControllerSourceType source;
+@property BOOL launchedPickerForLibrary;
+@property BOOL libraryPictureKept;
 
 -(IBAction)pickFriendsButtonClick:(id)sender;
 -(IBAction)presentActionSheetForImageUpload;

@@ -21,7 +21,7 @@
 
 @implementation LTBuryItViewController
 
-@synthesize capsuleImage, capsuleThought, source;
+@synthesize capsuleImage, capsuleThought, source, launchedPickerForLibrary, libraryPictureKept;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -656,6 +656,9 @@ messagesToUserLabel.text = @"will unearth within a week ";
     
     // Check for camera
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+        
+        self.launchedPickerForLibrary = NO;
+        
         // Create image picker controller
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         
@@ -728,6 +731,8 @@ messagesToUserLabel.text = @"will unearth within a week ";
         // Show image picker
         [self presentViewController:imagePicker animated:YES completion:^{
             self.source = imagePicker.sourceType;
+            self.launchedPickerForLibrary = YES;
+            self.libraryPictureKept = NO;
         }];
     }
 }

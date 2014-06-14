@@ -48,7 +48,7 @@
     
     if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
     {
-        if (([(LTBuryItViewController *)self.callingViewController source] != UIImagePickerControllerSourceTypeCamera) && self.launchedFromLibrary)
+        if ([(LTBuryItViewController *)[self callingViewController] launchedPickerForLibrary])
         {
             UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(goBackToLibrary:)];
             
@@ -69,7 +69,7 @@
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempRight];
         self->leftButton = tempRight;
         
-            if ([(LTBuryItViewController *)self.callingViewController source] == 0)
+            if (!self.launchedFromLibrary)
             {
         UIBarButtonItem *tempMiddle  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
         
@@ -193,7 +193,7 @@
         {
         if ([(LTBuryItViewController *)self.callingViewController source] != UIImagePickerControllerSourceTypeCamera)
         {
-            self.launchedFromLibrary = NO;
+            [(LTBuryItViewController *)[self callingViewController] setLibraryPictureKept:YES];
         }
         }
     }];
