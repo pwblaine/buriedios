@@ -89,8 +89,6 @@
                 [self changeButtonsForContinuingUser:displayName];
                 
             }
-    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
     
 }
 
@@ -483,6 +481,11 @@
             NSLog(@"unable to update profile");
         }
     }];
+}
+
+-(LTGrassState)defaultGrassStateForView
+{
+    return LTGrassStateGrown;
 }
 
 @end

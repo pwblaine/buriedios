@@ -9,10 +9,10 @@
 #import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
+#import "LTGrassViewController.h"
 
-@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate>
+@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate>
 {
-    IBOutlet UIImageView *grassImage;
     IBOutlet UILabel *lastLoggedInLabel;
     IBOutlet UIButton *notYouButton;
     
@@ -43,5 +43,7 @@
 
 /// Sent to the delegate when the sign up screen is dismissed.
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController;
+
+-(LTGrassState)defaultGrassStateForView;
 
 @end

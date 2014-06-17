@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTBuryItViewController">
             <connections>
+                <outlet property="buryItButton" destination="sfH-GK-4FU" id="S7l-g5-4AU"/>
                 <outlet property="emailTextField" destination="amP-cu-zWY" id="2Ew-hJ-Ksb"/>
                 <outlet property="messagesToUserLabel" destination="rQD-wF-QbU" id="WTJ-FH-tea"/>
                 <outlet property="thoughtTextView" destination="wJi-YH-mrr" id="6qU-FQ-mIO"/>
@@ -74,10 +75,6 @@
                         <outlet property="delegate" destination="-1" id="8hg-KE-r8B"/>
                     </connections>
                 </textView>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="144" image="buriedlogo_250height.png" translatesAutoresizingMaskIntoConstraints="NO" id="7AN-Ei-fTU" userLabel="grass image">
-                    <rect key="frame" x="0.0" y="494" width="320" height="144"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wWk-rf-M2z" userLabel="add friend button">
                     <rect key="frame" x="30" y="281" width="22" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -95,7 +92,4 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
-    <resources>
-        <image name="buriedlogo_250height.png" width="498" height="250"/>
-    </resources>
 </document>

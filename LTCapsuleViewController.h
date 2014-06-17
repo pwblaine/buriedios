@@ -21,10 +21,7 @@
     IBOutlet PFImageView *imageContainer;
     
     IBOutlet UIButton *imageButton;
-    IBOutlet UIButton *thoughtButton;
-    
-    IBOutlet UIImageView *grassImage;
-    
+    IBOutlet UIButton *thoughtButton;    
     IBOutlet UIActivityIndicatorView *activityIndicator;
     
 }

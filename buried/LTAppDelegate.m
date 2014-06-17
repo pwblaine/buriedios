@@ -7,17 +7,11 @@
 #import "LTStartScreenViewController.h"
 #import "LTBuryItViewController.h"
 #import "LTUnearthedViewController.h"
-
-@interface LTAppDelegate ()
-{
-    LTGrassState currentGrassState;
-}
-
-@end
+#import "LTGrassViewController.h"
 
 @implementation LTAppDelegate
 
-@synthesize grassImage;
+@synthesize grassDelegate;
 
 #pragma mark - UIApplicationDelegate
 
@@ -54,17 +48,15 @@
     
     // set defaults
     self->initialLoad = YES;
-    self->grownGrassFrame = CGRectMake(-30, 459.0f, 380, 204);
-    self->hiddenGrassFrame = CGRectMake(0, 568.0f, 320, 144);
-    self->shrunkGrassFrame = CGRectMake(-15, 494, 350, 174);
-    self->grassAnimationDuration = 0.75f;
-    
     
     // Register for Notification Center
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
     
     // Set up initial view
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTStartScreenViewController alloc] init]];
+    
+    self.grassDelegate = [[LTGrassViewController alloc] init];
+    [(UINavigationController *)self.window.rootViewController setDelegate:self.grassDelegate];
     
     // retrieve and store any remote notification data
     NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -101,29 +93,15 @@
         NSLog(@"App was launched normally");
     }
     
-    // Add grass overlay
-    /*
-    UIView *quickAddView = [[QuickAddView alloc] initWithFrame:CGRectMake(0, 494, 320, 568)];
-    [self.window.rootViewController.view addSubview:quickAddView];
-    [self.window.rootViewController.view bringSubviewToFront:quickAddView];
+    // add grass as subview of window
+    [self.grassDelegate addToFrontOfView:self.window.rootViewController.view];
     
-    // hide grass
-    [self showGrass:NO];
-    */
     // set app background to white
     self.window.backgroundColor = [UIColor whiteColor];
     
-    // make and display window
+    // make and display window, MUST BE DONE BEFORE ADDING SUBVIEWS
     [self.window makeKeyAndVisible];
-    self.grassImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriedlogo_250height.png"]];
-    self.grassImage.contentMode = UIViewContentModeScaleAspectFit;
-    [self showGrass:NO animated:NO];
-    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
-    {
-    [self.window.rootViewController.view addSubview:self.grassImage];
-    [self.window.rootViewController.view bringSubviewToFront:self.grassImage];
-    }
-    
+ 
     return YES;
 }
 
@@ -279,145 +257,5 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))handler {
         }
         
     }
-
--(void)showGrass:(BOOL)shouldShow animated:(BOOL)shouldAnimate
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"Toggling grass: %i animated: %i",shouldShow,shouldAnimate);
-    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
-    {
-    if (shouldAnimate)
-    {
-        self.isAnimatingGrass = YES;
-        if (shouldShow)
-        {
-            [UIView animateWithDuration:0.75f animations:^{
-                self->grassImage.frame = self->grownGrassFrame;
-            } completion:^(BOOL finished) {
-                self.grassIsShowing = YES;
-                self.grassIsShrunk = NO;
-                self.isAnimatingGrass = NO;
-            }];
-        } else {
-            [UIView animateWithDuration:0.75f animations:^{
-                self->grassImage.frame = self->hiddenGrassFrame;
-            } completion:^(BOOL finished) {
-                self.grassIsShowing = NO;
-                self.grassIsShrunk = NO;
-                self.isAnimatingGrass = NO;
-            }];
-        }
-    } else {
-        if (shouldShow)
-        {
-                self->grassImage.frame = self->grownGrassFrame;
-                self.grassIsShowing = YES;
-                self.grassIsShrunk = NO;
-        } else {
-            self->grassImage.frame = self->hiddenGrassFrame;
-            self.grassIsShowing = NO;
-            self.grassIsShrunk = NO;
-        }
-    }
-    }
-}
-
--(void)shrinkGrassAnimated:(BOOL)shouldAnimate
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"Shrinking grass animated: %i",shouldAnimate);
-    
-    // This short if statement is used to specialize UI for iphone 5 screens
-    if ( ((UIDeviceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && (([[UIScreen mainScreen] bounds].size.height-568)?NO:YES)))
-    {
-        if (shouldAnimate)
-        {
-            self.isAnimatingGrass = YES;
-            
-                [UIView animateWithDuration:0.75f animations:^{
-                    self->grassImage.frame = self->shrunkGrassFrame;
-                } completion:^(BOOL finished) {
-                    self.grassIsShowing = YES;
-                    self.isAnimatingGrass = NO;
-                    self.grassIsShrunk = YES;
-                }];
-            
-        } else {
-            
-                self->grassImage.frame = self->shrunkGrassFrame;
-                self.grassIsShowing = YES;
-                self.grassIsShrunk = YES;
-        }
-    
-    }
-}
-
-/*  - setGrassState:animated:
-    
-    @returns LTGrassState
-    @params (LTGrassState)newGrassState:(BOOL)isAnimated
- 
-    This method will update the placement of the grassImage if the request is valid and return the new LTGrassState; will return a value of LTGrassStateAnimating if the grass is currently busy animating, or will return the current state without updating if it doesn't differ.
- */
-
-#pragma grass methods
-
--(LTGrassState)setGrassState:(LTGrassState)newGrassState animated:(BOOL)isAnimated
-{
-    // test first if the grass is currently animating and not able to execute new requests.
-    if (self.isAnimatingGrass || newGrassState == LTGrassStateAnimating)
-    {
-        newGrassState = LTGrassStateAnimating;
-        // the flow quits out with a value of LTGrassStatAnimating
-    }
-    else if (self->currentGrassState != newGrassState)
-    {
-        // secondly test for whether any update is needed, if not, quits out with the current grassState
-        
-        // if an update is needed, the animation status is initialized to the passed in value and the frame it will update to is initialized and filled with the coordinates for each case
-        
-        self->currentGrassState = newGrassState;
-        self.isAnimatingGrass = isAnimated;
-        CGRect newFrame = CGRectNull;
-        
-        switch (newGrassState) {
-            case LTGrassStateHidden:
-                newFrame = CGRectMake(0, 568.0f, 320, 144);
-                break;
-            case LTGrassStateShrunk:
-                newFrame = CGRectMake(-15, 494, 350, 174);
-                break;
-            case LTGrassStateGrown:
-                newFrame = CGRectMake(-30, 459.0f, 380, 204);
-                break;
-            default:
-                break;
-        }
-        
-        // the animation block that will be either commited with duration is initialized to the newFrame
-        void (^animation)(void) = ^{
-            self.grassImage.frame = newFrame;
-        };
-        
-        //
-        if (isAnimated)
-        {
-            [UIView animateWithDuration:self->grassAnimationDuration animations:animation completion:^(BOOL finished) {
-                    // when the animation splits the code to asynchronous, follow up and make sure the animation visibility process is up to date
-                    if (finished)
-                        self.isAnimatingGrass = NO;
-                    }];
-        } else {
-            animation(); // if the isAnimated boolean is negative then invoke the animation block
-        }
-            
-    }
-    return newGrassState; // returns an LTGrassState object
-};
-
--(LTGrassState)grassState
-{
-    return self->currentGrassState;
-}
 
 @end

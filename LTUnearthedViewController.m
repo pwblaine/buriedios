@@ -55,8 +55,8 @@
         self.pullToRefreshEnabled = YES;
         self.paginationEnabled = NO;
         self->initialLoad = YES;
-        self->comingInFromOtherPage = YES;
-        
+        self.tableView.bounces = YES;
+        self.tableView.delegate = self;
     }
     return self;
 }
@@ -107,26 +107,6 @@
     
 }
 
-- (void)checkAndChangeGrassStateFor:(LTAppDelegate *)grassDelegate
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-     /*if the feed has at least 9 capsules (so as to require the grass to be hidden for a full view) and the last object in the query is the one being presented, and the grass is currently showing...
-     hide the grass
-   */
-    if (self->comingInFromOtherPage)
-    {
-        NSLog(@"there aren't enough capsules to cover the grass, it will not be moved from load state");
-        NSLog(@"the last capsule is occupying the last visible row, grass is covering the last capsule, the grass must be hidden");
-        
-        [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
-        self->comingInFromOtherPage = NO;
-    }
-    else if (!(self->isAtBottom))
-             [grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
-    else
-        [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
-}
-
 
 - (void)updateTitleWithNumberOfBuriedCapsules {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -170,7 +150,9 @@
         [currentInstallation saveEventually];
         NSLog(@"removing all badges.  badges: %d",(int)currentInstallation.badge);
     }
-    [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
+    
+    LTAppDelegate *appDelegate = (LTAppDelegate *)[UIApplication sharedApplication].delegate;
+    [[appDelegate grassDelegate] setGrassState:[self defaultGrassStateForView] animated:YES];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -223,15 +205,6 @@
  // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
  // and the imageView being the imageKey in the object.
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-     
-     if ([[object objectId] isEqualToString:[[self.objects lastObject] objectId]])
-     {
-         self->isAtBottom = YES;
-         [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
-     } else if (self->isAtBottom && ![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] isAnimatingGrass]) {
-         self->isAtBottom = NO;
-         [self checkAndChangeGrassStateFor:[[UIApplication sharedApplication] delegate]];
-     }
      
  static NSString *CellIdentifier = @"Cell";
  
@@ -483,13 +456,11 @@
     
     
     // Return to login view controller
-    self->comingInFromOtherPage = YES;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)buryItButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self->comingInFromOtherPage = YES;
     [self.navigationController pushViewController:[[LTBuryItViewController alloc] init] animated:YES];
     
 }
@@ -617,17 +588,45 @@
     
     NSLog(@"%@",capsule);
     
-    // Push the view controller.
-    self->comingInFromOtherPage = YES;
+    // Push the view controller
     [self.navigationController pushViewController:capsuleViewController animated:YES];
 }
 
  - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
  {
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
- // Navigation logic may go here, for example:
-     [self presentCapsule:[[self.objects objectAtIndex:[[self.tableView indexPathForSelectedRow] row]] objectId] fromSelectedCell:[tableView cellForRowAtIndexPath:indexPath]];
+     [self presentCapsule:[[self objectAtIndexPath:indexPath] objectId] fromSelectedCell:[self.tableView cellForRowAtIndexPath:indexPath]];
  }
+
+- (LTGrassState)defaultGrassStateForView
+{
+    return LTGrassStateShrunk;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LTGrassViewController *grassDelegate =  [LTGrassViewController delegate];
+    
+    if ([[[self.objects lastObject] objectId] isEqualToString:[[self objectAtIndexPath:indexPath] objectId]])
+    {
+            NSLog(@"match found for last capsule");
+            [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LTGrassViewController *grassDelegate =  [LTGrassViewController delegate];
+    
+    if ((self.defaultGrassStateForView != [grassDelegate grassState]))
+    {
+        if ([[[self.objects lastObject] objectId] isEqualToString:[[self objectAtIndexPath:indexPath] objectId]])
+        {
+            NSLog(@"match found for not last capsule");
+            [grassDelegate setGrassState:self.defaultGrassStateForView animated:YES];
+        }
+    }
+}
 
 
 @end

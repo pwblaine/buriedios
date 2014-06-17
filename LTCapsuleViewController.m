@@ -56,6 +56,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->activityIndicator.alpha = 1;
     self->theThought = [self.capsule objectForKey:@"thought"];
 }
@@ -100,21 +101,22 @@
             
             self->imageButton.enabled = YES;
             
-            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] shrinkGrassAnimated:YES];
+            LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
             
         } else {
             self->imageContainer.image = nil;
-            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
+            LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
         }
         // this code runs whether there's an image or not after its been retrieved
                 if (self->theThought.length > 1)
                 self->thoughtButton.enabled = YES;
                 else
         {
-            if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-            [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
+            LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+
         }
         if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
             self->imageContainer.image = nil;

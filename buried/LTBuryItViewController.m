@@ -55,8 +55,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    if (![(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing] || [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShrunk])
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:YES animated:YES];
+    LTAppDelegate *appDelegate = (LTAppDelegate *)[UIApplication sharedApplication].delegate;
+    [[appDelegate grassDelegate] setGrassState:[self defaultGrassStateForView] animated:YES];
 }
 
 
@@ -532,7 +532,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
     UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     // Dismiss controller
-    [picker dismissViewControllerAnimated:NO completion:^{
+    [picker dismissViewControllerAnimated:YES completion:^{
         LTPhotoDetailViewController *photoVC = [[LTPhotoDetailViewController alloc] init];
         photoVC.theImage = image;
         photoVC.callingViewController = self;
@@ -542,7 +542,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
         {
             NSLog(@"imagePicker did not use camera");
             photoVC.launchedFromLibrary = true;
-            [self presentViewController:photoVC animated:NO completion:^{
+            [self presentViewController:photoVC animated:YES completion:^{
                 NSLog(@"photoVC presented");
             }];
 
@@ -735,6 +735,11 @@ messagesToUserLabel.text = @"will unearth within a week ";
             self.libraryPictureKept = NO;
         }];
     }
+}
+
+- (LTGrassState)defaultGrassStateForView
+{
+    return LTGrassStateGrown;
 }
 
 @end

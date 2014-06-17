@@ -37,8 +37,6 @@
 
 -(void) viewDidAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if ([(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassIsShowing])
-    [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] showGrass:NO animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
