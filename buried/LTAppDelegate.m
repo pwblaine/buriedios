@@ -120,6 +120,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [FBAppEvents activateApp];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    self.grassDelegate.appIsComingBackFromBackground = YES;
     
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
     if ([[(UINavigationController *)self.window.rootViewController visibleViewController] isKindOfClass:[LTUnearthedViewController class]])

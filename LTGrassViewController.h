@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, LTGrassState) {
 -(LTGrassState)destinationState;
 
 @property (retain, nonatomic) IBOutlet UIImageView *grassView;
+@property (assign) BOOL appIsComingBackFromBackground;
 
 #pragma mark UINavigationControllerDelegate methods
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;

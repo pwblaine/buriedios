@@ -36,6 +36,7 @@
         self->grassAnimationDuration = 0.75f;
         self->currentGrassState = LTGrassStateHidden;
         self->destinationGrassState = LTGrassStateHidden;
+        self.appIsComingBackFromBackground = NO;
     }
     return self;
 }
@@ -59,7 +60,9 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // test first if the grass is currently animating and not able to execute new requests.
-    if (self->currentGrassState == LTGrassStateAnimating)
+    if (self.appIsComingBackFromBackground)
+        self.appIsComingBackFromBackground = NO;
+    else if (self->currentGrassState == LTGrassStateAnimating)
     {
         NSLog(@"grassIsAnimating setting newGrassState as desination");
         self->destinationGrassState = newGrassState;

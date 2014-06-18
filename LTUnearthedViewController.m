@@ -607,7 +607,7 @@
 {
     LTGrassViewController *grassDelegate =  [LTGrassViewController delegate];
     
-    if ([[[self.objects lastObject] objectId] isEqualToString:[[self objectAtIndexPath:indexPath] objectId]])
+    if (([[[self.objects lastObject] objectId] isEqualToString:[[self objectAtIndexPath:indexPath] objectId]]) && ([grassDelegate grassState] == self.defaultGrassStateForView))
     {
             NSLog(@"match found for last capsule");
             [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
