@@ -2,7 +2,7 @@
 //  Copyright (c) 2013 Parse. All rights reserved.
 
 #import "LTAppDelegate.h"
-
+#import <UbertestersSDK/Ubertesters.h>
 #import <Parse/Parse.h>
 #import "LTStartScreenViewController.h"
 #import "LTBuryItViewController.h"
@@ -20,6 +20,9 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    //Ubertersters SDK initialization
+    [[Ubertesters shared] initialize];
     
     // ****************************************************************************
     // Fill in with your Parse credentials:

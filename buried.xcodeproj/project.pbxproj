@@ -49,6 +49,13 @@
 		28A3E22D1945242700250FA2 /* LTPINVerificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28A3E22B1945242700250FA2 /* LTPINVerificationViewController.xib */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
+		28B75D021957716600593B3A /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75CFF1957716600593B3A /* UbertestersSDK.framework */; };
+		28B75D031957716600593B3A /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 28B75D001957716600593B3A /* UbertestersSDKResources.bundle */; };
+		28B75D051957724000593B3A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D041957724000593B3A /* AdSupport.framework */; };
+		28B75D071957724E00593B3A /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D061957724E00593B3A /* CoreImage.framework */; };
+		28B75D091957725C00593B3A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D081957725C00593B3A /* CoreTelephony.framework */; };
+		28B75D0B1957726E00593B3A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D0A1957726E00593B3A /* OpenGLES.framework */; };
+		28B75D0D1957727400593B3A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D0C1957727400593B3A /* CoreMotion.framework */; };
 		28C5931A18DD32E300288764 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C5931818DD32E300288764 /* Parse.framework */; };
 		28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D2A21218C33354007EB808 /* LTUnearthedViewController.m */; };
 		28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */; };
@@ -143,6 +150,13 @@
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
 		28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = "<group>"; };
+		28B75CFF1957716600593B3A /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
+		28B75D001957716600593B3A /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
+		28B75D041957724000593B3A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		28B75D061957724E00593B3A /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		28B75D081957725C00593B3A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		28B75D0A1957726E00593B3A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		28B75D0C1957727400593B3A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		28C5931718DD32E300288764 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
 		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
@@ -187,20 +201,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28B75D0D1957727400593B3A /* CoreMotion.framework in Frameworks */,
+				28B75D0B1957726E00593B3A /* OpenGLES.framework in Frameworks */,
+				44FC42E4186267AC00CC948C /* AudioToolbox.framework in Frameworks */,
+				44FC42E8186267BB00CC948C /* CoreLocation.framework in Frameworks */,
+				28B75D091957725C00593B3A /* CoreTelephony.framework in Frameworks */,
+				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
+				28B75D071957724E00593B3A /* CoreImage.framework in Frameworks */,
+				44FC42EE186267CE00CC948C /* QuartzCore.framework in Frameworks */,
+				28B75D051957724000593B3A /* AdSupport.framework in Frameworks */,
 				30E480CB19498C1600932DD5 /* FacebookSDK.framework in Frameworks */,
 				112B79081946FD9200558BE1 /* Social.framework in Frameworks */,
 				28C5931A18DD32E300288764 /* Parse.framework in Frameworks */,
-				44FC42F4186267DF00CC948C /* SystemConfiguration.framework in Frameworks */,
 				44FC42F2186267D800CC948C /* StoreKit.framework in Frameworks */,
 				44FC42F0186267D300CC948C /* Security.framework in Frameworks */,
-				44FC42EE186267CE00CC948C /* QuartzCore.framework in Frameworks */,
 				44FC42EC186267C900CC948C /* MobileCoreServices.framework in Frameworks */,
 				44FC42EA186267C100CC948C /* libz.1.1.3.dylib in Frameworks */,
-				44FC42E8186267BB00CC948C /* CoreLocation.framework in Frameworks */,
 				44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */,
 				44FC42E6186267B100CC948C /* CFNetwork.framework in Frameworks */,
-				44FC42E4186267AC00CC948C /* AudioToolbox.framework in Frameworks */,
 				44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */,
+				28B75D021957716600593B3A /* UbertestersSDK.framework in Frameworks */,
 				44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,9 +330,21 @@
 			name = "UIImage Categories";
 			sourceTree = "<group>";
 		};
+		28B75CFD1957716600593B3A /* UbertestersSDK */ = {
+			isa = PBXGroup;
+			children = (
+				28B75CFF1957716600593B3A /* UbertestersSDK.framework */,
+				28B75D001957716600593B3A /* UbertestersSDKResources.bundle */,
+			);
+			path = UbertestersSDK;
+			sourceTree = "<group>";
+		};
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
+				281E7AAB188EA66800C85066 /* main.m */,
+				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
+				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
 				280C85EB192D9C63009E6FE1 /* View Controllers */,
@@ -327,6 +359,12 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28B75D0C1957727400593B3A /* CoreMotion.framework */,
+				28B75D0A1957726E00593B3A /* OpenGLES.framework */,
+				28B75D081957725C00593B3A /* CoreTelephony.framework */,
+				28B75D061957724E00593B3A /* CoreImage.framework */,
+				28B75D041957724000593B3A /* AdSupport.framework */,
+				28B75CFD1957716600593B3A /* UbertestersSDK */,
 				30E480CA19498C1600932DD5 /* FacebookSDK.framework */,
 				112B79071946FD9200558BE1 /* Social.framework */,
 				28C5931718DD32E300288764 /* FacebookSDK.framework */,
@@ -354,10 +392,8 @@
 				28824A1219254A2E005F24CC /* burieddot152.png */,
 				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
-				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
 				2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */,
 				281E7A8A188EA66800C85066 /* 37x-Checkmark.png */,
-				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				308D4763191ADADE0098AEFC /* buriedicon58x58white.png */,
 				2858DA5B1944D65C00BDAB3A /* x-mark.png */,
 				2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */,
@@ -383,7 +419,6 @@
 				281E7AA0188EA66800C85066 /* login-button-small-pressed@2x.png */,
 				281E7AA1188EA66800C85066 /* login-button-small.png */,
 				281E7AA2188EA66800C85066 /* login-button-small@2x.png */,
-				281E7AAB188EA66800C85066 /* main.m */,
 				281E7AAE188EA66800C85066 /* ParseLogo.jpg */,
 				281E7AAF188EA66800C85066 /* Sunflowers.jpg */,
 				28A6BAE0188FC1F1008C81A1 /* Images.xcassets */,
@@ -481,6 +516,7 @@
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */,
 				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
+				28B75D031957716600593B3A /* UbertestersSDKResources.bundle in Resources */,
 				28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */,
 				286D080218CB647E000B5EBE /* grassToolbar.png in Resources */,
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
@@ -614,6 +650,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
+					"$(PROJECT_DIR)/UbertestersSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -639,6 +676,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
+					"$(PROJECT_DIR)/UbertestersSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
