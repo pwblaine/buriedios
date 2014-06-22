@@ -33,6 +33,7 @@
 		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
+		28483C2F1957441B0004DE34 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28483C2B1957441B0004DE34 /* libTestFlight.a */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
@@ -119,6 +120,10 @@
 		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
 		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
+		28483C2B1957441B0004DE34 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		28483C2C1957441B0004DE34 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		28483C2D1957441B0004DE34 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		28483C2E1957441B0004DE34 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -274,6 +279,17 @@
 				28A3E22A1945242700250FA2 /* LTPINVerificationViewController.m */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		28483C2A195743990004DE34 /* TestFlightApp */ = {
+			isa = PBXGroup;
+			children = (
+				28483C2B1957441B0004DE34 /* libTestFlight.a */,
+				28483C2C1957441B0004DE34 /* TestFlight.h */,
+				28483C2D1957441B0004DE34 /* TestFlight+AsyncLogging.h */,
+				28483C2E1957441B0004DE34 /* TestFlight+ManualSessions.h */,
+			);
+			name = TestFlightApp;
 			sourceTree = "<group>";
 		};
 		284B2CFA18AC49D500BB976F /* Partner Classes */ = {
@@ -656,6 +672,10 @@
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "buried/buried-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-v",
 					"-fobjc-arc",
@@ -682,6 +702,10 @@
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "buried/buried-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-v",
 					"-fobjc-arc",
