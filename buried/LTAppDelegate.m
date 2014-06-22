@@ -2,7 +2,7 @@
 //  Copyright (c) 2013 Parse. All rights reserved.
 
 #import "LTAppDelegate.h"
-
+#import "TestFlight.h"
 #import <Parse/Parse.h>
 #import "LTStartScreenViewController.h"
 #import "LTBuryItViewController.h"
@@ -20,6 +20,8 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [TestFlight takeOff:@"99f53a54-d74d-4424-968b-7cb83d01b08b"];
     
     // ****************************************************************************
     // Fill in with your Parse credentials:
