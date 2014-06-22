@@ -102,7 +102,7 @@
             self->imageButton.enabled = YES;
             
             LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+            [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
             
         } else {
             self->imageContainer.image = nil;
