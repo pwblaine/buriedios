@@ -70,13 +70,17 @@
     
     if (self->theThought.length > 1)
     {
+        
         LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
         self->thoughtButton.enabled = YES;
         self->thoughtContainer.text = self->theThought;
+        
     } else {
+        
         [self->thoughtButton removeFromSuperview];
         [self->thoughtContainer removeFromSuperview];
+        
     }
     
     
@@ -134,13 +138,18 @@
                 
                 LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                 [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
+                
             } else {
+                
                 NSLog(@"image failed to load error: %@",error);
                 
                 [self->imageContainer removeFromSuperview];
                 [self->imageButton removeFromSuperview];
                 
-                self.navigationItem.title = @"error loading image, please reload";
+                self->timestamp.text = @"Failed to load...";
+                
+                LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
             }
         }];
     }
