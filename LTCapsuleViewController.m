@@ -66,6 +66,20 @@
     
     [self->activityIndicator startAnimating];
     
+    // this code runs whether there's an image or not after its been retrieved
+    
+    if (self->theThought.length > 1)
+    {
+        LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+        self->thoughtButton.enabled = YES;
+        self->thoughtContainer.text = self->theThought;
+    } else {
+        [self->thoughtButton removeFromSuperview];
+        [self->thoughtContainer removeFromSuperview];
+    }
+    
+    
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
     PFQuery *fromUserIdQuery = [PFUser query];
     [fromUserIdQuery whereKey:@"objectId" equalTo:fromUserId];
@@ -85,17 +99,6 @@
     
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
-    // this code runs whether there's an image or not after its been retrieved
-    if (self->theThought.length > 1)
-    {
-        LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
-        self->thoughtButton.enabled = YES;
-        self->thoughtContainer.text = self->theThought;
-    } else {
-        [self->thoughtButton removeFromSuperview];
-        [self->thoughtContainer removeFromSuperview];
-    }
     
     PFFile *file = [self.capsule objectForKey:@"image"];
     
@@ -133,8 +136,11 @@
                 [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
             } else {
                 NSLog(@"image failed to load error: %@",error);
+                
                 [self->imageContainer removeFromSuperview];
                 [self->imageButton removeFromSuperview];
+                
+                self.navigationItem.title = @"error loading image, please reload";
             }
         }];
     }
