@@ -106,21 +106,24 @@
     
     PFFile *file = [self.capsule objectForKey:@"image"];
     
+    self->imageContainer.file = file;
+    
     if (!file) {
         NSLog(@"No file detected");
         [self->imageButton removeFromSuperview];
         [self->imageContainer removeFromSuperview];
     } else {
-        
+        NSLog(@"File detected, loading");
         [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
-            
+            NSLog(@"File loaded, filling container");
             [self->activityIndicator stopAnimating];
             [self->activityIndicator setAlpha:0];
             
             if (!error)
             {
-                
-                // this code is run if a picture is downloaded
+                [self.view bringSubviewToFront:self->imageContainer];
+                NSLog(@"No error in picture download");
+            // this code is run if a picture is downloaded
                 self->theImage = image; // store image in property
                 
                 self->imageContainer.image = image;
@@ -130,6 +133,7 @@
                 
                 if (self->theThought.length > 1)
                 {
+                    NSLog(@"Thought detected");
                     self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
                     self->thoughtButton.frame = CGRectMake(20, 415, 280, 65);
                 }
