@@ -22,7 +22,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     //Ubertersters SDK initialization
-    [[Ubertesters shared] initialize];
+    // [[Ubertesters shared] initialize];
+    // ONLY ENABLE WHEN READY, CONFLICTS WITH VIEWDIDAPPEAR AND STOPS GRASS FROM LOADING
     
     // ****************************************************************************
     // Fill in with your Parse credentials:
