@@ -12,9 +12,6 @@
 @interface LTCapsuleViewController : UIViewController <UINavigationControllerDelegate, UIAlertViewDelegate>
 {
     
-    UIImage *theImage;
-    NSString *theThought;
-    
     IBOutlet UILabel *timestamp;
     IBOutlet UILabel *thoughtContainer;
     
@@ -24,6 +21,7 @@
     IBOutlet UIButton *thoughtButton;    
     IBOutlet UIActivityIndicatorView *activityIndicator;
     
+    BOOL downloaded;
 }
 
 @property PFObject *capsule;

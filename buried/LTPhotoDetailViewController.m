@@ -160,10 +160,12 @@
             // code for the discard alert
             if (buttonIndex == alertView.firstOtherButtonIndex)
             {
-            self.theImage = nil;
+            if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+            {
             [(LTBuryItViewController *)self.callingViewController resetCamera];
             [(LTBuryItViewController *)self.callingViewController discardPhoto];
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }
         }
         if (alertView.tag == 2)
@@ -172,9 +174,9 @@
             {
             // code for the forwarding alert
             LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
-            buryItViewController.capsuleImage = self->theImage;
+            buryItViewController.capsuleImage = [self->theImage copy];
             if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                buryItViewController.capsuleThought = [(LTCapsuleViewController *)self.callingViewController theThought];
+                buryItViewController.capsuleThought = [[(LTCapsuleViewController *)self.callingViewController theThought] copy];
             
             [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
                 [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
@@ -238,10 +240,14 @@
 
 - (IBAction)goBackToLibrary:(id)sender
 {
+    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])
+        {
         [(LTBuryItViewController *)self.callingViewController discardPhoto];
         [(LTBuryItViewController *)self.callingViewController resetCamera];
         [(LTBuryItViewController *)self.callingViewController showLibraryPicker:self.callingViewController];
+        }
     }];
 }
 

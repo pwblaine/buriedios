@@ -28,6 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Do any additional setup after loading the view from its nib.
     self->thoughtView.text = self.theThought;
     
@@ -56,7 +57,8 @@
 -(IBAction)doneButtonTouched:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 - (IBAction)forwardButtonTapped:(id)sender
@@ -69,22 +71,18 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     // only occurs in a buryItView currently
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
-    
-        if (buttonIndex != alertView.cancelButtonIndex)
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);        if (buttonIndex != alertView.cancelButtonIndex)
         {
             // code for the forwarding alert
             LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
-                buryItViewController.capsuleThought = self.theThought;
+            buryItViewController.capsuleThought = [self.theThought copy];
             if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                buryItViewController.capsuleImage = [(LTCapsuleViewController *)self.callingViewController theImage];
+                buryItViewController.capsuleImage = [[(LTCapsuleViewController *)self.callingViewController theImage] copy];
             
             [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
                 [self.callingViewController.navigationController pushViewController:buryItViewController animated:YES];
             }];
         }
-    
     
 }
 

@@ -51,39 +51,36 @@
     
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
-    self->thoughtContainer.text = @"";
     self.navigationItem.title = @"Loading...";
-    
+    self.theThought = [self.capsule objectForKey:@"thought"];
+    self->downloaded = NO;
+    self->imageContainer.contentMode = UIViewContentModeCenter;
+    self->imageContainer.file = [self.capsule objectForKey:@"image"];
+    NSLog(@"file name %@", self->imageContainer.file.name);
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
-    [self->activityIndicator startAnimating];
-    
-    // this code runs whether there's an image or not after its been retrieved
-    
-    if (self->theThought.length > 1)
-    {
+    if (self.theThought.length >= 1) {
+        self->thoughtButton.enabled = YES;
+    if (self->imageContainer.file.name) {
+        NSLog(@"Will download image");
+    } else {
+        self->downloaded = YES;
         
+        [self->imageContainer removeFromSuperview];
+        [self->imageButton removeFromSuperview];
+        self->activityIndicator.alpha = 0;
+        self->thoughtContainer.text = self.theThought;
         LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
-        self->thoughtButton.enabled = YES;
-        self->thoughtContainer.text = self->theThought;
-        
+    }
     } else {
-        
+        NSLog(@"No thought detected");
         [self->thoughtButton removeFromSuperview];
         [self->thoughtContainer removeFromSuperview];
-        
     }
-    
-    
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
     PFQuery *fromUserIdQuery = [PFUser query];
     [fromUserIdQuery whereKey:@"objectId" equalTo:fromUserId];
@@ -104,45 +101,44 @@
     NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self->timestamp.text = timestampString; // timestamp states created at date
     
-    PFFile *file = [self.capsule objectForKey:@"image"];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (!downloaded)
+    {
+        self->downloaded = YES;
+        [self->activityIndicator startAnimating];
     
-    self->imageContainer.file = file;
+    // this code runs whether there's an image or not after its been retrieved
     
-    if (!file) {
-        NSLog(@"No file detected");
-        [self->imageButton removeFromSuperview];
-        [self->imageContainer removeFromSuperview];
-    } else {
+    if (self->imageContainer.file.name) {
         NSLog(@"File detected, loading");
+        if (self.theThought.length >= 1)
+        {
+        self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
+        self->thoughtButton.frame = CGRectMake(20, 415, 280, 65);
+            self->thoughtContainer.text = self.theThought;
+        }
         [self->imageContainer loadInBackground:^(UIImage *image, NSError *error) {
             NSLog(@"File loaded, filling container");
-            [self->activityIndicator stopAnimating];
-            [self->activityIndicator setAlpha:0];
             
             if (!error)
             {
-                [self.view bringSubviewToFront:self->imageContainer];
                 NSLog(@"No error in picture download");
             // this code is run if a picture is downloaded
-                self->theImage = image; // store image in property
-                
-                self->imageContainer.image = image;
-                self->imageContainer.frame = CGRectMake((320-285)/2, 130, 285, 285);
-                self->imageButton.frame = CGRectMake((320-285)/2, 125, 285, 285);
-                self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
-                
-                if (self->theThought.length > 1)
-                {
-                    NSLog(@"Thought detected");
-                    self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
-                    self->thoughtButton.frame = CGRectMake(20, 415, 280, 65);
-                }
-                
-                self->imageButton.enabled = true;
                 
                 LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                if (self.theThought.length >= 1)
+                {
                 [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
-                
+                } else {
+                    [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+                }
+                self.theImage = image;
+                self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
+                self->imageContainer.frame = CGRectMake(18, 130, 284, 285);
+                self->imageButton.enabled = YES;
             } else {
                 
                 NSLog(@"image failed to load error: %@",error);
@@ -152,24 +148,23 @@
                 
                 self->timestamp.text = @"Failed to load...";
                 
+                self->thoughtContainer.text = @"Please retry";
                 LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                 [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
             }
+            
+            NSLog(@"activity over");
+            [self->activityIndicator stopAnimating];
+            [self->activityIndicator setAlpha:0];
         }];
+    }
     }
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [UIView animateWithDuration:0.25f animations:^{
-        self->imageContainer.contentMode = UIViewContentModeCenter;
-        self->imageContainer.image = [UIImage imageNamed:@"burieddot152.png"];
-        self->thoughtContainer.text = @"";
-    }];
-    
-    self->timestamp.text = @"";
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 - (void)didReceiveMemoryWarning
@@ -183,6 +178,9 @@
 - (void)backButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->imageContainer = nil;
+    self.theImage = nil;
+    self->imageButton = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -190,7 +188,7 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
-    photoDetailViewController.theImage = self->theImage;
+    photoDetailViewController.theImage = self.theImage;
     photoDetailViewController.callingViewController = self;
     photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:photoDetailViewController animated:YES completion:nil];
@@ -200,10 +198,10 @@
 - (IBAction)thoughtButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if (self->theThought.length > 1)
+    if (self.theThought.length > 1)
     {
         LTThoughtDetailViewController *thoughtDetailViewController = [[LTThoughtDetailViewController alloc] init];
-        thoughtDetailViewController.theThought = self->theThought;
+        thoughtDetailViewController.theThought = self.theThought;
         thoughtDetailViewController.callingViewController = self;
         thoughtDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         [self presentViewController:thoughtDetailViewController animated:YES completion:nil];
@@ -218,11 +216,6 @@
 - (IBAction)forwardButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
-    
-    buryItViewController.capsuleImage = self->theImage;
-    buryItViewController.capsuleThought = self->theThought;
-    [self.navigationController pushViewController:buryItViewController animated:YES];
 }
 
 - (IBAction)trashButtonTapped:(id)sender
