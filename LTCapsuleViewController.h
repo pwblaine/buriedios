@@ -32,7 +32,6 @@
 - (IBAction)imageButtonTapped:(id)sender;
 - (IBAction)thoughtButtonTapped:(id)sender;
 - (IBAction)actionButtonTapped:(id)sender;
-- (IBAction)forwardButtonTapped:(id)sender;
 - (IBAction)trashButtonTapped:(id)sender;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
