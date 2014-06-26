@@ -58,12 +58,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->activityIndicator.alpha = 1;
-    self->theThought = [self.capsule objectForKey:@"thought"];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self->activityIndicator startAnimating];
+    self.theThought = [self.capsule objectForKey:@"thought"];
     
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
     PFQuery *fromUserIdQuery = [PFUser query];
@@ -77,6 +72,11 @@
                 self.title = [NSString stringWithFormat:@"From %@", displayName];
         }
     }];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self->activityIndicator startAnimating];
     
     self->imageContainer.file = [self.capsule objectForKey:@"image"];
     
@@ -88,7 +88,7 @@
         {
             
             // this code is run if a picture is downloaded
-            self->theImage = image; // store image in property
+            self.theImage = image; // store image in property
 
             self->imageContainer.image = image;
             self->imageContainer.frame = CGRectMake((320-285)/2, 130, 285, 285);
@@ -110,7 +110,7 @@
             [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
         }
         // this code runs whether there's an image or not after its been retrieved
-                if (self->theThought.length > 1)
+                if (self.theThought.length > 1)
                 self->thoughtButton.enabled = YES;
                 else
         {
@@ -120,7 +120,7 @@
         }
         if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
             self->imageContainer.image = nil;
-        self->thoughtContainer.text = self->theThought;
+        self->thoughtContainer.text = self.theThought;
         [self->activityIndicator stopAnimating];
         [self->activityIndicator setAlpha:0];
         NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
@@ -159,7 +159,7 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     LTPhotoDetailViewController *photoDetailViewController = [[LTPhotoDetailViewController alloc] init];
-    photoDetailViewController.theImage = self->theImage;
+    photoDetailViewController.theImage = self.theImage;
     photoDetailViewController.callingViewController = self;
     photoDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:photoDetailViewController animated:YES completion:nil];
@@ -169,10 +169,10 @@
 - (IBAction)thoughtButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if (self->theThought.length > 1)
+    if (self.theThought.length > 1)
     {
     LTThoughtDetailViewController *thoughtDetailViewController = [[LTThoughtDetailViewController alloc] init];
-    thoughtDetailViewController.theThought = self->theThought;
+    thoughtDetailViewController.theThought = self.theThought;
         thoughtDetailViewController.callingViewController = self;
     thoughtDetailViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:thoughtDetailViewController animated:YES completion:nil];
@@ -182,16 +182,6 @@
 - (IBAction)actionButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-}
-
-- (IBAction)forwardButtonTapped:(id)sender
-{
-    NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    LTBuryItViewController *buryItViewController = [[LTBuryItViewController alloc] init];
-
-    buryItViewController.capsuleImage = self->theImage;
-    buryItViewController.capsuleThought = self->theThought;
-    [self.navigationController pushViewController:buryItViewController animated:YES];
 }
 
 - (IBAction)trashButtonTapped:(id)sender

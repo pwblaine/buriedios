@@ -12,9 +12,6 @@
 @interface LTCapsuleViewController : UIViewController <UINavigationControllerDelegate, UIAlertViewDelegate>
 {
     
-    UIImage *theImage;
-    NSString *theThought;
-    
     IBOutlet UILabel *timestamp;
     IBOutlet UILabel *thoughtContainer;
     
@@ -34,7 +31,6 @@
 - (IBAction)imageButtonTapped:(id)sender;
 - (IBAction)thoughtButtonTapped:(id)sender;
 - (IBAction)actionButtonTapped:(id)sender;
-- (IBAction)forwardButtonTapped:(id)sender;
 - (IBAction)trashButtonTapped:(id)sender;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
