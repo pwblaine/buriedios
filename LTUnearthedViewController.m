@@ -91,7 +91,7 @@
     // Add the temporary title
     self.title = @"buried.";
     
-    // [self updateUserProfile];
+    [self updateUserProfile];
     
     NSLog(@"user %@ logged in with email: %@",[PFUser currentUser].username,[[PFUser currentUser] email]);
     

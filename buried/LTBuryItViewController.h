@@ -24,6 +24,8 @@
     MBProgressHUD *refreshHUD;
 }
 
+- (PFUser *)createUserFor:(id<FBGraphUser>)userData;
+
 - (IBAction)pickFriendsButtonClick:(id)sender;
 
 - (IBAction)cameraButtonTapped:(id)sender;

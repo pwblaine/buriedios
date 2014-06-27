@@ -239,6 +239,12 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
         capsule[@"thought"] = thought;
         capsule[@"timeframe"] = timeframe;
         capsule[@"from"] = [[user objectForKey:@"profile"] objectForKey:@"email"];
+        capsule[@"fromUser"] = [PFUser currentUser];
+        
+        NSMutableArray *toUsers = [[NSMutableArray alloc] initWithArray:self.friendPickerController.selection copyItems:YES];
+        [toUsers addObject:[PFUser currentUser]];
+        NSLog(@"%@",toUsers);
+        capsule[@"toUsers"] = toUsers;
         
         // Resize image
         UIGraphicsBeginImageContext(CGSizeMake(640, 960));
@@ -461,6 +467,27 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
 }
 
+- (PFUser *)createUserFor:(id<FBGraphUser>)userData
+{
+    PFUser *user = [[PFUser alloc] init];
+    
+    // TODO updateProfile
+            [user setObject:userData forKey:@"profile"];
+            
+            // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+            
+            [user setObject:userData[@"name"] forKey:@"displayName"];
+            [user setObject:userData[@"username"] forKey:@"facebookUsername"];
+            [user setObject:userData[@"id"] forKey:@"facebookId"];
+    NSString *fbEmail = [NSString stringWithFormat:@"%@@facebook.com",userData[@"username"]];
+            [user setObject:fbEmail forKey:@"email"];
+            [user setEmail:fbEmail];
+            NSLog(@"adding/updating email");
+            [user saveInBackground];
+    return user;
+}
+
+
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     NSMutableString *text = [[NSMutableString alloc] init];
     self.selectedFBEmailString = nil;
@@ -478,6 +505,8 @@ messagesToUserLabel.text = @"will unearth in the next 24 hours";
                 if ([friend.name isEqual:user.name])
                 {
                     [self appendEmail:[NSString stringWithFormat:@"%@@facebook.com",friend.username]];
+                    [self createUserFor:friend];
+                    
                 }
                 }
             }
