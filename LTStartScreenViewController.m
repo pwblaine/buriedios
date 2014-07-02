@@ -11,7 +11,6 @@
 #import <Parse/Parse.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
-#import "LTPINVerificationViewController.h"
 
 @implementation LTStartScreenViewController
 
@@ -74,7 +73,7 @@
     
     if ([self checkForSavedUser])
     {
-        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"%@",self->savedDisplayName];
+        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",self->savedDisplayName] lowercaseString];
         self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
@@ -108,7 +107,7 @@
         if (![self->savedDisplayName isEqualToString:displayName])
             self->savedDisplayName = displayName;
             [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
-            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"%@",displayName];
+            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",displayName] lowercaseString];
             NSLog(@"lastLoggedInLabel loaded");
             self->notYouButton.enabled = YES;
             NSLog(@"notYouButton loaded and enabled");
@@ -275,6 +274,15 @@
         [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
         self->originalViewCenter = self.view.center;
         NSLog(@"currentTextFields :%@",self->currentTextFields);
+        for (UITextField *textView in self->currentTextFields) {
+            //To make the border look very close to a UITextField
+            [textView.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
+            [textView.layer setBorderWidth:2.0];
+            
+            //The rounded corner part, where you specify your view's corner radius:
+            textView.layer.cornerRadius = 5;
+            textView.clipsToBounds = YES;
+        };
         [self enableAllBarButtons];
     }];
 }
