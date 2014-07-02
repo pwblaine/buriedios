@@ -43,6 +43,7 @@
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;
+    UITapGestureRecognizer *closeTextFieldGesture;
     NSMutableArray *currentTextFields;
 }
 

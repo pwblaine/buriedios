@@ -45,8 +45,6 @@
 		287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */; };
 		287BB8E919248FD4007DAA32 /* LTThoughtDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */; };
 		28824A1319254A2E005F24CC /* burieddot152.png in Resources */ = {isa = PBXBuildFile; fileRef = 28824A1219254A2E005F24CC /* burieddot152.png */; };
-		28A3E22C1945242700250FA2 /* LTPINVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A3E22A1945242700250FA2 /* LTPINVerificationViewController.m */; };
-		28A3E22D1945242700250FA2 /* LTPINVerificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28A3E22B1945242700250FA2 /* LTPINVerificationViewController.xib */; };
 		28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28A6BAE0188FC1F1008C81A1 /* Images.xcassets */; };
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
 		28B75D021957716600593B3A /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75CFF1957716600593B3A /* UbertestersSDK.framework */; };
@@ -65,6 +63,7 @@
 		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
 		28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */; };
 		28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */; };
+		28FC6674196437DA00962D69 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 28FC6673196437DA00962D69 /* Podfile */; };
 		308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4763191ADADE0098AEFC /* buriedicon58x58white.png */; };
 		308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4764191ADADE0098AEFC /* buriedicon76x76.png */; };
 		308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4765191ADADE0098AEFC /* buriedicon114x114.png */; };
@@ -144,9 +143,6 @@
 		287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTThoughtDetailViewController.m; sourceTree = "<group>"; };
 		287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTThoughtDetailViewController.xib; sourceTree = "<group>"; };
 		28824A1219254A2E005F24CC /* burieddot152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = burieddot152.png; path = buried/burieddot152.png; sourceTree = SOURCE_ROOT; };
-		28A3E2291945242700250FA2 /* LTPINVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTPINVerificationViewController.h; sourceTree = "<group>"; };
-		28A3E22A1945242700250FA2 /* LTPINVerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTPINVerificationViewController.m; sourceTree = "<group>"; };
-		28A3E22B1945242700250FA2 /* LTPINVerificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTPINVerificationViewController.xib; sourceTree = "<group>"; };
 		28A6BAE0188FC1F1008C81A1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = buried/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		28A6BAE8188FD3D4008C81A1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = buried/MBProgressHUD.h; sourceTree = "<group>"; };
 		28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = buried/MBProgressHUD.m; sourceTree = "<group>"; };
@@ -169,6 +165,7 @@
 		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
 		28F9584B1906555F0017DCEA /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		28FC6673196437DA00962D69 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		308D4763191ADADE0098AEFC /* buriedicon58x58white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon58x58white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon58x58white.png; sourceTree = SOURCE_ROOT; };
 		308D4764191ADADE0098AEFC /* buriedicon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon76x76.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon76x76.png; sourceTree = SOURCE_ROOT; };
 		308D4765191ADADE0098AEFC /* buriedicon114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon114x114.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon114x114.png; sourceTree = SOURCE_ROOT; };
@@ -241,7 +238,6 @@
 			children = (
 				281E7AA7188EA66800C85066 /* LTBuryItViewController.xib */,
 				28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */,
-				28A3E22B1945242700250FA2 /* LTPINVerificationViewController.xib */,
 				28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */,
 				28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */,
 				287BB8E719248FD4007DAA32 /* LTThoughtDetailViewController.xib */,
@@ -269,8 +265,6 @@
 				287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */,
 				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
 				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
-				28A3E2291945242700250FA2 /* LTPINVerificationViewController.h */,
-				28A3E22A1945242700250FA2 /* LTPINVerificationViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -284,6 +278,7 @@
 				284B2D0418AC4A7D00BB976F /* MBProgressHUD */,
 			);
 			name = "Partner Classes";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		284B2CFB18AC4A3600BB976F /* Configurations */ = {
@@ -295,6 +290,7 @@
 				284B2CFF18AC4A4800BB976F /* Project.xcconfig */,
 			);
 			name = Configurations;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		284B2D0418AC4A7D00BB976F /* MBProgressHUD */ = {
@@ -341,14 +337,13 @@
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
+				28FC6673196437DA00962D69 /* Podfile */,
 				281E7AAB188EA66800C85066 /* main.m */,
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
 				280C85EB192D9C63009E6FE1 /* View Controllers */,
-				284B2CFB18AC4A3600BB976F /* Configurations */,
-				284B2CFA18AC49D500BB976F /* Partner Classes */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,
 				28F9584B1906555F0017DCEA /* buried.app */,
@@ -387,6 +382,8 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				284B2CFB18AC4A3600BB976F /* Configurations */,
+				284B2CFA18AC49D500BB976F /* Partner Classes */,
 				28824A1219254A2E005F24CC /* burieddot152.png */,
 				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
@@ -487,13 +484,13 @@
 				112B790D1947015E00558BE1 /* x-mark.png in Resources */,
 				28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */,
 				308D4776191ADB3E0098AEFC /* Icon@2x.png in Resources */,
-				28A3E22D1945242700250FA2 /* LTPINVerificationViewController.xib in Resources */,
 				28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */,
 				308D4770191ADADF0098AEFC /* buriedlogo57x57.png in Resources */,
 				281E7ABB188EA66800C85066 /* ParseIcon.png in Resources */,
 				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
 				308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */,
 				308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */,
+				28FC6674196437DA00962D69 /* Podfile in Resources */,
 				281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
@@ -552,7 +549,6 @@
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
 				287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */,
 				281E7AC8188EA66800C85066 /* main.m in Sources */,
-				28A3E22C1945242700250FA2 /* LTPINVerificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

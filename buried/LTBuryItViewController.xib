@@ -52,7 +52,9 @@
                     <rect key="frame" x="20" y="414" width="280" height="72"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
-                    <state key="normal" title="bury it"/>
+                    <state key="normal" title="bury it">
+                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
                     <connections>
                         <action selector="buryIt:" destination="-1" eventType="touchUpInside" id="5qA-Si-fVN"/>
                     </connections>

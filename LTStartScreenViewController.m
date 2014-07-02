@@ -13,7 +13,6 @@
 #import "LTStartScreenViewController.h"
 #import "LTPINVerificationViewController.h"
 
-
 @implementation LTStartScreenViewController
 
 @synthesize logInVC,signUpVC, userInfo, usernameField, passwordField, confirmField, emailField;
@@ -24,15 +23,15 @@
     if (self) {
         NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
         // Custom initialization
-        self->signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
-        self->signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign Up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
-        self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
-        self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
-        self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        self->signInButton = [[UIBarButtonItem alloc] initWithTitle:@"log in" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+        self->signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"sign up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
+        self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
+        self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
+        self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,89,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
-    }
+        }
     return self;
 }
 
@@ -40,6 +39,8 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [super viewDidLoad];
     self.title = @"";
+    
+    self->closeTextFieldGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInMainView:)];
     
     // Check if user is cached and linked to Facebook, if so, bypass login
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
@@ -73,7 +74,7 @@
     
     if ([self checkForSavedUser])
     {
-        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",self->savedDisplayName];
+        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"%@",self->savedDisplayName];
         self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
@@ -85,17 +86,14 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self->originalViewCenter = self.view.center;
-    if (self->currentViewState != self->savedAccountView)
-        [self showView:self->startView];
-    else
-        [self showView:self->savedAccountView];
+    [self showView:self->startView];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Add login/sign in navigation bar button
     [self->HUD hide:YES];
+    [self hideViewElements:[self.view.subviews mutableCopy]];
 }
 
 -(void)changeButtonsForContinuingUser:(NSString *)displayName
@@ -110,7 +108,7 @@
         if (![self->savedDisplayName isEqualToString:displayName])
             self->savedDisplayName = displayName;
             [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
-            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
+            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"%@",displayName];
             NSLog(@"lastLoggedInLabel loaded");
             self->notYouButton.enabled = YES;
             NSLog(@"notYouButton loaded and enabled");
@@ -130,6 +128,7 @@
 - (IBAction)submitButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self cleanUpAfterEditing];
     self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: usernameField.text,@"username",passwordField.text,@"password",emailField.text,@"email", nil];
     NSLog(@"submitting userInfo: %@",userInfo);
     if ([self->signUpView isDescendantOfView:self->currentViewState])
@@ -143,7 +142,8 @@
 
 - (IBAction)cancelButtonTouchHandler:(id)sender
 {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self cleanUpAfterEditing];
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
         [self signUpViewControllerDidCancelSignUp:self.signUpVC];
@@ -163,6 +163,7 @@
     {
         [taggedElements addObjectsFromArray:[[NSMutableArray alloc] initWithArray:[self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %i",@"tag",self->sharedFieldsView.tag]]]];
     }
+    
     return taggedElements;
 }
 
@@ -202,6 +203,7 @@
     
     NSMutableArray *elementsToShow = [self getTaggedElementsForView:view];
     NSMutableArray *elementsToHide = [self getTaggedElementsForView:self->currentViewState];
+    
     if ([view isDescendantOfView:self->loginView] || [view isDescendantOfView:self->signUpView])
     {
         // make sure no shared elements are hidden
@@ -218,7 +220,7 @@
     }
     
     NSLog(@"items to hide: %@",self->currentViewElements);
-    if (![self->currentViewState isDescendantOfView:view])
+    if (![self->currentViewState isDescendantOfView:view] && self->currentViewState)
         [self hideViewElements:elementsToHide];
         
     [self disableAllBarButtons];
@@ -241,21 +243,23 @@
             [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
             [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
         }
-    
-    [UIView animateWithDuration:0.75 animations:^{
-        for (UIView *element in elementsToShow) {
+    [UIView animateKeyframesWithDuration:1.0 delay:0.0 options:UIViewKeyframeAnimationOptionBeginFromCurrentState animations:^{
+        [UIView  addKeyframeWithRelativeStartTime:0.0 relativeDuration:1.0 animations:^{
+            if ([view isDescendantOfView:self->savedAccountView])
+            {
+                self->buriedLogo.frame = self->centerLogoPostition;
+            } else if ([view isDescendantOfView:self->startView])
+            {
+                self->buriedLogo.center = self.view.center;
+            } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
+            {
+                self->buriedLogo.frame = self->topLogoPosition;
+            }
+        }];
+        [UIView  addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{for (UIView *element in elementsToShow) {
             element.alpha = 1;
         }
-        if ([view isDescendantOfView:self->savedAccountView])
-        {
-            self->buriedLogo.frame = self->centerLogoPostition;
-        } else if ([view isDescendantOfView:self->startView])
-        {
-            self->buriedLogo.center = self.view.center;
-        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
-        {
-            self->buriedLogo.frame = self->topLogoPosition;
-        }
+        }];
     } completion:^(BOOL finished) {
         NSLog(@"new view shown");
         self->currentViewState = view;
@@ -267,8 +271,9 @@
             NSNumber *theOtherY = [[NSNumber alloc] initWithInt:otherObject.center.y];
             return [theY compare:theOtherY];
         }]];
-        NSLog(@"currentTextFields :%@",self->currentTextFields);
-        [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"class == %@",[UITextField class]]];
+        NSLog(@"currentViewElements :%@",self->currentViewElements);
+        [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
+        self->originalViewCenter = self.view.center;
         NSLog(@"currentTextFields :%@",self->currentTextFields);
         [self enableAllBarButtons];
     }];
@@ -281,9 +286,11 @@
     if (viewElements.count > 0)
         [self disableAllBarButtons];
         
-        [UIView animateWithDuration:0.7 animations:^{
+        [UIView animateWithDuration:0.5 animations:^{
         for (UIView *element in viewElements) {
             element.alpha = 0;
+            if ([element isMemberOfClass:[UITextField class]])
+                [(UITextField *)[element self] setText:@""];
         }
         } completion:^(BOOL finished) {
         NSLog(@"finished hiding");
@@ -451,68 +458,102 @@
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    NSUInteger isNotLast = [[self->currentTextFields lastObject] indexGreaterThanIndex:[self->currentTextFields indexOfObject:self->currentResponder]];
-    if (isNotLast != NSNotFound)
+    BOOL isNotLast = NO;
+    
+    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
+        isNotLast = YES;
+    
+    if (isNotLast)
         textField.returnKeyType = UIReturnKeyNext;
     else
-        textField.returnKeyType = UIDocumentChangeDone;
-    self->currentResponder = textField;
+        textField.returnKeyType = UIReturnKeyDone;
+    
     return YES;
-}
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touchesBegan:");
-    [self.view endEditing:YES];
-    [super touchesBegan:touches withEvent:event];
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"originalCenter: (%f, %f), self.view.center: (%f, %f)", self->originalViewCenter.x, self->originalViewCenter.y,textField.center.x,textField.center.y);
+
+    self->currentResponder = textField;
+    NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder,textField);
+    
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        NSLog(@"%f,%f self.center %f, %f self.frame %f,%f self.bounds %i isediting",self.view.center.x,self.view.center.y,self.view.frame.origin.x,self.view.frame.origin.y,self.view.bounds.origin.x,self.view.bounds.origin.y,self.isEditing);
         
-        self.view.center = CGPointMake(self.view.center.x, textField.center.y);
+        NSLog(@"viewFrame w: %f h: %f",self.view.frame.size.width, self.view.frame.size.height);
+        NSInteger keyboardHeight = 432;
+        NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
+        NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, keyboardHeight, centerPointYForViewWithKeyboardUp);
+        if (self.view.center.y == self->originalViewCenter.y)
+        {
+            [self.view addGestureRecognizer:closeTextFieldGesture];
+            NSLog(@"view.center.y: %f == originalViewCenter.y: %f",self.view.center.y, self->originalViewCenter.y);
+            self.view.center = CGPointMake(self.view.center.x,centerPointYForViewWithKeyboardUp);
+        }
+            NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField.center.y %f | offset %f",textField.center.y,self.view.center.y,self->usernameField.center.y,(textField.center.y - self->usernameField.center.y));
+            self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->usernameField.center.y));
     } completion:^(BOOL finished) {
-        NSLog(@"originalCenter: (%f, %f), self.view.center: (%f, %f)", self->originalViewCenter.x, self->originalViewCenter.y,textField.center.x,textField.center.y);
+         NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField.center.y %f",textField.center.y,self.view.center.y,self->usernameField.center.y);
     }];
-    [self.view addGestureRecognizer:[[UIGestureRecognizer alloc] initWithTarget:self->currentResponder action:@selector(endEditing:)]];
+}
+
+-(void)handleTapInMainView:(UITapGestureRecognizer *)sender
+{
+        NSLog(@"handling tap in main view");
+        [self cleanUpAfterEditing];
 }
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-    if (self->currentResponder.center.y == self.view.center.y)
+    NSLog(@"should textfield %@ end its editing?",textField.accessibilityLabel);
+    if ([self->currentResponder isEditing])
     {
+        NSLog(@"yes");
         return YES;
-    } else
+    }
+    else
         return NO;
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
-    NSUInteger isNotLast = [[self->currentTextFields lastObject] indexGreaterThanIndex:[self->currentTextFields indexOfObject:self->currentResponder]];
-    if (isNotLast == NSNotFound)
+    NSLog(@"textField %@ ended editing",textField.placeholder);
+    [textField.layer setBorderWidth:0.5f];
+}
+
+-(void)cleanUpAfterEditing
+{
+    NSLog(@"cleanup after editing");
+    if ([self->currentResponder isFirstResponder])
     {
-        NSLog(@"last object detected");
+        [self->currentResponder resignFirstResponder];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.center = self->originalViewCenter;
-        } completion:^(BOOL finished) {
+    } completion:^(BOOL finished) {
         if (finished)
+        {
             NSLog(@"keyboard hiding animation done");
+            self->currentResponder = nil;
+        }
     }];
     }
+    [self.view removeGestureRecognizer:self->closeTextFieldGesture];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    NSLog(@"should return");
     [textField resignFirstResponder];
-    if (textField.returnKeyType == UIReturnKeyNext)
+    
+    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
     {
-    UITextField *nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
+        UITextField *nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
         NSLog(@"nextUp:%@",nextUp);
         [nextUp becomeFirstResponder];
     }
+    else
+        [self cleanUpAfterEditing];
     
     return NO;
 }
