@@ -92,7 +92,10 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Add login/sign in navigation bar button
     [self->HUD hide:YES];
-    [self hideViewElements:[self.view.subviews mutableCopy]];
+    [self->currentViewElements arrayByAddingObjectsFromArray:self.view.subviews];
+    [self->currentViewElements removeObject:self->buriedLogo];
+    [self hideViewElements:self->currentViewElements];
+    self->currentViewState = nil;
 }
 
 -(void)changeButtonsForContinuingUser:(NSString *)displayName
@@ -195,6 +198,19 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
+    // only bounce in significantly if coming from off screen
+    float damping = 0.8;
+    float velocity = 0.5;
+    float duration = 1;
+    if (self->buriedLogo.center.y > 568)
+    {
+        NSLog(@"buried logo coming in from off screen!");
+        damping = 0.6;
+        duration = 2;
+        velocity = 0.4;
+    }
+    // set up logo animation in block above
+    
     if ([view isDescendantOfView:self->startView] && [self checkForSavedUser])
     {
         view = self->savedAccountView;
@@ -242,19 +258,23 @@
             [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
             [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
         }
-    [UIView animateKeyframesWithDuration:1.0 delay:0.0 options:UIViewKeyframeAnimationOptionBeginFromCurrentState animations:^{
-        [UIView  addKeyframeWithRelativeStartTime:0.0 relativeDuration:1.0 animations:^{
-            if ([view isDescendantOfView:self->savedAccountView])
-            {
-                self->buriedLogo.frame = self->centerLogoPostition;
-            } else if ([view isDescendantOfView:self->startView])
-            {
-                self->buriedLogo.center = self.view.center;
-            } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
-            {
-                self->buriedLogo.frame = self->topLogoPosition;
-            }
-        }];
+    
+    [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
+        if ([view isDescendantOfView:self->savedAccountView])
+        {
+            self->buriedLogo.frame = self->centerLogoPostition;
+        } else if ([view isDescendantOfView:self->startView])
+        {
+            self->buriedLogo.center = self.view.center;
+        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
+        {
+            self->buriedLogo.frame = self->topLogoPosition;
+        }
+    } completion:^(BOOL finished) {
+        NSLog(@"logo bounced in");
+    }];
+    
+    [UIView animateKeyframesWithDuration:1.0 delay:0.3 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [UIView  addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{for (UIView *element in elementsToShow) {
             element.alpha = 1;
         }
@@ -349,7 +369,7 @@
 {
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"logging in");
+    NSLog(@"summoining views");
     //[(UIBarButtonItem*)sender setEnabled:NO];
     
     self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
@@ -362,6 +382,7 @@
     
     // The permissions requested from the user
     NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
+    NSLog(@"initializing fbuserlogin request with permissions array: %@",permissionsArray);
     
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
@@ -532,20 +553,26 @@
 
 -(void)cleanUpAfterEditing
 {
+    
     NSLog(@"cleanup after editing");
     if ([self->currentResponder isFirstResponder])
     {
         [self->currentResponder resignFirstResponder];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.view.center = self->originalViewCenter;
-    } completion:^(BOOL finished) {
-        if (finished)
-        {
-            NSLog(@"keyboard hiding animation done");
-            self->currentResponder = nil;
-        }
-    }];
     }
+    
+    if (!CGPointEqualToPoint(self.view.center, originalViewCenter))
+    {
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.view.center = self->originalViewCenter;
+        } completion:^(BOOL finished) {
+            if (finished)
+            {
+                NSLog(@"keyboard hiding animation done");
+                self->currentResponder = nil;
+            }
+        }];
+    }
+    
     [self.view removeGestureRecognizer:self->closeTextFieldGesture];
 }
 

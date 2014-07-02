@@ -4,6 +4,8 @@ platform :ios, "7.1"
 target "buried." do
 
 pod 'FlatUIKit'
+pod 'Canvas'
+pod 'Lookback'
 
 end
 
