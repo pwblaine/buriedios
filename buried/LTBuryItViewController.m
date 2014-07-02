@@ -29,7 +29,14 @@
     if (self) {
         // Custom initialization
         NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+        if (self.friendPickerController == nil) {
+            // Create friend picker, and get data loaded into it.
+            self.friendPickerController = [[FBFriendPickerViewController alloc] init];
+            self.friendPickerController.title = @"Pick Friends";
+            self.friendPickerController.delegate = self;
+        }
         
+        [self.friendPickerController loadData];
     }
     return self;
 }
@@ -609,16 +616,8 @@ messagesToUserLabel.text = @"will unearth within a week ";
         return;
     }
     
-    if (self.friendPickerController == nil) {
-        // Create friend picker, and get data loaded into it.
-        self.friendPickerController = [[FBFriendPickerViewController alloc] init];
-        self.friendPickerController.title = @"Pick Friends";
-        self.friendPickerController.delegate = self;
-    }
     
-    [self.friendPickerController loadData];
     //[self.friendPickerController clearSelection];
-    
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
 }
 

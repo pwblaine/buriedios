@@ -36,6 +36,8 @@
     // ****************************************************************************
     [PFFacebookUtils initializeFacebook];
     
+    [FBFriendPickerViewController class];
+    
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
 #ifdef __IPHONE_7_0
@@ -56,8 +58,10 @@
     // Register for Notification Center
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
     
+    LTStartScreenViewController *startScreenVC = [[LTStartScreenViewController alloc] initWithNibName:@"LTStartScreenViewController" bundle:[NSBundle mainBundle]];
+    
     // Set up initial view
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LTStartScreenViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: startScreenVC];
     
     self.grassDelegate = [[LTGrassViewController alloc] init];
     [(UINavigationController *)self.window.rootViewController setDelegate:self.grassDelegate];

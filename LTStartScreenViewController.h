@@ -11,13 +11,49 @@
 #import "MBProgressHUD.h"
 #import "LTGrassViewController.h"
 
-@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate>
+@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate>
 {
     IBOutlet UILabel *lastLoggedInLabel;
+    NSString *savedDisplayName;
     IBOutlet UIButton *notYouButton;
     
+    IBOutlet UIView *signUpView;
+    IBOutlet UIView *loginView;
+    IBOutlet UIView *savedAccountView;
+    IBOutlet UIView *sharedFieldsView;
+    IBOutlet UIView *startView;
+    
+    UIView *currentViewState;
+    NSMutableArray *currentViewElements;
+    IBOutlet UIImageView *buriedLogo;
+    
+    IBOutlet UIButton *forgotPasswordButton;
+    IBOutlet UIButton *facebookLoginButton;
+    
+    CGPoint originalViewCenter;
+    
+    CGRect topLogoPosition;
+    CGRect centerLogoPostition;
+    
+    UIBarButtonItem *signInButton;
+    UIBarButtonItem *signUpButton;
+    UIBarButtonItem *continueButton;
+    UIBarButtonItem *submitButton;
+    UIBarButtonItem *cancelButton;
+    
     MBProgressHUD *HUD;
+    UITextField *currentResponder;
+    NSMutableArray *currentTextFields;
 }
+
+@property IBOutlet UITextField *usernameField;
+@property IBOutlet UITextField *passwordField;
+@property IBOutlet UITextField *confirmField;
+@property IBOutlet UITextField *emailField;
+@property NSDictionary *userInfo;
+
+@property (retain) PFSignUpViewController *signUpVC;
+@property (retain) PFLogInViewController *logInVC;
 
 - (void)updateFbProfileForUser:(PFUser *)user;
 

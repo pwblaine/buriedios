@@ -149,7 +149,7 @@
         NSLog(@"%@ conforms to LTGrassViewControllerDelegate, queueing default LTGrassState",[viewController class]);
         [self setGrassState:[(id<LTGrassViewControllerDelegate>)viewController defaultGrassStateForView] animated:YES];
     }
-    NSLog(@"transferring to %@ via navController...",[viewController class]);
+    NSLog(@"transferring to %@ via navController from %@...",[viewController class], [[navigationController visibleViewController] class]);
 }
 
 #pragma mark Singleton methods

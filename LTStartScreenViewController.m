@@ -13,17 +13,25 @@
 #import "LTStartScreenViewController.h"
 #import "LTPINVerificationViewController.h"
 
-@interface LTStartScreenViewController ()
-
-@end
 
 @implementation LTStartScreenViewController
+
+@synthesize logInVC,signUpVC, userInfo, usernameField, passwordField, confirmField, emailField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
         // Custom initialization
+        self->signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
+        self->signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign Up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
+        self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
+        self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
+        self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        self->centerLogoPostition = CGRectMake(40,149,240,128);
+        self->topLogoPosition = CGRectMake(40,89,240,128);
+        self->currentViewElements = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -39,57 +47,49 @@
     }
     
     // Add signup navigation bar button
-    UIBarButtonItem *signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign Up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
-    self.navigationItem.leftBarButtonItem = signUpButton;
-    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.leftBarButtonItem = self->signUpButton;
     
-    // Add login/sign in navigation bar button
-    UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
-    self.navigationItem.rightBarButtonItem = signInButton;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    // Add login/sign in navigation bar button;
+    self.navigationItem.rightBarButtonItem = self->signInButton;
     
+}
+
+-(BOOL)checkForSavedUser
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->savedDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
+    
+    if (![self->savedDisplayName isEqualToString:@""])
+    {
+        return YES;
+    }
+    else
+        return NO;
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self->lastLoggedInLabel.text = @"";
-    self->lastLoggedInLabel.alpha = 0;
-    self->notYouButton.alpha = 0;
-    self->notYouButton.enabled = NO;
     
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"] length] > 0)
+    if ([self checkForSavedUser])
     {
-        UIBarButtonItem *continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
-        self.navigationItem.rightBarButtonItem = continueButton;
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",self->savedDisplayName];
+        self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
         // Add login/sign in navigation bar button
-        UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
-        self.navigationItem.rightBarButtonItem = signInButton;
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.navigationItem.rightBarButtonItem = self->signInButton;
     }
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self.navigationItem.rightBarButtonItem.enabled = true;
-    
-    // if connection is successful, welcome last logged in user and update label
-            NSString *lastLoggedInUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"];
-            if (lastLoggedInUserId.length > 0)
-            {
-                NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"];
-                
-                NSLog(@"display name of last logged in user is %@",displayName);
-                // ensure the user has a display name set before attempting to preset
-                
-                [self changeButtonsForContinuingUser:displayName];
-                
-            }
-    
+    self->originalViewCenter = self.view.center;
+    if (self->currentViewState != self->savedAccountView)
+        [self showView:self->startView];
+    else
+        [self showView:self->savedAccountView];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
@@ -100,56 +100,221 @@
 
 -(void)changeButtonsForContinuingUser:(NSString *)displayName
 {
-    if (displayName.length > 0)
+    if (![self.navigationItem.leftBarButtonItem isEqual:self->signUpButton])
+        [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if ([self checkForSavedUser] || [PFUser currentUser])
     {
-    self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
-    [UIView animateWithDuration:1.0f animations:^{
-        self->lastLoggedInLabel.alpha = 1;
-        self->notYouButton.alpha = 1;
-        if (![self.navigationItem.rightBarButtonItem.title isEqualToString:@"Continue"])
-        {
-        self.navigationItem.rightBarButtonItem.title = @"Continue";
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-        }
-    } completion:^(BOOL finished) {
-        if (finished)
-        {
-            UIBarButtonItem *continueButton = [[UIBarButtonItem alloc] initWithTitle:@"Continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
-            self.navigationItem.rightBarButtonItem = continueButton;
-            self.navigationItem.rightBarButtonItem.enabled = YES;
+        if ([PFUser currentUser])
+            displayName = [[PFUser currentUser] objectForKey:@"displayName"];
+        if (![self->savedDisplayName isEqualToString:displayName])
+            self->savedDisplayName = displayName;
+            [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
+            self->lastLoggedInLabel.text = [NSString stringWithFormat:@"Welcome, %@",displayName];
             NSLog(@"lastLoggedInLabel loaded");
             self->notYouButton.enabled = YES;
             NSLog(@"notYouButton loaded and enabled");
-        }
-        }];
+            [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
     } else {
         if (![PFUser currentUser])
+        {
             NSLog(@"no logged in or stored users detected");
+        }
         else
              NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
+        [self showView:self->startView];
     }
 }
 
 #pragma mark - SignUp methods
+- (IBAction)submitButtonTouchHandler:(id)sender
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: usernameField.text,@"username",passwordField.text,@"password",emailField.text,@"email", nil];
+    NSLog(@"submitting userInfo: %@",userInfo);
+    if ([self->signUpView isDescendantOfView:self->currentViewState])
+    {
+        [self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo];
+    } else if ([self->loginView isDescendantOfView:self->currentViewState])
+    {
+        [self logInViewController:logInVC shouldBeginLogInWithUsername:self.userInfo[@"username"] password:self.userInfo[@"password"]];
+    }
+}
+
+- (IBAction)cancelButtonTouchHandler:(id)sender
+{
+     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if ([self->signUpView isDescendantOfView:self->currentViewState])
+    {
+        [self signUpViewControllerDidCancelSignUp:self.signUpVC];
+    } else if ([self->loginView isDescendantOfView:self->currentViewState])
+    {
+        [self logInViewControllerDidCancelLogIn:self.logInVC];
+    }
+    
+}
+
+- (NSMutableArray *)getTaggedElementsForView:(UIView *)view
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSMutableArray *taggedElements = [[NSMutableArray alloc] initWithArray:[self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %i",@"tag",view.tag]]];
+    
+    if ([view isDescendantOfView:self->signUpView] || [view isDescendantOfView:self->loginView])
+    {
+        [taggedElements addObjectsFromArray:[[NSMutableArray alloc] initWithArray:[self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %i",@"tag",self->sharedFieldsView.tag]]]];
+    }
+    return taggedElements;
+}
+
+- (void)disableAllBarButtons
+{
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->signInButton.enabled = NO;
+    self->signUpButton.enabled = NO;
+    self->cancelButton.enabled = NO;
+    self->continueButton.enabled = NO;
+    self->submitButton.enabled = NO;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+-(void)enableAllBarButtons
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->signInButton.enabled = YES;
+    self->signUpButton.enabled = YES;
+    self->cancelButton.enabled = YES;
+    self->continueButton.enabled = YES;
+    self->submitButton.enabled = YES;
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+}
+
+- (void)showView:(UIView *)view
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    if ([view isDescendantOfView:self->startView] && [self checkForSavedUser])
+    {
+        view = self->savedAccountView;
+    }
+    
+    NSMutableArray *elementsToShow = [self getTaggedElementsForView:view];
+    NSMutableArray *elementsToHide = [self getTaggedElementsForView:self->currentViewState];
+    if ([view isDescendantOfView:self->loginView] || [view isDescendantOfView:self->signUpView])
+    {
+        // make sure no shared elements are hidden
+        NSMutableArray *objectsToRemove = [[NSMutableArray alloc] init];
+        for (UIView *element in elementsToHide) {
+            if (element.tag == self->sharedFieldsView.tag)
+            {
+                NSLog(@"removing %@ from self->currentViewElements",element);
+                [objectsToRemove addObject:element];
+            }
+        }
+        [elementsToShow removeObjectsInArray:objectsToRemove];
+        [elementsToHide removeObjectsInArray:objectsToRemove];
+    }
+    
+    NSLog(@"items to hide: %@",self->currentViewElements);
+    if (![self->currentViewState isDescendantOfView:view])
+        [self hideViewElements:elementsToHide];
+        
+    [self disableAllBarButtons];
+    
+    for (UIView *element in elementsToShow)
+        {
+            element.alpha = 0;
+            element.hidden = NO;
+        }
+        
+        if ([view isDescendantOfView:self->signUpView] || [view isDescendantOfView:self->loginView])
+        {
+            NSLog(@"showing signup animation finished");
+            [self.navigationItem setLeftBarButtonItem:self->cancelButton animated:YES];
+            [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
+        } else if ([view isDescendantOfView:self->savedAccountView])
+            [self changeButtonsForContinuingUser:self->savedDisplayName];
+        else if ([view isDescendantOfView:self->startView])
+        {
+            [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
+            [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
+        }
+    
+    [UIView animateWithDuration:0.75 animations:^{
+        for (UIView *element in elementsToShow) {
+            element.alpha = 1;
+        }
+        if ([view isDescendantOfView:self->savedAccountView])
+        {
+            self->buriedLogo.frame = self->centerLogoPostition;
+        } else if ([view isDescendantOfView:self->startView])
+        {
+            self->buriedLogo.center = self.view.center;
+        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
+        {
+            self->buriedLogo.frame = self->topLogoPosition;
+        }
+    } completion:^(BOOL finished) {
+        NSLog(@"new view shown");
+        self->currentViewState = view;
+        self->currentViewElements = [self getTaggedElementsForView:self->currentViewState];
+        self->currentTextFields = [NSMutableArray arrayWithArray:[self->currentViewElements sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            UIView *object = (UIView *)obj1;
+            UIView *otherObject = (UIView *)obj2;
+            NSNumber *theY = [[NSNumber alloc] initWithInt:object.center.y];
+            NSNumber *theOtherY = [[NSNumber alloc] initWithInt:otherObject.center.y];
+            return [theY compare:theOtherY];
+        }]];
+        NSLog(@"currentTextFields :%@",self->currentTextFields);
+        [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"class == %@",[UITextField class]]];
+        NSLog(@"currentTextFields :%@",self->currentTextFields);
+        [self enableAllBarButtons];
+    }];
+}
+
+- (void)hideViewElements:(NSMutableArray *)viewElements
+{
+    
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (viewElements.count > 0)
+        [self disableAllBarButtons];
+        
+        [UIView animateWithDuration:0.7 animations:^{
+        for (UIView *element in viewElements) {
+            element.alpha = 0;
+        }
+        } completion:^(BOOL finished) {
+        NSLog(@"finished hiding");
+        if (finished)
+        {
+            for (UIView *element in viewElements) {
+                element.hidden = YES;
+            }
+        }
+    }];
+    }
+
 - (IBAction)signUpButtonTouchHandler:(id)sender  {
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    PFSignUpViewController *signUpVC = [[PFSignUpViewController alloc] init];
-    signUpVC.fields = PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsEmail | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton;
-    signUpVC.delegate = self;
-    [self presentViewController:signUpVC animated:YES completion:^{
-        NSLog(@"presenting signUpVC");
-    }];
+    if (!self.signUpVC)
+    {
+    self.signUpVC = [[PFSignUpViewController alloc] init];
+    self.signUpVC.delegate = self;
+    }
+    [self showView:self->signUpView];
 }
 
 #pragma mark - SignIn methods
 - (IBAction)signInButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    PFLogInViewController *signInVC = [[PFLogInViewController alloc] init];
-    signInVC.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsFacebook | PFLogInFieldsDismissButton;
-    signInVC.delegate = self;
-    [self presentViewController:signInVC animated:YES completion:^{
-        NSLog(@"presenting signInVC");
-    }];
+    if (!self.logInVC)
+    {
+        self.logInVC = [[PFLogInViewController alloc] init];
+        self.logInVC.delegate = self;
+    }
+    [self showView:self->loginView];
 }
 
 #pragma mark - Continue mehtods
@@ -160,12 +325,15 @@
      [self presentViewController:[[LTPINVerificationViewController alloc] init] animated:YES completion:^{
         NSLog(@"PinVC presented successfully");
     }];
-     */ [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
+     */
+    [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
 }
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:
     (id)sender
 {
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"logging in");
     //[(UIBarButtonItem*)sender setEnabled:NO];
     
@@ -253,20 +421,7 @@
                     
                     NSLog(@"current channels: %@", [currentInstallation channels]);
                     
-                    // write to user defaults
-                    NSString *lastLoggedInUserId = [user objectId];
-                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-                    
-                    NSString *lastLoggedInFacebookId = [userData objectForKey:@"id"];
-                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-                    
-                    NSString *lastLoggedInDisplayName = [user objectForKey:@"displayName"];
-                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-                    
-                    NSString *lastLoggedInUserName = [user username];
-                    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
-                    
-                    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
+                    [self storeUserDataToDefaults:user];
                     
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
@@ -294,6 +449,74 @@
 
 }
 
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    NSUInteger isNotLast = [[self->currentTextFields lastObject] indexGreaterThanIndex:[self->currentTextFields indexOfObject:self->currentResponder]];
+    if (isNotLast != NSNotFound)
+        textField.returnKeyType = UIReturnKeyNext;
+    else
+        textField.returnKeyType = UIDocumentChangeDone;
+    self->currentResponder = textField;
+    return YES;
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touchesBegan:");
+    [self.view endEditing:YES];
+    [super touchesBegan:touches withEvent:event];
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"originalCenter: (%f, %f), self.view.center: (%f, %f)", self->originalViewCenter.x, self->originalViewCenter.y,textField.center.x,textField.center.y);
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        self.view.center = CGPointMake(self.view.center.x, textField.center.y);
+    } completion:^(BOOL finished) {
+        NSLog(@"originalCenter: (%f, %f), self.view.center: (%f, %f)", self->originalViewCenter.x, self->originalViewCenter.y,textField.center.x,textField.center.y);
+    }];
+    [self.view addGestureRecognizer:[[UIGestureRecognizer alloc] initWithTarget:self->currentResponder action:@selector(endEditing:)]];
+}
+
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (self->currentResponder.center.y == self.view.center.y)
+    {
+        return YES;
+    } else
+        return NO;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSUInteger isNotLast = [[self->currentTextFields lastObject] indexGreaterThanIndex:[self->currentTextFields indexOfObject:self->currentResponder]];
+    if (isNotLast == NSNotFound)
+    {
+        NSLog(@"last object detected");
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.center = self->originalViewCenter;
+        } completion:^(BOOL finished) {
+        if (finished)
+            NSLog(@"keyboard hiding animation done");
+    }];
+    }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    if (textField.returnKeyType == UIReturnKeyNext)
+    {
+    UITextField *nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
+        NSLog(@"nextUp:%@",nextUp);
+        [nextUp becomeFirstResponder];
+    }
+    
+    return NO;
+}
+
 - (IBAction)notYouButtonTouched:(id)sender
 {
     // as of this moment ass this button does is to clear the stored userId for the last logged in user to remove the greeting, however, with the new account management branch, this will play an integral role in switching accounts and allowing the user to authenticate again as someone else
@@ -311,24 +534,11 @@
     // clear stored account in user defaults
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserId"];
     
-    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"displayName"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInDisplayName"];
     
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName");
     
-    self->notYouButton.enabled = NO;
-    [UIView animateWithDuration:0.3f animations:^{
-        self->lastLoggedInLabel.alpha = 0;
-        self->notYouButton.alpha = 0;
-        self.navigationItem.rightBarButtonItem.title = @"Sign In";
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-    } completion:^(BOOL finished) {
-        if (finished)
-            NSLog(@"notYouButton and lastLoggedInLabel hidden");
-        UIBarButtonItem *signInButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign In" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
-        self.navigationItem.rightBarButtonItem = signInButton;
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        NSLog(@"Sign In button restored");
-    }];
+    [self showView:self->startView];
 }
 
 - (void)hudWasHidden:(MBProgressHUD *)hud
@@ -339,7 +549,45 @@
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"info: %@",info);
     return YES;
+}
+
+-(void)storeUserDataToDefaults:(PFUser*)user
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSString *lastLoggedInUserId = nil;
+    NSString *lastLoggedInFacebookId = nil;
+    NSString *lastLoggedInDisplayName = nil;
+    NSString *lastLoggedInUserName = nil;
+    
+    //write to user defaults and update buttons
+    if ([PFFacebookUtils isLinkedWithUser:user])
+    {
+        NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
+        lastLoggedInDisplayName = [user objectForKey:@"displayName"];
+        lastLoggedInUserName = [user username];
+        
+    } else {
+        
+        //write to user defaults and update buttons
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = @"";
+        lastLoggedInDisplayName = @"";
+        lastLoggedInUserName = [user username];
+    }
+    // write to user defaults
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+    self->savedDisplayName = lastLoggedInDisplayName;
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+    
+    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
 }
 
 /// Sent to the delegate when a PFUser is signed up.
@@ -348,18 +596,8 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [signUpController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"signUpViewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        /* TODO handle signup vc successful completion
-        if (user) {
-        
-        //write to user defaults and update buttons
-            [self changeButtonsForContinuingUser:[user username]];
-        }
-        
-        // save working login data and pass it to PIN controller to be saved on submission
-        LTPINVerificationViewController *pinVC = [[LTPINVerificationViewController alloc] init];
-        [self presentViewController:pinVC animated:YES completion:^{
-            NSLog(@"pinVC succesfully presented");
-        }];*/
+        [self storeUserDataToDefaults:user];
+        [self showView:startView];
     }];
 }
 
@@ -373,6 +611,7 @@
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self showView:startView];
 }
 
 /*
@@ -394,41 +633,8 @@
      NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [logInController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"loginviewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        
-        NSString *lastLoggedInUserId = nil;
-        NSString *lastLoggedInFacebookId = nil;
-        NSString *lastLoggedInDisplayName = nil;
-        NSString *lastLoggedInUserName = nil;
-        
-        //write to user defaults and update buttons
-        if ([PFFacebookUtils isLinkedWithUser:user])
-        {
-            NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
-            
-            [self changeButtonsForContinuingUser:[user objectForKey:@"displayName"]];
-        
-        lastLoggedInUserId = [user objectId];
-        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-        lastLoggedInDisplayName = [user objectForKey:@"displayName"];
-        lastLoggedInUserName = [user username];
-            
-            [self continueButtonTouchHandler:self];
-            
-    } else {
-        
-        //write to user defaults and update buttons
-        [self changeButtonsForContinuingUser:[user username]];
-        
-        lastLoggedInUserId = [user objectId];
-        lastLoggedInFacebookId = @"";
-        lastLoggedInDisplayName = @"";
-        lastLoggedInUserName = [user username];
-    }
-        /* TODO save working login data and pass it to PIN controller to be saved on submission
-        LTPINVerificationViewController *pinVC = [[LTPINVerificationViewController alloc] init];
-        [self presentViewController:pinVC animated:YES completion:^{
-            NSLog(@"pinVC succesfully presented");
-        }];*/
+        [self storeUserDataToDefaults:user];
+        [self showView:startView];
     }];
 }
 
@@ -441,12 +647,14 @@
 /// Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self showView:self->startView];
     
 }
 
 - (void)updateFbProfileForUser:(PFUser *)user
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -485,6 +693,7 @@
 
 -(LTGrassState)defaultGrassStateForView
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     return LTGrassStateGrown;
 }
 
