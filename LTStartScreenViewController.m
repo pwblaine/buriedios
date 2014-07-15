@@ -513,7 +513,7 @@
         NSLog(@"viewFrame w: %f h: %f",self.view.frame.size.width, self.view.frame.size.height);
         NSInteger keyboardHeight = 432;
         NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
-        NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, keyboardHeight, (long)centerPointYForViewWithKeyboardUp);
+        NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, (long)keyboardHeight, (long)centerPointYForViewWithKeyboardUp);
         if (self.view.center.y == self->originalViewCenter.y)
         {
             [self.view addGestureRecognizer:closeTextFieldGesture];

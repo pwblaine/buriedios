@@ -12,12 +12,17 @@
 #import "LTCapsuleViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
+#import "LTAdminTableViewController.h"
 
-@interface LTUnearthedViewController ()
+@interface LTUnearthedViewController () {
+    LTAdminTableViewController * adminTableVC;
+}
 
 @end
 
 @implementation LTUnearthedViewController
+
+@synthesize allItems;
 
 /* DEFAULT UI VIEW METHOD
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -103,8 +108,6 @@
     // Add the temporary title
     self.title = @"buried.";
     
-    [self updateTitleWithNumberOfBuriedCapsules];
-    
 }
 
 
@@ -112,7 +115,19 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     PFUser *currentUser = [PFUser currentUser];
+    PFInstallation *installation = [PFInstallation currentInstallation];
     
+    NSLog(@"%i",(BOOL)[installation objectForKey:@"admin"]);
+    
+    if ([installation objectForKey:@"admin"])
+    {
+        NSLog(@"admin user detected, changing view");
+        self->adminTableVC = [[LTAdminTableViewController alloc ]initWithStyle:UITableViewStylePlain];
+        self->adminTableVC.admin = [PFUser currentUser];
+        [self.navigationController pushViewController:self->adminTableVC animated:YES];
+        
+    } else {
+        
     PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
@@ -129,18 +144,25 @@
             self.title = [NSString stringWithFormat:@"%i Awaits You",count];
         else
             self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
-    }];
+        }];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (initialLoad)
+    {
         initialLoad = NO;
+        NSLog(@"initial load");
+    }
     else
     {
         [self loadObjects];
-         [self updateTitleWithNumberOfBuriedCapsules];
+        NSLog(@"loading objects");
     }
+    
+    [self updateTitleWithNumberOfBuriedCapsules];
+    
     
     // if user is looking at the full capsule view, they've been notified of everything already, clear the badges
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];

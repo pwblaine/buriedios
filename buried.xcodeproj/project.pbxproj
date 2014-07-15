@@ -33,6 +33,7 @@
 		281E7AC8188EA66800C85066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 281E7AAB188EA66800C85066 /* main.m */; };
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
+		2833B0701975129E00274469 /* LTAdminTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2833B06F1975129E00274469 /* LTAdminTableViewController.m */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
@@ -116,6 +117,8 @@
 		281E7AAB188EA66800C85066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = buried/main.m; sourceTree = SOURCE_ROOT; };
 		281E7AAE188EA66800C85066 /* ParseLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ParseLogo.jpg; path = buried/ParseLogo.jpg; sourceTree = SOURCE_ROOT; };
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
+		2833B06E1975129E00274469 /* LTAdminTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTAdminTableViewController.h; sourceTree = "<group>"; };
+		2833B06F1975129E00274469 /* LTAdminTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAdminTableViewController.m; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -251,6 +254,8 @@
 				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
 				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
 				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
+				2833B06E1975129E00274469 /* LTAdminTableViewController.h */,
+				2833B06F1975129E00274469 /* LTAdminTableViewController.m */,
 				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
 				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
 				28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */,
@@ -448,7 +453,7 @@
 				ORGANIZATIONNAME = "Loftier Thoughts";
 				TargetAttributes = {
 					44FC42A51862667700CC948C = {
-						DevelopmentTeam = 3562EE5B52;
+						DevelopmentTeam = M5MRV4ZLPR;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -573,6 +578,7 @@
 				284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */,
 				286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */,
 				286E641A18C30D3400CDB033 /* UIImage+RoundedCornerAdditions.m in Sources */,
+				2833B0701975129E00274469 /* LTAdminTableViewController.m in Sources */,
 				28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */,
 				286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */,
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
@@ -692,7 +698,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "132BD485-661E-4676-B750-A7E09E88A851";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -723,7 +729,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "132BD485-661E-4676-B750-A7E09E88A851";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};

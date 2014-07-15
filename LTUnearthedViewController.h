@@ -20,6 +20,8 @@
     BOOL comingInFromOtherPage;
 }
 
+@property NSMutableArray *allItems;
+
 #pragma mark - Capsule tracking UI methods
 - (void)updateTitleWithNumberOfBuriedCapsules;
 
