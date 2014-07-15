@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, LTGrassState) {
 
 @property (retain, nonatomic) IBOutlet UIImageView *grassView;
 @property (assign) BOOL appIsComingBackFromBackground;
+@property NSDictionary *colorScheme;
 
 #pragma mark UINavigationControllerDelegate methods
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;

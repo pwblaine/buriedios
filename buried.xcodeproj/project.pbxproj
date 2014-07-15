@@ -250,22 +250,20 @@
 			isa = PBXGroup;
 			children = (
 				280C85EA192D9C4B009E6FE1 /* Interface Builder Files */,
-				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
-				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
+				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
+				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
 				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
 				28D2A21218C33354007EB808 /* LTUnearthedViewController.m */,
 				2833B06E1975129E00274469 /* LTAdminTableViewController.h */,
 				2833B06F1975129E00274469 /* LTAdminTableViewController.m */,
-				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
-				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
+				281E7AA5188EA66800C85066 /* LTBuryItViewController.h */,
+				281E7AA6188EA66800C85066 /* LTBuryItViewController.m */,
 				28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */,
 				28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */,
 				28070C5A18911E2900D465CA /* LTPhotoDetailViewController.h */,
 				28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */,
 				287BB8E519248FD4007DAA32 /* LTThoughtDetailViewController.h */,
 				287BB8E619248FD4007DAA32 /* LTThoughtDetailViewController.m */,
-				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
-				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -341,6 +339,8 @@
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
+				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
+				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
 				280C85EB192D9C63009E6FE1 /* View Controllers */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,

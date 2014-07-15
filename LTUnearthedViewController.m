@@ -22,7 +22,7 @@
 
 @implementation LTUnearthedViewController
 
-@synthesize allItems;
+@synthesize allItems, HUD;
 
 /* DEFAULT UI VIEW METHOD
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -114,20 +114,11 @@
 - (void)updateTitleWithNumberOfBuriedCapsules {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    PFUser *currentUser = [PFUser currentUser];
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    
-    NSLog(@"%i",(BOOL)[installation objectForKey:@"admin"]);
-    
-    if ([installation objectForKey:@"admin"])
+    if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
     {
-        NSLog(@"admin user detected, changing view");
-        self->adminTableVC = [[LTAdminTableViewController alloc ]initWithStyle:UITableViewStylePlain];
-        self->adminTableVC.admin = [PFUser currentUser];
-        [self.navigationController pushViewController:self->adminTableVC animated:YES];
-        
-    } else {
-        
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
     PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
     
     [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
@@ -136,6 +127,7 @@
     
     [toUserIdsQuery countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
         // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
+        NSLog(@"count for pending capsules: %i", count);
         if (error)
             NSLog(@"updating title received error: %@",error);
         else if (count > 1)
@@ -146,6 +138,49 @@
             self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
         }];
     }
+
+}
+
+-(void)pushToAdminTable
+{
+    if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
+    {
+        
+    NSLog(@"admin user detected, changing view");
+    self->adminTableVC = [[LTAdminTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self->adminTableVC.admin = [PFUser currentUser];/*
+        self->adminTableVC.loadingViewEnabled = NO;
+    NSLog(@"self.navigationItem.titleView.gestureRecognizers = %@",self.navigationController.navigationBar.gestureRecognizers);
+    for (UITapGestureRecognizer *gesture in self.navigationController.navigationBar.gestureRecognizers)
+    {
+        NSLog(@"examining gesture %@", gesture);
+        if ([gesture respondsToSelector:@selector(pushToAdminTable)])
+        {
+            NSLog(@"gesture responds to pushToAdminTable selector");
+            [[gesture view] removeGestureRecognizer:gesture];
+            NSLog(@"removing tap recognizer now that admin menu is being summoned, pushing admin menu...");
+        }
+    }*/
+        [self.navigationController pushViewController:self->adminTableVC animated:YES];
+        self->adminTableVC.HUD = self.HUD;
+        self->adminTableVC.HUD.delegate = self->adminTableVC;
+    }
+}
+
+- (void)loadAdmin
+{
+    
+    self.HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
+    UIWindow *theWindow = [[[UIApplication sharedApplication] windows] firstObject];
+    [theWindow addSubview:self.HUD];
+    
+    [theWindow bringSubviewToFront:self.HUD];
+    
+    // Set indeterminate mode
+    self.HUD.mode = MBProgressHUDModeIndeterminate;
+    self.HUD.delegate = self;
+    [self.HUD show:YES];
+    [self pushToAdminTable];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -154,14 +189,32 @@
     {
         initialLoad = NO;
         NSLog(@"initial load");
+        
+        PFUser *currentUser = [PFUser currentUser];
+        NSLog(@"admin: %@",[currentUser objectForKey:@"admin"]);
+        BOOL isAdmin = [[currentUser objectForKey:@"admin"] isEqualToString:@"ADMIN"];
+        NSLog(@"regular user %@ with admin status of %i",currentUser,isAdmin);
+        if (isAdmin)
+        {
+            if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
+            {
+            NSLog(@"gestureRecognizers on title: %lu",(unsigned long)[self.navigationItem.titleView.gestureRecognizers count]);
+            if ([self.navigationItem.titleView.gestureRecognizers count] == 0)
+            {
+                NSLog(@"attaching admin summon to titleview");
+            UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAdminTable)];
+            [titleTap setNumberOfTapsRequired:2]; // 2 taps on the menu bar sends it to admin view
+            [self.navigationController.navigationBar addGestureRecognizer:titleTap];
+                }
+            }
+        }
     }
     else
     {
         [self loadObjects];
         NSLog(@"loading objects");
+        [self updateTitleWithNumberOfBuriedCapsules];
     }
-    
-    [self updateTitleWithNumberOfBuriedCapsules];
     
     
     // if user is looking at the full capsule view, they've been notified of everything already, clear the badges
@@ -196,6 +249,8 @@
     // This method is called every time objects are loaded from Parse via the PFQuery
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.rightBarButtonItem.enabled = YES;
+    
+    [self updateTitleWithNumberOfBuriedCapsules];
 }
 
 /*

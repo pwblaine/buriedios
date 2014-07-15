@@ -22,7 +22,7 @@
 
 @implementation LTGrassViewController
 
-@synthesize grassView, delegate;
+@synthesize grassView, delegate, colorScheme;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,6 +37,7 @@
         self->currentGrassState = LTGrassStateHidden;
         self->destinationGrassState = LTGrassStateHidden;
         self.appIsComingBackFromBackground = NO;
+        self.colorScheme = @{@"errorColor":[UIColor colorWithRed:111/255.0f green:0/255.0f blue:8/255.0f alpha:1.0f], @"successColor":[UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f]};
     }
     return self;
 }

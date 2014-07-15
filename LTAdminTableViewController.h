@@ -8,6 +8,7 @@
 
 #import <Parse/Parse.h>
 #import "LTUnearthedViewController.h"
+#import "MBProgressHUD.h"
 
 @interface LTAdminTableViewController : LTUnearthedViewController
 {
@@ -15,5 +16,9 @@
 }
 
 @property PFUser *admin;
+
+@property __block NSMutableArray *users;
+
+@property __block NSArray *latestCapsules;
 
 @end

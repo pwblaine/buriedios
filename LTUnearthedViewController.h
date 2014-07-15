@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "LTGrassViewController.h"
+#import "MBProgressHUD.h"
 
-@interface LTUnearthedViewController : PFQueryTableViewController <NSURLConnectionDelegate, UINavigationControllerDelegate, LTGrassViewControllerDelegate, UITableViewDelegate>
+@interface LTUnearthedViewController : PFQueryTableViewController <NSURLConnectionDelegate, UINavigationControllerDelegate, LTGrassViewControllerDelegate, UITableViewDelegate, MBProgressHUDDelegate>
 {
     NSMutableData *profileImageData;
     UIImage *smallPortrait;
@@ -21,6 +22,8 @@
 }
 
 @property NSMutableArray *allItems;
+
+@property MBProgressHUD *HUD;
 
 #pragma mark - Capsule tracking UI methods
 - (void)updateTitleWithNumberOfBuriedCapsules;
