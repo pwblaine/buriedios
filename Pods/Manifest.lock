@@ -1,0 +1,48 @@
+PODS:
+  - BZGFormField (1.1.2)
+  - Canvas (0.1.1)
+  - FrameAccessor (1.3.2)
+  - HATransparentView (0.2)
+  - MRoundedButton (1.0)
+  - NZCircularImageView (0.0.4):
+    - UIActivityIndicator-for-SDWebImage (~> 1.0.3)
+  - pop (1.0.6)
+  - SDWebImage (3.6):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.6)
+  - Shimmer (1.0.1)
+  - UIActivityIndicator-for-SDWebImage (1.0.5):
+    - SDWebImage (~> 3.2)
+  - UIColor+FlatColors (0.0.2)
+  - VENCalculatorInputView (1.2.1)
+  - VENTokenField (1.0.2):
+    - FrameAccessor (~> 1.0)
+
+DEPENDENCIES:
+  - BZGFormField (~> 1.1.2)
+  - Canvas
+  - HATransparentView (~> 0.2)
+  - MRoundedButton (~> 1.0)
+  - NZCircularImageView (~> 0.0.4)
+  - pop
+  - Shimmer (~> 1.0.1)
+  - UIColor+FlatColors
+  - VENCalculatorInputView
+  - VENTokenField
+
+SPEC CHECKSUMS:
+  BZGFormField: c469a07c251a9fd8bd8d8fce023896b15d752a99
+  Canvas: 45356a2e61087a776bfde5090676d290cf67f7f2
+  FrameAccessor: 8bf7a2c66f86005ff9bcd1c9cbd0a3eb4970910b
+  HATransparentView: 989b60a126b4d58a0161af48712cb3dc91332f38
+  MRoundedButton: 89d8c570f39a565810a5f20d0d0620e466204fb1
+  NZCircularImageView: 271166541c73118fff81c4bc83bcd84ceb04befb
+  pop: e518794da38942c05255eb64b36d894e70cb4f00
+  SDWebImage: c6989652c1cdf27cbdf3f56957e2030f825af5bc
+  Shimmer: 35aa2a57b8fbc17f9e16706021665966fd93dbd1
+  UIActivityIndicator-for-SDWebImage: d9e46f1592d04cfbeda67bb6d7bba5348558697b
+  UIColor+FlatColors: 15506ef6472e26a751033f2f2469283800bcb906
+  VENCalculatorInputView: 5614f1a7bc232a845de2ffc41f4eb6bb3b74d39f
+  VENTokenField: 96cdf0e682ce709aa6cf7383c836d26dfc2eec20
+
+COCOAPODS: 0.33.1

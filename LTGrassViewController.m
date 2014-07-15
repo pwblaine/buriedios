@@ -110,6 +110,9 @@
                 {
                     NSLog(@"animation finished");
                     self->currentGrassState = newGrassState;
+                    CGRect overlap = CGRectIntersection(self.grassView.frame, self.view.window.frame);
+                    NSLog(@"exposed grass: %f x %f",overlap.size.width,overlap.size.width);
+                    NSLog(@"current size %f x %f",self.grassView.bounds.size.width,self.grassView.bounds.size.height);
                 if (self->destinationGrassState != self->currentGrassState)
                     NSLog(@"destination state has changed, reanimating");
                     [self setGrassState:self->destinationGrassState animated:YES];

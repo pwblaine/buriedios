@@ -12,6 +12,12 @@
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
 
+@interface LTStartScreenViewController ()
+
+@property (readonly) NSMutableArray *animationQueue;
+
+@end
+
 @implementation LTStartScreenViewController
 
 @synthesize logInVC,signUpVC, userInfo, usernameField, passwordField, confirmField, emailField;
@@ -27,9 +33,7 @@
         self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
         self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
-        self->centerLogoPostition = CGRectMake(40,149,240,128);
-        self->topLogoPosition = CGRectMake(40,89,240,128);
-        self->currentViewElements = [[NSMutableArray alloc] init];
+        self->currentTextFields = [[NSMutableArray alloc] init];
         }
     return self;
 }
@@ -52,6 +56,93 @@
     // Add login/sign in navigation bar button;
     self.navigationItem.rightBarButtonItem = self->signInButton;
     
+}
+
+-(NSInteger)validateField:(UITextField *)sender
+{
+    NSInteger isValid = -1;
+    
+    if ([sender.placeholder isEqualToString:self->emailField.placeholder])
+    {
+        
+        NSString *emailRegEx =
+        @"(?:[A-Za-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[A-Za-z0-9!#$%\\&'*+/=?\\^_`{|}"
+        @"~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
+        @"x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[A-Za-z0-9](?:[a-"
+        @"z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?|\\[(?:(?:25[0-5"
+        @"]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-"
+        @"9][0-9]?|[A-Za-z0-9-]*[A-Za-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21"
+        @"-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        
+        NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegEx];
+        
+        if ([emailTest evaluateWithObject:sender.text])
+        {
+            isValid = YES;
+        } else
+        {
+            isValid = NO;
+        }
+    }else if ([sender.placeholder isEqualToString:self->usernameField.placeholder])
+    {
+        NSString *usernameTest = [self->usernameField.text stringByTrimmingCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]];
+        
+        if ((usernameTest.length == usernameField.text.length) && usernameField.text.length > 6)
+        {
+            isValid = YES;
+        } else
+        {
+            isValid = NO;
+        }
+    } else if ([sender.placeholder isEqualToString:self->passwordField.placeholder])
+    {
+        if (sender.text.length > 8)
+            isValid = YES;
+        else
+            isValid = NO;
+    } else if ([sender.placeholder isEqualToString:self->passwordField.placeholder])
+    {
+        if ([sender.text isEqualToString:self->passwordField.text])
+        {
+            isValid = YES;
+        }
+        else
+        {
+            isValid = NO;
+        }
+    }
+    return isValid;
+}
+
+
+-(void)validateAndApplyGlowTo:(UITextField *)sender {
+
+    NSInteger isValid = [self validateField:sender];
+    
+    UIColor *colorForBorder = [UIColor clearColor];
+        
+    UIViewAnimationOptions animationOptions = animationOptions = (UIViewAnimationCurveEaseOut|UIViewAnimationOptionAllowUserInteraction);
+    if (isValid == NO)
+    {
+        animationOptions = (UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse|UIViewAnimationOptionAllowUserInteraction);
+       // colorForBorder = [UIColor flatPumpkinColor];
+    } else if (isValid == YES)
+    {
+        //colorForBorder = [UIColor flatBelizeHoleColor];
+    }
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0.3 options:animationOptions animations:^{
+                NSLog(@"validate animations starting");
+                [sender.layer setBorderColor:[colorForBorder CGColor]];
+                [sender.layer setBorderWidth:3];
+                [sender.layer setCornerRadius:2];
+            } completion:^(BOOL finished) {
+                NSLog(@"validate animations completed");
+                if (isValid == NO)
+                {
+                    [sender addTarget:self action:@selector(validateAndApplyGlowTo:) forControlEvents:UIControlEventEditingChanged];
+                } else if (isValid == YES)
+                    [self.userInfo setValue:sender.text forKey:sender.placeholder];
+    }];
 }
 
 -(BOOL)checkForSavedUser
@@ -122,7 +213,6 @@
         }
         else
              NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
-        [self showView:self->startView];
     }
 }
 
@@ -135,7 +225,7 @@
     NSLog(@"submitting userInfo: %@",userInfo);
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
-        [self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo];
+        [self self];
     } else if ([self->loginView isDescendantOfView:self->currentViewState])
     {
         [self logInViewController:logInVC shouldBeginLogInWithUsername:self.userInfo[@"username"] password:self.userInfo[@"password"]];
@@ -160,12 +250,6 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSMutableArray *taggedElements = [[NSMutableArray alloc] initWithArray:[self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %i",@"tag",view.tag]]];
-    
-    if ([view isDescendantOfView:self->signUpView] || [view isDescendantOfView:self->loginView])
-    {
-        [taggedElements addObjectsFromArray:[[NSMutableArray alloc] initWithArray:[self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %i",@"tag",self->sharedFieldsView.tag]]]];
-    }
-    
     return taggedElements;
 }
 
@@ -196,31 +280,34 @@
 
 - (void)showView:(UIView *)view
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    // only bounce in significantly if coming from off screen
-    float damping = 0.8;
-    float velocity = 0.5;
-    float duration = 1;
-    if (self->buriedLogo.center.y > 568)
-    {
-        NSLog(@"buried logo coming in from off screen!");
-        damping = 0.6;
-        duration = 2;
-        velocity = 0.4;
-    }
-    // set up logo animation in block above
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     if ([view isDescendantOfView:self->startView] && [self checkForSavedUser])
     {
         view = self->savedAccountView;
     }
-    
+    // set up logo animation in block above
     NSMutableArray *elementsToShow = [self getTaggedElementsForView:view];
-    NSMutableArray *elementsToHide = [self getTaggedElementsForView:self->currentViewState];
     
-    if ([view isDescendantOfView:self->loginView] || [view isDescendantOfView:self->signUpView])
+    
+    // only bounce in significantly if coming from off screen
+    float damping = 0.2;
+    float velocity = 1;
+    float duration = 0.5;
+    float delay = 0.4;
+    if (self->buriedLogo.center.y > 568)
     {
+        NSLog(@"buried logo coming in from off screen!");
+        damping = 0.3;
+        velocity = 1;
+        duration = 2;
+        delay = 0.3;
+    } else {
+        NSMutableArray *elementsToHide = [self getTaggedElementsForView:self->currentViewState];
+        if ([view isDescendantOfView:self->loginView] || [view isDescendantOfView:self->signUpView])
+        {
         // make sure no shared elements are hidden
         NSMutableArray *objectsToRemove = [[NSMutableArray alloc] init];
         for (UIView *element in elementsToHide) {
@@ -233,9 +320,7 @@
         [elementsToShow removeObjectsInArray:objectsToRemove];
         [elementsToHide removeObjectsInArray:objectsToRemove];
     }
-    
-    NSLog(@"items to hide: %@",self->currentViewElements);
-    if (![self->currentViewState isDescendantOfView:view] && self->currentViewState)
+    NSLog(@"items to hide: %@",elementsToHide);
         [self hideViewElements:elementsToHide];
         
     [self disableAllBarButtons];
@@ -252,30 +337,38 @@
             [self.navigationItem setLeftBarButtonItem:self->cancelButton animated:YES];
             [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
         } else if ([view isDescendantOfView:self->savedAccountView])
-            [self changeButtonsForContinuingUser:self->savedDisplayName];
+        {
+            [self.navigationItem setLeftBarButtonItem:self->cancelButton animated:YES];
+            [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
+        }
         else if ([view isDescendantOfView:self->startView])
         {
             [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
             [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
         }
-    
-    [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
+    }
+    [UIView animateWithDuration:duration delay:delay usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveLinear animations:^{
         if ([view isDescendantOfView:self->savedAccountView])
         {
-            self->buriedLogo.frame = self->centerLogoPostition;
+            self->buriedLogo.bounds = CGRectOffset(self->buriedLogo.bounds, 0, (self->lastLoggedInLabel.center.y - self.view.center.y));
         } else if ([view isDescendantOfView:self->startView])
         {
             self->buriedLogo.center = self.view.center;
         } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
-        {
-            self->buriedLogo.frame = self->topLogoPosition;
-        }
+                                                   {
+                                                       self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,
+                                                                                             (self.usernameField.center.y + 64) - (self.usernameField.bounds.size.height/2));
+                                                       self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x, ((self->buriedLogo.center.y)/2)+64-(self->buriedLogo.bounds.size.height/2))
+;
+                                                   }
+        
     } completion:^(BOOL finished) {
         NSLog(@"logo bounced in");
     }];
     
-    [UIView animateKeyframesWithDuration:1.0 delay:0.3 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
-        [UIView  addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{for (UIView *element in elementsToShow) {
+    [UIView animateKeyframesWithDuration:1.0 delay:0.0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+        [UIView  addKeyframeWithRelativeStartTime:0.7 relativeDuration:0.3 animations:
+         ^{for (UIView *element in elementsToShow) {
             element.alpha = 1;
         }
         }];
@@ -294,15 +387,6 @@
         [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
         self->originalViewCenter = self.view.center;
         NSLog(@"currentTextFields :%@",self->currentTextFields);
-        for (UITextField *textView in self->currentTextFields) {
-            //To make the border look very close to a UITextField
-            [textView.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
-            [textView.layer setBorderWidth:2.0];
-            
-            //The rounded corner part, where you specify your view's corner radius:
-            textView.layer.cornerRadius = 5;
-            textView.clipsToBounds = YES;
-        };
         [self enableAllBarButtons];
     }];
 }
@@ -314,8 +398,9 @@
     if (viewElements.count > 0)
         [self disableAllBarButtons];
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.3 animations:^{
         for (UIView *element in viewElements) {
+            if (element.tag > 0)
             element.alpha = 0;
             if ([element isMemberOfClass:[UITextField class]])
                 [(UITextField *)[element self] setText:@""];
@@ -325,6 +410,7 @@
         if (finished)
         {
             for (UIView *element in viewElements) {
+                if (element.tag > 0)
                 element.hidden = YES;
             }
         }
@@ -513,7 +599,7 @@
         NSLog(@"viewFrame w: %f h: %f",self.view.frame.size.width, self.view.frame.size.height);
         NSInteger keyboardHeight = 432;
         NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
-        NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, keyboardHeight, centerPointYForViewWithKeyboardUp);
+        NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, (long)keyboardHeight,(long)centerPointYForViewWithKeyboardUp);
         if (self.view.center.y == self->originalViewCenter.y)
         {
             [self.view addGestureRecognizer:closeTextFieldGesture];
@@ -548,7 +634,15 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     NSLog(@"textField %@ ended editing",textField.placeholder);
-    [textField.layer setBorderWidth:0.5f];
+    [self validateAndApplyGlowTo:textField];
+    if (([textField.placeholder isEqualToString:self->usernameField.placeholder]) || ([textField.placeholder isEqualToString:self->confirmField.placeholder]))
+                                                     {
+                                                        if ([self.usernameField.text isEqualToString:self.confirmField.text])
+                                                        {
+                                                            [self validateAndApplyGlowTo:self.confirmField];
+                                                            [self validateAndApplyGlowTo:self.passwordField];
+                                                        }
+                                                     }
 }
 
 -(void)cleanUpAfterEditing

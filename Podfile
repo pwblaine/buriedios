@@ -3,9 +3,15 @@ platform :ios, "7.1"
 
 target "buried." do
 
-pod 'FlatUIKit'
+pod 'UIColor+FlatColors'
+pod 'BZGFormField', '~> 1.1.2'
+pod 'MRoundedButton', '~> 1.0'
+pod 'NZCircularImageView', '~> 0.0.4'
+pod 'HATransparentView', '~> 0.2'
+pod 'Shimmer', '~> 1.0.1'
 pod 'Canvas'
-pod 'Lookback'
+pod 'pop'
+pod 'VENTokenField'
+pod 'VENCalculatorInputView'
 
 end
-
