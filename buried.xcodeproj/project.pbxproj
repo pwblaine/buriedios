@@ -10,7 +10,6 @@
 		112B79081946FD9200558BE1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B79071946FD9200558BE1 /* Social.framework */; };
 		112B790D1947015E00558BE1 /* x-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5B1944D65C00BDAB3A /* x-mark.png */; };
 		112B790F1947019C00558BE1 /* x-mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */; };
-		1911345CFBAE4D04A9980C20 /* libPods-buried..a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6D824D75D3B43B5BEE0FC64 /* libPods-buried..a */; };
 		280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */; };
 		28070C5D18911E2900D465CA /* LTPhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28070C5B18911E2900D465CA /* LTPhotoDetailViewController.m */; };
 		28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */; };
@@ -64,7 +63,6 @@
 		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
 		28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */; };
 		28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */; };
-		28FC6674196437DA00962D69 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 28FC6673196437DA00962D69 /* Podfile */; };
 		308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4763191ADADE0098AEFC /* buriedicon58x58white.png */; };
 		308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4764191ADADE0098AEFC /* buriedicon76x76.png */; };
 		308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4765191ADADE0098AEFC /* buriedicon114x114.png */; };
@@ -165,7 +163,6 @@
 		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
 		28F9584B1906555F0017DCEA /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		28FC6673196437DA00962D69 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		308D4763191ADADE0098AEFC /* buriedicon58x58white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon58x58white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon58x58white.png; sourceTree = SOURCE_ROOT; };
 		308D4764191ADADE0098AEFC /* buriedicon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon76x76.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon76x76.png; sourceTree = SOURCE_ROOT; };
 		308D4765191ADADE0098AEFC /* buriedicon114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon114x114.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon114x114.png; sourceTree = SOURCE_ROOT; };
@@ -189,7 +186,6 @@
 		44FC42ED186267CE00CC948C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		44FC42EF186267D300CC948C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		44FC42F3186267DF00CC948C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		C2C47483005D4B07A21CC3C6 /* Pods-buried..xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-buried..xcconfig"; path = "Pods/Pods-buried..xcconfig"; sourceTree = "<group>"; };
 		D6D824D75D3B43B5BEE0FC64 /* libPods-buried..a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-buried..a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -218,7 +214,6 @@
 				44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */,
 				28B75D021957716600593B3A /* UbertestersSDK.framework in Frameworks */,
 				44FC42AA1862667700CC948C /* Foundation.framework in Frameworks */,
-				1911345CFBAE4D04A9980C20 /* libPods-buried..a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +331,6 @@
 		44FC429D1862667700CC948C = {
 			isa = PBXGroup;
 			children = (
-				28FC6673196437DA00962D69 /* Podfile */,
 				281E7AAB188EA66800C85066 /* main.m */,
 				28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */,
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
@@ -348,7 +342,6 @@
 				284B2CFA18AC49D500BB976F /* Partner Classes */,
 				284B2CFB18AC4A3600BB976F /* Configurations */,
 				28F9584B1906555F0017DCEA /* buried.app */,
-				C2C47483005D4B07A21CC3C6 /* Pods-buried..xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -497,7 +490,6 @@
 				28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */,
 				308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */,
 				308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */,
-				28FC6674196437DA00962D69 /* Podfile in Resources */,
 				281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
@@ -549,7 +541,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-buried.-resources.sh\"\n";
+			shellScript = "";
 			showEnvVarsInLog = 0;
 		};
 		F1AE3C167BB842F6BA688AF1 /* Check Pods Manifest.lock */ = {
@@ -564,7 +556,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -677,7 +669,6 @@
 		};
 		44FC42DC1862667700CC948C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2C47483005D4B07A21CC3C6 /* Pods-buried..xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -709,7 +700,6 @@
 		};
 		44FC42DD1862667700CC948C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2C47483005D4B07A21CC3C6 /* Pods-buried..xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
