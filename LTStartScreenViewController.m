@@ -27,6 +27,7 @@
         self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
         self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,89,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
@@ -110,11 +111,11 @@
         if (![self->savedDisplayName isEqualToString:displayName])
             self->savedDisplayName = displayName;
             [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
-            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",displayName] lowercaseString];
+            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
             NSLog(@"lastLoggedInLabel loaded");
-            self->notYouButton.enabled = YES;
-            NSLog(@"notYouButton loaded and enabled");
+            NSLog(@"navBar elements loaded and enabled");
             [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
+            [self.navigationItem setLeftBarButtonItem:self->notYouButton animated:YES];
     } else {
         if (![PFUser currentUser])
         {
@@ -131,6 +132,16 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self cleanUpAfterEditing];
+    if ((self.emailField.text.length < 6) || (self.usernameField.text.length < 1) || (self.passwordField.text.length > 1) || ([self.passwordField.text isEqualToString:self.confirmField.text]))
+    {
+        NSLog(@"submission failed");
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"fill out all fields correctly!";
+        [self->HUD hide:YES afterDelay:3.0f];
+    }
+    else
+    {
     self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: usernameField.text,@"username",passwordField.text,@"password",emailField.text,@"email", nil];
     NSLog(@"submitting userInfo: %@",userInfo);
     if ([self->signUpView isDescendantOfView:self->currentViewState])
@@ -139,6 +150,7 @@
     } else if ([self->loginView isDescendantOfView:self->currentViewState])
     {
         [self logInViewController:logInVC shouldBeginLogInWithUsername:self.userInfo[@"username"] password:self.userInfo[@"password"]];
+    }
     }
 }
 
@@ -294,15 +306,6 @@
         [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
         self->originalViewCenter = self.view.center;
         NSLog(@"currentTextFields :%@",self->currentTextFields);
-        for (UITextField *textView in self->currentTextFields) {
-            //To make the border look very close to a UITextField
-            [textView.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
-            [textView.layer setBorderWidth:2.0];
-            
-            //The rounded corner part, where you specify your view's corner radius:
-            textView.layer.cornerRadius = 5;
-            textView.clipsToBounds = YES;
-        };
         [self enableAllBarButtons];
     }];
 }
@@ -487,22 +490,28 @@
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    BOOL isNotLast = NO;
-    
-    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
-        isNotLast = YES;
-    
-    if (isNotLast)
-        textField.returnKeyType = UIReturnKeyNext;
+    if ([self.navigationItem.rightBarButtonItem isEnabled])
+        return YES;
     else
-        textField.returnKeyType = UIReturnKeyDone;
-    
-    return YES;
+        return NO;
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    BOOL isNotLast = NO;
+    
+    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
+        isNotLast = YES;
+    
+    UIBarButtonItem *previousButton = [[UIBarButtonItem alloc] initWithTitle:@"previous" style:UIBarButtonItemStyleBordered target:self action:@selector(moveToPreviousTextField)];
+    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"next" style:UIBarButtonItemStyleBordered target:self action:@selector(moveToNextTextField)];
+    
+    self.navigationItem.leftBarButtonItem = previousButton;
+    self.navigationItem.rightBarButtonItem = nextButton;
+    
+    textField.returnKeyType = UIReturnKeyDone;
 
     self->currentResponder = textField;
     NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder,textField);
@@ -548,7 +557,6 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     NSLog(@"textField %@ ended editing",textField.placeholder);
-    [textField.layer setBorderWidth:0.5f];
 }
 
 -(void)cleanUpAfterEditing
@@ -559,6 +567,9 @@
     {
         [self->currentResponder resignFirstResponder];
     }
+    
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.rightBarButtonItem = submitButton;
     
     if (!CGPointEqualToPoint(self.view.center, originalViewCenter))
     {
@@ -576,21 +587,42 @@
     [self.view removeGestureRecognizer:self->closeTextFieldGesture];
 }
 
+-(void)moveToNextTextField
+{
+    UITextField *textField = self->currentResponder;
+    UITextField *nextUp;
+    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
+    {
+        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
+        NSLog(@"nextUp:%@",nextUp);
+    }
+    else {
+        nextUp = [self->currentTextFields objectAtIndex:0];
+    }
+    [nextUp becomeFirstResponder];
+}
+
+-(void)moveToPreviousTextField
+{
+    UITextField *textField = self->currentResponder;
+    UITextField *nextUp;
+    if ([self->currentTextFields indexOfObject:textField] > 0)
+    {
+        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
+        NSLog(@"nextUp:%@",nextUp);
+    }
+    else {
+        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields count] - 1)];
+    }
+    [nextUp becomeFirstResponder];
+}
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSLog(@"should return");
     [textField resignFirstResponder];
-    
-    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
-    {
-        UITextField *nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
-        NSLog(@"nextUp:%@",nextUp);
-        [nextUp becomeFirstResponder];
-    }
-    else
-        [self cleanUpAfterEditing];
-    
-    return NO;
+    [self cleanUpAfterEditing];
+    return NO; // disabled, textFields just close
 }
 
 - (IBAction)notYouButtonTouched:(id)sender

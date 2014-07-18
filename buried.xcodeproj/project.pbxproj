@@ -34,6 +34,7 @@
 		281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAE188EA66800C85066 /* ParseLogo.jpg */; };
 		281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7AAF188EA66800C85066 /* Sunflowers.jpg */; };
 		2833B0701975129E00274469 /* LTAdminTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2833B06F1975129E00274469 /* LTAdminTableViewController.m */; };
+		283949FF1978A44E0067833B /* LTForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 283949FE1978A44E0067833B /* LTForm.m */; };
 		284B2D0818AC4A9000BB976F /* FPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284B2D0618AC4A9000BB976F /* FPViewController.m */; };
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
@@ -119,6 +120,8 @@
 		281E7AAF188EA66800C85066 /* Sunflowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Sunflowers.jpg; path = buried/Sunflowers.jpg; sourceTree = SOURCE_ROOT; };
 		2833B06E1975129E00274469 /* LTAdminTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTAdminTableViewController.h; sourceTree = "<group>"; };
 		2833B06F1975129E00274469 /* LTAdminTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAdminTableViewController.m; sourceTree = "<group>"; };
+		283949FD1978A44E0067833B /* LTForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTForm.h; sourceTree = "<group>"; };
+		283949FE1978A44E0067833B /* LTForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTForm.m; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -341,6 +344,8 @@
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
 				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
 				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
+				283949FD1978A44E0067833B /* LTForm.h */,
+				283949FE1978A44E0067833B /* LTForm.m */,
 				280C85EB192D9C63009E6FE1 /* View Controllers */,
 				44FC42B01862667700CC948C /* Supporting Files */,
 				44FC42A81862667700CC948C /* Frameworks */,
@@ -584,6 +589,7 @@
 				28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */,
 				281E7AC3188EA66800C85066 /* LTAppDelegate.m in Sources */,
 				2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */,
+				283949FF1978A44E0067833B /* LTForm.m in Sources */,
 				281E7AC4188EA66800C85066 /* LTBuryItViewController.m in Sources */,
 				287BB8E819248FD4007DAA32 /* LTThoughtDetailViewController.m in Sources */,
 				281E7AC8188EA66800C85066 /* main.m in Sources */,

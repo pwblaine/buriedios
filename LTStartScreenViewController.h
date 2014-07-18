@@ -15,7 +15,6 @@
 {
     IBOutlet UILabel *lastLoggedInLabel;
     NSString *savedDisplayName;
-    IBOutlet UIButton *notYouButton;
     
     IBOutlet UIView *signUpView;
     IBOutlet UIView *loginView;
@@ -40,6 +39,7 @@
     UIBarButtonItem *continueButton;
     UIBarButtonItem *submitButton;
     UIBarButtonItem *cancelButton;
+    UIBarButtonItem *notYouButton;
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;

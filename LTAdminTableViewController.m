@@ -39,6 +39,8 @@
     
     PFQuery *allUsersQuery = [PFUser query];
     
+    [allUsersQuery whereKey:@"displayName" notContainedIn:@[@"",[NSNull null]]];
+    
     //NSMutableArray *latestCapsuleIds = [NSMutableArray array];
     
     //PFQuery *resultingQuery = [PFQuery queryWithClassName:@"capsule"];
@@ -108,6 +110,7 @@
     [super viewDidAppear:NO];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self.navigationController action:@selector(popViewControllerAnimated:)];
     self.navigationItem.title = @"Admin Menu";
+    [self.navigationItem setRightBarButtonItems:[NSArray array] animated:YES];
     
     
 }

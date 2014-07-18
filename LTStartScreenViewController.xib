@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -13,7 +13,6 @@
                 <outlet property="forgotPasswordButton" destination="GYS-Oc-O4y" id="3Ah-cF-kYO"/>
                 <outlet property="lastLoggedInLabel" destination="Tnc-qK-WQO" id="STF-Ge-rgs"/>
                 <outlet property="loginView" destination="nTJ-hi-3py" id="JV0-qu-gYZ"/>
-                <outlet property="notYouButton" destination="HaB-1J-31p" id="xtp-nb-zA3"/>
                 <outlet property="passwordField" destination="BfP-qd-LXR" id="2es-SZ-v1I"/>
                 <outlet property="savedAccountView" destination="9BD-eB-si7" id="Ft1-kq-BgS"/>
                 <outlet property="sharedFieldsView" destination="zyg-5i-VWp" id="tou-iw-Gdy"/>
@@ -105,15 +104,6 @@
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaB-1J-31p">
-                    <rect key="frame" x="120" y="395" width="80" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <state key="normal" title="not you?"/>
-                    <connections>
-                        <action selector="notYouButtonTouched:" destination="-1" eventType="touchUpInside" id="nPe-UJ-Jhf"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="tintColor" red="0.40000000000000002" green="0.59999999999999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
