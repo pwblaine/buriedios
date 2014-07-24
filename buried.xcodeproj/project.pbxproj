@@ -458,7 +458,7 @@
 				ORGANIZATIONNAME = "Loftier Thoughts";
 				TargetAttributes = {
 					44FC42A51862667700CC948C = {
-						DevelopmentTeam = M5MRV4ZLPR;
+						DevelopmentTeam = 3562EE5B52;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -704,7 +704,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "5d9190ef-03a8-4791-8514-7cdeaa1d8c67";
+				PROVISIONING_PROFILE = "";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -735,7 +735,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "5d9190ef-03a8-4791-8514-7cdeaa1d8c67";
+				PROVISIONING_PROFILE = "";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};

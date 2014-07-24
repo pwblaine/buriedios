@@ -164,14 +164,16 @@
     __block PFUser *userInFocus = (PFUser *)[self objectAtIndexPath:indexPath];
     __block PFQuery *capsuleQuery = [PFQuery queryWithClassName:@"capsule"];
     [capsuleQuery orderByDescending:@"deliveryDate"];
-    [capsuleQuery whereKey:@"fromUserId" containsString:userInFocus.objectId];
+    [capsuleQuery whereKey:@"fromUserId" containsString:userInFocus.objectId]; // must be from selected user
+    [capsuleQuery whereKey:@"toUserIds" containedIn:@[userInFocus.objectId]]; // user must still be in the recipients (can't have deleted from their feed)
     [capsuleQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (error) {
             NSLog(@"the capsules failed to load");
             [self.navigationController popViewControllerAnimated:YES];
         } else {
-            [object setObject:[NSDate date] forKey:@"deliveryDate"];
-            [object setObject:@NO forKey:@"sent"];
+            [object setObject:[NSDate date] forKey:@"deliveryDate"]; // set the delivery date to now
+            [object setObject:@NO forKey:@"sent"]; // make it unsent
+            [object setObject:@[] forKey:@"readUserIds"]; // clear read users
             [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (error)
                 {
