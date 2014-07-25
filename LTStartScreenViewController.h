@@ -79,6 +79,8 @@
 
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
+-(BOOL)isValidEmail:(NSString *)email;
+
 #pragma mark - PFSignup Protocol
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info;
 

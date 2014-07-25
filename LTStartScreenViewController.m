@@ -60,12 +60,20 @@
     self->initialBorderSpecs.masksToBounds = self.emailField.layer.masksToBounds;
 }
 
+
+-(BOOL)isValidEmail:(NSString *)email
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailPredicate evaluateWithObject:email];
+}
+
 -(BOOL)checkForSavedUser
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->savedDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
     
-    if (![self->savedDisplayName isEqualToString:@""])
+    if (![self->savedDisplayName isEqual:@""] && self->savedDisplayName != nil)
     {
         return YES;
     }
@@ -158,12 +166,34 @@
     {
         if ([self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo])
         {
-            [self showView:savedAccountView];
+            self->HUD.labelText=@"signing up";
             NSLog(@"signup fields are good to go");
-            self->HUD.mode = MBProgressHUDModeCustomView;
-            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-            self->HUD.labelText = @"success!";
-            [self->HUD hide:YES afterDelay:1.0f];
+            
+            PFUser *userToSignup = [[PFUser alloc] init];
+            [userToSignup setEmail:self.userInfo[@"email"]];
+            [userToSignup setUsername:self.userInfo[@"username"]];
+            [userToSignup setPassword:self.userInfo[@"password"]];
+            [userToSignup setObject:self.userInfo[@"username"] forKey:@"displayName"];
+            [userToSignup signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded)
+                {
+                    NSLog(@"user %@ (%@) successfully signed up",userToSignup.username,userToSignup.objectId);
+                    [self storeUserDataToDefaults:userToSignup];
+                    [self showView:savedAccountView];
+                    
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+                    self->HUD.labelText = @"success!";
+                    [self->HUD hide:YES afterDelay:1.0f];
+                } else
+                {
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+                    self->HUD.labelText = [error userInfo][@"error"];
+                    [self->HUD hide:YES afterDelay:1.0f];
+                    NSLog(@"signing up user %@ (%@) failed because error:%@",userToSignup.username,userToSignup.objectId,error);
+                }
+            }];
         } else {
             NSLog(@"signup fields have errors");
         }
@@ -616,20 +646,86 @@
 
 -(void)fieldToChangeBorderOf:(UITextField *)textField toColor:(CGColorRef)borderColor
 {
-    textField.layer.cornerRadius=8.0f;
+    CABasicAnimation *color = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+    color.toValue   = (__bridge id)borderColor;
+    color.fromValue = (id)textField.layer.borderColor;
+    // ... and change the model value
+    textField.layer.borderColor = borderColor;
+    
+    CABasicAnimation *width = [CABasicAnimation animationWithKeyPath:@"borderWidth"];
+    width.toValue = @1;
+    width.fromValue = (id)[NSNumber numberWithFloat:textField.layer.borderWidth];
+    // ... and change the model value
+    textField.layer.borderWidth = 1.0f;
+    
+    CABasicAnimation *corner = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
+    corner.toValue = @8;
+    corner.fromValue = (id)[NSNumber numberWithFloat:textField.layer.cornerRadius];
+    // ... and change the model value
+    textField.layer.cornerRadius = 8.0f;
+    
+    CAAnimationGroup *all = [CAAnimationGroup animation];
+    // animate all as a group with the duration of 0.5 seconds
+    all.duration   = 0.5;
+    all.animations = @[color, width,corner];
+    // optionally add other configuration (that applies to all animations)
+    all.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [textField.layer addAnimation:all forKey:@"color and corner and width"];
+    
     textField.layer.masksToBounds=YES;
-    [[textField layer] setBorderColor:borderColor];
-    textField.layer.borderWidth= 1.0f;
+    
+    [NSTimer scheduledTimerWithTimeInterval:all.duration target:self selector:@selector(callRevertField:) userInfo:@{@"textField":textField,@"animated":@YES} repeats:NO];
+}
+
+-(void)callRevertField:(NSTimer *)timer
+{
+}
+
+-(void)revertField:(UITextField *)textField animated:(BOOL)animated
+{
+    CABasicAnimation *color = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+    color.toValue   = (id)self->initialBorderSpecs.borderColor;
+    color.fromValue = (id)textField.layer.borderColor;
+    // ... and change the model value
+    textField.layer.borderColor = self->initialBorderSpecs.borderColor;
+    
+    CABasicAnimation *width = [CABasicAnimation animationWithKeyPath:@"borderWidth"];
+    width.toValue = (id)[NSNumber numberWithFloat:self->initialBorderSpecs.borderWidth];
+    width.fromValue = (id)[NSNumber numberWithFloat:textField.layer.borderWidth];
+    // ... and change the model value
+    textField.layer.borderWidth = self->initialBorderSpecs.borderWidth;
+    
+    CABasicAnimation *corner = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
+    width.toValue = (id)[NSNumber numberWithFloat:self->initialBorderSpecs.cornerRadius];
+    corner.fromValue = (id)[NSNumber numberWithFloat:textField.layer.cornerRadius];
+    // ... and change the model value
+    textField.layer.cornerRadius = self->initialBorderSpecs.cornerRadius;
+    
+    CAAnimationGroup *all = [CAAnimationGroup animation];
+    // animate all as a group with the duration of 0.5 seconds
+    if (animated)
+        all.duration = 0.3f;
+    else
+        all.duration = 0.0f;
+    all.animations = @[color, width,corner];
+    
+    // optionally add other configuration (that applies to all animations)
+    all.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [textField.layer addAnimation:all forKey:@"color and width and corner"];
+    
+    textField.layer.masksToBounds=YES;
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
-    NSMutableArray *fieldsToChangeColorOf = [NSMutableArray arrayWithObject:textField];
+    NSArray *fieldsToChangeColorOf = [NSArray arrayWithObject:textField];
     NSLog(@"textField %@ ended editing",textField.placeholder);
     CGColorRef borderColor = CGColorCreate(0, 0);
     if ([textField isEqual:self.emailField])
     {
-        if (textField.text.length >= 5)
+        if ([self isValidEmail:textField.text])
         {
             borderColor = [[UIColor greenColor] CGColor];
         }
@@ -637,43 +733,26 @@
         {
             borderColor = [[UIColor redColor] CGColor];
         }
-    } else if (([textField isEqual:self.passwordField]) || ([textField isEqual:self.confirmField]))
+    } else
     {
-        if (textField.text.length < 1)
+        if ([self->currentViewState isDescendantOfView:self->signUpView])
         {
-            borderColor = [[UIColor redColor] CGColor];
-        }
-        else if ([self->currentViewState isDescendantOfView:self->signUpView])
-        {
-            if ([self.passwordField.text isEqualToString:self.confirmField.text])
-            {
-                borderColor = [[UIColor greenColor] CGColor];
-                if ([textField isEqual:self.passwordField])
-                {
-                    [fieldsToChangeColorOf addObject:self.confirmField];
-                }
-                else
-                {
-                    [fieldsToChangeColorOf addObject:self.passwordField];
-                }
-            }
-            else
+            fieldsToChangeColorOf = @[self.passwordField,self.confirmField];
+            if (![self.passwordField.text isEqualToString:self.confirmField.text] || textField.text.length < 1)
             {
                 borderColor = [[UIColor redColor] CGColor];
-                if ([textField isEqual:self.passwordField])
-                {
-                    [fieldsToChangeColorOf addObject:self.confirmField];
-                }
-                else
-                {
-                    [fieldsToChangeColorOf addObject:self.passwordField];
-                }
+            } else
+            {
+                borderColor = [[UIColor greenColor] CGColor];
             }
+        } else if (textField.text.length < 1) {
+            borderColor = [[UIColor redColor] CGColor];
         } else
         {
             borderColor = [[UIColor greenColor] CGColor];
         }
     }
+
     for (UITextField *field in fieldsToChangeColorOf) {
         [self fieldToChangeBorderOf:field toColor:borderColor];
     }
@@ -779,7 +858,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"info: %@",info);
     
-    if ((self.passwordField.text.length < 1) || (self.emailField.text.length < 5))
+    if ((self.passwordField.text.length < 1) || (![self isValidEmail:self.emailField.text]))
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
@@ -873,7 +952,7 @@
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if ((self.emailField.text.length < 5) || (self.passwordField.text.length < 1))
+    if ((![self isValidEmail:self.emailField.text]) || (self.passwordField.text.length < 1))
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
@@ -886,7 +965,6 @@
         NSLog(@"user info acceptable for login");
         return YES;
     }
-    return YES;
 }
 
 /*! @name Responding to Actions */
