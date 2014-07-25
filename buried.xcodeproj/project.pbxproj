@@ -683,8 +683,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -714,8 +714,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
