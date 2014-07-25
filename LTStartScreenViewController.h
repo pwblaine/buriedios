@@ -34,20 +34,28 @@
     CGRect topLogoPosition;
     CGRect centerLogoPostition;
     
+    CGRect textFieldHighPosition;
+    CGRect textFieldMedHighPosition;
+    CGRect textFieldMedHighGroupedPosition;
+    CGRect textFieldMedLowPosition;
+    CGRect textFieldLowPosition;
+    
     UIBarButtonItem *signInButton;
     UIBarButtonItem *signUpButton;
     UIBarButtonItem *continueButton;
     UIBarButtonItem *submitButton;
-    UIBarButtonItem *cancelButton;
+    UIBarButtonItem *goBackButton;
+    UIBarButtonItem *clearButton;
     UIBarButtonItem *notYouButton;
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;
     UITapGestureRecognizer *closeTextFieldGesture;
     NSMutableArray *currentTextFields;
+    
+    CALayer *initialBorderSpecs;
 }
 
-@property IBOutlet UITextField *usernameField;
 @property IBOutlet UITextField *passwordField;
 @property IBOutlet UITextField *confirmField;
 @property IBOutlet UITextField *emailField;
@@ -62,6 +70,8 @@
 - (IBAction)signInButtonTouchHandler:(id)sender;
 - (IBAction)continueButtonTouchHandler:(id)sender;
 - (IBAction)notYouButtonTouched:(id)sender;
+- (IBAction)goBackButtonTouchHandler:(id)sender;
+- (IBAction)clearButtonTouchHandler:(id)sender;
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender;
 

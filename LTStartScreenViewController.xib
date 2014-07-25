@@ -8,7 +8,7 @@
             <connections>
                 <outlet property="buriedLogo" destination="cpo-Y1-xtb" id="kby-Jx-dEZ"/>
                 <outlet property="confirmField" destination="kzB-8P-fji" id="pBq-rD-Fo5"/>
-                <outlet property="emailField" destination="Izi-u2-hei" id="UCe-Do-c95"/>
+                <outlet property="emailField" destination="aPS-kV-ODT" id="nfW-x4-zxz"/>
                 <outlet property="facebookLoginButton" destination="Y9Q-Ib-odj" id="eET-bu-iJY"/>
                 <outlet property="forgotPasswordButton" destination="GYS-Oc-O4y" id="3Ah-cF-kYO"/>
                 <outlet property="lastLoggedInLabel" destination="Tnc-qK-WQO" id="STF-Ge-rgs"/>
@@ -18,7 +18,6 @@
                 <outlet property="sharedFieldsView" destination="zyg-5i-VWp" id="tou-iw-Gdy"/>
                 <outlet property="signUpView" destination="3rA-Qm-dly" id="YLV-GG-lEh"/>
                 <outlet property="startView" destination="Jdf-t8-8gj" id="fM9-ip-hQc"/>
-                <outlet property="usernameField" destination="aPS-kV-ODT" id="7Mx-wT-WGo"/>
                 <outlet property="view" destination="uZF-GN-OCq" id="YVU-Mk-6wB"/>
             </connections>
         </placeholder>
@@ -26,14 +25,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="buried_text_250x94.png" translatesAutoresizingMaskIntoConstraints="NO" id="cpo-Y1-xtb">
-                    <rect key="frame" x="40" y="568" width="240" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" label="buried logo">
-                        <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
-                        <bool key="isElement" value="YES"/>
-                    </accessibility>
-                </imageView>
                 <button hidden="YES" opaque="NO" alpha="0.0" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-Oc-O4y">
                     <rect key="frame" x="78" y="335" width="164" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -57,22 +48,12 @@
                         <action selector="continueButtonTouchHandler:" destination="-1" eventType="touchUpInside" id="V1a-ib-2HA"/>
                     </connections>
                 </button>
-                <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Izi-u2-hei" userLabel="email">
-                    <rect key="frame" x="40" y="395" width="240" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <accessibility key="accessibilityConfiguration" label="email"/>
-                    <attributedString key="attributedText"/>
-                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light"/>
-                    <connections>
-                        <outlet property="delegate" destination="-1" id="Z2z-zY-w7a"/>
-                    </connections>
-                </textField>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="confirm password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kzB-8P-fji" userLabel="confirm">
                     <rect key="frame" x="40" y="335" width="240" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="confirm password"/>
                     <attributedString key="attributedText"/>
-                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light" secureTextEntry="YES"/>
+                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="5h4-UX-dZA"/>
                     </connections>
@@ -82,12 +63,12 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="password"/>
                     <attributedString key="attributedText"/>
-                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light" secureTextEntry="YES"/>
+                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="N58-38-7e6"/>
                     </connections>
                 </textField>
-                <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPS-kV-ODT" userLabel="username">
+                <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="email address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPS-kV-ODT" userLabel="email">
                     <rect key="frame" x="40" y="225" width="240" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="username"/>
@@ -97,13 +78,21 @@
                         <outlet property="delegate" destination="-1" id="ceu-l4-u38"/>
                     </connections>
                 </textField>
-                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="welcome label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Tnc-qK-WQO">
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Tnc-qK-WQO">
                     <rect key="frame" x="20" y="335" width="280" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="buried_text_250x94.png" translatesAutoresizingMaskIntoConstraints="NO" id="cpo-Y1-xtb">
+                    <rect key="frame" x="40" y="568" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <accessibility key="accessibilityConfiguration" label="buried logo">
+                        <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
+                </imageView>
             </subviews>
             <color key="tintColor" red="0.40000000000000002" green="0.59999999999999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

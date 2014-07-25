@@ -14,7 +14,7 @@
 
 @implementation LTStartScreenViewController
 
-@synthesize logInVC,signUpVC, userInfo, usernameField, passwordField, confirmField, emailField;
+@synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, emailField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,12 +26,13 @@
         self->signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"sign up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
         self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
-        self->cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        self->goBackButton = [[UIBarButtonItem alloc] initWithTitle:@"go back" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
+        self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(clearButtonTouchHandler:)];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,89,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
-        }
+    }
     return self;
 }
 
@@ -53,6 +54,10 @@
     // Add login/sign in navigation bar button;
     self.navigationItem.rightBarButtonItem = self->signInButton;
     
+    self->initialBorderSpecs.borderColor = self.emailField.layer.borderColor;
+    self->initialBorderSpecs.borderWidth = self.emailField.layer.borderWidth;
+    self->initialBorderSpecs.cornerRadius = self.emailField.layer.cornerRadius;
+    self->initialBorderSpecs.masksToBounds = self.emailField.layer.masksToBounds;
 }
 
 -(BOOL)checkForSavedUser
@@ -110,51 +115,83 @@
             displayName = [[PFUser currentUser] objectForKey:@"displayName"];
         if (![self->savedDisplayName isEqualToString:displayName])
             self->savedDisplayName = displayName;
-            [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
-            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
-            NSLog(@"lastLoggedInLabel loaded");
-            NSLog(@"navBar elements loaded and enabled");
-            [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
-            [self.navigationItem setLeftBarButtonItem:self->notYouButton animated:YES];
+        [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
+        if (![[[[displayName componentsSeparatedByString:@" "] objectAtIndex:0] lowercaseString] isEqual:[NSNull null]])
+        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
+        NSLog(@"lastLoggedInLabel loaded");
+        NSLog(@"navBar elements loaded and enabled");
+        [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
+        [self.navigationItem setLeftBarButtonItem:self->notYouButton animated:YES];
     } else {
         if (![PFUser currentUser])
         {
             NSLog(@"no logged in or stored users detected");
         }
         else
-             NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
+            NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
         [self showView:self->startView];
     }
 }
 
-#pragma mark - SignUp methods
+#pragma mark - SignUpView methods
 - (IBAction)submitButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self cleanUpAfterEditing];
-    if ((self.emailField.text.length < 6) || (self.usernameField.text.length < 1) || (self.passwordField.text.length > 1) || ([self.passwordField.text isEqualToString:self.confirmField.text]))
+    
+    if (!self->HUD)
     {
-        NSLog(@"submission failed");
-        self->HUD.mode = MBProgressHUDModeCustomView;
-        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"fill out all fields correctly!";
-        [self->HUD hide:YES afterDelay:3.0f];
+        self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
+        [[[[UIApplication sharedApplication] windows] firstObject] addSubview:HUD];
+        
+        self->HUD.delegate = self;
     }
-    else
-    {
-    self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: usernameField.text,@"username",passwordField.text,@"password",emailField.text,@"email", nil];
-    NSLog(@"submitting userInfo: %@",userInfo);
+    
+    self->HUD.mode = MBProgressHUDModeIndeterminate;
+    self->HUD.labelText = @"submitting";
+    [self->HUD show:YES];
+    
+    self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.emailField.text,@"username",self.passwordField.text,@"password",self.emailField.text,@"email", nil];
+    NSLog(@"submitting userInfo: %@",self.userInfo);
+    
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
-        [self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo];
+        if ([self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo])
+        {
+            [self showView:savedAccountView];
+            NSLog(@"signup fields are good to go");
+            self->HUD.mode = MBProgressHUDModeCustomView;
+            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+            self->HUD.labelText = @"success!";
+            [self->HUD hide:YES afterDelay:1.0f];
+        } else {
+            NSLog(@"signup fields have errors");
+        }
     } else if ([self->loginView isDescendantOfView:self->currentViewState])
     {
-        [self logInViewController:logInVC shouldBeginLogInWithUsername:self.userInfo[@"username"] password:self.userInfo[@"password"]];
-    }
+        if ([self logInViewController:self.logInVC shouldBeginLogInWithUsername:self.userInfo[@"username"] password:self.userInfo[@"password"]])
+        {
+            [PFUser logInWithUsernameInBackground:self.userInfo[@"username"] password:self.userInfo[@"password"] block:^(PFUser *user, NSError *error) {
+                if (!error)
+                {
+                    [self showView:savedAccountView];
+                    NSLog(@"user: %@",user);
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+                    self->HUD.labelText = @"success!";
+                    
+                    [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:self->submitButton];
+                } else
+                {
+                    NSLog(@"error in login: %@",error);
+                    [self->HUD hide:YES afterDelay:1.0f];
+                }
+            }];
+        }
     }
 }
 
-- (IBAction)cancelButtonTouchHandler:(id)sender
+- (IBAction)goBackButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self cleanUpAfterEditing];
@@ -166,6 +203,12 @@
         [self logInViewControllerDidCancelLogIn:self.logInVC];
     }
     
+}
+
+- (IBAction)clearButtonTouchHandler:(id)sender
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self->currentResponder setText:@""];
 }
 
 - (NSMutableArray *)getTaggedElementsForView:(UIView *)view
@@ -187,7 +230,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->signInButton.enabled = NO;
     self->signUpButton.enabled = NO;
-    self->cancelButton.enabled = NO;
+    self->goBackButton.enabled = NO;
     self->continueButton.enabled = NO;
     self->submitButton.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -199,7 +242,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->signInButton.enabled = YES;
     self->signUpButton.enabled = YES;
-    self->cancelButton.enabled = YES;
+    self->goBackButton.enabled = YES;
     self->continueButton.enabled = YES;
     self->submitButton.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
@@ -249,27 +292,28 @@
     NSLog(@"items to hide: %@",self->currentViewElements);
     if (![self->currentViewState isDescendantOfView:view] && self->currentViewState)
         [self hideViewElements:elementsToHide];
-        
+    
     [self disableAllBarButtons];
     
     for (UIView *element in elementsToShow)
-        {
-            element.alpha = 0;
-            element.hidden = NO;
-        }
-        
-        if ([view isDescendantOfView:self->signUpView] || [view isDescendantOfView:self->loginView])
-        {
-            NSLog(@"showing signup animation finished");
-            [self.navigationItem setLeftBarButtonItem:self->cancelButton animated:YES];
-            [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
-        } else if ([view isDescendantOfView:self->savedAccountView])
-            [self changeButtonsForContinuingUser:self->savedDisplayName];
-        else if ([view isDescendantOfView:self->startView])
-        {
-            [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
-            [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
-        }
+    {
+        element.alpha = 0;
+        element.hidden = NO;
+    }
+    
+    if ([view isDescendantOfView:self->signUpView] || [view isDescendantOfView:self->loginView])
+    {
+        NSLog(@"showing signup animation finished");
+        [self.navigationItem setLeftBarButtonItem:self->goBackButton animated:YES];
+        [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
+        [passwordField setSecureTextEntry:([view isDescendantOfView:self->loginView])];
+    } else if ([view isDescendantOfView:self->savedAccountView])
+        [self changeButtonsForContinuingUser:self->savedDisplayName];
+    else if ([view isDescendantOfView:self->startView])
+    {
+        [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
+        [self.navigationItem setRightBarButtonItem:self->signInButton animated:YES];
+    }
     
     [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
         if ([view isDescendantOfView:self->savedAccountView])
@@ -313,17 +357,23 @@
 - (void)hideViewElements:(NSMutableArray *)viewElements
 {
     
-        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (viewElements.count > 0)
         [self disableAllBarButtons];
-        
-        [UIView animateWithDuration:0.5 animations:^{
+    
+    [UIView animateWithDuration:0.5 animations:^{
         for (UIView *element in viewElements) {
             element.alpha = 0;
             if ([element isMemberOfClass:[UITextField class]])
+            {
                 [(UITextField *)[element self] setText:@""];
+                ((UITextField *)[element self]).layer.borderColor = self->initialBorderSpecs.borderColor;
+                ((UITextField *)[element self]).layer.borderWidth = self->initialBorderSpecs.borderWidth;
+                ((UITextField *)[element self]).layer.cornerRadius = self->initialBorderSpecs.cornerRadius;
+                ((UITextField *)[element self]).layer.masksToBounds = self->initialBorderSpecs.masksToBounds;
+            }
         }
-        } completion:^(BOOL finished) {
+    } completion:^(BOOL finished) {
         NSLog(@"finished hiding");
         if (finished)
         {
@@ -332,15 +382,17 @@
             }
         }
     }];
-    }
+}
 
 - (IBAction)signUpButtonTouchHandler:(id)sender  {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (!self.signUpVC)
     {
-    self.signUpVC = [[PFSignUpViewController alloc] init];
-    self.signUpVC.delegate = self;
+        self.signUpVC = [[PFSignUpViewController alloc] init];
+        self.signUpVC.delegate = self;
     }
+    [self.passwordField setSecureTextEntry:NO];
+    [self.confirmField setSecureTextEntry:NO];
     [self showView:self->signUpView];
 }
 
@@ -361,14 +413,14 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     /* TODO implement PIN VC
      [self presentViewController:[[LTPINVerificationViewController alloc] init] animated:YES completion:^{
-        NSLog(@"PinVC presented successfully");
-    }];
+     NSLog(@"PinVC presented successfully");
+     }];
      */
     [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
 }
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:
-    (id)sender
+(id)sender
 {
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -428,9 +480,9 @@
                         
                         [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
                             if (succeeded)
-                            NSLog(@"new user profile successfully saved to parse");
+                                NSLog(@"new user profile successfully saved to parse");
                             else
-                            NSLog(@"profile updating failed with error: %@",error);
+                                NSLog(@"profile updating failed with error: %@",error);
                         }];
                     } else {
                         NSLog(@"profile is up to date");
@@ -485,13 +537,27 @@
             }];
         }
     }];
-
+    
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    
     if ([self.navigationItem.rightBarButtonItem isEnabled])
+    {
+        [textField setReturnKeyType:UIReturnKeyDone];
+        
+        if ([textField isEqual:self.emailField])
+        {
+            [textField setKeyboardType:UIKeyboardTypeEmailAddress];
+        }
+        else
+        {
+            [textField setKeyboardType:UIKeyboardTypeASCIICapable];
+        }
+        
         return YES;
+    }
     else
         return NO;
 }
@@ -505,14 +571,8 @@
     if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
         isNotLast = YES;
     
-    UIBarButtonItem *previousButton = [[UIBarButtonItem alloc] initWithTitle:@"previous" style:UIBarButtonItemStyleBordered target:self action:@selector(moveToPreviousTextField)];
-    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"next" style:UIBarButtonItemStyleBordered target:self action:@selector(moveToNextTextField)];
+    self.navigationItem.leftBarButtonItem = clearButton;
     
-    self.navigationItem.leftBarButtonItem = previousButton;
-    self.navigationItem.rightBarButtonItem = nextButton;
-    
-    textField.returnKeyType = UIReturnKeyDone;
-
     self->currentResponder = textField;
     NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder,textField);
     
@@ -529,17 +589,17 @@
             NSLog(@"view.center.y: %f == originalViewCenter.y: %f",self.view.center.y, self->originalViewCenter.y);
             self.view.center = CGPointMake(self.view.center.x,centerPointYForViewWithKeyboardUp);
         }
-            NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField.center.y %f | offset %f",textField.center.y,self.view.center.y,self->usernameField.center.y,(textField.center.y - self->usernameField.center.y));
-            self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->usernameField.center.y));
+        NSLog(@"text.center.y: %f | self.view.center.y: %f | emailField %f | offset %f",textField.center.y,self.view.center.y,self->emailField.center.y,(textField.center.y - self->emailField.center.y));
+        self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->emailField.center.y));
     } completion:^(BOOL finished) {
-         NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField.center.y %f",textField.center.y,self.view.center.y,self->usernameField.center.y);
+        NSLog(@"text.center.y: %f | self.view.center.y: %f | emailField.center.y %f",textField.center.y,self.view.center.y,self->emailField.center.y);
     }];
 }
 
 -(void)handleTapInMainView:(UITapGestureRecognizer *)sender
 {
-        NSLog(@"handling tap in main view");
-        [self cleanUpAfterEditing];
+    NSLog(@"handling tap in main view");
+    [self cleanUpAfterEditing];
 }
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
@@ -554,9 +614,69 @@
         return NO;
 }
 
+-(void)fieldToChangeBorderOf:(UITextField *)textField toColor:(CGColorRef)borderColor
+{
+    textField.layer.cornerRadius=8.0f;
+    textField.layer.masksToBounds=YES;
+    [[textField layer] setBorderColor:borderColor];
+    textField.layer.borderWidth= 1.0f;
+}
+
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
+    NSMutableArray *fieldsToChangeColorOf = [NSMutableArray arrayWithObject:textField];
     NSLog(@"textField %@ ended editing",textField.placeholder);
+    CGColorRef borderColor = CGColorCreate(0, 0);
+    if ([textField isEqual:self.emailField])
+    {
+        if (textField.text.length >= 5)
+        {
+            borderColor = [[UIColor greenColor] CGColor];
+        }
+        else
+        {
+            borderColor = [[UIColor redColor] CGColor];
+        }
+    } else if (([textField isEqual:self.passwordField]) || ([textField isEqual:self.confirmField]))
+    {
+        if (textField.text.length < 1)
+        {
+            borderColor = [[UIColor redColor] CGColor];
+        }
+        else if ([self->currentViewState isDescendantOfView:self->signUpView])
+        {
+            if ([self.passwordField.text isEqualToString:self.confirmField.text])
+            {
+                borderColor = [[UIColor greenColor] CGColor];
+                if ([textField isEqual:self.passwordField])
+                {
+                    [fieldsToChangeColorOf addObject:self.confirmField];
+                }
+                else
+                {
+                    [fieldsToChangeColorOf addObject:self.passwordField];
+                }
+            }
+            else
+            {
+                borderColor = [[UIColor redColor] CGColor];
+                if ([textField isEqual:self.passwordField])
+                {
+                    [fieldsToChangeColorOf addObject:self.confirmField];
+                }
+                else
+                {
+                    [fieldsToChangeColorOf addObject:self.passwordField];
+                }
+            }
+        } else
+        {
+            borderColor = [[UIColor greenColor] CGColor];
+        }
+    }
+    for (UITextField *field in fieldsToChangeColorOf) {
+        [self fieldToChangeBorderOf:field toColor:borderColor];
+    }
 }
 
 -(void)cleanUpAfterEditing
@@ -568,8 +688,8 @@
         [self->currentResponder resignFirstResponder];
     }
     
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    self.navigationItem.rightBarButtonItem = submitButton;
+    self.navigationItem.leftBarButtonItem = self->goBackButton;
+    self.navigationItem.rightBarButtonItem = self->submitButton;
     
     if (!CGPointEqualToPoint(self.view.center, originalViewCenter))
     {
@@ -608,7 +728,7 @@
     UITextField *nextUp;
     if ([self->currentTextFields indexOfObject:textField] > 0)
     {
-        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
+        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] - 1)];
         NSLog(@"nextUp:%@",nextUp);
     }
     else {
@@ -658,7 +778,29 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"info: %@",info);
-    return YES;
+    
+    if ((self.passwordField.text.length < 1) || (self.emailField.text.length < 5))
+    {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"fill out all fields";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else if (![self.passwordField.text isEqualToString:self.confirmField.text])
+    {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"password and confirm must match";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else {
+        NSLog(@"user info acceptable for signup");
+        return YES;
+    }
 }
 
 -(void)storeUserDataToDefaults:(PFUser*)user
@@ -724,13 +866,26 @@
 
 /*
  Sent to the delegate to determine whether the log in request should be submitted to the server.
-@param username the username the user tries to log in with.
-@param password the password the user tries to log in with.
-@result a boolean indicating whether the log in should proceed.
-*/
+ @param username the username the user tries to log in with.
+ @param password the password the user tries to log in with.
+ @result a boolean indicating whether the log in should proceed.
+ */
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
 {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if ((self.emailField.text.length < 5) || (self.passwordField.text.length < 1))
+    {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"fill out all fields";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else {
+        NSLog(@"user info acceptable for login");
+        return YES;
+    }
     return YES;
 }
 
@@ -738,7 +893,7 @@
 /// Sent to the delegate when a PFUser is logged in.
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [logInController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"loginviewController dismissed with successful login, current user: %@",[PFUser currentUser]);
         [self storeUserDataToDefaults:user];
@@ -749,7 +904,7 @@
 /// Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
 {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 }
 
 /// Sent to the delegate when the log in screen is dismissed.
@@ -771,28 +926,28 @@
             
             // Parse the data received
             NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
-             NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
+            NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
             
-                if (![userData[@"updated_time"] isEqualToString:storedData[@"updated_time"]])
-                {
-                    
-                    [[PFUser currentUser] setObject:userData forKey:@"profile"];
-                    
-                    // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-                    
-                    [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-                    [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                    [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-                    
-                    [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
-                        if (succeeded)
-                            NSLog(@"new user profile successfully saved to parse");
-                        else
-                            NSLog(@"profile updating failed with error: %@",error);
-                    }];
-                } else {
-                    NSLog(@"profile is up to date, no change");
-                }
+            if (![userData[@"updated_time"] isEqualToString:storedData[@"updated_time"]])
+            {
+                
+                [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                
+                // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                
+                [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
+                [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
+                [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                
+                [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+                    if (succeeded)
+                        NSLog(@"new user profile successfully saved to parse");
+                    else
+                        NSLog(@"profile updating failed with error: %@",error);
+                }];
+            } else {
+                NSLog(@"profile is up to date, no change");
+            }
         } else {
             NSLog(@"unable to update profile");
         }

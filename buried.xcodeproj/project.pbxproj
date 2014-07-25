@@ -704,7 +704,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "F42F6FA2-4346-4889-9393-070B34C16AEF";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -735,7 +735,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "F42F6FA2-4346-4889-9393-070B34C16AEF";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
