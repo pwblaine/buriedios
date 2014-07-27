@@ -19,6 +19,7 @@
     BOOL initialLoad;
     BOOL isAtBottom;
     BOOL comingInFromOtherPage;
+    UILabel *tableHeaderLabel;
 }
 
 @property NSMutableArray *allItems;
@@ -35,6 +36,11 @@
 
 - (void)logoutButtonTouchHandler:(id)sender;
 - (void)buryItButtonTouchHandler:(id)sender;
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
 #pragma mark - NSURLConnectionDataDelegate
 

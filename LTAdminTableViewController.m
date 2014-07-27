@@ -18,6 +18,8 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -28,6 +30,8 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.loadingViewEnabled = NO;
@@ -35,6 +39,8 @@
 
 - (PFQuery *)queryForTable
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     //PFQuery *allCapsules = [PFQuery queryWithClassName:@"capsule"];
     
     PFQuery *allUsersQuery = [PFUser query];
@@ -105,18 +111,20 @@
      }*/
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
     [super viewDidAppear:NO];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self.navigationController action:@selector(popViewControllerAnimated:)];
-    self.navigationItem.title = @"Admin Menu";
-    [self.navigationItem setRightBarButtonItems:[NSArray array] animated:YES];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self.navigationController action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.title = @"admin nenu";
+    [self.navigationItem setRightBarButtonItems:[NSArray array] animated:NO];
     
     
 }
 
 -(void)objectsDidLoad:(NSError *)error
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     [super objectsDidLoad:error];
     
 }
@@ -147,7 +155,7 @@
         }
     }
     NSLog(@"name to display: %@",nameToDisplay);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@",nameToDisplay];
+    cell.textLabel.text = [[NSString stringWithFormat:@"%@",nameToDisplay] lowercaseString];
     
     return cell;
 }
@@ -247,6 +255,8 @@
 
 -(LTGrassState)defaultGrassStateForView
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     return LTGrassStateHidden;
 }
 

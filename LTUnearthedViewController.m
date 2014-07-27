@@ -25,27 +25,27 @@
 @synthesize allItems, HUD;
 
 /* DEFAULT UI VIEW METHOD
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
+ - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+ {
+ self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+ if (self) {
+ // Custom initialization
+ }
+ return self;
+ }
+ */
 /* DEFAULT TABLE VIEW METHOD
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-*/
+ - (void)viewDidLoad
+ {
+ [super viewDidLoad];
+ 
+ // Uncomment the following line to preserve selection between presentations.
+ // self.clearsSelectionOnViewWillAppear = NO;
+ 
+ // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+ // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+ }
+ */
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -95,8 +95,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    self->tableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    self->tableHeaderLabel.textAlignment = NSTextAlignmentCenter;
+    self->tableHeaderLabel.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:17.0f];
+    self->tableHeaderLabel.text = @"everything buried has been unearthed";
+    //self.tableView.tableHeaderView = self->tableHeaderLabel;
+    self->tableHeaderLabel.center = CGPointMake(self.refreshControl.center.x, self.refreshControl.center.y + (self->tableHeaderLabel.bounds.size.height));
+    
     // Add logout navigation bar button
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
     [logoutButton setEnabled:NO];
     self.navigationItem.leftBarButtonItem = logoutButton;
     
@@ -116,51 +123,58 @@
     
     if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
     {
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
-    PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
-    
-    [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
-    
-    [toUserIdsQuery whereKey:@"sent" notEqualTo:@YES];
-    
-    [toUserIdsQuery countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
-        // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
-        NSLog(@"count for pending capsules: %i", count);
-        if (error)
-            NSLog(@"updating title received error: %@",error);
-        else if (count > 1)
-            self.title = [NSString stringWithFormat:@"%i Await You",count];
-        else if (count == 1)
-            self.title = [NSString stringWithFormat:@"%i Awaits You",count];
-        else
-            self.title = [NSString stringWithFormat:@"%@",[currentUser objectForKey:@"displayName"]];
+        
+        PFUser *currentUser = [PFUser currentUser];
+        
+        PFQuery *toUserIdsQuery = [PFQuery queryWithClassName:self.parseClassName];
+        
+        [toUserIdsQuery whereKey:@"toUserIds" containsAllObjectsInArray:@[currentUser.objectId]];
+        
+        [toUserIdsQuery whereKey:@"sent" notEqualTo:@YES];
+        
+        [toUserIdsQuery countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
+            // set title for number of pending capsules (if none, display name, if 1, display Awaits You, display Await You)
+            NSLog(@"count for pending capsules: %i", count);
+            if (error)
+                NSLog(@"updating title received error: %@",error);
+            else if (count > 1)
+            {
+                    self->tableHeaderLabel.text = [NSString stringWithFormat:@"%i await you...",count];
+                self.title = self->tableHeaderLabel.text;
+            }
+                else if (count == 1)
+                {
+                    self->tableHeaderLabel.text = [NSString stringWithFormat:@"%i awaits you...",count];
+                    self.title = self->tableHeaderLabel.text;
+                }
+                else
+                self.title = [NSString stringWithFormat:@"%@",[[currentUser objectForKey:@"displayName"] lowercaseString]];
         }];
     }
-
+    
 }
 
 -(void)pushToAdminTable
 {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
     {
         
-    NSLog(@"admin user detected, changing view");
-    self->adminTableVC = [[LTAdminTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    self->adminTableVC.admin = [PFUser currentUser];/*
-        self->adminTableVC.loadingViewEnabled = NO;
-    NSLog(@"self.navigationItem.titleView.gestureRecognizers = %@",self.navigationController.navigationBar.gestureRecognizers);
-    for (UITapGestureRecognizer *gesture in self.navigationController.navigationBar.gestureRecognizers)
-    {
-        NSLog(@"examining gesture %@", gesture);
-        if ([gesture respondsToSelector:@selector(pushToAdminTable)])
-        {
-            NSLog(@"gesture responds to pushToAdminTable selector");
-            [[gesture view] removeGestureRecognizer:gesture];
-            NSLog(@"removing tap recognizer now that admin menu is being summoned, pushing admin menu...");
-        }
-    }*/
+        NSLog(@"admin user detected, changing view");
+        self->adminTableVC = [[LTAdminTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        self->adminTableVC.admin = [PFUser currentUser];/*
+                                                         self->adminTableVC.loadingViewEnabled = NO;
+                                                         NSLog(@"self.navigationItem.titleView.gestureRecognizers = %@",self.navigationController.navigationBar.gestureRecognizers);
+                                                         for (UITapGestureRecognizer *gesture in self.navigationController.navigationBar.gestureRecognizers)
+                                                         {
+                                                         NSLog(@"examining gesture %@", gesture);
+                                                         if ([gesture respondsToSelector:@selector(pushToAdminTable)])
+                                                         {
+                                                         NSLog(@"gesture responds to pushToAdminTable selector");
+                                                         [[gesture view] removeGestureRecognizer:gesture];
+                                                         NSLog(@"removing tap recognizer now that admin menu is being summoned, pushing admin menu...");
+                                                         }
+                                                         }*/
         [self.navigationController pushViewController:self->adminTableVC animated:YES];
         self->adminTableVC.HUD = self.HUD;
         self->adminTableVC.HUD.delegate = self->adminTableVC;
@@ -169,7 +183,7 @@
 
 - (void)loadAdmin
 {
-    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self.HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
     UIWindow *theWindow = [[[UIApplication sharedApplication] windows] firstObject];
     [theWindow addSubview:self.HUD];
@@ -183,7 +197,7 @@
     [self pushToAdminTable];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (initialLoad)
     {
@@ -198,13 +212,13 @@
         {
             if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
             {
-            NSLog(@"gestureRecognizers on title: %lu",(unsigned long)[self.navigationItem.titleView.gestureRecognizers count]);
-            if ([self.navigationItem.titleView.gestureRecognizers count] == 0)
-            {
-                NSLog(@"attaching admin summon to titleview");
-            UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAdminTable)];
-            [titleTap setNumberOfTapsRequired:2]; // 2 taps on the menu bar sends it to admin view
-            [self.navigationController.navigationBar addGestureRecognizer:titleTap];
+                NSLog(@"gestureRecognizers on title: %lu",(unsigned long)[self.navigationItem.titleView.gestureRecognizers count]);
+                if ([self.navigationItem.titleView.gestureRecognizers count] == 0)
+                {
+                    NSLog(@"attaching admin summon to titleview");
+                    UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAdminTable)];
+                    [titleTap setNumberOfTapsRequired:2]; // 2 taps on the menu bar sends it to admin view
+                    [self.navigationController.navigationBar addGestureRecognizer:titleTap];
                 }
             }
         }
@@ -275,87 +289,87 @@
  return query;
  }
  */
-        
 
 
- // Override to customize the look of a cell representing an object. The default is to display
- // a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
- // and the imageView being the imageKey in the object.
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-     
- static NSString *CellIdentifier = @"Cell";
- 
- PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
- if (cell == nil) {
- cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
- }
- 
-     // Configure the cell
-     
-     PFUser *currentUser = [PFUser currentUser];
-     
-     // Set left label to timestamp
-     NSString *timestampString = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-     if (![cell.textLabel.text isEqualToString:timestampString])
-     cell.textLabel.text = timestampString;
-     
-     // If sent to self set label to blue
-     if ([[object objectForKey:@"fromUserId"] isEqualToString:currentUser.objectId])
-     {
-         if (![cell.textLabel.textColor isEqual:[UIColor blueColor]])
-         cell.textLabel.textColor = [UIColor blueColor];
-     } else {
-         if (![cell.textLabel.textColor isEqual:[UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f]])
-         cell.textLabel.textColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
-     }
+
+// Override to customize the look of a cell representing an object. The default is to display
+// a UITableViewCellStyleDefault style cell with the label being the textKey in the object,
+// and the imageView being the imageKey in the object.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     
-     if (cell.textLabel.textAlignment != NSTextAlignmentLeft)
-         cell.textLabel.textAlignment = NSTextAlignmentLeft;
-     
-     NSString *thought = [object objectForKey:@"thought"];
-     
-     if (thought.length > 1)
-     {
-         if (![cell.detailTextLabel.text isEqualToString:thought])
-         cell.detailTextLabel.text = thought;
-         if (cell.detailTextLabel.textColor != [UIColor blackColor])
-         cell.detailTextLabel.textColor = [UIColor blackColor];
-     }
-     else
-     {
-         NSString *picturePlaceholderString = @"Picture";
-         if (![cell.detailTextLabel.text isEqualToString:picturePlaceholderString])
-         cell.detailTextLabel.text = picturePlaceholderString;
-         if (cell.detailTextLabel.textColor != [UIColor lightGrayColor])
-         cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-     }
+    static NSString *CellIdentifier = @"Cell";
     
-     // Unread code: if current user isn't found in the readUsers tint brown.
-     
-     NSArray *readUserIds = [object objectForKey:@"readUserIds"];
-     
-     BOOL userHasRead = NO;
-     
-     if ([readUserIds count] > 0)
-     {
-     for (NSString *userId in readUserIds) {
-         
-         if ([userId isEqualToString:[currentUser objectId]]) {
-             userHasRead = YES;
-             break;
-         }
-         
+    PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+    }
+    
+    // Configure the cell
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    // Set left label to timestamp
+    NSString *timestampString = [NSDateFormatter localizedStringFromDate:[object objectForKey:self.textKey] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+    if (![cell.textLabel.text isEqualToString:timestampString])
+        cell.textLabel.text = timestampString;
+    
+    // If sent to self set label to blue
+    if ([[object objectForKey:@"fromUserId"] isEqualToString:currentUser.objectId])
+    {
+        if (![cell.textLabel.textColor isEqual:[UIColor blueColor]])
+            cell.textLabel.textColor = [UIColor blueColor];
+    } else {
+        if (![cell.textLabel.textColor isEqual:[UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f]])
+            cell.textLabel.textColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
+    }
+    
+    if (cell.textLabel.textAlignment != NSTextAlignmentLeft)
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
+    
+    NSString *thought = [object objectForKey:@"thought"];
+    
+    if (thought.length > 1)
+    {
+        if (![cell.detailTextLabel.text isEqualToString:thought])
+            cell.detailTextLabel.text = thought;
+        if (cell.detailTextLabel.textColor != [UIColor blackColor])
+            cell.detailTextLabel.textColor = [UIColor blackColor];
+    }
+    else
+    {
+        NSString *picturePlaceholderString = @"Picture";
+        if (![cell.detailTextLabel.text isEqualToString:picturePlaceholderString])
+            cell.detailTextLabel.text = picturePlaceholderString;
+        if (cell.detailTextLabel.textColor != [UIColor lightGrayColor])
+            cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+    }
+    
+    // Unread code: if current user isn't found in the readUsers tint brown.
+    
+    NSArray *readUserIds = [object objectForKey:@"readUserIds"];
+    
+    BOOL userHasRead = NO;
+    
+    if ([readUserIds count] > 0)
+    {
+        for (NSString *userId in readUserIds) {
+            
+            if ([userId isEqualToString:[currentUser objectId]]) {
+                userHasRead = YES;
+                break;
+            }
+            
         }
-     }
-     if (!userHasRead)
-     {
-         cell.detailTextLabel.text = [NSString stringWithFormat:@"• %@",cell.detailTextLabel.text];
-         cell.detailTextLabel.textColor = [UIColor brownColor];
-     }
-
-     
- return cell;
- }
+    }
+    if (!userHasRead)
+    {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"• %@",cell.detailTextLabel.text];
+        cell.detailTextLabel.textColor = [UIColor brownColor];
+    }
+    
+    
+    return cell;
+}
 
 /*
  // Override if you need to change the ordering of objects in the table.
@@ -420,20 +434,20 @@
 
 #pragma mark - UITableViewDelegate
 /*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-}
-*/
+ - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+ [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+ }
+ */
 // OLD METHODS
 
 /*
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-*/
+ - (void)didReceiveMemoryWarning
+ {
+ [super didReceiveMemoryWarning];
+ // Dispose of any resources that can be recreated.
+ }
+ 
+ */
 #pragma mark - NSURLConnectionDataDelegate
 
 // Callback delegate methods used for downloading the user's profile picture
@@ -516,13 +530,13 @@
     NSLog(@"saving updated installation data to Parse...");
     [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
-
+    
     // write to user defaults
     NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
     if (![displayName isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"]])
     {
         [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"displayName"];
-     NSLog(@"written to NSUserDefaults for offline/immediate access: displayName/%@",displayName);
+        NSLog(@"written to NSUserDefaults for offline/immediate access: displayName/%@",displayName);
     }
     
     
@@ -542,36 +556,36 @@
     
 }
 /*
-#pragma mark - Parse Methods
-
-- (void)populateTable {
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 30;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
-    // Configure the cell...
-    
-    return cell;
-}
+ #pragma mark - Parse Methods
+ 
+ - (void)populateTable {
+ }
+ 
+ #pragma mark - Table view data source
+ 
+ - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+ {
+ // Return the number of sections.
+ return 1;
+ }
+ 
+ - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+ {
+ return 30;
+ }
+ 
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ static NSString *CellIdentifier = @"Cell";
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+ }
+ 
+ // Configure the cell...
+ 
+ return cell;
+ }
  */
 
 /*
@@ -669,11 +683,11 @@
     [self.navigationController pushViewController:capsuleViewController animated:YES];
 }
 
- - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
- {
-     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-     [self presentCapsule:[[self objectAtIndexPath:indexPath] objectId] fromSelectedCell:[self.tableView cellForRowAtIndexPath:indexPath]];
- }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self presentCapsule:[[self objectAtIndexPath:indexPath] objectId] fromSelectedCell:[self.tableView cellForRowAtIndexPath:indexPath]];
+}
 
 - (LTGrassState)defaultGrassStateForView
 {
@@ -686,8 +700,8 @@
     
     if (([[[self.objects lastObject] objectId] isEqualToString:[[self objectAtIndexPath:indexPath] objectId]]) && ([grassDelegate grassState] == self.defaultGrassStateForView))
     {
-            NSLog(@"match found for last capsule");
-            [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
+        NSLog(@"match found for last capsule");
+        [grassDelegate setGrassState:LTGrassStateHidden animated:YES];
     }
 }
 
@@ -703,6 +717,14 @@
             [grassDelegate setGrassState:self.defaultGrassStateForView animated:YES];
         }
     }
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [self viewWillAppear:animated];
 }
 
 
