@@ -142,6 +142,11 @@
         }
     } else {
         NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
+        NSLog(@"current state of PFFacebookUtils %@, current user: %@", [PFFacebookUtils session],[PFUser currentUser]);
+        [PFFacebookUtils logInWithPermissions:nil block:^(PFUser *user, NSError *error) {
+            if (error)
+                NSLog(@"error: %@, user: %@",error, user);
+        }];
     }
     
     if (self->initialLoad)

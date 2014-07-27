@@ -125,7 +125,7 @@
             self->savedDisplayName = displayName;
         [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
         if (![[[[displayName componentsSeparatedByString:@" "] objectAtIndex:0] lowercaseString] isEqual:[NSNull null]])
-        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
+            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
         [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
@@ -449,12 +449,11 @@
     [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
 }
 
-- (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:
-(id)sender
+- (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender
 {
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"summoining views");
+    NSLog(@"summoning views");
     //[(UIBarButtonItem*)sender setEnabled:NO];
     
     self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
@@ -471,52 +470,48 @@
     
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+        NSLog(@"returned user: %@,current user:%@, error: %@, activeSession: %@",user,[PFUser currentUser],error,[PFFacebookUtils session]);
+        // login attempted
         if (!user) {
-            
+            // no user was returned
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-            [self->HUD hide:YES afterDelay:1.0f];
             
             if (!error) {
                 NSLog(@"uh oh. The user outright cancelled the Facebook login.");
-                self.navigationItem.rightBarButtonItem.enabled = YES;
+                [self->HUD hide:YES afterDelay:1.0f];
             } else {
                 NSLog(@"uh oh. An error occurred: %@", error);
-                self.navigationItem.rightBarButtonItem.enabled = YES;
+                [self->HUD hide:YES afterDelay:1.0f];
             }
+            
         } else {
-            // Send request to Facebook
+            // user succesfully returned, gather all fb data and store in parse db and locally on the phone
+            NSLog(@"user successfully returned, grabbing fb data.");
+            self->HUD.labelText = @"updating profile";
             FBRequest *request = [FBRequest requestForMe];
             [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                NSLog(@"profile connection finished");
                 // handle response
-                if (!error) {
+                if (error) {
+                    NSLog(@"error in retrieving profile, failing out");
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+                    [self->HUD hide:YES afterDelay:1.0f];
+                } else {
+                    NSLog(@"no error in retrieving profile, saving data");
                     
-                    // Parse the data received
-                    NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
-                    NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
+                    NSLog(@"connection: %@,result: %@, error: %@",connection,result,error);
                     
-                    if (![storedData[@"updated_time"] isEqualToString:userData[@"updated_time"]])
-                    {
-                        
-                        [[PFUser currentUser] setObject:userData forKey:@"profile"];
-                        
-                        // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
-                        
-                        [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-                        [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                        [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
-                        
-                        NSLog(@"updating profile and saving to parse");
-                        
-                        [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
-                            if (succeeded)
-                                NSLog(@"new user profile successfully saved to parse");
-                            else
-                                NSLog(@"profile updating failed with error: %@",error);
-                        }];
-                    } else {
-                        NSLog(@"profile is up to date");
-                    }
+                    NSDictionary<FBGraphUser> *userData = result;
+                    
+                    user.username = userData[@"id"];
+                    user.email = userData[@"email"];
+                    [user setObject:userData[@"id"] forKey:@"facebookId"];
+                    [user setObject:userData[@"name"] forKey:@"displayName"];
+                    [user setObject:userData forKey:@"profile"];
+                    
+                    [user save];
                     
                     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                     // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
@@ -526,10 +521,6 @@
                     
                     // Register for user specific channels
                     PFUser *currentUser = [PFUser currentUser];
-                    
-                    /* if there are existing channels overwrite them
-                     if (currentInstallation.channels.count > 1)
-                     currentInstallation.channels = @[@"global"];*/
                     
                     [currentInstallation addUniqueObject:[currentUser objectId] forKey:@"channels"];
                     
@@ -546,23 +537,9 @@
                     
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+                    self->HUD.labelText = @"success!";
+                    [self->HUD hide:YES afterDelay:1.0f];
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                    
-                } else {
-                    
-                    NSLog(@"cannot reach parse servers, profile not updated: , %@", error);
-                    if (user.isNew)
-                    {
-                        self->HUD.mode = MBProgressHUDModeText;
-                        self->HUD.labelText = @"initial setup failed";
-                        self->HUD.detailsLabelText = @"try again, please";
-                        [self->HUD hide:YES afterDelay:1.0f];
-                    } else {
-                        NSLog(@"warning: profile may or may not be out of date");
-                        self->HUD.mode = MBProgressHUDModeCustomView;
-                        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                        [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                    }
                 }
             }];
         }
@@ -752,7 +729,7 @@
             borderColor = [[UIColor greenColor] CGColor];
         }
     }
-
+    
     for (UITextField *field in fieldsToChangeColorOf) {
         [self fieldToChangeBorderOf:field toColor:borderColor];
     }

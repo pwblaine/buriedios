@@ -95,12 +95,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self->tableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    self->tableHeaderLabel.textAlignment = NSTextAlignmentCenter;
-    self->tableHeaderLabel.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:17.0f];
-    self->tableHeaderLabel.text = @"everything buried has been unearthed";
-    //self.tableView.tableHeaderView = self->tableHeaderLabel;
-    self->tableHeaderLabel.center = CGPointMake(self.refreshControl.center.x, self.refreshControl.center.y + (self->tableHeaderLabel.bounds.size.height));
+    self->awaitBadge = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    self->awaitBadge.textAlignment = NSTextAlignmentCenter;
+    self->awaitBadge.font = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:17.0f];
+    self->awaitBadge.text = @"everything buried has been unearthed";
+    //self.tableView.tableHeaderView = self->awaitBadge;
+    self->awaitBadge.center = CGPointMake(self.refreshControl.center.x, self.refreshControl.center.y + (self->awaitBadge.bounds.size.height));
     
     // Add logout navigation bar button
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
@@ -139,13 +139,13 @@
                 NSLog(@"updating title received error: %@",error);
             else if (count > 1)
             {
-                    self->tableHeaderLabel.text = [NSString stringWithFormat:@"%i await you...",count];
-                self.title = self->tableHeaderLabel.text;
+                    self->awaitBadge.text = [NSString stringWithFormat:@"%i await you...",count];
+                    self.title = self->awaitBadge.text;
             }
                 else if (count == 1)
                 {
-                    self->tableHeaderLabel.text = [NSString stringWithFormat:@"%i awaits you...",count];
-                    self.title = self->tableHeaderLabel.text;
+                    self->awaitBadge.text = [NSString stringWithFormat:@"%i awaits you...",count];
+                    self.title = self->awaitBadge.text;
                 }
                 else
                 self.title = [NSString stringWithFormat:@"%@",[[currentUser objectForKey:@"displayName"] lowercaseString]];

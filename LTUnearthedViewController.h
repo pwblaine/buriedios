@@ -19,7 +19,7 @@
     BOOL initialLoad;
     BOOL isAtBottom;
     BOOL comingInFromOtherPage;
-    UILabel *tableHeaderLabel;
+    UILabel *awaitBadge;
 }
 
 @property NSMutableArray *allItems;

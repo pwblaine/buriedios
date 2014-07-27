@@ -81,7 +81,10 @@
 
 -(BOOL)isValidEmail:(NSString *)email;
 
+-(void)storeUserDataToDefaults:(PFUser *)user;
+
 #pragma mark - PFSignup Protocol
+
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info;
 
 /// Sent to the delegate when a PFUser is signed up.

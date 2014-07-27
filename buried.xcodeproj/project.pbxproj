@@ -683,8 +683,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -704,7 +704,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "F42F6FA2-4346-4889-9393-070B34C16AEF";
+				PROVISIONING_PROFILE = "";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -714,7 +714,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: MITCHELL L SOLOMON (NTC94AXS7N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents",
@@ -734,7 +735,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "F42F6FA2-4346-4889-9393-070B34C16AEF";
+				PROVISIONING_PROFILE = "";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
