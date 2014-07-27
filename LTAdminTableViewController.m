@@ -138,9 +138,13 @@
     
     // Configure the cell
     NSString *nameToDisplay = [object objectForKey:@"displayName"];
-    if (!nameToDisplay)
+    if (!nameToDisplay || [nameToDisplay isEqualToString:@""])
     {
         nameToDisplay = [object objectForKey:@"username"];
+        if (!nameToDisplay || [nameToDisplay isEqualToString:@""])
+        {
+            nameToDisplay = [object objectId];
+        }
     }
     NSLog(@"name to display: %@",nameToDisplay);
     cell.textLabel.text = [NSString stringWithFormat:@"%@",nameToDisplay];
