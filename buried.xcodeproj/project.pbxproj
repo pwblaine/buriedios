@@ -56,6 +56,8 @@
 		28B75D091957725C00593B3A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D081957725C00593B3A /* CoreTelephony.framework */; };
 		28B75D0B1957726E00593B3A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D0A1957726E00593B3A /* OpenGLES.framework */; };
 		28B75D0D1957727400593B3A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D0C1957727400593B3A /* CoreMotion.framework */; };
+		28B922D41987E13D003A87EF /* x-circlemark.png in Resources */ = {isa = PBXBuildFile; fileRef = 28B922D21987E13D003A87EF /* x-circlemark.png */; };
+		28B922D51987E13D003A87EF /* x-circlemark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28B922D31987E13D003A87EF /* x-circlemark@2x.png */; };
 		28BE448C196269DE00DA2069 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E480CA19498C1600932DD5 /* FacebookSDK.framework */; };
 		28C5931A18DD32E300288764 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C5931818DD32E300288764 /* Parse.framework */; };
 		28D2A21418C33354007EB808 /* LTUnearthedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D2A21218C33354007EB808 /* LTUnearthedViewController.m */; };
@@ -157,6 +159,8 @@
 		28B75D081957725C00593B3A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		28B75D0A1957726E00593B3A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28B75D0C1957727400593B3A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		28B922D21987E13D003A87EF /* x-circlemark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark.png"; sourceTree = SOURCE_ROOT; };
+		28B922D31987E13D003A87EF /* x-circlemark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark@2x.png"; sourceTree = SOURCE_ROOT; };
 		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
 		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
@@ -387,6 +391,8 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28B922D21987E13D003A87EF /* x-circlemark.png */,
+				28B922D31987E13D003A87EF /* x-circlemark@2x.png */,
 				28824A1219254A2E005F24CC /* burieddot152.png */,
 				28763EA71924F5940076A636 /* buried_text_250x94.png */,
 				286D080118CB647E000B5EBE /* grassToolbar.png */,
@@ -502,6 +508,7 @@
 				308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */,
 				281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
+				28B922D41987E13D003A87EF /* x-circlemark.png in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
 				308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */,
 				281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */,
@@ -527,6 +534,7 @@
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
 				28824A1319254A2E005F24CC /* burieddot152.png in Resources */,
 				2858DA581944C33900BDAB3A /* LTStartScreenViewController.xib in Resources */,
+				28B922D51987E13D003A87EF /* x-circlemark@2x.png in Resources */,
 				28A6BAE1188FC1F1008C81A1 /* Images.xcassets in Resources */,
 				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,

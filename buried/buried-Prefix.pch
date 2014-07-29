@@ -14,3 +14,9 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#pragma mark buried prefixes
+/*
+NSString * const facebookTimestampFormatForDateFromString = @"yyyy-MM-dd'T'HH:mm:ssZZZZ";
+NSString * const facebookTimestampFormatForStringFromDate = @"eee MMM dd, yyyy hh:mm";
+*/

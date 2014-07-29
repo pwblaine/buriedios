@@ -96,6 +96,11 @@
 /// Sent to the delegate when the sign up screen is dismissed.
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController;
 
+#pragma mark UINavigationControllerDelegate Protocol
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+
+#pragma mark LTGrassState Protocol
+
 -(LTGrassState)defaultGrassStateForView;
 
 @end
