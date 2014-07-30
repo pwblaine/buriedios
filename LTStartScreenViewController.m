@@ -523,7 +523,7 @@
                     
                     NSDictionary<FBGraphUser> *userData = result;
                     
-                    if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_at"]])
+                    if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
                     {
                         NSLog(@"buried's user info is up to date with facebook");
                     }
@@ -533,13 +533,17 @@
                         NSLog(@"buried's user info is out of date with facebook");
                         NSLog(@"syncing user data with facebook");
                         self->HUD.labelText = @"getting to know you better";
+
                         [user setObject:userData[@"id"] forKey:@"facebookId"];
+                        
                         [user setObject:userData[@"first_name"] forKey:@"firstName"];
                         [user setObject:userData[@"last_name"] forKey:@"lastName"];
                         
                         [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
-                        [user setObject:userData[@"updated_at"] forKey:@"fbProfileChangedAt"];
-                      
+                        
+                        [user setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
+                        
+                         
                         NSLog(@"updating device's channels to listen for pushes for the now logged in user");
                         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                         // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
@@ -577,12 +581,15 @@
                     // shows success hud
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                    self->HUD.labelText = @"hello %@",[[PFUser currentUser] objectForKey:@"firstName"];
+                    self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[PFUser currentUser] objectForKey:@"firstName"]];
                     [self->HUD hide:YES afterDelay:1.0f];
                         
                         if (!user.username || !user.email || ![user objectForKey:@"displayName"])
-                    // send the user on through to the unearthed view
+                        {
+                        }else{
+                            // send the user on through to the unearthed view
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
+                        }
                     }
                 }
             }];
