@@ -536,6 +536,7 @@
                         [user setObject:userData[@"id"] forKey:@"facebookId"];
                         [user setObject:userData[@"first_name"] forKey:@"firstName"];
                         [user setObject:userData[@"last_name"] forKey:@"lastName"];
+                        
                         [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
                         [user setObject:userData[@"updated_at"] forKey:@"fbProfileChangedAt"];
                       
@@ -568,19 +569,21 @@
                         NSError *__autoreleasing * userSaveFbProfileError = NULL;
                         [user save:(NSError *__autoreleasing *)userSaveFbProfileError];
                         // if the user fails and is new, ensure we have enough user data to operate correctly
-                        if (userSaveFbProfileError && user.isNew)
+                        if (userSaveFbProfileError)
                         {
-                            NSLog(@"User is trying to sign in with an empty profile");
+                            NSLog(@"User profile could not be saved");
                         }
                     
+                    // shows success hud
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
                     self->HUD.labelText = @"hello %@",[[PFUser currentUser] objectForKey:@"firstName"];
                     [self->HUD hide:YES afterDelay:1.0f];
                         
+                        if (!user.username || !user.email || ![user objectForKey:@"displayName"])
                     // send the user on through to the unearthed view
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                         }
+                    }
                 }
             }];
         }
