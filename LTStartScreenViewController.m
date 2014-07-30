@@ -164,11 +164,13 @@
             NSLog(@"signup fields are good to go");
             
             PFUser *userToSignup = [[PFUser alloc] init];
+            
             [userToSignup setEmail:self.userInfo[@"email"]];
             [userToSignup setUsername:self.userInfo[@"username"]];
             [userToSignup setPassword:self.userInfo[@"password"]];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"displayName"];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"firstName"];
+            
             [userToSignup signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded)
                 {
@@ -188,17 +190,10 @@
             [PFUser logInWithUsernameInBackground:self.userInfo[@"username"] password:self.userInfo[@"password"] block:^(PFUser *user, NSError *error) {
                 if (!error)
                 {
-                    [self showView:startView];
-                    NSLog(@"user: %@",user);
-                    self->HUD.mode = MBProgressHUDModeCustomView;
-                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                    self->HUD.labelText = @"success!";
-                    
-                    [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:self->submitButton];
+                    [self logInViewController:self.logInVC didLogInUser:user];
                 } else
                 {
-                    NSLog(@"error in login: %@",error);
-                    [self->HUD hide:YES afterDelay:1.0f];
+                    [self logInViewController:self.logInVC didFailToLogInWithError:error];
                 }
             }];
         }
@@ -486,97 +481,15 @@
             }
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
+            [self updateFbProfileForUser:user];
+            
             NSLog(@"user successfully returned, grabbing fb data if necessary...");
-            self->HUD.labelText = @"figuring out if we've met before";
-            FBRequest *request = [FBRequest requestForMe];
-            [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                NSLog(@"profile download finished");
-                // the profile download finished either successfully or unsuccessfully
-                if (error) {
-                    // there was an error downloading the profile
-                    NSLog(@"error in retrieving profile, failing out");
-                    
-                    // let the user know
-                    self->HUD.mode = MBProgressHUDModeCustomView;
-                    self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
-                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-                    [self->HUD hide:YES afterDelay:1.0f];
-                } else {
-                    NSLog(@"profile retrieved successfully");
-                    NSLog(@"connection: %@,result: %@, error: %@",connection,result,error);
-                    
-                    NSDictionary<FBGraphUser> *userData = result;
-                    
-                    if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
-                    {
-                        NSLog(@"buried's user info is up to date with facebook");
-                    }
-                    else
-                    {
-                    
-                        NSLog(@"buried's user info is out of date with facebook");
-                        NSLog(@"syncing user data with facebook");
-                        self->HUD.labelText = @"getting to know you better";
-
-                        [user setObject:userData[@"id"] forKey:@"facebookId"];
-                        
-                        [user setObject:userData[@"first_name"] forKey:@"firstName"];
-                        [user setObject:userData[@"last_name"] forKey:@"lastName"];
-                        
-                        [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
-                        
-                        [user setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
-                        
-                         
-                        NSLog(@"updating device's channels to listen for pushes for the now logged in user");
-                        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                        // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
-                        
-                        // double check global is registered
-                        [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
-                        
-                        // Register for user specific channels;
-                        [currentInstallation addUniqueObject:[user objectId] forKey:@"channels"];
-                        
-                        // save the addition of the user's id to the channels
-                        [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            if (!succeeded)
-                            {
-                                NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[user objectId],error);
-                            } else
-                            {
-                                NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[user objectId]);
-                            }
-                        }];
-                        
-                        NSLog(@"current channels: %@", [currentInstallation channels]);
-                        
-                        // save the user's sync'd model locally to the device and to the parse cloud
-                        [self storeUserDataToDefaults:user];
-                        
-                        NSError *__autoreleasing * userSaveFbProfileError = NULL;
-                        [user save:(NSError *__autoreleasing *)userSaveFbProfileError];
-                        // if the user fails and is new, ensure we have enough user data to operate correctly
-                        if (userSaveFbProfileError)
-                        {
-                            NSLog(@"User profile could not be saved");
-                        }
-                    }
-                    // shows success hud
-                    self->HUD.mode = MBProgressHUDModeCustomView;
-                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                    self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
-                    [self->HUD hide:YES afterDelay:1.0f];
-                        
                         if (!user.username || !user.email || ![user objectForKey:@"displayName"])
                         {
                         }else{
                             // send the user on through to the unearthed view
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
                         }
-                    
-                }
-            }];
         }
     }];
     
@@ -981,18 +894,23 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
     __block PFUser * blockUser = user;
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [logInController dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"loginviewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        [self storeUserDataToDefaults:blockUser];
+    [self storeUserDataToDefaults:blockUser];
+        NSLog(@"loginviewController dismissed with successful login, current user: %@",blockUser);
         [self showView:startView];
-    }];
+        
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+        self->HUD.labelText = @"success!";
+        [self->HUD hide:YES afterDelay:1.0f];
 }
 
 /// Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    NSLog(@"error in login: %@",error);
+    [self->HUD hide:YES afterDelay:1.0f];
 }
 
 /// Sent to the delegate when the log in screen is dismissed.
@@ -1003,43 +921,96 @@
     
 }
 
-- (void)updateFbProfileForUser:(PFUser *)user
+- (BOOL)updateFbProfileForUser:(PFUser *)user
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // Send request to Facebook
+    __block BOOL updated = NO;
+    self->HUD.labelText = @"figuring out if we've met before";
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        // handle response
-        if (!error) {
+        NSLog(@"profile download finished");
+        // the profile download finished either successfully or unsuccessfully
+        if (error) {
+            // there was an error downloading the profile
+            NSLog(@"error in retrieving profile, failing out");
             
-            // Parse the data received
-            NSDictionary<FBGraphUser> *userData = (NSDictionary<FBGraphUser> *)result;
-            NSDictionary<FBGraphUser> *storedData = (NSDictionary<FBGraphUser> *)[user objectForKey:@"profile"];
+            // let the user know
+            self->HUD.mode = MBProgressHUDModeCustomView;
+            self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
+            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+            [self->HUD hide:YES afterDelay:1.0f];
             
-            if (![userData[@"updated_time"] isEqualToString:storedData[@"updated_time"]])
+            updated = NO;
+        } else {
+            NSLog(@"profile retrieved successfully");
+            NSLog(@"connection: %@,result: %@, error: %@",connection,result,error);
+            
+            NSDictionary<FBGraphUser> *userData = result;
+            
+            if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
+            {
+                NSLog(@"buried's user info is up to date with facebook");
+                updated = NO;
+            }
+            else
             {
                 
-                [[PFUser currentUser] setObject:userData forKey:@"profile"];
+                NSLog(@"buried's user info is out of date with facebook");
+                NSLog(@"syncing user data with facebook");
+                self->HUD.labelText = @"getting to know you better";
                 
-                // update facebook username, email, facebook profile, display name, facebook id and download profile pictures
+                [user setObject:userData[@"id"] forKey:@"facebookId"];
                 
-                [[PFUser currentUser] setObject:userData[@"name"] forKey:@"displayName"];
-                [[PFUser currentUser] setObject:userData[@"username"] forKey:@"facebookUsername"];
-                [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
+                [user setObject:userData[@"first_name"] forKey:@"firstName"];
+                [user setObject:userData[@"last_name"] forKey:@"lastName"];
                 
-                [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
-                    if (succeeded)
-                        NSLog(@"new user profile successfully saved to parse");
-                    else
-                        NSLog(@"profile updating failed with error: %@",error);
+                [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
+                
+                [user setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
+                
+                
+                NSLog(@"updating device's channels to listen for pushes for the now logged in user");
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
+                
+                // double check global is registered
+                [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
+                
+                // Register for user specific channels;
+                [currentInstallation addUniqueObject:[user objectId] forKey:@"channels"];
+                
+                // save the addition of the user's id to the channels
+                [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (!succeeded)
+                    {
+                        NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[user objectId],error);
+                    } else
+                    {
+                        NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[user objectId]);
+                    }
                 }];
-            } else {
-                NSLog(@"profile is up to date, no change");
+                
+                NSLog(@"current channels: %@", [currentInstallation channels]);
+                
+                // save the user's sync'd model locally to the device and to the parse cloud
+                [self storeUserDataToDefaults:user];
+                
+                NSError *__autoreleasing * userSaveFbProfileError = NULL;
+                [user save:(NSError *__autoreleasing *)userSaveFbProfileError];
+                // if the user fails and is new, ensure we have enough user data to operate correctly
+                if (userSaveFbProfileError)
+                {
+                    NSLog(@"User profile could not be saved");
+                }
             }
-        } else {
-            NSLog(@"unable to update profile");
+            // shows success hud
+            self->HUD.mode = MBProgressHUDModeCustomView;
+            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+            self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
+            [self->HUD hide:YES afterDelay:1.0f];
+            updated = YES;
         }
     }];
+    return updated;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated

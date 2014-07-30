@@ -64,7 +64,7 @@
 @property (retain) PFSignUpViewController *signUpVC;
 @property (retain) PFLogInViewController *logInVC;
 
-- (void)updateFbProfileForUser:(PFUser *)user;
+- (BOOL)updateFbProfileForUser:(PFUser *)user;
 
 - (IBAction)signUpButtonTouchHandler:(id)sender;
 - (IBAction)signInButtonTouchHandler:(id)sender;
