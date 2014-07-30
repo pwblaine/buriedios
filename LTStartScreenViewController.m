@@ -578,7 +578,7 @@
                     self->HUD.labelText = @"hello %@",[[PFUser currentUser] objectForKey:@"firstName"];
                     [self->HUD hide:YES afterDelay:1.0f];
                         
-                    // send the user on through to the n
+                    // send the user on through to the unearthed view
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
                          }
                 }
