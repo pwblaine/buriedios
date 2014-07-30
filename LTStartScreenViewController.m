@@ -451,21 +451,32 @@
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender
 {
+    // This code if the user wishes to log in with Facebook
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"creating modal progress hud");
     //[(UIBarButtonItem*)sender setEnabled:NO];
     
+    // we like our HUDs over everything so grab the top window and place the HUD there
+    UIWindow *thePrimaryWindow = [[[UIApplication sharedApplication] windows] firstObject];
+    
+    // check to see if the HUD has ever been initialized
+    if (!self->HUD)
+    {
     self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
-    [[[[UIApplication sharedApplication] windows] firstObject] addSubview:HUD];
+    [thePrimaryWindow addSubview:HUD];
+    } else {
+        [thePrimaryWindow bringSubviewToFront:self->HUD];
+    }
     
-    // Set indeterminate mode
-    HUD.mode = MBProgressHUDModeIndeterminate;
-    HUD.delegate = self;
-    [HUD show:YES];
+    // Star our activity indicator HUD
+    self->HUD.mode = MBProgressHUDModeIndeterminate;
+    self->HUD.delegate = self;
+    self->HUD.labelText = @"logging in";
+    [self->HUD show:YES];
     
-    // The permissions requested from the user
-    NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
+    // The permissions requested from the user, we're interested in their email address and their profile
+    NSArray *permissionsArray = @[@"public_profile", @"email"];
     NSLog(@"initializing fbuserlogin request with permissions array: %@",permissionsArray);
     
     // Login PFUser using Facebook
@@ -473,31 +484,35 @@
         NSLog(@"returned user: %@,current user:%@, error: %@, activeSession: %@",user,[PFUser currentUser],error,[PFFacebookUtils session]);
         // login attempted
         if (!user) {
-            // no user was returned
+            // this case handles either a connection error or a cancelled login
             self->HUD.mode = MBProgressHUDModeCustomView;
             
             if (!error) {
+                // this code is run when the user chose to cancel the fb login
                 NSLog(@"uh oh. The user outright cancelled the Facebook login.");
                 self->HUD.labelText = @"login cancelled";
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-circlehand.png"]];
                 [self->HUD hide:YES afterDelay:1.0f];
             } else {
+                // this code is run when the user tried to login but ran into a connection or authentication error
                 NSLog(@"uh oh. An error occurred: %@", error);
                 self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
                 [self->HUD hide:YES afterDelay:1.0f];
             }
-            
         } else {
-            // user succesfully returned, gather all fb data and store in parse db and locally on the phone
+            // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
             NSLog(@"user successfully returned, grabbing fb data if necessary...");
-            self->HUD.labelText = @"comparing notes on you";
+            self->HUD.labelText = @"figuring out if we've met before";
             FBRequest *request = [FBRequest requestForMe];
             [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                NSLog(@"profile connection finished");
-                // handle response
+                NSLog(@"profile download finished");
+                // the profile download finished either successfully or unsuccessfully
                 if (error) {
+                    // there was an error downloading the profile
                     NSLog(@"error in retrieving profile, failing out");
+                    
+                    // let the user know
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
