@@ -75,7 +75,7 @@
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender;
 
-- (void)changeButtonsForContinuingUser:(NSString *)displayName;
+- (void)changeButtonsForSavedUser;
 
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 

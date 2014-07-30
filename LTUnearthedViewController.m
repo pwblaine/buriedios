@@ -519,9 +519,11 @@
         NSLog(@"clearing badges for user.  badges: %d",(int)currentInstallation.badge);
     }
     
+    PFUser *user = [PFUser currentUser];
+    
     // remove user from device channels
     NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
-    NSString *userObjectId = [[PFUser currentUser] objectId];
+    NSString *userObjectId = [user objectId];
     [mutableChannels removeObject:userObjectId];
     NSLog(@"removing user from push channels");
     [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
@@ -531,13 +533,30 @@
     [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
     
-    // write to user defaults
-    NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
-    if (![displayName isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"displayName"]])
+    // write to user defaultsNSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSString *lastLoggedInUserId = nil;
+    NSString *lastLoggedInFacebookId = nil;
+    NSString *lastLoggedInDisplayName = nil;
+    NSString *lastLoggedInUserName = nil;
+    
+    //write to user defaults and update buttons
+    if ([PFFacebookUtils isLinkedWithUser:user])
     {
-        [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"displayName"];
-        NSLog(@"written to NSUserDefaults for offline/immediate access: displayName/%@",displayName);
+        NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
+        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
+        lastLoggedInUserName = [user username];
     }
+    
+    // write to user defaults
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+    
+    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
     
     
     [FBSession setActiveSession:nil];

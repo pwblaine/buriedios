@@ -32,7 +32,6 @@
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,89,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
-        self->savedDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
     }
     return self;
 }
@@ -73,7 +72,7 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    if (![self->savedDisplayName isEqual:@""] && self->savedDisplayName != nil)
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"] length] > 0)
     {
         return YES;
     }
@@ -87,7 +86,7 @@
     
     if ([self checkForSavedUser])
     {
-        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",self->savedDisplayName] lowercaseString];
+        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"]] lowercaseString];
         self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
@@ -112,20 +111,15 @@
     self->currentViewState = nil;
 }
 
--(void)changeButtonsForContinuingUser:(NSString *)displayName
+-(void)changeButtonsForSavedUser
 {
     if (![self.navigationItem.leftBarButtonItem isEqual:self->signUpButton])
         [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if ([self checkForSavedUser] || [PFUser currentUser])
+    if ([self checkForSavedUser])
     {
-        if ([PFUser currentUser])
-            displayName = [[PFUser currentUser] objectForKey:@"displayName"];
-        if (![self->savedDisplayName isEqualToString:displayName])
-            self->savedDisplayName = displayName;
-        [[NSUserDefaults standardUserDefaults] setObject:displayName forKey:@"lastLoggedInDisplayName"];
-        if (![[[[displayName componentsSeparatedByString:@" "] objectAtIndex:0] lowercaseString] isEqual:[NSNull null]])
-            self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"welcome back, %@!",[[displayName componentsSeparatedByString:@" "] objectAtIndex:0]] lowercaseString];
+        NSString * displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
+        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome back, %@!",[displayName lowercaseString]];
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
         [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
@@ -174,24 +168,14 @@
             [userToSignup setUsername:self.userInfo[@"username"]];
             [userToSignup setPassword:self.userInfo[@"password"]];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"displayName"];
+            [userToSignup setObject:self.userInfo[@"username"] forKey:@"firstName"];
             [userToSignup signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded)
                 {
-                    NSLog(@"user %@ (%@) successfully signed up",userToSignup.username,userToSignup.objectId);
-                    [self storeUserDataToDefaults:userToSignup];
-                    [self showView:savedAccountView];
-                    
-                    self->HUD.mode = MBProgressHUDModeCustomView;
-                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                    self->HUD.labelText = @"success!";
-                    [self->HUD hide:YES afterDelay:1.0f];
+                    [self signUpViewController:self.signUpVC didSignUpUser:userToSignup];
                 } else
                 {
-                    self->HUD.mode = MBProgressHUDModeCustomView;
-                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-                    self->HUD.labelText = [error userInfo][@"error"];
-                    [self->HUD hide:YES afterDelay:1.0f];
-                    NSLog(@"signing up user %@ (%@) failed because error:%@",userToSignup.username,userToSignup.objectId,error);
+                    [self signUpViewController:self.signUpVC didFailToSignUpWithError:error];
                 }
             }];
         } else {
@@ -204,7 +188,7 @@
             [PFUser logInWithUsernameInBackground:self.userInfo[@"username"] password:self.userInfo[@"password"] block:^(PFUser *user, NSError *error) {
                 if (!error)
                 {
-                    [self showView:savedAccountView];
+                    [self showView:startView];
                     NSLog(@"user: %@",user);
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
@@ -338,7 +322,7 @@
         [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
         [passwordField setSecureTextEntry:([view isDescendantOfView:self->loginView])];
     } else if ([view isDescendantOfView:self->savedAccountView])
-        [self changeButtonsForContinuingUser:self->savedDisplayName];
+        [self changeButtonsForSavedUser];
     else if ([view isDescendantOfView:self->startView])
     {
         [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
@@ -577,11 +561,11 @@
                         {
                             NSLog(@"User profile could not be saved");
                         }
-                    
+                    }
                     // shows success hud
                     self->HUD.mode = MBProgressHUDModeCustomView;
                     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-                    self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[PFUser currentUser] objectForKey:@"firstName"]];
+                    self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
                     [self->HUD hide:YES afterDelay:1.0f];
                         
                         if (!user.username || !user.email || ![user objectForKey:@"displayName"])
@@ -590,7 +574,7 @@
                             // send the user on through to the unearthed view
                     [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
                         }
-                    }
+                    
                 }
             }];
         }
@@ -869,11 +853,7 @@
     // clear stored account in user defaults
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserId"];
     
-    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInDisplayName"];
-    
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName");
-    
-    self->savedDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
     
     [self showView:self->startView];
 }
@@ -924,26 +904,17 @@
     if ([PFFacebookUtils isLinkedWithUser:user])
     {
         NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
-        
+    }
+    
         lastLoggedInUserId = [user objectId];
         lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-        lastLoggedInDisplayName = [user objectForKey:@"displayName"];
+        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
         lastLoggedInUserName = [user username];
-        
-    } else {
-        
-        //write to user defaults and update buttons
-        
-        lastLoggedInUserId = [user objectId];
-        lastLoggedInFacebookId = @"";
-        lastLoggedInDisplayName = @"";
-        lastLoggedInUserName = [user username];
-    }
+    
     // write to user defaults
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-    self->savedDisplayName = lastLoggedInDisplayName;
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
     
     NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
@@ -952,18 +923,26 @@
 /// Sent to the delegate when a PFUser is signed up.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [signUpController dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"signUpViewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        [self storeUserDataToDefaults:user];
-        [self showView:startView];
-    }];
+    
+    NSLog(@"user %@ (%@) successfully signed up",user.username,user.objectId);
+    [self storeUserDataToDefaults:user];
+    [self showView:startView];
+    
+    self->HUD.mode = MBProgressHUDModeCustomView;
+    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+    self->HUD.labelText = @"success!";
+    [self->HUD hide:YES afterDelay:1.0f];
 }
 
 /// Sent to the delegate when the sign up attempt fails.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->HUD.mode = MBProgressHUDModeCustomView;
+    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+    self->HUD.labelText = [error userInfo][@"error"];
+    [self->HUD hide:YES afterDelay:1.0f];
+    NSLog(@"signing up user failed because error:%@",error);
 }
 
 /// Sent to the delegate when the sign up screen is dismissed.
@@ -1001,10 +980,11 @@
 /// Sent to the delegate when a PFUser is logged in.
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
+    __block PFUser * blockUser = user;
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [logInController dismissViewControllerAnimated:YES completion:^{
         NSLog(@"loginviewController dismissed with successful login, current user: %@",[PFUser currentUser]);
-        [self storeUserDataToDefaults:user];
+        [self storeUserDataToDefaults:blockUser];
         [self showView:startView];
     }];
 }
@@ -1067,7 +1047,6 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"NavController current view is %@",[[navigationController visibleViewController] class]);
     NSLog(@"New view controller is %@",[viewController class]);
-    self->savedDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
 }
 
 -(LTGrassState)defaultGrassStateForView
