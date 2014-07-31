@@ -50,7 +50,6 @@
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;
-    UITapGestureRecognizer *closeTextFieldGesture;
     NSMutableArray *currentTextFields;
     
     CALayer *initialBorderSpecs;
@@ -65,6 +64,7 @@
 @property (retain) PFLogInViewController *logInVC;
 
 - (BOOL)updateFbProfileForUser:(PFUser *)user;
+-(void)returnViewToOrigin;
 
 - (IBAction)signUpButtonTouchHandler:(id)sender;
 - (IBAction)signInButtonTouchHandler:(id)sender;
@@ -80,6 +80,9 @@
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
 -(BOOL)isValidEmail:(NSString *)email;
+
+-(void)validateField:(UITextField *)textField;
+-(void)validateAllFields;
 
 -(void)storeUserDataToDefaults:(PFUser *)user;
 

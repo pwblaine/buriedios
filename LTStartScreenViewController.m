@@ -41,8 +41,6 @@
     [super viewDidLoad];
     self.title = @"";
     
-    self->closeTextFieldGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapInMainView:)];
-    
     // Check if user is cached and linked to Facebook, if so, bypass login
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
@@ -98,16 +96,35 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    
+    // we like our HUDs over everything so grab the top window and place the HUD there
+    UIWindow *thePrimaryWindow = [[[UIApplication sharedApplication] windows] firstObject];
+    
+    // check to see if the HUD has ever been initialized, if it has just make sure its in front
+    if (!self->HUD)
+    {
+        self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
+        [thePrimaryWindow addSubview:HUD];
+        self->HUD.delegate = self;
+    } else {
+        [thePrimaryWindow bringSubviewToFront:self->HUD];
+    }
+    
     [self showView:self->startView];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // Add login/sign in navigation bar button
+    
     [self->HUD hide:YES];
+    
     [self->currentViewElements arrayByAddingObjectsFromArray:self.view.subviews];
     [self->currentViewElements removeObject:self->buriedLogo];
+    
     [self hideViewElements:self->currentViewElements];
+    
     self->currentViewState = nil;
 }
 
@@ -120,8 +137,10 @@
     {
         NSString * displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
         self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome back, %@!",[displayName lowercaseString]];
+        
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
+        
         [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
         [self.navigationItem setLeftBarButtonItem:self->notYouButton animated:YES];
     } else {
@@ -130,8 +149,9 @@
             NSLog(@"no logged in or stored users detected");
         }
         else
+        {
             NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
-        [self showView:self->startView];
+        }
     }
 }
 
@@ -139,16 +159,18 @@
 - (IBAction)submitButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self cleanUpAfterEditing];
     
-    if (!self->HUD)
+    [self validateAllFields];
+    
+    if ([self->currentResponder isFirstResponder])
     {
-        self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
-        [[[[UIApplication sharedApplication] windows] firstObject] addSubview:HUD];
-        
-        self->HUD.delegate = self;
+        [self->currentResponder resignFirstResponder];
+        [self returnViewToOrigin];
     }
     
+    [self disableAllBarButtons];
+    
+    // start the hud
     self->HUD.mode = MBProgressHUDModeIndeterminate;
     self->HUD.labelText = @"submitting";
     [self->HUD show:YES];
@@ -160,7 +182,7 @@
     {
         if ([self signUpViewController:self.signUpVC shouldBeginSignUp:self.userInfo])
         {
-            self->HUD.labelText=@"signing up";
+            self->HUD.labelText = @"signing up";
             NSLog(@"signup fields are good to go");
             
             PFUser *userToSignup = [[PFUser alloc] init];
@@ -181,7 +203,7 @@
                 }
             }];
         } else {
-            NSLog(@"signup fields have errors");
+            NSLog(@"signup fields had errors");
         }
     } else if ([self->loginView isDescendantOfView:self->currentViewState])
     {
@@ -203,7 +225,6 @@
 - (IBAction)goBackButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self cleanUpAfterEditing];
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
         [self signUpViewControllerDidCancelSignUp:self.signUpVC];
@@ -260,6 +281,8 @@
 
 - (void)showView:(UIView *)view
 {
+    
+    [self disableAllBarButtons];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     // only bounce in significantly if coming from off screen
@@ -302,7 +325,6 @@
     if (![self->currentViewState isDescendantOfView:view] && self->currentViewState)
         [self hideViewElements:elementsToHide];
     
-    [self disableAllBarButtons];
     
     for (UIView *element in elementsToShow)
     {
@@ -331,7 +353,7 @@
         } else if ([view isDescendantOfView:self->startView])
         {
             self->buriedLogo.center = self.view.center;
-        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:loginView])
+        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:self->loginView])
         {
             self->buriedLogo.frame = self->topLogoPosition;
         }
@@ -357,7 +379,7 @@
         }]];
         NSLog(@"currentViewElements :%@",self->currentViewElements);
         [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
-        self->originalViewCenter = self.view.center;
+        self->originalViewCenter = CGPointMake(self.view.center.x, self.view.center.y);
         NSLog(@"currentTextFields :%@",self->currentTextFields);
         [self enableAllBarButtons];
     }];
@@ -365,10 +387,10 @@
 
 - (void)hideViewElements:(NSMutableArray *)viewElements
 {
+    if (self.navigationItem.rightBarButtonItem.isEnabled)
+        [self disableAllBarButtons];
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if (viewElements.count > 0)
-        [self disableAllBarButtons];
     
     [UIView animateWithDuration:0.5 animations:^{
         for (UIView *element in viewElements) {
@@ -383,7 +405,7 @@
             }
         }
     } completion:^(BOOL finished) {
-        NSLog(@"finished hiding");
+        NSLog(@"finished hiding animation");
         if (finished)
         {
             for (UIView *element in viewElements) {
@@ -430,27 +452,14 @@
 
 - (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender
 {
+    [self disableAllBarButtons];
     // This code if the user wishes to log in with Facebook
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"creating modal progress hud");
-    //[(UIBarButtonItem*)sender setEnabled:NO];
-    
-    // we like our HUDs over everything so grab the top window and place the HUD there
-    UIWindow *thePrimaryWindow = [[[UIApplication sharedApplication] windows] firstObject];
-    
-    // check to see if the HUD has ever been initialized
-    if (!self->HUD)
-    {
-    self->HUD = [[MBProgressHUD alloc] initWithView:[[[UIApplication sharedApplication] windows] firstObject]];
-    [thePrimaryWindow addSubview:HUD];
-    } else {
-        [thePrimaryWindow bringSubviewToFront:self->HUD];
-    }
     
     // Star our activity indicator HUD
     self->HUD.mode = MBProgressHUDModeIndeterminate;
-    self->HUD.delegate = self;
     self->HUD.labelText = @"logging in";
     [self->HUD show:YES];
     
@@ -471,20 +480,21 @@
                 NSLog(@"uh oh. The user outright cancelled the Facebook login.");
                 self->HUD.labelText = @"login cancelled";
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-circlehand.png"]];
-                [self->HUD hide:YES afterDelay:1.0f];
             } else {
                 // this code is run when the user tried to login but ran into a connection or authentication error
                 NSLog(@"uh oh. An error occurred: %@", error);
-                self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
+                self->HUD.labelText = [NSString stringWithFormat:@"%@",[[error userInfo] objectForKey:@"error"]];
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-                [self->HUD hide:YES afterDelay:1.0f];
             }
+            
+            [self->HUD hide:YES afterDelay:1.0f];
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
             [self updateFbProfileForUser:user];
             
             NSLog(@"user successfully returned, grabbing fb data if necessary...");
-                        if (!user.username || !user.email || ![user objectForKey:@"displayName"])
+            
+            if (!user.username || !user.email || ![user objectForKey:@"displayName"])
                         {
                         }else{
                             // send the user on through to the unearthed view
@@ -520,30 +530,32 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->currentResponder = textField;
     
     BOOL isNotLast = NO;
     
     if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
         isNotLast = YES;
     
-    self.navigationItem.leftBarButtonItem = clearButton;
+    self.navigationItem.leftBarButtonItem = self->clearButton;
     
-    self->currentResponder = textField;
-    NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder,textField);
+    NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder.accessibilityLabel,textField.accessibilityLabel);
+    
+    __block NSInteger keyboardHeight = 432;
+    __block NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
     
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         NSLog(@"%f,%f self.center %f, %f self.frame %f,%f self.bounds %i isediting",self.view.center.x,self.view.center.y,self.view.frame.origin.x,self.view.frame.origin.y,self.view.bounds.origin.x,self.view.bounds.origin.y,self.isEditing);
         
         NSLog(@"viewFrame w: %f h: %f",self.view.frame.size.width, self.view.frame.size.height);
-        NSInteger keyboardHeight = 432;
-        NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
+        
         NSLog(@"%f view.center.y | %f textfield.center.y | %li keyboardHeight| %li centerPointYForViewWithKeyboardUp",self.view.center.y, textField.center.y, (long)keyboardHeight, (long)centerPointYForViewWithKeyboardUp);
         if (self.view.center.y == self->originalViewCenter.y)
         {
-            [self.view addGestureRecognizer:closeTextFieldGesture];
-            NSLog(@"view.center.y: %f == originalViewCenter.y: %f",self.view.center.y, self->originalViewCenter.y);
+            NSLog(@"view.center.y: %f == self->originalViewCenter.y: %f",self.view.center.y, self->originalViewCenter.y);
             self.view.center = CGPointMake(self.view.center.x,centerPointYForViewWithKeyboardUp);
         }
+        
         NSLog(@"text.center.y: %f | self.view.center.y: %f | emailField %f | offset %f",textField.center.y,self.view.center.y,self->emailField.center.y,(textField.center.y - self->emailField.center.y));
         self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->emailField.center.y));
     } completion:^(BOOL finished) {
@@ -551,16 +563,10 @@
     }];
 }
 
--(void)handleTapInMainView:(UITapGestureRecognizer *)sender
-{
-    NSLog(@"handling tap in main view");
-    [self cleanUpAfterEditing];
-}
-
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     NSLog(@"should textfield %@ end its editing?",textField.accessibilityLabel);
-    if ([self->currentResponder isEditing])
+    if ([textField isEditing])
     {
         NSLog(@"yes");
         return YES;
@@ -599,12 +605,6 @@
     [textField.layer addAnimation:all forKey:@"color and corner and width"];
     
     textField.layer.masksToBounds=YES;
-    
-    [NSTimer scheduledTimerWithTimeInterval:all.duration target:self selector:@selector(callRevertField:) userInfo:@{@"textField":textField,@"animated":@YES} repeats:NO];
-}
-
--(void)callRevertField:(NSTimer *)timer
-{
 }
 
 -(void)revertField:(UITextField *)textField animated:(BOOL)animated
@@ -643,10 +643,10 @@
     textField.layer.masksToBounds=YES;
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField
+-(void)validateField:(UITextField *)textField
 {
     NSArray *fieldsToChangeColorOf = [NSArray arrayWithObject:textField];
-    NSLog(@"textField %@ ended editing",textField.placeholder);
+    
     CGColorRef borderColor = CGColorCreate(0, 0);
     if ([textField isEqual:self.emailField])
     {
@@ -660,6 +660,7 @@
         }
     } else
     {
+        
         if ([self->currentViewState isDescendantOfView:self->signUpView])
         {
             fieldsToChangeColorOf = @[self.passwordField,self.confirmField];
@@ -683,69 +684,46 @@
     }
 }
 
--(void)cleanUpAfterEditing
-{
-    
-    NSLog(@"cleanup after editing");
-    if ([self->currentResponder isFirstResponder])
-    {
-        [self->currentResponder resignFirstResponder];
+-(void)validateAllFields {
+    for (UITextField *textField in self->currentTextFields) {
+        [self validateField:textField];
     }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    NSLog(@"textField %@ ended editing",textField.accessibilityLabel);
+    
+    [self validateField:textField];
     
     self.navigationItem.leftBarButtonItem = self->goBackButton;
     self.navigationItem.rightBarButtonItem = self->submitButton;
-    
-    if (!CGPointEqualToPoint(self.view.center, originalViewCenter))
-    {
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.view.center = self->originalViewCenter;
-        } completion:^(BOOL finished) {
-            if (finished)
-            {
-                NSLog(@"keyboard hiding animation done");
-                self->currentResponder = nil;
-            }
-        }];
-    }
-    
-    [self.view removeGestureRecognizer:self->closeTextFieldGesture];
 }
 
--(void)moveToNextTextField
-{
-    UITextField *textField = self->currentResponder;
-    UITextField *nextUp;
-    if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
-    {
-        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] + 1)];
-        NSLog(@"nextUp:%@",nextUp);
-    }
-    else {
-        nextUp = [self->currentTextFields objectAtIndex:0];
-    }
-    [nextUp becomeFirstResponder];
-}
-
--(void)moveToPreviousTextField
-{
-    UITextField *textField = self->currentResponder;
-    UITextField *nextUp;
-    if ([self->currentTextFields indexOfObject:textField] > 0)
-    {
-        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields indexOfObject:self->currentResponder] - 1)];
-        NSLog(@"nextUp:%@",nextUp);
-    }
-    else {
-        nextUp = [self->currentTextFields objectAtIndex:([self->currentTextFields count] - 1)];
-    }
-    [nextUp becomeFirstResponder];
+-(void)returnViewToOrigin {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [UIView animateWithDuration:0.3 delay:[UIKeyboardAnimationDurationUserInfoKey floatValue] options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.center = CGPointMake(self->originalViewCenter.x, self->originalViewCenter.y);
+    } completion:^(BOOL finished) {
+        if (finished)
+        {
+            NSLog(@"keyboard hiding animation done");
+            NSLog(@"clearing current responder");
+            self->currentResponder = nil;
+        }
+    }];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSLog(@"should return");
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     [textField resignFirstResponder];
-    [self cleanUpAfterEditing];
+    
+    [self returnViewToOrigin];
+    
     return NO; // disabled, textFields just close
 }
 
@@ -754,7 +732,9 @@
     // as of this moment ass this button does is to clear the stored userId for the last logged in user to remove the greeting, however, with the new account management branch, this will play an integral role in switching accounts and allowing the user to authenticate again as someone else
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
     [currentInstallation setObject:@"" forKey:@"lastLoggedInUserId"];
+    
     [currentInstallation saveEventually:^(BOOL succeeded, NSError *error) {
         NSLog(@"currently stored last logged in user: %@",[currentInstallation objectForKey:@"lastLoggedInUserId"]);
         if (succeeded)
@@ -774,6 +754,7 @@
 - (void)hudWasHidden:(MBProgressHUD *)hud
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self enableAllBarButtons];
 }
 
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info
@@ -794,7 +775,7 @@
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"password and confirm must match";
+        self->HUD.labelText = @"password mismatch";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
@@ -839,11 +820,12 @@
     
     NSLog(@"user %@ (%@) successfully signed up",user.username,user.objectId);
     [self storeUserDataToDefaults:user];
-    [self showView:startView];
+    [self showView:self->startView];
     
     self->HUD.mode = MBProgressHUDModeCustomView;
     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
     self->HUD.labelText = @"success!";
+    
     [self->HUD hide:YES afterDelay:1.0f];
 }
 
@@ -851,9 +833,11 @@
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     self->HUD.mode = MBProgressHUDModeCustomView;
     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
     self->HUD.labelText = [error userInfo][@"error"];
+    
     [self->HUD hide:YES afterDelay:1.0f];
     NSLog(@"signing up user failed because error:%@",error);
 }
@@ -862,7 +846,7 @@
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self showView:startView];
+    [self showView:self->startView];
 }
 
 /*
@@ -896,7 +880,7 @@
     __block PFUser * blockUser = user;
     [self storeUserDataToDefaults:blockUser];
         NSLog(@"loginviewController dismissed with successful login, current user: %@",blockUser);
-        [self showView:startView];
+        [self showView:self->startView];
         
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
