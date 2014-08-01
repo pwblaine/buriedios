@@ -26,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button hidden="YES" opaque="NO" alpha="0.0" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-Oc-O4y">
-                    <rect key="frame" x="78" y="335" width="164" height="30"/>
+                    <rect key="frame" x="40" y="400" width="240" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="forgot your password?"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -49,7 +49,7 @@
                     </connections>
                 </button>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="confirm password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kzB-8P-fji" userLabel="confirm">
-                    <rect key="frame" x="40" y="355" width="240" height="40"/>
+                    <rect key="frame" x="40" y="405" width="240" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="confirm password"/>
                     <attributedString key="attributedText"/>
@@ -59,7 +59,7 @@
                     </connections>
                 </textField>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BfP-qd-LXR" userLabel="password">
-                    <rect key="frame" x="40" y="295" width="240" height="40"/>
+                    <rect key="frame" x="40" y="316" width="240" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="password"/>
                     <attributedString key="attributedText"/>
@@ -69,7 +69,7 @@
                     </connections>
                 </textField>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="email address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPS-kV-ODT" userLabel="email">
-                    <rect key="frame" x="40" y="225" width="240" height="40"/>
+                    <rect key="frame" x="40" y="220" width="240" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration" label="email"/>
                     <attributedString key="attributedText"/>
@@ -79,7 +79,7 @@
                     </connections>
                 </textField>
                 <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Tnc-qK-WQO" userLabel="lastLoggedInLabel">
-                    <rect key="frame" x="20" y="335" width="280" height="30"/>
+                    <rect key="frame" x="20" y="297" width="280" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>

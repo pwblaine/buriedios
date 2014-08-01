@@ -30,7 +30,7 @@
         self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
         self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(clearButtonTouchHandler:)];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
-        self->topLogoPosition = CGRectMake(40,89,240,128);
+        self->topLogoPosition = CGRectMake(40,74,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
     }
     return self;
@@ -63,16 +63,23 @@
         if ([textField.accessibilityLabel isEqualToString:@"email"])
         {
             leftImageView = [[UIImageView  alloc]  initWithImage:
-                                          [UIImage  imageNamed: @"iconmonstr-user-3-icon-32.png"]];
+                                          [UIImage  imageNamed: @"iconmonstr-user-3-icon-40.png"]];
+        } else if ([textField.accessibilityLabel isEqualToString:@"password"]) {
+            leftImageView = [[UIImageView  alloc]  initWithImage:
+                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-48 (1).png"]];
         } else {
             leftImageView = [[UIImageView  alloc]  initWithImage:
-                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-32.png"]];
+                             [UIImage  imageNamed: @"iconmonstr-key-7-icon-48.png"]];
         }
-            int halfWidth = textField.bounds.size.width/2;
-            [textField setCenter:CGPointMake((textField.center.x - halfWidth), textField.center.y)];
-            [textField setTextAlignment:NSTextAlignmentCenter];
+        [textField setTextAlignment:NSTextAlignmentCenter];
+        
+        textField.layer.backgroundColor = [[UIColor clearColor] CGColor];
+        textField.layer.cornerRadius = 8;
+        textField.layer.masksToBounds = NO;
             [textField  setLeftView:leftImageView];
-            [textField setAlpha:0.5];
+        leftImageView.layer.cornerRadius = 8;
+        leftImageView.layer.backgroundColor = [[UIColor colorWithRed:((float)127 / 255.0f) green:((float)140 / 255.0f) blue:((float)141 / 255.0f) alpha:0.0] CGColor];
+        leftImageView.alpha = 0.5;
             [textField  setLeftViewMode: UITextFieldViewModeAlways];
         }
     }

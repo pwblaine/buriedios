@@ -15,6 +15,10 @@
 		28070C5E18911E2900D465CA /* LTPhotoDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */; };
 		280EE1AC198B42AA0063C791 /* iconmonstr-key-8-icon-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 280EE1AA198B42AA0063C791 /* iconmonstr-key-8-icon-24.png */; };
 		280EE1AD198B42AA0063C791 /* iconmonstr-key-8-icon-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 280EE1AB198B42AA0063C791 /* iconmonstr-key-8-icon-32.png */; };
+		28195040198BDD5E001AE270 /* iconmonstr-key-8-icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2819503E198BDD5E001AE270 /* iconmonstr-key-8-icon-40.png */; };
+		28195041198BDD5E001AE270 /* iconmonstr-user-3-icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2819503F198BDD5E001AE270 /* iconmonstr-user-3-icon-40.png */; };
+		28195043198BE32F001AE270 /* iconmonstr-key-7-icon-48.png in Resources */ = {isa = PBXBuildFile; fileRef = 28195042198BE32F001AE270 /* iconmonstr-key-7-icon-48.png */; };
+		28195045198BE61D001AE270 /* iconmonstr-key-8-icon-48 (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 28195044198BE61D001AE270 /* iconmonstr-key-8-icon-48 (1).png */; };
 		281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A8A188EA66800C85066 /* 37x-Checkmark.png */; };
 		281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A92188EA66800C85066 /* buriedlogo_250height.png */; };
 		281E7AB5188EA66800C85066 /* Crowd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 281E7A93188EA66800C85066 /* Crowd.jpg */; };
@@ -108,6 +112,10 @@
 		28070C5C18911E2900D465CA /* LTPhotoDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LTPhotoDetailViewController.xib; path = buried/LTPhotoDetailViewController.xib; sourceTree = "<group>"; };
 		280EE1AA198B42AA0063C791 /* iconmonstr-key-8-icon-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-key-8-icon-24.png"; sourceTree = SOURCE_ROOT; };
 		280EE1AB198B42AA0063C791 /* iconmonstr-key-8-icon-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-key-8-icon-32.png"; sourceTree = SOURCE_ROOT; };
+		2819503E198BDD5E001AE270 /* iconmonstr-key-8-icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-key-8-icon-40.png"; sourceTree = SOURCE_ROOT; };
+		2819503F198BDD5E001AE270 /* iconmonstr-user-3-icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-user-3-icon-40.png"; sourceTree = SOURCE_ROOT; };
+		28195042198BE32F001AE270 /* iconmonstr-key-7-icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-key-7-icon-48.png"; sourceTree = SOURCE_ROOT; };
+		28195044198BE61D001AE270 /* iconmonstr-key-8-icon-48 (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-key-8-icon-48 (1).png"; sourceTree = SOURCE_ROOT; };
 		281E7A8A188EA66800C85066 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark.png"; path = "buried/37x-Checkmark.png"; sourceTree = SOURCE_ROOT; };
 		281E7A90188EA66800C85066 /* buried-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "buried-Info.plist"; path = "buried/buried-Info.plist"; sourceTree = SOURCE_ROOT; };
 		281E7A92188EA66800C85066 /* buriedlogo_250height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo_250height.png; path = buried/buriedlogo_250height.png; sourceTree = SOURCE_ROOT; };
@@ -409,7 +417,11 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28195044198BE61D001AE270 /* iconmonstr-key-8-icon-48 (1).png */,
+				28195042198BE32F001AE270 /* iconmonstr-key-7-icon-48.png */,
 				280EE1AA198B42AA0063C791 /* iconmonstr-key-8-icon-24.png */,
+				2819503E198BDD5E001AE270 /* iconmonstr-key-8-icon-40.png */,
+				2819503F198BDD5E001AE270 /* iconmonstr-user-3-icon-40.png */,
 				280EE1AB198B42AA0063C791 /* iconmonstr-key-8-icon-32.png */,
 				2821DFC0198B3879002E23D5 /* iconmonstr-key-8-icon-48.png */,
 				2821DFC1198B3879002E23D5 /* iconmonstr-key-8-icon-64.png */,
@@ -536,6 +548,7 @@
 				308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */,
 				308D4771191ADADF0098AEFC /* buriedlogo80x80.png in Resources */,
 				281E7ABC188EA66800C85066 /* ParseIcon@2x.png in Resources */,
+				28195043198BE32F001AE270 /* iconmonstr-key-7-icon-48.png in Resources */,
 				281E7ABE188EA66800C85066 /* Lime.jpg in Resources */,
 				28B922D41987E13D003A87EF /* x-circlemark.png in Resources */,
 				281E7AB0188EA66800C85066 /* 37x-Checkmark.png in Resources */,
@@ -553,8 +566,11 @@
 				281E7AC5188EA66800C85066 /* LTBuryItViewController.xib in Resources */,
 				28763EA81924F5940076A636 /* buried_text_250x94.png in Resources */,
 				308D4772191ADADF0098AEFC /* buriedlogo120x120white.png in Resources */,
+				28195040198BDD5E001AE270 /* iconmonstr-key-8-icon-40.png in Resources */,
 				2821DFCD198B3879002E23D5 /* iconmonstr-user-3-icon-64.png in Resources */,
 				112B790F1947019C00558BE1 /* x-mark@2x.png in Resources */,
+				28195045198BE61D001AE270 /* iconmonstr-key-8-icon-48 (1).png in Resources */,
+				28195041198BDD5E001AE270 /* iconmonstr-user-3-icon-40.png in Resources */,
 				2821DFC9198B3879002E23D5 /* iconmonstr-key-8-icon-64.png in Resources */,
 				308D476E191ADADF0098AEFC /* buriedicon152x152white.png in Resources */,
 				2821DFCA198B3879002E23D5 /* iconmonstr-user-3-icon-24.png in Resources */,
