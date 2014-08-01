@@ -161,4 +161,14 @@
     return [(LTAppDelegate *)[[UIApplication sharedApplication] delegate] grassDelegate];
 }
 
+#pragma mark Color Scheme
+
++(UIColor *)errorColor{
+    return [UIColor colorWithRed:111/255.0f green:0/255.0f blue:8/255.0f alpha:1.0f];
+}
+
++(UIColor *)successColor{
+    return [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
+}
+
 @end

@@ -35,9 +35,13 @@ typedef NS_ENUM(NSInteger, LTGrassState) {
 #pragma mark UINavigationControllerDelegate methods
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
-#pragma mark Delegate methods
+#pragma mark LTGrassView static methods
 
 +(LTGrassViewController *)delegate;
+
++(UIColor *)errorColor;
+
++(UIColor *)successColor;
 
 @end
 

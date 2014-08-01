@@ -10,4 +10,13 @@
 
 @implementation LTForm
 
+
+-(BOOL)verifyField:(UITextField *)field{return YES;}
+
+-(LTFormFieldType)fieldTypeOf:(UITextField *)field{return LTPasswordField;}
+
+-(UIResponder *)fieldAfter:(UITextField *)currentField{return [UIResponder alloc];}
+
+-(UIResponder *)fieldBefore:(UITextField *)currentField{return [UIResponder alloc];}
+
 @end

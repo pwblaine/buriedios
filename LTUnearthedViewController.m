@@ -544,11 +544,11 @@
     {
         NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
         
+    }
         lastLoggedInUserId = [user objectId];
         lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
         lastLoggedInDisplayName = [user objectForKey:@"firstName"];
         lastLoggedInUserName = [user username];
-    }
     
     // write to user defaults
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];

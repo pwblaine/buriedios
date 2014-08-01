@@ -52,11 +52,30 @@
     // Add login/sign in navigation bar button;
     self.navigationItem.rightBarButtonItem = self->signInButton;
     
-    self->initialBorderSpecs.borderColor = self.emailField.layer.borderColor;
-    self->initialBorderSpecs.borderWidth = self.emailField.layer.borderWidth;
-    self->initialBorderSpecs.cornerRadius = self.emailField.layer.cornerRadius;
-    self->initialBorderSpecs.masksToBounds = self.emailField.layer.masksToBounds;
-}
+    self->initialBorderSpecs.borderColor = [[UIColor clearColor] CGColor];
+    self->initialBorderSpecs.shadowColor = [[UIColor clearColor] CGColor];
+    self->initialBorderSpecs.borderWidth = 1;
+    self->initialBorderSpecs.cornerRadius = 8;
+    self->initialBorderSpecs.masksToBounds = YES;
+    
+    for (UITextField *textField in [self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]]) {
+        UIImageView *leftImageView;
+        if ([textField.accessibilityLabel isEqualToString:@"email"])
+        {
+            leftImageView = [[UIImageView  alloc]  initWithImage:
+                                          [UIImage  imageNamed: @"iconmonstr-user-3-icon-32.png"]];
+        } else {
+            leftImageView = [[UIImageView  alloc]  initWithImage:
+                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-32.png"]];
+        }
+            int halfWidth = textField.bounds.size.width/2;
+            [textField setCenter:CGPointMake((textField.center.x - halfWidth), textField.center.y)];
+            [textField setTextAlignment:NSTextAlignmentCenter];
+            [textField  setLeftView:leftImageView];
+            [textField setAlpha:0.5];
+            [textField  setLeftViewMode: UITextFieldViewModeAlways];
+        }
+    }
 
 
 -(BOOL)isValidEmail:(NSString *)email
@@ -72,6 +91,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"] length] > 0)
     {
+        NSLog(@"user found with id %@ & name %@ & fbid %@ & username %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInFacebookId"]);
         return YES;
     }
     else
@@ -188,7 +208,7 @@
             PFUser *userToSignup = [[PFUser alloc] init];
             
             [userToSignup setEmail:self.userInfo[@"email"]];
-            [userToSignup setUsername:self.userInfo[@"username"]];
+            [userToSignup setUsername:self.userInfo[@"email"]];
             [userToSignup setPassword:self.userInfo[@"password"]];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"displayName"];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"firstName"];
@@ -325,7 +345,6 @@
     if (![self->currentViewState isDescendantOfView:view] && self->currentViewState)
         [self hideViewElements:elementsToHide];
     
-    
     for (UIView *element in elementsToShow)
     {
         element.alpha = 0;
@@ -338,8 +357,11 @@
         [self.navigationItem setLeftBarButtonItem:self->goBackButton animated:YES];
         [self.navigationItem setRightBarButtonItem:self->submitButton animated:YES];
         [passwordField setSecureTextEntry:([view isDescendantOfView:self->loginView])];
+        
     } else if ([view isDescendantOfView:self->savedAccountView])
+    {
         [self changeButtonsForSavedUser];
+    }
     else if ([view isDescendantOfView:self->startView])
     {
         [self.navigationItem setLeftBarButtonItem:self->signUpButton animated:YES];
@@ -377,11 +399,14 @@
             NSNumber *theOtherY = [[NSNumber alloc] initWithInt:otherObject.center.y];
             return [theY compare:theOtherY];
         }]];
+        
         NSLog(@"currentViewElements :%@",self->currentViewElements);
         [self->currentTextFields filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]];
         self->originalViewCenter = CGPointMake(self.view.center.x, self.view.center.y);
         NSLog(@"currentTextFields :%@",self->currentTextFields);
+        
         [self enableAllBarButtons];
+        
     }];
 }
 
@@ -398,10 +423,7 @@
             if ([element isMemberOfClass:[UITextField class]])
             {
                 [(UITextField *)[element self] setText:@""];
-                ((UITextField *)[element self]).layer.borderColor = self->initialBorderSpecs.borderColor;
-                ((UITextField *)[element self]).layer.borderWidth = self->initialBorderSpecs.borderWidth;
-                ((UITextField *)[element self]).layer.cornerRadius = self->initialBorderSpecs.cornerRadius;
-                ((UITextField *)[element self]).layer.masksToBounds = self->initialBorderSpecs.masksToBounds;
+                ((UITextField *)[element self]).textColor = [UIColor darkTextColor];
             }
         }
     } completion:^(BOOL finished) {
@@ -442,15 +464,21 @@
 /* Login to facebook method */
 - (IBAction)continueButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    /* TODO implement PIN VC
-     [self presentViewController:[[LTPINVerificationViewController alloc] init] animated:YES completion:^{
-     NSLog(@"PinVC presented successfully");
-     }];
-     */
-    [self continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:sender];
+    
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    {
+        [[self navigationController] pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
+    } else {
+        // TODO add fb account linkage controller
+        self->HUD.mode = MBProgressHUDModeText;
+        self->HUD.labelText = @"facebook not linked";
+        self->HUD.detailsLabelText = @"during the beta, fb is a requisite";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+    }
 }
 
-- (void)continueToUnearthedWithFbLoginPermissionsAfterPINVerificationBy:(id)sender
+- (void)facebookLoginButtonTouchHandler:(id)sender
 {
     [self disableAllBarButtons];
     // This code if the user wishes to log in with Facebook
@@ -491,15 +519,6 @@
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
             [self updateFbProfileForUser:user];
-            
-            NSLog(@"user successfully returned, grabbing fb data if necessary...");
-            
-            if (!user.username || !user.email || ![user objectForKey:@"displayName"])
-                        {
-                        }else{
-                            // send the user on through to the unearthed view
-                    [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-                        }
         }
     }];
     
@@ -532,6 +551,11 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->currentResponder = textField;
     
+    if (![textField.textColor isEqual:[UIColor darkTextColor]] || !(textField.alpha == 1))
+    {
+        
+    }
+    
     BOOL isNotLast = NO;
     
     if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
@@ -544,7 +568,7 @@
     __block NSInteger keyboardHeight = 432;
     __block NSInteger centerPointYForViewWithKeyboardUp = (self.view.frame.size.height - keyboardHeight)*2;
     
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.5f delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
         NSLog(@"%f,%f self.center %f, %f self.frame %f,%f self.bounds %i isediting",self.view.center.x,self.view.center.y,self.view.frame.origin.x,self.view.frame.origin.y,self.view.bounds.origin.x,self.view.bounds.origin.y,self.isEditing);
         
         NSLog(@"viewFrame w: %f h: %f",self.view.frame.size.width, self.view.frame.size.height);
@@ -622,10 +646,10 @@
     textField.layer.borderWidth = self->initialBorderSpecs.borderWidth;
     
     CABasicAnimation *corner = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
-    width.toValue = (id)[NSNumber numberWithFloat:self->initialBorderSpecs.cornerRadius];
+    corner.toValue = @8;
     corner.fromValue = (id)[NSNumber numberWithFloat:textField.layer.cornerRadius];
     // ... and change the model value
-    textField.layer.cornerRadius = self->initialBorderSpecs.cornerRadius;
+    textField.layer.cornerRadius = 8.0f;
     
     CAAnimationGroup *all = [CAAnimationGroup animation];
     // animate all as a group with the duration of 0.5 seconds
@@ -645,48 +669,120 @@
 
 -(void)validateField:(UITextField *)textField
 {
-    NSArray *fieldsToChangeColorOf = [NSArray arrayWithObject:textField];
+    UIColor * errorColor = [LTGrassViewController errorColor];
+    UIColor * successColor = [LTGrassViewController successColor];
     
-    CGColorRef borderColor = CGColorCreate(0, 0);
+    __block NSMutableSet * fieldsToChangeColorOf = [[NSMutableSet alloc] initWithObjects:textField, nil];
+    __block UIColor * originalColor = [UIColor darkTextColor];
+    __block UIColor * changeColor = [UIColor clearColor];
+    __block NSString * validateMessage = @"";
+   __block NSString * originalText = textField.text;
+    
     if ([textField isEqual:self.emailField])
     {
         if ([self isValidEmail:textField.text])
         {
-            borderColor = [[UIColor greenColor] CGColor];
+            changeColor = successColor;
         }
         else
         {
-            borderColor = [[UIColor redColor] CGColor];
+            changeColor = errorColor;
         }
     } else
     {
         
         if ([self->currentViewState isDescendantOfView:self->signUpView])
         {
-            fieldsToChangeColorOf = @[self.passwordField,self.confirmField];
+            [fieldsToChangeColorOf addObject:self.passwordField];
+            [fieldsToChangeColorOf addObject:self.confirmField];
             if (![self.passwordField.text isEqualToString:self.confirmField.text] || textField.text.length < 1)
             {
-                borderColor = [[UIColor redColor] CGColor];
+                changeColor = errorColor;
             } else
             {
-                borderColor = [[UIColor greenColor] CGColor];
+                changeColor = successColor;
             }
         } else if (textField.text.length < 1) {
-            borderColor = [[UIColor redColor] CGColor];
+            changeColor = errorColor;
         } else
         {
-            borderColor = [[UIColor greenColor] CGColor];
+            changeColor = successColor;
         }
     }
     
-    for (UITextField *field in fieldsToChangeColorOf) {
-        [self fieldToChangeBorderOf:field toColor:borderColor];
+    if ([changeColor isEqual:successColor])
+    {
+        validateMessage = @"valid";
+    } else if (fieldsToChangeColorOf.count > 1)
+    {
+        validateMessage = @"mismatch";
+    } else
+    {
+        validateMessage = @"invalid";
     }
+    
+    NSLog(@"validate messages is : %@",validateMessage);
+    
+    
+    
+    [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction
+                              animations:^{
+                    for (UITextField *thisField in fieldsToChangeColorOf) {
+                thisField.alpha = 0;
+            }
+    } completion:^(BOOL finished) {
+        NSLog(@"hidden!");
+        [UIView animateKeyframesWithDuration:1.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+            [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
+                for (UITextField *thisField in fieldsToChangeColorOf) {
+                    thisField.alpha = 1;
+                    thisField.textColor = changeColor;
+                    thisField.text = validateMessage;
+                }
+            }];
+            [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{
+                for (UITextField *thisField in fieldsToChangeColorOf) {
+                    thisField.alpha = 0;
+                }
+            }];
+        } completion:^(BOOL finished) {
+            NSLog(@"swapped out and showed message, then hid again");
+            [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+                [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1 animations:^{
+                    for (UITextField *thisField in fieldsToChangeColorOf) {
+                        thisField.alpha = 1;
+                        thisField.text = originalText;
+                        thisField.textColor = originalColor;
+                    }
+                }];
+            } completion:^(BOOL finished) {
+                if (finished)
+                {
+                    NSLog(@"restored to original state");
+                }
+                
+                if ([changeColor isEqual:errorColor]) {
+                    NSLog(@"validation error shown : %@ in color %@", validateMessage, changeColor);
+                } else {
+                    NSLog(@"validation message shown: %@ in color %@", validateMessage, changeColor);
+                }
+            }];
+
+        }];
+    }];
+    
 }
+
 
 -(void)validateAllFields {
     for (UITextField *textField in self->currentTextFields) {
         [self validateField:textField];
+    }
+}
+
+-(void)revertAllFields {
+    for (UITextField *textField in self->currentTextFields) {
+        [self revertField:textField animated:YES];
     }
 }
 
@@ -744,9 +840,12 @@
     }];
     
     // clear stored account in user defaults
-    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserId"];
-    
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName");
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserId"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInDisplayName"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInFacebookId"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserName"];
     
     [self showView:self->startView];
 }
@@ -800,10 +899,10 @@
         NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
     }
     
-        lastLoggedInUserId = [user objectId];
-        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
-        lastLoggedInUserName = [user username];
+    lastLoggedInUserId = [user objectId];
+    lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
+    lastLoggedInDisplayName = [user objectForKey:@"firstName"];
+    lastLoggedInUserName = [user username];
     
     // write to user defaults
     [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
@@ -836,13 +935,20 @@
     
     self->HUD.mode = MBProgressHUDModeCustomView;
     self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-    self->HUD.labelText = [error userInfo][@"error"];
+    if ([error code] == 202)
+    {
+        self->HUD.labelText = @"username already taken";
+    }
+    else
+    {
+        self->HUD.labelText = @"login error";
+    }
     
     [self->HUD hide:YES afterDelay:1.0f];
     NSLog(@"signing up user failed because error:%@",error);
 }
 
-/// Sent to the delegate when the sign up screen is dismissed.
+/// Sent to the delegate whefn the sign up screen is dismissed.
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -879,13 +985,13 @@
 {
     __block PFUser * blockUser = user;
     [self storeUserDataToDefaults:blockUser];
-        NSLog(@"loginviewController dismissed with successful login, current user: %@",blockUser);
-        [self showView:self->startView];
-        
-        self->HUD.mode = MBProgressHUDModeCustomView;
-        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-        self->HUD.labelText = @"success!";
-        [self->HUD hide:YES afterDelay:1.0f];
+    NSLog(@"loginviewController dismissed with successful login, current user: %@",blockUser);
+    [self showView:self->startView];
+    
+    self->HUD.mode = MBProgressHUDModeCustomView;
+    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+    self->HUD.labelText = @"success!";
+    [self->HUD hide:YES afterDelay:1.0f];
 }
 
 /// Sent to the delegate when the log in attempt fails.
@@ -905,9 +1011,9 @@
     
 }
 
-- (BOOL)updateFbProfileForUser:(PFUser *)user
+- (LTUpdateResult)updateFbProfileForUser:(PFUser *)user
 {
-    __block BOOL updated = NO;
+    __block LTUpdateResult updateResult = LTUpdateNotNeeded;
     self->HUD.labelText = @"figuring out if we've met before";
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -923,7 +1029,7 @@
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
             [self->HUD hide:YES afterDelay:1.0f];
             
-            updated = NO;
+            updateResult = LTUpdateFailed;
         } else {
             NSLog(@"profile retrieved successfully");
             NSLog(@"connection: %@,result: %@, error: %@",connection,result,error);
@@ -933,7 +1039,7 @@
             if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
             {
                 NSLog(@"buried's user info is up to date with facebook");
-                updated = NO;
+                updateResult = LTUpdateNotNeeded;
             }
             else
             {
@@ -947,8 +1053,12 @@
                 [user setObject:userData[@"first_name"] forKey:@"firstName"];
                 [user setObject:userData[@"last_name"] forKey:@"lastName"];
                 
-                [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
-                
+                if (userData[@"last_name"])
+                {
+                    [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
+                } else {
+                    [user setObject:[NSString stringWithFormat:@"%@",userData[@"first_name"]]  forKey:@"displayName"];
+                }
                 [user setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
                 
                 
@@ -991,10 +1101,12 @@
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
             self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
             [self->HUD hide:YES afterDelay:1.0f];
-            updated = YES;
+            updateResult = LTUpdateSucceeded;
+            [self storeUserDataToDefaults:user];
+            [self showView:startView];
         }
     }];
-    return updated;
+    return updateResult;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
