@@ -187,7 +187,7 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    [self validateAllFields];
+    [self validateFields:self->currentTextFields];
     
     if ([self->currentResponder isFirstResponder])
     {
@@ -674,117 +674,161 @@
     textField.layer.masksToBounds=YES;
 }
 
--(void)validateField:(UITextField *)textField
+-(BOOL)validateField:(UITextField *)textField
 {
-    UIColor * errorColor = [LTGrassViewController errorColor];
-    UIColor * successColor = [LTGrassViewController successColor];
-    
-    __block NSMutableSet * fieldsToChangeColorOf = [[NSMutableSet alloc] initWithObjects:textField, nil];
-    __block UIColor * originalColor = [UIColor darkTextColor];
-    __block UIColor * changeColor = [UIColor clearColor];
-    __block NSString * validateMessage = @"";
-   __block NSString * originalText = textField.text;
-    
-    if ([textField isEqual:self.emailField])
+    NSLog(@"validateField called for %@",textField);
+    if (textField.text.length < 1) {
+        return NO;
+    } else if ([textField isEqual:self.emailField])
     {
         if ([self isValidEmail:textField.text])
         {
-            changeColor = successColor;
+            return YES;
         }
         else
         {
-            changeColor = errorColor;
+            return NO;
         }
-    } else
-    {
-        
-        if ([self->currentViewState isDescendantOfView:self->signUpView])
-        {
-            [fieldsToChangeColorOf addObject:self.passwordField];
-            [fieldsToChangeColorOf addObject:self.confirmField];
-            if (![self.passwordField.text isEqualToString:self.confirmField.text] || textField.text.length < 1)
+    } else if (![self.passwordField.text isEqualToString:self.confirmField.text] && [self->currentViewState isDescendantOfView:signUpView])
             {
-                changeColor = errorColor;
+                return NO;
             } else
             {
-                changeColor = successColor;
+                return YES;
             }
-        } else if (textField.text.length < 1) {
-            changeColor = errorColor;
-        } else
-        {
-            changeColor = successColor;
-        }
-    }
-    
-    if ([changeColor isEqual:successColor])
-    {
-        validateMessage = @"valid";
-    } else if (fieldsToChangeColorOf.count > 1)
-    {
-        validateMessage = @"mismatch";
-    } else
-    {
-        validateMessage = @"invalid";
-    }
-    
-    NSLog(@"validate messages is : %@",validateMessage);
-    
-    
-    
-    [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction
-                              animations:^{
-                    for (UITextField *thisField in fieldsToChangeColorOf) {
-                thisField.alpha = 0;
-            }
-    } completion:^(BOOL finished) {
-        NSLog(@"hidden!");
-        [UIView animateKeyframesWithDuration:1.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
-            [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
-                for (UITextField *thisField in fieldsToChangeColorOf) {
-                    thisField.alpha = 1;
-                    thisField.textColor = changeColor;
-                    thisField.text = validateMessage;
-                }
-            }];
-            [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{
-                for (UITextField *thisField in fieldsToChangeColorOf) {
-                    thisField.alpha = 0;
-                }
-            }];
-        } completion:^(BOOL finished) {
-            NSLog(@"swapped out and showed message, then hid again");
-            [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
-                [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1 animations:^{
-                    for (UITextField *thisField in fieldsToChangeColorOf) {
-                        thisField.alpha = 1;
-                        thisField.text = originalText;
-                        thisField.textColor = originalColor;
-                    }
-                }];
-            } completion:^(BOOL finished) {
-                if (finished)
-                {
-                    NSLog(@"restored to original state");
-                }
-                
-                if ([changeColor isEqual:errorColor]) {
-                    NSLog(@"validation error shown : %@ in color %@", validateMessage, changeColor);
-                } else {
-                    NSLog(@"validation message shown: %@ in color %@", validateMessage, changeColor);
-                }
-            }];
-
-        }];
-    }];
     
 }
 
-
--(void)validateAllFields {
-    for (UITextField *textField in self->currentTextFields) {
-        [self validateField:textField];
+-(void)flashFieldAsError:(NSArray *)fields {
+    
+    NSLog(@"validateAllFields Called");
+    NSMutableDictionary *fieldsToChangeColorOf = [[NSMutableDictionary alloc] init];
+    UIColor *changeColor = [LTGrassViewController errorColor];
+    
+    for (UITextField *textField in fields) {
+        [fieldsToChangeColorOf setObject:changeColor forKey:textField.accessibilityLabel];
     }
+    
+    [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction
+                              animations:^{
+                                  for (UITextField *thisField in fields) {
+                                      if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                          thisField.alpha = 0;
+                                  }
+                              } completion:^(BOOL finished) {
+                                  NSLog(@"hidden!");
+                                  [UIView animateKeyframesWithDuration:1.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+                                      [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
+                                          for (UITextField *thisField in fields) {
+                                              if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                              {
+                                                  thisField.alpha = 1;
+                                                  thisField.textColor = [fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel];
+                                              }
+                                          }
+                                      }];
+                                      [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{
+                                          for (UITextField *thisField in fields) {
+                                              if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                                  thisField.alpha = 0;
+                                          }
+                                      }];
+                                  } completion:^(BOOL finished) {
+                                      NSLog(@"swapped out and showed message, then hid again");
+                                      [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+                                          [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1 animations:^{
+                                              for (UITextField *thisField in fields) {
+                                                  
+                                                  if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                                  {
+                                                      thisField.alpha = 1;
+                                                      thisField.textColor = [UIColor darkTextColor];
+                                                  }
+                                              }
+                                          }];
+                                      } completion:^(BOOL finished) {
+                                          if (finished)
+                                          {
+                                              NSLog(@"restored to original state");
+                                          }
+                                      }];
+                                      
+                                  }];
+                              }];
+
+}
+
+
+-(void)validateFields:(NSArray *)fields {
+    NSLog(@"validateAllFields Called");
+    NSMutableDictionary *fieldsToChangeColorOf = [[NSMutableDictionary alloc] init];
+    UIColor *changeColor = [[UIColor alloc] init];
+    
+    for (UITextField *textField in fields) {
+        BOOL wasValidated = [self validateField:textField];
+        if (wasValidated)
+        {
+            changeColor = [LTGrassViewController successColor];
+        }
+        else
+        {
+            changeColor = [LTGrassViewController errorColor];
+        }
+        
+        if ([[fieldsToChangeColorOf objectForKey:self.emailField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]] && ![textField.accessibilityLabel isEqualToString:self.emailField.accessibilityLabel])
+        {
+            NSLog(@"skipping %@",textField.accessibilityLabel);
+        } else
+        {
+            [fieldsToChangeColorOf setObject:changeColor forKey:textField.accessibilityLabel];
+        }
+    }
+    [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction
+                              animations:^{
+                                  for (UITextField *thisField in fields) {
+                                      if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                      thisField.alpha = 0;
+                                  }
+                              } completion:^(BOOL finished) {
+                                  NSLog(@"hidden!");
+                                  [UIView animateKeyframesWithDuration:1.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+                                      [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
+                                          for (UITextField *thisField in fields) {
+                                              if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                              {
+                                              thisField.alpha = 1;
+                                              thisField.textColor = [fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel];
+                                          }
+                                          }
+                                      }];
+                                      [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{
+                                          for (UITextField *thisField in fields) {
+                                              if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                              thisField.alpha = 0;
+                                          }
+                                      }];
+                                  } completion:^(BOOL finished) {
+                                      NSLog(@"swapped out and showed message, then hid again");
+                                      [UIView animateKeyframesWithDuration:0.5 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+                                          [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1 animations:^{
+                                              for (UITextField *thisField in fields) {
+                                                  
+                                                  if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
+                                                  {
+                                                  thisField.alpha = 1;
+                                                  thisField.textColor = [UIColor darkTextColor];
+                                              }
+                                              }
+                                          }];
+                                      } completion:^(BOOL finished) {
+                                          if (finished)
+                                          {
+                                              NSLog(@"restored to original state");
+                                          }
+                                      }];
+                                      
+                                  }];
+                              }];
 }
 
 -(void)revertAllFields {
@@ -798,8 +842,6 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
     NSLog(@"textField %@ ended editing",textField.accessibilityLabel);
-    
-    [self validateField:textField];
     
     self.navigationItem.leftBarButtonItem = self->goBackButton;
     self.navigationItem.rightBarButtonItem = self->submitButton;
@@ -860,6 +902,8 @@
 - (void)hudWasHidden:(MBProgressHUD *)hud
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->HUD.labelText = @"";
+    self->HUD.detailsLabelText = @"";
     [self enableAllBarButtons];
 }
 
@@ -868,11 +912,20 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"info: %@",info);
     
-    if ((self.passwordField.text.length < 1) || (![self isValidEmail:self.emailField.text]))
+    if (![self isValidEmail:self.emailField.text])
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"fill out all fields";
+        self->HUD.labelText = @"invalid email address";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else if ((self.passwordField.text.length < 1) || (self.confirmField.text.length < 1))
+    {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"password is too short";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
@@ -881,7 +934,7 @@
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"password mismatch";
+        self->HUD.labelText = @"passwords must match";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
@@ -945,6 +998,7 @@
     if ([error code] == 202)
     {
         self->HUD.labelText = @"username already taken";
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.emailField, nil]];
     }
     else
     {
@@ -971,11 +1025,19 @@
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if ((![self isValidEmail:self.emailField.text]) || (self.passwordField.text.length < 1))
+    if (![self isValidEmail:self.emailField.text])
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"fill out all fields";
+        self->HUD.labelText = @"invalid email address";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else if (self.passwordField.text.length < 1)  {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"password is too short";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
@@ -1006,8 +1068,22 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    NSLog(@"error in login: %@",error);
+    self->HUD.mode = MBProgressHUDModeCustomView;
+    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+    if ([error code] == 101)
+    {
+        self->HUD.labelText = @"password incorrect";
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.passwordField
+                                 , nil]];
+    }
+    else
+    {
+        self->HUD.labelText = @"login error";
+        [self validateFields:self->currentTextFields];
+    }
+    
     [self->HUD hide:YES afterDelay:1.0f];
+    NSLog(@"signing up user failed because error:%@",error);
 }
 
 /// Sent to the delegate when the log in screen is dismissed.

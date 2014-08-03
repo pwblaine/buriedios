@@ -21,6 +21,7 @@
     IBOutlet UIView *savedAccountView;
     IBOutlet UIView *sharedFieldsView;
     IBOutlet UIView *startView;
+    IBOutlet UIView *accountTypesView;
     
     UIView *currentViewState;
     NSMutableArray *currentViewElements;
@@ -79,8 +80,8 @@
 
 -(BOOL)isValidEmail:(NSString *)email;
 
--(void)validateField:(UITextField *)textField;
--(void)validateAllFields;
+-(BOOL)validateField:(UITextField *)textField;
+-(void)validateFields:(NSArray *)fields;
 
 -(void)storeUserDataToDefaults:(PFUser *)user;
 

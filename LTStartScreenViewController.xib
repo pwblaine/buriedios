@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LTStartScreenViewController">
             <connections>
+                <outlet property="accountTypesView" destination="FDI-yc-wqT" id="g0w-hX-QEr"/>
                 <outlet property="buriedLogo" destination="cpo-Y1-xtb" id="kby-Jx-dEZ"/>
                 <outlet property="confirmField" destination="kzB-8P-fji" id="pBq-rD-Fo5"/>
                 <outlet property="emailField" destination="aPS-kV-ODT" id="nfW-x4-zxz"/>
@@ -34,7 +35,7 @@
                         <color key="titleColor" red="0.40000000000000002" green="0.59999999999999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <button hidden="YES" opaque="NO" alpha="0.0" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9Q-Ib-odj" userLabel="facebookLoginButton">
+                <button hidden="YES" opaque="NO" alpha="0.0" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9Q-Ib-odj" userLabel="facebookLoginButton">
                     <rect key="frame" x="94" y="395" width="132" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -125,6 +126,12 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
         <view tag="5" contentMode="scaleToFill" id="Jdf-t8-8gj" userLabel="startview">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+        </view>
+        <view contentMode="scaleToFill" id="FDI-yc-wqT" userLabel="AccountTypes">
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
