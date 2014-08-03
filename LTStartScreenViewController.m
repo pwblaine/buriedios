@@ -500,21 +500,22 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
              [self logInToFacebookAndUpdateProfileWithCompletionHandler:^(LTUpdateResult profileUpdateResult){
                  if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
                  {
-                     NSLog(@"login was succesful and current user is now linked");
+                     NSLog(@"login was successful and current user is now linked");
                      logInSuccessful = YES;
-                     [self logInAttempted:logInSuccessful];
+                     [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(logInAttempted:) userInfo:[NSNumber numberWithBool:logInSuccessful] repeats:NO];
                  }
              }];
          } else {
              NSLog(@"PFFacebookUtils is already linked with a user");
              logInSuccessful = YES;
-             [self logInAttempted:logInSuccessful];
+             [self logInAttempted:[NSNumber numberWithBool:logInSuccessful]];
          }
 }
 
-- (void)logInAttempted:(BOOL)logInSuccessful
+- (void)logInAttempted:(id)logInSuccessful
 {
-    if (logInSuccessful)
+    BOOL didLogIn = [(NSNumber *)logInSuccessful boolValue];
+    if (didLogIn)
     {
         NSLog(@"detected fb linkage, logging in");
         self->HUD.mode = MBProgressHUDModeCustomView;
