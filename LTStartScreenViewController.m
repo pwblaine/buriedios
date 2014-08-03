@@ -72,7 +72,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                                           [UIImage  imageNamed: @"iconmonstr-user-3-icon-40.png"]];
         } else if ([textField.accessibilityLabel isEqualToString:@"password"]) {
             leftImageView = [[UIImageView  alloc]  initWithImage:
-                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-48 (1).png"]];
+                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-48.png"]];
         } else {
             leftImageView = [[UIImageView  alloc]  initWithImage:
                              [UIImage  imageNamed: @"iconmonstr-key-7-icon-48.png"]];
