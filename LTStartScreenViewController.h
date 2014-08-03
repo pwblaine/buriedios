@@ -110,9 +110,10 @@
 typedef NS_ENUM(NSInteger, LTUpdateResult) {
     LTUpdateSucceeded, // the case where
     LTUpdateNotNeeded, // the case where no change was necessary
-    LTUpdateFailed
+    LTUpdateFailed,
+    LTUpdateResultNil
 };
 
--(LTUpdateResult)updateFbProfileForUser:(PFUser *)user;
+-(LTUpdateResult)updateFbProfileForUser;
 
 @end

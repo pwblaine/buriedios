@@ -12,6 +12,12 @@
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
 
+@interface LTStartScreenViewController()
+
+typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
+
+@end
+
 @implementation LTStartScreenViewController
 
 @synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, emailField;
@@ -95,7 +101,10 @@
 -(BOOL)checkForSavedUser
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
+    if ([PFUser currentUser])
+    {
+        return YES;
+    }
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"] length] > 0)
     {
         NSLog(@"user found with id %@ & name %@ & fbid %@ & username %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInFacebookId"]);
@@ -111,7 +120,9 @@
     
     if ([self checkForSavedUser])
     {
-        self->lastLoggedInLabel.text = [[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"]] lowercaseString];
+        NSString *displayName = [[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"]] lowercaseString];
+        displayName = [[PFUser currentUser] objectForKey:@"firstName"];
+        self->lastLoggedInLabel.text = displayName;
         self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
@@ -163,6 +174,10 @@
     if ([self checkForSavedUser])
     {
         NSString * displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
+        if ([PFUser currentUser])
+        {
+            displayName = [[PFUser currentUser] objectForKey:@"firstName"];
+        }
         self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome back, %@!",[displayName lowercaseString]];
         
         NSLog(@"lastLoggedInLabel loaded");
@@ -472,12 +487,47 @@
 - (IBAction)continueButtonTouchHandler:(id)sender  {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    __block BOOL logInSuccessful = NO;
+    
+    self->HUD.mode = MBProgressHUDModeIndeterminate;
+    self->HUD.labelText = @"checking for facebook";
+    [self->HUD show:YES];
+    
+    NSLog(@"checking PFFacebookUtils is linked with a user");
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+         {
+             NSLog(@"PFFacebookUtils not linked with a user, attempting to login");
+             [self logInToFacebookAndUpdateProfileWithCompletionHandler:^(LTUpdateResult profileUpdateResult){
+                 if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+                 {
+                     NSLog(@"login was succesful and current user is now linked");
+                     logInSuccessful = YES;
+                     [self logInAttempted:logInSuccessful];
+                 }
+             }];
+         } else {
+             NSLog(@"PFFacebookUtils is already linked with a user");
+             logInSuccessful = YES;
+             [self logInAttempted:logInSuccessful];
+         }
+}
+
+- (void)logInAttempted:(BOOL)logInSuccessful
+{
+    if (logInSuccessful)
     {
-        [[self navigationController] pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-    } else {
-        // TODO add fb account linkage controller
-        self->HUD.mode = MBProgressHUDModeText;
+        NSLog(@"detected fb linkage, logging in");
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
+        self->HUD.labelText = @"welcome to buried";
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
+    }
+    else
+    {
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
         self->HUD.labelText = @"facebook not linked";
         self->HUD.detailsLabelText = @"during the beta, fb is a requisite";
         [self->HUD show:YES];
@@ -487,6 +537,15 @@
 
 - (void)facebookLoginButtonTouchHandler:(id)sender
 {
+    [self logInToFacebookAndUpdateProfileWithCompletionHandler:^(LTUpdateResult profileResult){
+        [self showView:startView];
+    }];
+}
+
+-(LTUpdateResult)logInToFacebookAndUpdateProfileWithCompletionHandler:(LTCompletionBlock)success
+{
+    __block LTUpdateResult result = LTUpdateResultNil;
+    
     [self disableAllBarButtons];
     // This code if the user wishes to log in with Facebook
     
@@ -518,16 +577,39 @@
             } else {
                 // this code is run when the user tried to login but ran into a connection or authentication error
                 NSLog(@"uh oh. An error occurred: %@", error);
-                self->HUD.labelText = [NSString stringWithFormat:@"%@",[[error userInfo] objectForKey:@"error"]];
+                self->HUD.labelText = [NSString stringWithFormat:@"something went way wrong"];
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
             }
             
             [self->HUD hide:YES afterDelay:1.0f];
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
-            [self updateFbProfileForUser:user];
+            void(^attemptUpdate)(void);
+            __block LTUpdateResult attempt = LTUpdateResultNil;
+            attemptUpdate = ^(void) {
+                attempt = [self updateFbProfileForUser];
+                if (attempt == LTUpdateSucceeded)
+                {
+                    NSLog(@"facebook login succeeded");
+                    success(attempt);
+                } else if (attempt == LTUpdateNotNeeded)
+                {
+                    NSLog(@"facebook login succeeded and profile up to date");
+                    success(attempt);
+                }
+                else
+                {
+                    NSLog(@"facebook login succeeded but profile update failed");
+                }
+            };
+            
+            [self->HUD showAnimated:YES whileExecutingBlock:attemptUpdate];
+            
+           
         }
     }];
+    
+    return result;
     
 }
 
@@ -1094,10 +1176,15 @@
     
 }
 
-- (LTUpdateResult)updateFbProfileForUser:(PFUser *)user
+- (LTUpdateResult)updateFbProfileForUser
 {
-    __block LTUpdateResult updateResult = LTUpdateNotNeeded;
+    __block LTUpdateResult updateResult = LTUpdateResultNil;
+    self->HUD.mode = MBProgressHUDModeIndeterminate;
     self->HUD.labelText = @"figuring out if we've met before";
+    [self->HUD show:YES];
+    
+    PFUser *user = [PFUser currentUser];
+    
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         NSLog(@"profile download finished");
@@ -1108,7 +1195,7 @@
             
             // let the user know
             self->HUD.mode = MBProgressHUDModeCustomView;
-            self->HUD.labelText = @"%@",[[error userInfo] objectForKey:@"error"];
+            self->HUD.labelText = @"can't remember right now";
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
             [self->HUD hide:YES afterDelay:1.0f];
             
@@ -1119,9 +1206,16 @@
             
             NSDictionary<FBGraphUser> *userData = result;
             
-            if ([[user objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
+            if ([[[PFUser currentUser] objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
             {
                 NSLog(@"buried's user info is up to date with facebook");
+                
+                self->HUD.mode = MBProgressHUDModeCustomView;
+                self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-wink-icon-48_MB"]];
+                self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
+                
+                [self->HUD hide:YES afterDelay:1.0f];
+                
                 updateResult = LTUpdateNotNeeded;
             }
             else
@@ -1129,20 +1223,21 @@
                 
                 NSLog(@"buried's user info is out of date with facebook");
                 NSLog(@"syncing user data with facebook");
+                
                 self->HUD.labelText = @"getting to know you better";
                 
-                [user setObject:userData[@"id"] forKey:@"facebookId"];
+                [[PFUser currentUser] setObject:userData[@"id"] forKey:@"facebookId"];
                 
-                [user setObject:userData[@"first_name"] forKey:@"firstName"];
-                [user setObject:userData[@"last_name"] forKey:@"lastName"];
+                [[PFUser currentUser] setObject:userData[@"first_name"] forKey:@"firstName"];
+                [[PFUser currentUser] setObject:userData[@"last_name"] forKey:@"lastName"];
                 
                 if (userData[@"last_name"])
                 {
-                    [user setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
+                    [[PFUser currentUser] setObject:[NSString stringWithFormat:@"%@ %@",userData[@"first_name"],userData[@"last_name"]] forKey:@"displayName"];
                 } else {
-                    [user setObject:[NSString stringWithFormat:@"%@",userData[@"first_name"]]  forKey:@"displayName"];
+                    [[PFUser currentUser] setObject:[NSString stringWithFormat:@"%@",userData[@"first_name"]]  forKey:@"displayName"];
                 }
-                [user setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
+                [[PFUser currentUser] setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
                 
                 
                 NSLog(@"updating device's channels to listen for pushes for the now logged in user");
@@ -1159,36 +1254,49 @@
                 [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (!succeeded)
                     {
-                        NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[user objectId],error);
+                        NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[[PFUser currentUser] objectId],error);
                     } else
                     {
-                        NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[user objectId]);
+                        NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[[PFUser currentUser] objectId]);
                     }
                 }];
                 
                 NSLog(@"current channels: %@", [currentInstallation channels]);
                 
                 // save the user's sync'd model locally to the device and to the parse cloud
-                [self storeUserDataToDefaults:user];
                 
                 NSError *__autoreleasing * userSaveFbProfileError = NULL;
-                [user save:(NSError *__autoreleasing *)userSaveFbProfileError];
+                [[PFUser currentUser] save:(NSError *__autoreleasing *)userSaveFbProfileError];
                 // if the user fails and is new, ensure we have enough user data to operate correctly
                 if (userSaveFbProfileError)
                 {
                     NSLog(@"User profile could not be saved");
+                    
+                    // let the user know
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.labelText = @"can't remember right now";
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+                    [self->HUD hide:YES afterDelay:1.0f];
+                    
+                    updateResult = LTUpdateFailed;
+                }
+                else
+                {
+                    updateResult = LTUpdateSucceeded;
+                    
+                    self->HUD.mode = MBProgressHUDModeCustomView;
+                    self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-wink-icon-48_MB"]];
+                    self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
+                    
+                    [self->HUD hide:YES afterDelay:1.0f];
+                    
+                    
+                    [self storeUserDataToDefaults:[PFUser currentUser]];
                 }
             }
-            // shows success hud
-            self->HUD.mode = MBProgressHUDModeCustomView;
-            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
-            self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
-            [self->HUD hide:YES afterDelay:1.0f];
-            updateResult = LTUpdateSucceeded;
-            [self storeUserDataToDefaults:user];
-            [self showView:startView];
         }
     }];
+    
     return updateResult;
 }
 
