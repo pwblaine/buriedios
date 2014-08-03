@@ -51,6 +51,9 @@
 		284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */; };
 		2852DD11198E40AA00225EB5 /* buriediconcircleshine_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 2852DD10198E40AA00225EB5 /* buriediconcircleshine_37.png */; };
 		2852DD13198E43E200225EB5 /* iconmonstr-smiley-wink-icon-48_MB.png in Resources */ = {isa = PBXBuildFile; fileRef = 2852DD12198E43E200225EB5 /* iconmonstr-smiley-wink-icon-48_MB.png */; };
+		2852DD15198E5DF100225EB5 /* iconmonstr-quote-15-icon-37_MB.png in Resources */ = {isa = PBXBuildFile; fileRef = 2852DD14198E5DF100225EB5 /* iconmonstr-quote-15-icon-37_MB.png */; };
+		2852DD17198E5EAD00225EB5 /* iconmonstr-smiley-scared-icon-37_MB.png in Resources */ = {isa = PBXBuildFile; fileRef = 2852DD16198E5EAD00225EB5 /* iconmonstr-smiley-scared-icon-37_MB.png */; };
+		2852DD19198E5F1B00225EB5 /* iconmonstr-smiley-confused-icon-37_MB.png in Resources */ = {isa = PBXBuildFile; fileRef = 2852DD18198E5F1B00225EB5 /* iconmonstr-smiley-confused-icon-37_MB.png */; };
 		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
 		2858DA581944C33900BDAB3A /* LTStartScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
@@ -159,6 +162,9 @@
 		284B2D0718AC4A9000BB976F /* FPViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FPViewController_iPhone.xib; sourceTree = "<group>"; };
 		2852DD10198E40AA00225EB5 /* buriediconcircleshine_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buriediconcircleshine_37.png; sourceTree = SOURCE_ROOT; };
 		2852DD12198E43E200225EB5 /* iconmonstr-smiley-wink-icon-48_MB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-smiley-wink-icon-48_MB.png"; sourceTree = SOURCE_ROOT; };
+		2852DD14198E5DF100225EB5 /* iconmonstr-quote-15-icon-37_MB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-quote-15-icon-37_MB.png"; sourceTree = SOURCE_ROOT; };
+		2852DD16198E5EAD00225EB5 /* iconmonstr-smiley-scared-icon-37_MB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-smiley-scared-icon-37_MB.png"; sourceTree = SOURCE_ROOT; };
+		2852DD18198E5F1B00225EB5 /* iconmonstr-smiley-confused-icon-37_MB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconmonstr-smiley-confused-icon-37_MB.png"; sourceTree = SOURCE_ROOT; };
 		2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTStartScreenViewController.h; sourceTree = "<group>"; };
 		2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTStartScreenViewController.m; sourceTree = "<group>"; };
 		2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTStartScreenViewController.xib; sourceTree = "<group>"; };
@@ -419,6 +425,9 @@
 		44FC42B01862667700CC948C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2852DD14198E5DF100225EB5 /* iconmonstr-quote-15-icon-37_MB.png */,
+				2852DD16198E5EAD00225EB5 /* iconmonstr-smiley-scared-icon-37_MB.png */,
+				2852DD18198E5F1B00225EB5 /* iconmonstr-smiley-confused-icon-37_MB.png */,
 				2852DD12198E43E200225EB5 /* iconmonstr-smiley-wink-icon-48_MB.png */,
 				2852DD10198E40AA00225EB5 /* buriediconcircleshine_37.png */,
 				28195042198BE32F001AE270 /* iconmonstr-key-7-icon-48.png */,
@@ -579,12 +588,14 @@
 				2821DFCA198B3879002E23D5 /* iconmonstr-user-3-icon-24.png in Resources */,
 				281E7ACA188EA66800C85066 /* ParseLogo.jpg in Resources */,
 				308D476D191ADADF0098AEFC /* buriedicon114x114.png in Resources */,
+				2852DD17198E5EAD00225EB5 /* iconmonstr-smiley-scared-icon-37_MB.png in Resources */,
 				2821DFCB198B3879002E23D5 /* iconmonstr-user-3-icon-32.png in Resources */,
 				281E7AC1188EA66800C85066 /* login-button-small.png in Resources */,
 				280EE1AD198B42AA0063C791 /* iconmonstr-key-8-icon-32.png in Resources */,
 				2852DD13198E43E200225EB5 /* iconmonstr-smiley-wink-icon-48_MB.png in Resources */,
 				28B75D031957716600593B3A /* UbertestersSDKResources.bundle in Resources */,
 				28D2A21518C33354007EB808 /* LTUnearthedViewController.xib in Resources */,
+				2852DD19198E5F1B00225EB5 /* iconmonstr-smiley-confused-icon-37_MB.png in Resources */,
 				286D080218CB647E000B5EBE /* grassToolbar.png in Resources */,
 				281E7ABF188EA66800C85066 /* login-button-small-pressed.png in Resources */,
 				281E7ACB188EA66800C85066 /* Sunflowers.jpg in Resources */,
@@ -595,6 +606,7 @@
 				281E7AB6188EA66800C85066 /* Default-568h@2x.png in Resources */,
 				281E7AB4188EA66800C85066 /* buriedlogo_250height.png in Resources */,
 				28D34E0B194CC42E002095F9 /* LTGrassViewController.xib in Resources */,
+				2852DD15198E5DF100225EB5 /* iconmonstr-quote-15-icon-37_MB.png in Resources */,
 				284B2D0918AC4A9000BB976F /* FPViewController_iPhone.xib in Resources */,
 				308D476F191ADADF0098AEFC /* buriedlogo29x29.png in Resources */,
 			);
