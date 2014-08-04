@@ -163,7 +163,11 @@
      See also applicationDidEnterBackground:.
      */
     
-    [[PFFacebookUtils session] close];
+    if ([PFUser currentUser])
+    {
+        [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+        [PFUser logOut];
+    }
 }
 
 #pragma mark Push Notification Methods

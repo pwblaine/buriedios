@@ -526,18 +526,26 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                     [self loginAttemptedWithBool:logInSuccessful];
                 } else {
                     NSLog(@"and had no errors");
-                    logInSuccessful = YES;
+                    if ([PFFacebookUtils isLinkedWithUser:user])
+                    {
+                        NSLog(@"user is linked with FB");
                     [self updateFbProfileForUserWithHUDAndCompletionBlock:^id(id result) {
                         LTUpdateResult updateResult = (LTUpdateResult)result;
                         if (updateResult == LTUpdateNotNeeded || updateResult == LTUpdateSucceeded)
                         {
+                            NSLog(@"profile update from fb successful");
+                            logInSuccessful = YES;
                             [self loginAttemptedWithBool:logInSuccessful];
                         } else {
-                            logInSuccessful = NO;
-                            [self loginAttemptedWithBool:NO];
+                            NSLog(@"profile update from fb not successful, quitting out");
+                            [self loginAttemptedWithBool:logInSuccessful];
                         }
                         return result;
                     }];
+                    } else {
+                        NSLog(@"user is not linked with facebook however, quitting out");
+                        [self loginAttemptedWithBool:logInSuccessful];
+                    }
                 }
             }
         }];
@@ -1125,13 +1133,16 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
     }];
     
     // clear stored account in user defaults
-    NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName");
+    NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName & facebookId & userName & sessionToken");
     
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserId"];
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInDisplayName"];
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInFacebookId"];
     [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInUserName"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"lastLoggedInSessionToken"];
     
+    // invalidating session
+    [[PFFacebookUtils session] closeAndClearTokenInformation];
     [PFUser logOut];
     
     [self showView:self->startView];
