@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface MBProgressHUD()
 
@@ -502,6 +503,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
     
     NSLog(@"checking for saved user");
     NSString *savedSessionToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"];
+    
     if ([self checkForSavedUser] && [savedSessionToken length] > 1)
     {
         NSLog(@"saved user found with valid sessionToken");
@@ -523,35 +525,21 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                 if (error)
                 {
                     NSLog(@"and had error: %@",error);
-                    [self loginAttemptedWithBool:logInSuccessful];
                 } else {
                     NSLog(@"and had no errors");
                     if ([PFFacebookUtils isLinkedWithUser:user])
                     {
-                        NSLog(@"user is linked with FB");
-                    [self updateFbProfileForUserWithHUDAndCompletionBlock:^id(id result) {
-                        LTUpdateResult updateResult = (LTUpdateResult)result;
-                        if (updateResult == LTUpdateNotNeeded || updateResult == LTUpdateSucceeded)
-                        {
-                            NSLog(@"profile update from fb successful");
-                            logInSuccessful = YES;
-                            [self loginAttemptedWithBool:logInSuccessful];
-                        } else {
-                            NSLog(@"profile update from fb not successful, quitting out");
-                            [self loginAttemptedWithBool:logInSuccessful];
-                        }
-                        return result;
-                    }];
+                        NSLog(@"user is linked with FB, will update profile");
+                        logInSuccessful = YES;
                     } else {
-                        NSLog(@"user is not linked with facebook however, quitting out");
-                        [self loginAttemptedWithBool:logInSuccessful];
+                        NSLog(@"user is not linked with facebook, will attempt to link");
                     }
                 }
             }
         }];
     } else if (![PFUser currentUser])
     {
-        NSLog(@"no logged in current user, will login through fb");
+        NSLog(@"no logged in current user, will generate user by login through fb");
         [self logInToFacebookAndUpdateProfileWithCompletionHandler:^(id result){
             if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
             {
@@ -561,19 +549,18 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                 {
                     NSLog(@"login success? %i | result of profile was %i",logInSuccessful,(int)result);
                     logInSuccessful = YES;
-                    [self loginAttemptedWithBool:logInSuccessful];
                 }
                 return result;
             }
             else
             {
-                NSLog(@"login success? %i | result of profile was %i",logInSuccessful,(int)result);
-                logInSuccessful = NO;
+                NSLog(@"user was sent to login through fb, but failed out");
             }
-            [self loginAttemptedWithBool:logInSuccessful];
             return result;
         }];
-    } else if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    }
+    
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
     {
         NSLog(@"PFFacebookUtils not linked with logged in user, attempting to link");
         [PFFacebookUtils linkUser:[PFUser currentUser] permissions:permissions block:^(BOOL succeeded, NSError *error) {
@@ -600,6 +587,8 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                     self->HUD.labelText = @"profile syncing failed";
                     [self->HUD show:YES];
                     [self->HUD hide:YES afterDelay:1.0f];
+                    [self loginAttemptedWithBool:logInSuccessful];
+                    
                 }
             } else {
                 NSLog(@"error linking: %@",error);
@@ -608,11 +597,56 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                 self->HUD.mode = MBProgressHUDModeCustomView;
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
                 self->HUD.labelText = @"fb account already in use";
-                self->HUD.detailsLabelText = @"you are logged out, try again";
+                self->HUD.detailsLabelText = @"please log in with another";
                 [self->HUD show:YES];
-                [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
+                [self hud:self->HUD hide:YES afterDelay:2.0f withCompletionBlock:^id(id final) {
+                    [self loginAttemptedWithBool:logInSuccessful];
+                    /*
                     [[PFFacebookUtils session] closeAndClearTokenInformation];
-                    [PFUser logOut];
+                    FBSession *newSession = [FBSession activeSession];
+                    if ([newSession state] != FBSessionStateCreated)
+                    {
+                        newSession =[[FBSession alloc] init];
+                        [FBSettings setLoggingBehavior:[[NSSet alloc] initWithArray:@[FBLoggingBehaviorDeveloperErrors]]];
+                    [newSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                        NSLog(@"session %@ | status %i | error %@",session,status,error);
+                        switch (status)
+                        {
+                    case FBSessionStateOpen:
+                        // call the legacy session delegate
+                        //Now the session is open do corresponding UI changes
+                        {
+                            FBCacheDescriptor *cacheDescriptor = [FBFriendPickerViewController cacheDescriptor];
+                            [cacheDescriptor prefetchAndCacheForSession:session];
+                            [FBSession openActiveSessionWithAllowLoginUI:NO];
+                            [FBSession openActiveSessionWithPublishPermissions:[NSArray arrayWithObjects:@"publish_stream",@"publish_actions", nil] defaultAudience:FBSessionDefaultAudienceFriends allowLoginUI:NO completionHandler:nil];
+                            NSLog(@"connection was opened and session is active");
+                            [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID]  accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:^(BOOL succeeded, NSError *error) {
+                                if (succeeded) {
+                                    logInSuccessful = YES;
+                                } else {
+                                    NSLog(@"error in linking returned web account with currentUser == %@",error);
+                                }
+                                [self loginAttemptedWithBool:logInSuccessful];
+                            }];
+                        }
+                        break;
+                    case FBSessionStateClosedLoginFailed:
+                        { // prefer to keep decls near to their use
+                            // unpack the error code and reason in order to compute cancel bool
+                            // call the legacy session delegate if needed
+                            NSLog(@"closed login failed");
+                            [self loginAttemptedWithBool:logInSuccessful];
+                        }
+                        break;
+                        // presently extension, log-out and invalidation are being implemented in the Facebook class
+                            default:
+                                NSLog(@"default case");
+                                [self loginAttemptedWithBool:logInSuccessful];
+                        break; // so we do nothing in response to those state transitions
+                        }
+                      }];
+                    }*/
                     return final;
                 }];
             }
@@ -637,8 +671,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                      [self loginAttemptedWithBool:logInSuccessful];
                      return final;
                  }];
-             } else
-                  {
+             } else {
                       logInSuccessful = NO;
                       [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
                           if ([[[[PFFacebookUtils session] accessTokenData] userID] isEqualToString:[[PFUser currentUser] objectForKey:@"facebookId"]])
@@ -674,7 +707,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
     }
     else
     {
-        self->HUD.labelText = @"facebook must be linked";
+        self->HUD.labelText = @"facebook could not be linked";
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
         [self->HUD show:YES];
@@ -770,7 +803,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
         }
     }];
     
-    NSLog(@"login and profile finished with result:%i",result);
+    NSLog(@"login and profile finished with result:%i",(int)result);
     return result;
     
 }

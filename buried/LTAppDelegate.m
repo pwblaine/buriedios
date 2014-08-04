@@ -36,8 +36,6 @@
     // ****************************************************************************
     [PFFacebookUtils initializeFacebook];
     
-    [FBFriendPickerViewController class];
-    
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
 #ifdef __IPHONE_7_0
@@ -51,6 +49,12 @@
 #endif
 
     // Override point for customization after application launch.
+    
+    [FBDialogs class];
+    [FBWebDialogs class];
+    [FBLoginView class];
+    
+    [FBFriendPickerViewController class];
     
     // set defaults
     self->initialLoad = YES;
@@ -121,12 +125,28 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+    // application returned from a sign on attempt
+    NSLog(@"session was returned form an SSO attempt through the webView");
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+    
+    if (wasHandled)
+    {
+        NSLog(@"session was wasHandled validly. current session: %@",[PFFacebookUtils session]);
+    } else {
+        NSLog(@"session failed to handle correctly, current session: %@",[PFFacebookUtils session]);
+    }
+    
+    return wasHandled;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+    {
+        NSLog(@"becoming active, test passed for a current user, and one that is linked to fb, restoring session");
+        [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    }
     self.grassDelegate.appIsComingBackFromBackground = YES;
     
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
