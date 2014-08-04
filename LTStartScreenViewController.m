@@ -79,10 +79,10 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
         if ([textField.accessibilityLabel isEqualToString:@"email"])
         {
             leftImageView = [[UIImageView  alloc]  initWithImage:
-                                          [UIImage  imageNamed: @"iconmonstr-user-3-icon-40.png"]];
+                             [UIImage  imageNamed: @"iconmonstr-user-3-icon-40.png"]];
         } else if ([textField.accessibilityLabel isEqualToString:@"password"]) {
             leftImageView = [[UIImageView  alloc]  initWithImage:
-                                          [UIImage  imageNamed: @"iconmonstr-key-8-icon-48.png"]];
+                             [UIImage  imageNamed: @"iconmonstr-key-8-icon-48.png"]];
         } else {
             leftImageView = [[UIImageView  alloc]  initWithImage:
                              [UIImage  imageNamed: @"iconmonstr-key-7-icon-48.png"]];
@@ -92,13 +92,13 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
         textField.layer.backgroundColor = [[UIColor clearColor] CGColor];
         textField.layer.cornerRadius = 8;
         textField.layer.masksToBounds = NO;
-            [textField  setLeftView:leftImageView];
+        [textField  setLeftView:leftImageView];
         leftImageView.layer.cornerRadius = 8;
         leftImageView.layer.backgroundColor = [[UIColor colorWithRed:((float)127 / 255.0f) green:((float)140 / 255.0f) blue:((float)141 / 255.0f) alpha:0.0] CGColor];
         leftImageView.alpha = 0.5;
-            [textField  setLeftViewMode: UITextFieldViewModeAlways];
-        }
+        [textField  setLeftViewMode: UITextFieldViewModeAlways];
     }
+}
 
 
 -(BOOL)isValidEmail:(NSString *)email
@@ -518,7 +518,6 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                 }else {
                     NSLog(@"and had no errors");
                 }
-                [self loginAttemptedWithBool:logInSuccessful];
             } else
             {
                 NSLog(@"becoming %@ returned a user successfully we are %@ == %@",savedSessionToken,[PFUser currentUser],user);
@@ -602,94 +601,94 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                 [self hud:self->HUD hide:YES afterDelay:2.0f withCompletionBlock:^id(id final) {
                     [self loginAttemptedWithBool:logInSuccessful];
                     /*
-                    [[PFFacebookUtils session] closeAndClearTokenInformation];
-                    FBSession *newSession = [FBSession activeSession];
-                    if ([newSession state] != FBSessionStateCreated)
-                    {
-                        newSession =[[FBSession alloc] init];
-                        [FBSettings setLoggingBehavior:[[NSSet alloc] initWithArray:@[FBLoggingBehaviorDeveloperErrors]]];
-                    [newSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-                        NSLog(@"session %@ | status %i | error %@",session,status,error);
-                        switch (status)
-                        {
-                    case FBSessionStateOpen:
-                        // call the legacy session delegate
-                        //Now the session is open do corresponding UI changes
-                        {
-                            FBCacheDescriptor *cacheDescriptor = [FBFriendPickerViewController cacheDescriptor];
-                            [cacheDescriptor prefetchAndCacheForSession:session];
-                            [FBSession openActiveSessionWithAllowLoginUI:NO];
-                            [FBSession openActiveSessionWithPublishPermissions:[NSArray arrayWithObjects:@"publish_stream",@"publish_actions", nil] defaultAudience:FBSessionDefaultAudienceFriends allowLoginUI:NO completionHandler:nil];
-                            NSLog(@"connection was opened and session is active");
-                            [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID]  accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:^(BOOL succeeded, NSError *error) {
-                                if (succeeded) {
-                                    logInSuccessful = YES;
-                                } else {
-                                    NSLog(@"error in linking returned web account with currentUser == %@",error);
-                                }
-                                [self loginAttemptedWithBool:logInSuccessful];
-                            }];
-                        }
-                        break;
-                    case FBSessionStateClosedLoginFailed:
-                        { // prefer to keep decls near to their use
-                            // unpack the error code and reason in order to compute cancel bool
-                            // call the legacy session delegate if needed
-                            NSLog(@"closed login failed");
-                            [self loginAttemptedWithBool:logInSuccessful];
-                        }
-                        break;
-                        // presently extension, log-out and invalidation are being implemented in the Facebook class
-                            default:
-                                NSLog(@"default case");
-                                [self loginAttemptedWithBool:logInSuccessful];
-                        break; // so we do nothing in response to those state transitions
-                        }
-                      }];
-                    }*/
+                     [[PFFacebookUtils session] closeAndClearTokenInformation];
+                     FBSession *newSession = [FBSession activeSession];
+                     if ([newSession state] != FBSessionStateCreated)
+                     {
+                     newSession =[[FBSession alloc] init];
+                     [FBSettings setLoggingBehavior:[[NSSet alloc] initWithArray:@[FBLoggingBehaviorDeveloperErrors]]];
+                     [newSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                     NSLog(@"session %@ | status %i | error %@",session,status,error);
+                     switch (status)
+                     {
+                     case FBSessionStateOpen:
+                     // call the legacy session delegate
+                     //Now the session is open do corresponding UI changes
+                     {
+                     FBCacheDescriptor *cacheDescriptor = [FBFriendPickerViewController cacheDescriptor];
+                     [cacheDescriptor prefetchAndCacheForSession:session];
+                     [FBSession openActiveSessionWithAllowLoginUI:NO];
+                     [FBSession openActiveSessionWithPublishPermissions:[NSArray arrayWithObjects:@"publish_stream",@"publish_actions", nil] defaultAudience:FBSessionDefaultAudienceFriends allowLoginUI:NO completionHandler:nil];
+                     NSLog(@"connection was opened and session is active");
+                     [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID]  accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:^(BOOL succeeded, NSError *error) {
+                     if (succeeded) {
+                     logInSuccessful = YES;
+                     } else {
+                     NSLog(@"error in linking returned web account with currentUser == %@",error);
+                     }
+                     [self loginAttemptedWithBool:logInSuccessful];
+                     }];
+                     }
+                     break;
+                     case FBSessionStateClosedLoginFailed:
+                     { // prefer to keep decls near to their use
+                     // unpack the error code and reason in order to compute cancel bool
+                     // call the legacy session delegate if needed
+                     NSLog(@"closed login failed");
+                     [self loginAttemptedWithBool:logInSuccessful];
+                     }
+                     break;
+                     // presently extension, log-out and invalidation are being implemented in the Facebook class
+                     default:
+                     NSLog(@"default case");
+                     [self loginAttemptedWithBool:logInSuccessful];
+                     break; // so we do nothing in response to those state transitions
+                     }
+                     }];
+                     }*/
                     return final;
                 }];
             }
         }];
     } else {
-             NSLog(@"PFFacebookUtils is already linked with a user w/ a sync'd fb account, just update profile and move on");
-             __block LTUpdateResult result = [self updateFbProfileForUser];
-             if ((result == LTUpdateNotNeeded) || (result == LTUpdateSucceeded))
-             {
-                 logInSuccessful = YES;
-                 [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
-                     if ([[[[PFFacebookUtils session] accessTokenData] userID] isEqualToString:[[PFUser currentUser] objectForKey:@"facebookId"]])
-                     {
-                         // save data succeed
-                     logInSuccessful = YES;
-                     }
-                 else
-                 {
-                     // save data fail
-                     logInSuccessful = NO;
-                 }
-                     [self loginAttemptedWithBool:logInSuccessful];
-                     return final;
-                 }];
-             } else {
-                      logInSuccessful = NO;
-                      [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
-                          if ([[[[PFFacebookUtils session] accessTokenData] userID] isEqualToString:[[PFUser currentUser] objectForKey:@"facebookId"]])
-                          {
-                              // save data succeed
-                              logInSuccessful = YES;
-                          }
-                          else
-                          {
-                              // save data fail
-                              logInSuccessful = NO;
-                          }
-                          [self loginAttemptedWithBool:logInSuccessful];
-                          
-                          return final;
-                      }];
-             }
-         }
+        NSLog(@"PFFacebookUtils is already linked with a user w/ a sync'd fb account, just update profile and move on");
+        __block LTUpdateResult result = [self updateFbProfileForUser];
+        if ((result == LTUpdateNotNeeded) || (result == LTUpdateSucceeded))
+        {
+            logInSuccessful = YES;
+            [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
+                if ([[[[PFFacebookUtils session] accessTokenData] userID] isEqualToString:[[PFUser currentUser] objectForKey:@"facebookId"]])
+                {
+                    // save data succeed
+                    logInSuccessful = YES;
+                }
+                else
+                {
+                    // save data fail
+                    logInSuccessful = NO;
+                }
+                [self loginAttemptedWithBool:logInSuccessful];
+                return final;
+            }];
+        } else {
+            logInSuccessful = NO;
+            [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:^id(id final) {
+                if ([[[[PFFacebookUtils session] accessTokenData] userID] isEqualToString:[[PFUser currentUser] objectForKey:@"facebookId"]])
+                {
+                    // save data succeed
+                    logInSuccessful = YES;
+                }
+                else
+                {
+                    // save data fail
+                    logInSuccessful = NO;
+                }
+                [self loginAttemptedWithBool:logInSuccessful];
+                
+                return final;
+            }];
+        }
+    }
 }
 
 -(void)loginAttemptedWithBool:(BOOL)didLogIn
@@ -785,10 +784,10 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
             {
                 NSLog(@"uh oh. The user outright cancelled the Facebook login. error:%@",error);
                 self->HUD.labelText = @"login cancelled";
-            NSLog(@"%@",innerError);
+                NSLog(@"%@",innerError);
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-circlemark"]];
-            
-            [self->HUD hide:YES afterDelay:2.0f];
+                
+                [self->HUD hide:YES afterDelay:2.0f];
             } else {
                 NSLog(@"uh oh. an error:%@",error);
                 self->HUD.labelText = @"login did not complete";
@@ -799,7 +798,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
             }
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
-           result = [self updateFbProfileForUserWithHUDAndCompletionBlock:success];
+            result = [self updateFbProfileForUserWithHUDAndCompletionBlock:success];
         }
     }];
     
@@ -967,12 +966,12 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
             return NO;
         }
     } else if (![self.passwordField.text isEqualToString:self.confirmField.text] && [self->currentViewState isDescendantOfView:signUpView])
-            {
-                return NO;
-            } else
-            {
-                return YES;
-            }
+    {
+        return NO;
+    } else
+    {
+        return YES;
+    }
     
 }
 
@@ -1032,7 +1031,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                                       
                                   }];
                               }];
-
+    
 }
 
 
@@ -1064,7 +1063,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                               animations:^{
                                   for (UITextField *thisField in fields) {
                                       if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
-                                      thisField.alpha = 0;
+                                          thisField.alpha = 0;
                                   }
                               } completion:^(BOOL finished) {
                                   NSLog(@"hidden!");
@@ -1073,15 +1072,15 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                                           for (UITextField *thisField in fields) {
                                               if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
                                               {
-                                              thisField.alpha = 1;
-                                              thisField.textColor = [fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel];
-                                          }
+                                                  thisField.alpha = 1;
+                                                  thisField.textColor = [fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel];
+                                              }
                                           }
                                       }];
                                       [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.5 animations:^{
                                           for (UITextField *thisField in fields) {
                                               if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
-                                              thisField.alpha = 0;
+                                                  thisField.alpha = 0;
                                           }
                                       }];
                                   } completion:^(BOOL finished) {
@@ -1092,9 +1091,9 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
                                                   
                                                   if ([[fieldsToChangeColorOf objectForKey:thisField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]])
                                                   {
-                                                  thisField.alpha = 1;
-                                                  thisField.textColor = [UIColor darkTextColor];
-                                              }
+                                                      thisField.alpha = 1;
+                                                      thisField.textColor = [UIColor darkTextColor];
+                                                  }
                                               }
                                           }];
                                       } completion:^(BOOL finished) {
@@ -1404,7 +1403,7 @@ typedef void(^LTCompletionBlock)(LTUpdateResult aResult);
             self->HUD.labelText = @"can't remember right now";
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-scared-icon-37_MB.png"]];
             [self hud:self->HUD hide:YES afterDelay:1.0f withCompletionBlock:completion];
-
+            
             updateResult = LTUpdateFailed;
         } else {
             NSLog(@"profile retrieved successfully");
