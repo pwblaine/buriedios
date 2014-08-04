@@ -13,6 +13,7 @@
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
 #import "LTAdminTableViewController.h"
+#import "LTStartScreenViewController.h"
 
 @interface LTUnearthedViewController () {
     LTAdminTableViewController * adminTableVC;
@@ -533,33 +534,9 @@
     [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
     
-    // write to user defaultsNSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSString *lastLoggedInUserId = nil;
-    NSString *lastLoggedInFacebookId = nil;
-    NSString *lastLoggedInDisplayName = nil;
-    NSString *lastLoggedInUserName = nil;
+    // store user & sessionToken
+    [LTStartScreenViewController storeUserDataToDefaults:user];
     
-    //write to user defaults and update buttons
-    if ([PFFacebookUtils isLinkedWithUser:user])
-    {
-        NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
-        
-    }
-        lastLoggedInUserId = [user objectId];
-        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
-        lastLoggedInUserName = [user username];
-    
-    // write to user defaults
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
-    
-    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId);
-    
-    
-    [FBSession setActiveSession:nil];
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);
     

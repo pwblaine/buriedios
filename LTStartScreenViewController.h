@@ -83,7 +83,7 @@
 -(BOOL)validateField:(UITextField *)textField;
 -(void)validateFields:(NSArray *)fields;
 
--(void)storeUserDataToDefaults:(PFUser *)user;
++(void)storeUserDataToDefaults:(PFUser *)user;
 
 #pragma mark - PFSignup Protocol
 
@@ -115,5 +115,8 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
 };
 
 -(LTUpdateResult)updateFbProfileForUser;
+
+-(void)loginAttemptedWithBool:(BOOL)didLogIn;
+
 
 @end
