@@ -775,10 +775,7 @@
 					"$(inherited)",
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
-					/Users/patrickblaine/Documents/FacebookSDK,
-					"$(PROJECT_DIR)/Documents",
-					"$(PROJECT_DIR)/Documents/FacebookSDK",
-					"$(PROJECT_DIR)/Documents/FacebookSDK/FBAudienceNetwork",
+					"~/Documents/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -809,10 +806,7 @@
 					"$(inherited)",
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
-					/Users/patrickblaine/Documents/FacebookSDK,
-					"$(PROJECT_DIR)/Documents",
-					"$(PROJECT_DIR)/Documents/FacebookSDK",
-					"$(PROJECT_DIR)/Documents/FacebookSDK/FBAudienceNetwork",
+					"~/Documents/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";

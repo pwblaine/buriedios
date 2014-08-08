@@ -9,12 +9,9 @@
 
 #import "LTUnearthedViewController.h"
 #import <Parse/Parse.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
-
-#import "FBLoginDialog.h"
-#import "FBDialog.h"
-
 
 @interface LTStartScreenViewController()
 

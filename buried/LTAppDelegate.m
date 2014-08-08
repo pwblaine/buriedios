@@ -2,8 +2,9 @@
 //  Copyright (c) 2013 Parse. All rights reserved.
 
 #import "LTAppDelegate.h"
-#import <UbertestersSDK/Ubertesters.h>
+#import <Bolts/Bolts.h>
 #import <Parse/Parse.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "LTStartScreenViewController.h"
 #import "LTBuryItViewController.h"
 #import "LTUnearthedViewController.h"
@@ -128,9 +129,8 @@
     // application returned from a sign on attempt
     NSLog(@"session was returned form an SSO attempt through the webView");
     BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session] fallbackHandler:^(FBAppCall *call) {
-        NSLog(@"app call%@]",[call debugDescription]);
+        NSLog(@"%@",call);
     }];
-    
     if (wasHandled)
     {
         NSLog(@"session was wasHandled validly. current session: %@",[PFFacebookUtils session]);
