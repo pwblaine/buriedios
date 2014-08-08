@@ -26,6 +26,8 @@
 
 @property MBProgressHUD *HUD;
 
+-(void)pushToAdminTable;
+
 #pragma mark - Capsule tracking UI methods
 - (void)updateTitleWithNumberOfBuriedCapsules;
 

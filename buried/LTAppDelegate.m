@@ -135,12 +135,12 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
     {
         NSLog(@"call %@",call);
     }
-}];
+    }];
     
     if (wasHandled)
     {
         NSLog(@"URL: %@",url);
-        NSLog(@"annotation: %@",(NSDictionary *)(id)annotation);
+        NSLog(@"annotation: %@",(NSString *)(id)annotation);
         if ([FBAppCall appCallFromURL:url])
         {
         NSLog(@"FB APP CALL: %@",[[FBAppCall appCallFromURL:url] debugDescription]);
@@ -148,7 +148,7 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
     } else
     {
         NSLog(@"URL : %@",url);
-        NSLog(@"annotation: %@",(NSDictionary *)(id)annotation);
+        NSLog(@"annotation: %@",(NSString *)(id)annotation);
     }
     
     return wasHandled;

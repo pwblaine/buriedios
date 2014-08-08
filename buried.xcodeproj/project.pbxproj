@@ -154,11 +154,6 @@
 		2833B06F1975129E00274469 /* LTAdminTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAdminTableViewController.m; sourceTree = "<group>"; };
 		283949FD1978A44E0067833B /* LTForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTForm.h; sourceTree = "<group>"; };
 		283949FE1978A44E0067833B /* LTForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTForm.m; sourceTree = "<group>"; };
-		284184061993C7C70090FABC /* FBLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBLoginDialog.h; sourceTree = "<group>"; };
-		284185C61993C8F60090FABC /* FBDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialog.h; sourceTree = "<group>"; };
-		284185C71993CC680090FABC /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
-		284186011994324C0090FABC /* FBSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSession.h; sourceTree = "<group>"; };
-		284186021994329B0090FABC /* FBSDKMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSDKMacros.h; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -201,7 +196,7 @@
 		28B75D0C1957727400593B3A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		28B922D21987E13D003A87EF /* x-circlemark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark.png"; sourceTree = SOURCE_ROOT; };
 		28B922D31987E13D003A87EF /* x-circlemark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark@2x.png"; sourceTree = SOURCE_ROOT; };
-		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
+		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../Documents/Parse.framework; sourceTree = "<group>"; };
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
 		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
 		28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTUnearthedViewController.xib; sourceTree = "<group>"; };
@@ -224,7 +219,7 @@
 		308D476A191ADADE0098AEFC /* buriedlogo120x120white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedlogo120x120white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedlogo120x120white.png; sourceTree = SOURCE_ROOT; };
 		308D4773191ADB220098AEFC /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = buried/Icon.png; sourceTree = SOURCE_ROOT; };
 		308D4775191ADB3E0098AEFC /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "buried/Icon@2x.png"; sourceTree = SOURCE_ROOT; };
-		30E480CA19498C1600932DD5 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		30E480CA19498C1600932DD5 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = SOURCE_ROOT; };
 		44FC42A91862667700CC948C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		44FC42AB1862667700CC948C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44FC42AD1862667700CC948C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -237,7 +232,7 @@
 		44FC42ED186267CE00CC948C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		44FC42EF186267D300CC948C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		44FC42F3186267DF00CC948C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		D6D824D75D3B43B5BEE0FC64 /* libPods-buried..a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-buried..a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6D824D75D3B43B5BEE0FC64 /* Bolts.framework */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = Bolts.framework; path = ../../../../../../../../Documents/Bolts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,6 +293,8 @@
 		280C85EB192D9C63009E6FE1 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
+				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
 				280C85EA192D9C4B009E6FE1 /* Interface Builder Files */,
 				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
 				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
@@ -388,8 +385,6 @@
 				281E7A90188EA66800C85066 /* buried-Info.plist */,
 				281E7AA3188EA66800C85066 /* LTAppDelegate.h */,
 				281E7AA4188EA66800C85066 /* LTAppDelegate.m */,
-				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
-				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
 				283949FD1978A44E0067833B /* LTForm.h */,
 				283949FE1978A44E0067833B /* LTForm.m */,
 				280C85EB192D9C63009E6FE1 /* View Controllers */,
@@ -412,11 +407,6 @@
 				28B75D041957724000593B3A /* AdSupport.framework */,
 				28B75CFD1957716600593B3A /* UbertestersSDK */,
 				30E480CA19498C1600932DD5 /* FacebookSDK.framework */,
-				284184061993C7C70090FABC /* FBLoginDialog.h */,
-				284185C61993C8F60090FABC /* FBDialog.h */,
-				284185C71993CC680090FABC /* Facebook.h */,
-				284186011994324C0090FABC /* FBSession.h */,
-				284186021994329B0090FABC /* FBSDKMacros.h */,
 				112B79071946FD9200558BE1 /* Social.framework */,
 				28C5931818DD32E300288764 /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
@@ -431,7 +421,7 @@
 				44FC42AB1862667700CC948C /* CoreGraphics.framework */,
 				44FC42AD1862667700CC948C /* UIKit.framework */,
 				44FC42CB1862667700CC948C /* XCTest.framework */,
-				D6D824D75D3B43B5BEE0FC64 /* libPods-buried..a */,
+				D6D824D75D3B43B5BEE0FC64 /* Bolts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

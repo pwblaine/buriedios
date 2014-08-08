@@ -14,7 +14,7 @@
 
 @class  FBSession;
 
-@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate>
+@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate, UIWebViewDelegate, FBWebDialogsDelegate>
 {
     IBOutlet UILabel *lastLoggedInLabel;
     NSString *savedDisplayName;

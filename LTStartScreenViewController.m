@@ -39,7 +39,8 @@
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,74,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
-        self->readPermissions = [NSArray arrayWithObjects:@"public_profile", @"email",@"user_friends",nil];    }
+        self->readPermissions = [[NSArray alloc] initWithObjects:@"public_profile", @"email",@"user_friends",nil];
+    }
     return self;
 }
 
@@ -175,7 +176,7 @@
         NSLog(@"no current user, checking for saved user");
         if (![self checkForSavedUser]) {
             NSLog(@"no saved user found, login failed");
-            [self loginAttemptedWithSuccess:NO withError:[NSError errorWithDomain:FacebookSDKDomain code:FBErrorLoginFailedOrCancelled userInfo:@{@"error":@"no saved or logged in user"}]];
+            [self loginAttemptedWithSuccess:NO withError:nil];
         } else {
             NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"];
             [PFUser becomeInBackground:token block:^(PFUser *user, NSError *error) {
@@ -610,17 +611,15 @@
             // Handle the logged in scenario
             
             // You may wish to show a logged in view
-            NSLog(@"session logged in");
+            NSLog(@"session was opened for user : %@",[[session accessTokenData] userID]);
+            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[[PFUser currentUser] objectForKey:@"authData"] objectForKey:@"facebook"] : @"unlinked");
             break;
         }
         case FBSessionStateClosed:
         case FBSessionStateClosedLoginFailed: {
             // Handle the logged out scenario
             
-            // Close the active session
-            [[PFFacebookUtils  session]closeAndClearTokenInformation];
-            
-            NSLog(@"session logged out");
+            NSLog(@"session was closed or failed to login");
             // You may wish to show a logged out view
             
             break;
@@ -632,17 +631,49 @@
     
     if (error) {
         // Handle authentication errors
-        NSLog(@"error: %@ user message: %@",error,[FBErrorUtility userMessageForError:error]);if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession)
+        NSString *errorMessage = [[error domain] isEqualToString:FacebookSDKDomain] ? [FBErrorUtility userMessageForError:error] : [FBErrorUtility userMessageForError:error];
+        NSLog(@"error: %@ user message: %@",error,errorMessage);
+        if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession)
         {
+            NSLog(@"error identified as FBErrorCategoryAuthenticationReopenSession");
+            [self loginAttemptedWithSuccess:NO withError:error];
+        } else if (state == FBSessionStateOpen)
+        {
+            NSLog(@"session is open with error : %@",errorMessage);
+            [self loginAttemptedWithSuccess:NO withError:error];
+        } else if (state == FBSessionStateClosed || state == FBSessionStateClosedLoginFailed) {
+            NSLog(@"session is closed with error : %@",errorMessage);
             [self loginAttemptedWithSuccess:NO withError:error];
         } else
         {
+            NSLog(@"%@",[FBErrorUtility shouldNotifyUserForError:error] ? [FBErrorUtility userMessageForError:error] :  @"session had an error case we don't catch, but doesn't need to notify the user");
             [self loginAttemptedWithSuccess:NO withError:error];
         }
-    } else if (state == FBSessionStateOpen)
+    }
+    NSLog(@"session %@",session);
+    PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog(@"user signed in successfully and linked with a new facebook account");
+            [self loginAttemptedWithSuccess:YES withError:nil];
+        } else if (error)
+        {
+            NSLog(@"user couldn't link their facebook account to their parse account because of error: %@",error);
+            [self loginAttemptedWithSuccess:NO withError:error];
+        } else
+        {
+            NSLog(@"linking parse current with facebook user returned from web view failed without a posted reason");
+            [self loginAttemptedWithSuccess:NO withError:error];
+        }
+    };
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
     {
-        if ([PFFacebookUtils isLinkedWithUser:])
+        NSLog(@"session was and verified currentUser linkage");
         [self loginAttemptedWithSuccess:YES withError:nil];
+    } else if (![[session accessTokenData] userID]) {
+        NSLog(@"could not access accessToken for active session, requesting new");
+        [PFFacebookUtils linkUser:[PFUser currentUser] permissions:self->readPermissions block:linkageCompletionBlock];
+    } else {
+        [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData]expirationDate] block:linkageCompletionBlock];
     }
 }
 
@@ -650,114 +681,123 @@
 {    // The permissions requested from the user, we're interested in their email address and their profile
     
     NSLog(@"openFacebook Authentication run");
-   // NSLog(@"cleared out session");
+    // NSLog(@"cleared out session");
     // Initialize a session object
-    FBSession *session = [[FBSession alloc] init];
+    FBSession *session = [[FBSession alloc] initWithPermissions:self->readPermissions];
     // Set the active session
     [FBSession setActiveSession:session];
     // Open the session
-    [session openWithBehavior:FBSessionLoginBehaviorWithNoFallbackToWebView
+    
+    [session openWithBehavior:FBSessionLoginBehaviorForcingSafari
             completionHandler:^(FBSession *session,
                                 FBSessionState status,
                                 NSError *error) {
                 // Respond to session state changes,
                 // ex: updating the view
-        [self sessionStateChanged:session state:status error:error];
-    }];
+                [self sessionStateChanged:session state:status error:error];
+                
+                // TODO ENABLE FOR PURE WEBVIEW
+                // [(UIWebView *)[self presentedViewController] setDelegate:self];
+            }];
 }
-    /*
-    [FBSession.activeSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-        switch (status){
-            case FBSessionStateOpen:
-                NSLog(@"FBSessionStateOpen | %@",error);
-                didLogIn = YES;
-                break;
-            case FBSessionStateClosedLoginFailed:
-                NSLog(@"FBSessionStateClosedLoginFailed");
-                break;
-            case FBSessionStateClosed:
-                NSLog(@"FBSessionStateClosed");
-                break;
-            case FBSessionStateCreated:
-                NSLog(@"FBSessionState1");
-                break;
-            case FBSessionStateCreatedOpening:
-                NSLog(@"FBSessionState2");
-                break;
-            case FBSessionStateCreatedTokenLoaded:
-                NSLog(@"FBSessionState3");
-                break;
-            case FBSessionStateOpenTokenExtended:
-                NSLog(@"FBSessionState4");
-                break;
-            default:
-                NSLog(@"FBSessionStateOther");
-                break; // so we do nothing in response to those state transitions
-        }
-    }];
-    permissionsArray = nil;
-    [self loginAttemptedWithSuccess:didLogIn withError:[NSError errorWithDomain:FacebookSDKDomain code:208 userInfo:@{}]];*/
+/*
+ [FBSession.activeSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+ switch (status){
+ case FBSessionStateOpen:
+ NSLog(@"FBSessionStateOpen | %@",error);
+ didLogIn = YES;
+ break;
+ case FBSessionStateClosedLoginFailed:
+ NSLog(@"FBSessionStateClosedLoginFailed");
+ break;
+ case FBSessionStateClosed:
+ NSLog(@"FBSessionStateClosed");
+ break;
+ case FBSessionStateCreated:
+ NSLog(@"FBSessionState1");
+ break;
+ case FBSessionStateCreatedOpening:
+ NSLog(@"FBSessionState2");
+ break;
+ case FBSessionStateCreatedTokenLoaded:
+ NSLog(@"FBSessionState3");
+ break;
+ case FBSessionStateOpenTokenExtended:
+ NSLog(@"FBSessionState4");
+ break;
+ default:
+ NSLog(@"FBSessionStateOther");
+ break; // so we do nothing in response to those state transitions
+ }
+ }];
+ permissionsArray = nil;
+ [self loginAttemptedWithSuccess:didLogIn withError:[NSError errorWithDomain:FacebookSDKDomain code:208 userInfo:@{}]];*/
 
 -(void)loginAttemptedWithSuccess:(BOOL)didLogIn withError:(NSError *)error
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if (didLogIn && !error)
     {
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         {
-        NSLog(@"detected fb linkage, logging in");
-        self->HUD.mode = MBProgressHUDModeCustomView;
-        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
-        self->HUD.labelText = @"welcome to buried";
-        self->HUD.detailsLabelText = nil;
-        [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
-        
-        [self enableAllBarButtons];
+            NSLog(@"detected fb linkage, logging in");
+            self->HUD.mode = MBProgressHUDModeCustomView;
+            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
+            self->HUD.labelText = @"welcome to buried";
+            self->HUD.detailsLabelText = nil;
+            [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
+            
+            [self enableAllBarButtons];
         } else
         {
             didLogIn = NO;
         }
     }
     
+        NSString *errorMessage = nil;
+    if (error)
+        errorMessage = [[error domain] isEqualToString:FacebookSDKDomain] ? [FBErrorUtility userMessageForError:error] : [FBErrorUtility userMessageForError:error];
+    
     if (!didLogIn)
     {
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]] && [PFUser currentUser])
+        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]] && [PFUser currentUser] && error)
         {
             self->HUD.labelText = @"login failure";
-            [self->HUD setDetailsLabelText:[[NSString stringWithFormat:@"%@",[[error userInfo] objectForKey:@"error"]] lowercaseString]];
+            [self->HUD setDetailsLabelText:[NSString stringWithFormat:@"%@",[errorMessage lowercaseString]]];
             [self->HUD hide:YES afterDelay:1.0f];
         } else if ([PFUser currentUser]) {
-            NSLog(@"%@",[error localizedFailureReason] ? [error localizedFailureReason] : [[error userInfo] objectForKey:@"error"]
-                  );
             self->HUD.labelText = @"couldn't connect to facebook";
-            NSNumber *userCancelledCode = [NSNumber numberWithInteger:[error code] ? [error code] : [(NSError *)[[error userInfo]  objectForKey:@"error"] code]];
-            if ([userCancelledCode isEqualToNumber:@2])
+            if (([error.domain isEqualToString:FacebookSDKDomain]) && ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled))
             {
                 NSLog(@"user cancelled and denied access");
                 [self->HUD setDetailsLabelText:@"facebook access was denied"];
             }
-            else if ([userCancelledCode isEqualToNumber:@208])
+            else if ((error.code == kPFErrorAccountAlreadyLinked)||(error.code == kPFErrorFacebookAccountAlreadyLinked))
             {
                 NSLog(@"fb account linked to another account");
                 [self->HUD setDetailsLabelText:@"that facebook account is already in use"];
             }
-            else
+            else if (error)
             {
-                NSLog(@"fb account linking failed with error %@",[FBErrorUtility userMessageForError:error]);
-                [self->HUD setDetailsLabelText:[FBErrorUtility userMessageForError:error]];
+                NSLog(@"fb account linking failed with error %@",errorMessage);
+                [self->HUD setDetailsLabelText:[NSString stringWithFormat:@"%@",[errorMessage lowercaseString]]];
+            } else
+            {
+                NSLog(@"fb account linking failed and posted no errors");
+                [self->HUD setDetailsLabelText:@"unknown login failure"];
             }
             
             [self hide:YES afterDelay:2.0f withCompletionBlock:^(){
                 NSLog(@"session failed out");
                 [self enableAllBarButtons];
+                [[FBSession activeSession] closeAndClearTokenInformation];
             }];
             
         }
         else
         {
-            [self->HUD setDetailsLabelText:[[NSString stringWithFormat:@"%@",[[error userInfo] objectForKey:@"error"]] lowercaseString]];
+            [self->HUD setDetailsLabelText:[NSString stringWithFormat:@"%@",[errorMessage lowercaseString]]];
             self->HUD.labelText = @"no user found";
             [self->HUD hide:YES afterDelay:1.0f];
             [self enableAllBarButtons];
@@ -1247,7 +1287,7 @@
     NSString *lastLoggedInDisplayName = nil;
     NSString *lastLoggedInUserName = nil;
     NSString *lastLoggedInSessionToken = nil;
-    NSDictionary *lastLoggedInUserFBAuthData = @{};
+    NSDictionary *lastLoggedInUserFBAuthData = NULL;
     
     //write to user defaults and update buttons
     if ([PFFacebookUtils isLinkedWithUser:user])
