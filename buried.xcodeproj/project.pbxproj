@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		112B79081946FD9200558BE1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B79071946FD9200558BE1 /* Social.framework */; };
+		112B79081946FD9200558BE1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B79071946FD9200558BE1 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		112B790D1947015E00558BE1 /* x-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5B1944D65C00BDAB3A /* x-mark.png */; };
 		112B790F1947019C00558BE1 /* x-mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */; };
 		280657AC18910008007AAB22 /* UIBarButtonItem+_projectButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 280657AB18910008007AAB22 /* UIBarButtonItem+_projectButtons.m */; };
@@ -68,7 +68,7 @@
 		28A6BAED188FD61C008C81A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A6BAEC188FD61C008C81A1 /* MBProgressHUD.m */; };
 		28B75D021957716600593B3A /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75CFF1957716600593B3A /* UbertestersSDK.framework */; };
 		28B75D031957716600593B3A /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 28B75D001957716600593B3A /* UbertestersSDKResources.bundle */; };
-		28B75D051957724000593B3A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D041957724000593B3A /* AdSupport.framework */; };
+		28B75D051957724000593B3A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D041957724000593B3A /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28B75D071957724E00593B3A /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D061957724E00593B3A /* CoreImage.framework */; };
 		28B75D091957725C00593B3A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D081957725C00593B3A /* CoreTelephony.framework */; };
 		28B75D0B1957726E00593B3A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B75D0A1957726E00593B3A /* OpenGLES.framework */; };
@@ -83,6 +83,7 @@
 		28D34E0B194CC42E002095F9 /* LTGrassViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D34E09194CC42E002095F9 /* LTGrassViewController.xib */; };
 		28E8AE2118C6504F00BD106C /* LTCapsuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */; };
 		28E8AE2218C6504F00BD106C /* LTCapsuleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */; };
+		28E8EA70199481670050C16F /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28E8EA6F199481670050C16F /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28FB0ED718C84DA900A37A4B /* buried-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */; };
 		308D476B191ADADE0098AEFC /* buriedicon58x58white.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4763191ADADE0098AEFC /* buriedicon58x58white.png */; };
 		308D476C191ADADF0098AEFC /* buriedicon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D4764191ADADE0098AEFC /* buriedicon76x76.png */; };
@@ -210,6 +211,7 @@
 		28E8AE1E18C6504F00BD106C /* LTCapsuleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTCapsuleViewController.h; sourceTree = "<group>"; };
 		28E8AE1F18C6504F00BD106C /* LTCapsuleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTCapsuleViewController.m; sourceTree = "<group>"; };
 		28E8AE2018C6504F00BD106C /* LTCapsuleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTCapsuleViewController.xib; sourceTree = "<group>"; };
+		28E8EA6F199481670050C16F /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		28F9584B1906555F0017DCEA /* buried.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buried.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28FB0ED618C84D8300A37A4B /* buried-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "buried-Prefix.pch"; path = "buried/buried-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		308D4763191ADADE0098AEFC /* buriedicon58x58white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buriedicon58x58white.png; path = buried/Images.xcassets/AppIcon.appiconset/buriedicon58x58white.png; sourceTree = SOURCE_ROOT; };
@@ -243,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28E8EA70199481670050C16F /* Accounts.framework in Frameworks */,
 				28BE448C196269DE00DA2069 /* FacebookSDK.framework in Frameworks */,
 				28B75D0D1957727400593B3A /* CoreMotion.framework in Frameworks */,
 				28B75D0B1957726E00593B3A /* OpenGLES.framework in Frameworks */,
@@ -401,6 +404,7 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28E8EA6F199481670050C16F /* Accounts.framework */,
 				28B75D0C1957727400593B3A /* CoreMotion.framework */,
 				28B75D0A1957726E00593B3A /* OpenGLES.framework */,
 				28B75D081957725C00593B3A /* CoreTelephony.framework */,

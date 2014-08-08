@@ -14,7 +14,7 @@
 
 @class  FBSession;
 
-@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate, FBSessionDelegate, FBLoginDialogDelegate, FBDialogDelegate>
+@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate>
 {
     IBOutlet UILabel *lastLoggedInLabel;
     NSString *savedDisplayName;
@@ -124,14 +124,5 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
 -(LTUpdateResult)updateFbProfileForUser;
 
 -(void)loginAttemptedWithBool:(BOOL)didLogIn;
-
--(void)fbDialogLogin:(NSString *)token expirationDate:(NSDate *)expirationDate params:(NSDictionary *)params;
--(void)dialogDidCancel:(id)sender;
-- (void)fbDidNotLogin:(BOOL)cancelled;
-- (void)fbDidExtendToken:(NSString *)accessToken
-               expiresAt:(NSDate *)expiresAt;
-- (void)fbDidLogout;
-- (void)fbSessionInvalidated;
-- (void)fbDialogNotLogin:(BOOL)cancelled;
 
 @end

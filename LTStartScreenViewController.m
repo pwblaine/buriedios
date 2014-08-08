@@ -9,7 +9,6 @@
 
 #import "LTUnearthedViewController.h"
 #import <Parse/Parse.h>
-#import <FacebookSDK/FacebookSDK.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
 
@@ -22,53 +21,6 @@
 @implementation LTStartScreenViewController
 
 @synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, emailField;
-- (void)fbDidLogin{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-}
-
-
--(void)fbDialogLogin:(NSString *)token expirationDate:(NSDate *)expirationDate params:(NSDictionary *)params{}
-
--(void)dialogDidCancel:(id)sender {
-}
-/**
- * Called when the user dismissed the dialog without logging in.
- */
-- (void)fbDidNotLogin:(BOOL)cancelled{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-}
-
-/**
- * Called after the access token was extended. If your application has any
- * references to the previous access token (for example, if your application
- * stores the previous access token in persistent storage), your application
- * should overwrite the old access token with the new one in this method.
- * See extendAccessToken for more details.
- */
-- (void)fbDidExtendToken:(NSString *)accessToken
-               expiresAt:(NSDate *)expiresAt{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);}
-
-/**
- * Called when the user logged out.
- */
-- (void)fbDidLogout{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);}
-
-/**
- * Called when the current session has expired. This might happen when:
- *  - the access token expired
- *  - the app has been disabled
- *  - the user revoked the app's permissions
- *  - the user changed his or her password
- */
-- (void)fbSessionInvalidated{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-}
-- (void)fbDialogNotLogin:(BOOL)cancelled
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -222,7 +174,7 @@
         NSLog(@"no current user, checking for saved user");
         if (![self checkForSavedUser]) {
             NSLog(@"no saved user found, login failed");
-            [self loginAttemptedWithBool:NO withError:nil];
+            [self loginAttemptedWithBool:NO withError:[NSError errorWithDomain:FacebookSDKDomain code:FBErrorLoginFailedOrCancelled userInfo:@{@"error":@"no saved or logged in user"}]];
         } else {
             NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"];
             [PFUser becomeInBackground:token block:^(PFUser *user, NSError *error) {
@@ -792,7 +744,7 @@
     [FBSession setActiveSession:session];
     
     [[FBSession activeSession] openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-        
+    
         switch (status) {
             case FBSessionStateOpen:
                 NSLog(@"%@",error);
@@ -829,22 +781,51 @@
     }];
     permissionsArray = nil;
 }
+- (void)sessionStateChanged:(FBSession *)session
+                      state:(FBSessionState) state
+                      error:(NSError *)error
+{
+    switch (state) {
+        case FBSessionStateOpen: {
+            // Handle the logged in scenario
+            
+            // You may wish to show a logged in view
+            NSLog(@"session logged in");
+            break;
+        }
+        case FBSessionStateClosed:
+        case FBSessionStateClosedLoginFailed: {
+            // Handle the logged out scenario
+            
+            // Close the active session
+            [[PFFacebookUtils session] closeAndClearTokenInformation];
+            
+            NSLog(@"session logged out");
+            // You may wish to show a logged out view
+            
+            break;
+        }
+        default:
+            break;
+    }
+    
+    if (error) {
+        // Handle authentication errors
+        NSLog(@"error? %@",error);
+    }    
+}
 
 -(void)openFacebookAuthentication
 {    // The permissions requested from the user, we're interested in their email address and their profile
-    NSArray *permissionsArray = @[@"public_profile", @"email",@"user_friends"];
-    NSLog(@"initializing fbuserlogin request with permissions array: %@",permissionsArray);
     
     NSLog(@"openFacebook Authentication run");
-    __block BOOL didLogIn = NO;
-    
-    [FBSession.activeSession closeAndClearTokenInformation];
-    FBSession.activeSession = nil;
-    FBSession *s = [[FBSession alloc] initWithPermissions:permissionsArray];
-    [s setStateChangeHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-        NSLog(@"state changed : %li",(long)status);
+    [[PFFacebookUtils session] closeAndClearTokenInformation];
+    NSLog(@"cleared out session");
+    [[PFFacebookUtils session] openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+        [self sessionStateChanged:session state:status error:error];
     }];
-    [FBSession setActiveSession:s];
+}
+    /*
     [FBSession.activeSession openWithBehavior:FBSessionLoginBehaviorForcingWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
         switch (status){
             case FBSessionStateOpen:
@@ -875,8 +856,7 @@
         }
     }];
     permissionsArray = nil;
-    [self loginAttemptedWithBool:didLogIn withError:[NSError errorWithDomain:FacebookSDKDomain code:208 userInfo:@{}]];
-}
+    [self loginAttemptedWithBool:didLogIn withError:[NSError errorWithDomain:FacebookSDKDomain code:208 userInfo:@{}]];*/
 
 -(void)loginAttemptedWithBool:(BOOL)didLogIn withError:(NSError *)error
 {
