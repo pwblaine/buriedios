@@ -153,6 +153,11 @@
 		2833B06F1975129E00274469 /* LTAdminTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTAdminTableViewController.m; sourceTree = "<group>"; };
 		283949FD1978A44E0067833B /* LTForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTForm.h; sourceTree = "<group>"; };
 		283949FE1978A44E0067833B /* LTForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTForm.m; sourceTree = "<group>"; };
+		284184061993C7C70090FABC /* FBLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBLoginDialog.h; sourceTree = "<group>"; };
+		284185C61993C8F60090FABC /* FBDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialog.h; sourceTree = "<group>"; };
+		284185C71993CC680090FABC /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		284186011994324C0090FABC /* FBSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSession.h; sourceTree = "<group>"; };
+		284186021994329B0090FABC /* FBSDKMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBSDKMacros.h; sourceTree = "<group>"; };
 		284B2CFC18AC4A4800BB976F /* Application.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
 		284B2CFD18AC4A4800BB976F /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		284B2CFE18AC4A4800BB976F /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
@@ -403,6 +408,11 @@
 				28B75D041957724000593B3A /* AdSupport.framework */,
 				28B75CFD1957716600593B3A /* UbertestersSDK */,
 				30E480CA19498C1600932DD5 /* FacebookSDK.framework */,
+				284184061993C7C70090FABC /* FBLoginDialog.h */,
+				284185C61993C8F60090FABC /* FBDialog.h */,
+				284185C71993CC680090FABC /* Facebook.h */,
+				284186011994324C0090FABC /* FBSession.h */,
+				284186021994329B0090FABC /* FBSDKMacros.h */,
 				112B79071946FD9200558BE1 /* Social.framework */,
 				28C5931818DD32E300288764 /* Parse.framework */,
 				44FC42F3186267DF00CC948C /* SystemConfiguration.framework */,
@@ -766,6 +776,9 @@
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
 					/Users/patrickblaine/Documents/FacebookSDK,
+					"$(PROJECT_DIR)/Documents",
+					"$(PROJECT_DIR)/Documents/FacebookSDK",
+					"$(PROJECT_DIR)/Documents/FacebookSDK/FBAudienceNetwork",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -797,6 +810,9 @@
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
 					/Users/patrickblaine/Documents/FacebookSDK,
+					"$(PROJECT_DIR)/Documents",
+					"$(PROJECT_DIR)/Documents/FacebookSDK",
+					"$(PROJECT_DIR)/Documents/FacebookSDK/FBAudienceNetwork",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";

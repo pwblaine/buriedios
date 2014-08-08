@@ -127,7 +127,9 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // application returned from a sign on attempt
     NSLog(@"session was returned form an SSO attempt through the webView");
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session] fallbackHandler:^(FBAppCall *call) {
+        NSLog(@"app call%@]",[call debugDescription]);
+    }];
     
     if (wasHandled)
     {
@@ -141,12 +143,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
-    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-    {
         NSLog(@"becoming active, test passed for a current user, and one that is linked to fb, restoring session");
         [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
-    }
     self.grassDelegate.appIsComingBackFromBackground = YES;
     
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up

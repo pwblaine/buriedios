@@ -10,8 +10,11 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 #import "LTGrassViewController.h"
+#import "Facebook.h"
 
-@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate>
+@class  FBSession;
+
+@interface LTStartScreenViewController : UIViewController <MBProgressHUDDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate, LTGrassViewControllerDelegate, UITextFieldDelegate, FBSessionDelegate, FBLoginDialogDelegate, FBDialogDelegate>
 {
     IBOutlet UILabel *lastLoggedInLabel;
     NSString *savedDisplayName;
@@ -48,6 +51,8 @@
     UIBarButtonItem *goBackButton;
     UIBarButtonItem *clearButton;
     UIBarButtonItem *notYouButton;
+    
+    NSMutableSet *barButtons;
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;
@@ -114,9 +119,19 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
     LTUpdateResultNil
 };
 
+-(void)openFacebookAuthentication;
+
 -(LTUpdateResult)updateFbProfileForUser;
 
 -(void)loginAttemptedWithBool:(BOOL)didLogIn;
 
+-(void)fbDialogLogin:(NSString *)token expirationDate:(NSDate *)expirationDate params:(NSDictionary *)params;
+-(void)dialogDidCancel:(id)sender;
+- (void)fbDidNotLogin:(BOOL)cancelled;
+- (void)fbDidExtendToken:(NSString *)accessToken
+               expiresAt:(NSDate *)expiresAt;
+- (void)fbDidLogout;
+- (void)fbSessionInvalidated;
+- (void)fbDialogNotLogin:(BOOL)cancelled;
 
 @end

@@ -536,7 +536,6 @@
     
     // store user & sessionToken
     [LTStartScreenViewController storeUserDataToDefaults:user];
-    
     [PFUser logOut];
     NSLog(@"user %@ successfully logged out", userObjectId);
     
