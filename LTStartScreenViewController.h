@@ -83,6 +83,7 @@
 
 - (void)changeButtonsForSavedUser;
 
+-(void)clearHUD;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
 -(BOOL)isValidEmail:(NSString *)email;
@@ -121,7 +122,13 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
     LTUpdateResultNil
 };
 
-#pragma mark Facebook/buried. login methods
+#pragma mark Facebook/buried. user handling methods
+
+-(IBAction)initiateLoginSequence;
+
+-(BOOL)checkForSavedUser; // the first step in the initiateLoginSequence, see if a user is cached or signed in.
+
+-(void)checkUserFBLinkage:(PFUser *)user; // tests if a certain user is linked to fb and continues login sequence
 
 -(void)openFacebookAuthentication; // present the login workflow in a embedded webview and check to see if FB account is already is use
 
@@ -131,6 +138,6 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
 
 -(LTUpdateResult)updateFbProfileForUser; // update profile from FB and store in defaults
 
--(void)loginAttemptedWithBool:(BOOL)didLogIn;  // result method in either success or failure and notify user
+-(void)loginAttemptedWithSuccess:(BOOL)success withError:(NSError *)error; // result method in either success or failure and notify user
 
 @end
