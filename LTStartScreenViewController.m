@@ -39,7 +39,7 @@
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,74,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
-    }
+        self->readPermissions = [NSArray arrayWithObjects:@"public_profile", @"email",@"user_friends",nil];    }
     return self;
 }
 
@@ -781,6 +781,7 @@
     }];
     permissionsArray = nil;
 }
+
 - (void)sessionStateChanged:(FBSession *)session
                       state:(FBSessionState) state
                       error:(NSError *)error
@@ -791,6 +792,7 @@
             
             // You may wish to show a logged in view
             NSLog(@"session logged in");
+            [self loginAttemptedWithBool:YES withError:nil];
             break;
         }
         case FBSessionStateClosed:
@@ -806,22 +808,38 @@
             break;
         }
         default:
+            NSLog(@"session changed");
             break;
     }
     
     if (error) {
         // Handle authentication errors
-        NSLog(@"error? %@",error);
-    }    
+        NSLog(@"error: %@ user message: %@",error,[FBErrorUtility userMessageForError:error]);if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession)
+        {
+            [self loginAttemptedWithBool:NO withError:error];
+        } else
+        {
+            [self loginAttemptedWithBool:NO withError:error];
+        }
+    }
 }
 
 -(void)openFacebookAuthentication
 {    // The permissions requested from the user, we're interested in their email address and their profile
     
     NSLog(@"openFacebook Authentication run");
-    [[PFFacebookUtils session] closeAndClearTokenInformation];
-    NSLog(@"cleared out session");
-    [[PFFacebookUtils session] openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+   // NSLog(@"cleared out session");
+    // Initialize a session object
+    FBSession *session = [[FBSession alloc] init];
+    // Set the active session
+    [FBSession setActiveSession:session];
+    // Open the session
+    [session openWithBehavior:FBSessionLoginBehaviorWithNoFallbackToWebView
+            completionHandler:^(FBSession *session,
+                                FBSessionState status,
+                                NSError *error) {
+                // Respond to session state changes,
+                // ex: updating the view
         [self sessionStateChanged:session state:status error:error];
     }];
 }
@@ -898,8 +916,8 @@
             }
             else
             {
-                NSLog(@"fb account link failed for reason %@",[userCancelledCode stringValue]);
-                [self->HUD setDetailsLabelText:@"login failed due to unknown reason"];
+                NSLog(@"fb account linking failed with error %@",[FBErrorUtility userMessageForError:error]);
+                [self->HUD setDetailsLabelText:[FBErrorUtility userMessageForError:error]];
             }
             
             [self hide:YES afterDelay:2.0f withCompletionBlock:^(){

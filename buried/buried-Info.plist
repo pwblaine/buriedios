@@ -33,8 +33,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>ubertesters_project_id</key>
-	<string>ff3ffa6a-fa49-11e3-b581-22000ac44c54</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>FacebookAppID</key>
@@ -66,5 +64,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>ubertesters_project_id</key>
+	<string>ff3ffa6a-fa49-11e3-b581-22000ac44c54</string>
 </dict>
 </plist>

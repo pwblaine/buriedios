@@ -59,6 +59,8 @@
     NSMutableArray *currentTextFields;
     
     CALayer *initialBorderSpecs;
+    
+    NSArray *readPermissions;
 }
 
 @property IBOutlet UITextField *passwordField;
@@ -119,10 +121,16 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
     LTUpdateResultNil
 };
 
--(void)openFacebookAuthentication;
+#pragma mark Facebook/buried. login methods
 
--(LTUpdateResult)updateFbProfileForUser;
+-(void)openFacebookAuthentication; // present the login workflow in a embedded webview and check to see if FB account is already is use
 
--(void)loginAttemptedWithBool:(BOOL)didLogIn;
+- (void)sessionStateChanged:(FBSession *)session
+                      state:(FBSessionState) state
+                      error:(NSError *)error; // handler follows the active session and handles the error cases
+
+-(LTUpdateResult)updateFbProfileForUser; // update profile from FB and store in defaults
+
+-(void)loginAttemptedWithBool:(BOOL)didLogIn;  // result method in either success or failure and notify user
 
 @end

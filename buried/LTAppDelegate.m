@@ -123,19 +123,32 @@
 // ****************************************************************************
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
+                   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // application returned from a sign on attempt
     NSLog(@"session was returned form an SSO attempt through the webView");
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session] fallbackHandler:^(FBAppCall *call) {
-        NSLog(@"%@",call);
-    }];
+BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session] fallbackHandler:^(FBAppCall *call) {
+    if (!call)
+    {
+        NSLog(@"no call data");
+    } else
+    {
+        NSLog(@"call %@",call);
+    }
+}];
+    
     if (wasHandled)
     {
-        NSLog(@"session was wasHandled validly. current session: %@",[PFFacebookUtils session]);
-    } else {
-        NSLog(@"session failed to handle correctly, current session: %@",[PFFacebookUtils session]);
+        NSLog(@"URL: %@",url);
+        NSLog(@"annotation: %@",(NSDictionary *)(id)annotation);
+        if ([FBAppCall appCallFromURL:url])
+        {
+        NSLog(@"FB APP CALL: %@",[[FBAppCall appCallFromURL:url] debugDescription]);
+        }
+    } else
+    {
+        NSLog(@"URL : %@",url);
+        NSLog(@"annotation: %@",(NSDictionary *)(id)annotation);
     }
     
     return wasHandled;
@@ -143,8 +156,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-        NSLog(@"becoming active, test passed for a current user, and one that is linked to fb, restoring session");
-        [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    //NSLog(@"becoming active, test passed for a current user, and one that is linked to fb, restoring session");
+    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
     self.grassDelegate.appIsComingBackFromBackground = YES;
     
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
@@ -184,6 +197,7 @@
     if ([PFUser currentUser])
     {
         [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+        [[PFFacebookUtils session] close];
         [PFUser logOut];
     }
 }
