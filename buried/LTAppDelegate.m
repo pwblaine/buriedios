@@ -196,7 +196,6 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
     
     if ([PFUser currentUser])
     {
-        [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
         [[PFFacebookUtils session] close];
         [PFUser logOut];
     }

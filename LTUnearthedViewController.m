@@ -535,13 +535,6 @@
     [currentInstallation saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
     
-    // store user & sessionToken
-    [LTStartScreenViewController storeUserDataToDefaults:user];
-    [PFUser logOut];
-    NSLog(@"user %@ successfully logged out", userObjectId);
-    
-    
-    
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
