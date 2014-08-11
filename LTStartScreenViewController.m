@@ -790,7 +790,10 @@
     {
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         {
-            NSLog(@"detected fb linkage, logging in");
+            NSLog(@"detected fb linkage, logging in and storing data");
+            
+            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
             self->HUD.labelText = @"welcome to buried";
@@ -1341,9 +1344,10 @@
     NSDictionary *lastLoggedInUserFBAuthData = NULL;
     
     //write to user defaults and update buttons
-    if ([PFFacebookUtils isLinkedWithUser:user] && [[PFFacebookUtils session] isOpen])
+    if ([PFFacebookUtils isLinkedWithUser:user])
     {
         NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
+        if ([[PFFacebookUtils session] isOpen])
         lastLoggedInUserFBAuthData = [[user objectForKey:@"authData"] objectForKey:@"facebook"];
     }
     
