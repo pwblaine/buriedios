@@ -30,12 +30,13 @@
         // Custom initialization
         self->signInButton = [[UIBarButtonItem alloc] initWithTitle:@"log in" style:UIBarButtonItemStyleBordered target:self action:@selector(signInButtonTouchHandler:)];
         self->signUpButton = [[UIBarButtonItem alloc] initWithTitle:@"sign up" style:UIBarButtonItemStyleBordered target:self action:@selector(signUpButtonTouchHandler:)];
-        self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(initiateLoginSequence)];
+        self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
         self->goBackButton = [[UIBarButtonItem alloc] initWithTitle:@"go back" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
         self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(clearButtonTouchHandler:)];
-        self->barButtons = [[NSMutableSet alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->notYouButton,self->clearButton, nil];
+        self->facebookLoginButton = [[FBLoginView alloc] initWithReadPermissions:nil];
+        self->barButtons = [[NSMutableArray alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->notYouButton,self->clearButton,self->continueButton, self->facebookLoginButton,  nil];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
         self->topLogoPosition = CGRectMake(40,74,240,128);
         self->currentViewElements = [[NSMutableArray alloc] init];
@@ -109,7 +110,7 @@
     userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"];
     sessionToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"];
     
-    if ((!userId) || (!sessionToken))
+    if ((userId != NULL) || (sessionToken != NULL))
     {
         return NO;
     }
@@ -146,6 +147,23 @@
     self->HUD.mode = MBProgressHUDModeIndeterminate;
 }
 
+-(BOOL)isFbAuthDataStoredWithLastLogin
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->HUD.labelText = @"linking to facebook";
+    NSDictionary *fbAuthData = NULL;
+    fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFBAuthData"];
+    if (!(fbAuthData.count > 1))
+    {
+        NSLog(@"no stored facebook data found in cache or online");
+        return NO;
+    }
+    else
+    {
+                NSLog(@"stored facebook data found in cache");
+        return YES;
+    }
+}
 
 -(void)checkUserFBLinkage:(PFUser *)user
 {
@@ -154,7 +172,35 @@
     if (![PFFacebookUtils isLinkedWithUser:user])
     {
         NSLog(@"PFFacebookUtils not linked with logged in user, attempting to link");
-        [self openFacebookAuthentication];
+        if ([self isFbAuthDataStoredWithLastLogin])
+        {
+            NSLog(@"fbAuthData cached, restoring PFUser state");
+            NSDictionary *fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFbAuthData"];
+            [PFFacebookUtils linkUser:user facebookId:[fbAuthData objectForKey:@"id"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"access_token"] block:^(BOOL succeeded, NSError *error) {
+                if (succeeded)
+                {
+                    NSLog(@"restoring PFUser state successful");
+                    NSLog(@"current linked user data : %@",[PFUser currentUser]);
+                    [self loginAttemptedWithSuccess:YES withError:nil];
+                } else
+                {
+                    if (error)
+                    {
+                        
+                        NSLog(@"restoring PFUser state failed due to error: %@",error);
+                    } else
+                    {
+                        
+                        NSLog(@"restoring PFUser state failed due to unknown error");
+                    }
+                    NSLog(@"could not retrieve session from cache initiating new");
+                    [self openFacebookAuthentication];
+                }
+            }];
+        } else {
+            NSLog(@"no fbAuthData cached, requesting access token");
+            [self openFacebookAuthentication];
+        }
     } else {
         NSLog(@"PFFacebookUtils linked with logged in user, login success");
         [self loginAttemptedWithSuccess:YES withError:nil];
@@ -164,12 +210,13 @@
 -(void)initiateLoginSequence
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    if (self.navigationItem.rightBarButtonItem.enabled)
+        [self disableAllBarButtons];
+    
     [self->HUD setLabelText:@"logging in"];
     [self->HUD show:YES];
     
     PFUser *currentUser = [PFUser currentUser];
-    
-    [self disableAllBarButtons];
     
     if (!currentUser)
     {
@@ -567,6 +614,8 @@
 -(IBAction)continueButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self initiateLoginSequence];
+    [self disableAllBarButtons];
 }
 
 
@@ -613,6 +662,33 @@
             // You may wish to show a logged in view
             NSLog(@"session was opened for user : %@",[[session accessTokenData] userID]);
             NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[[PFUser currentUser] objectForKey:@"authData"] objectForKey:@"facebook"] : @"unlinked");
+            NSLog(@"session %@",session);
+            PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"user signed in successfully and linked with a new facebook account");
+                    [self loginAttemptedWithSuccess:YES withError:nil];
+                } else if (error)
+                {
+                    NSLog(@"user couldn't link their facebook account to their parse account because of error: %@",error);
+                    [self loginAttemptedWithSuccess:NO withError:error];
+                } else
+                {
+                    NSLog(@"linking parse current with facebook user returned from web view failed without a posted reason");
+                    [self loginAttemptedWithSuccess:NO withError:error];
+                }
+            };
+            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+            {
+                NSLog(@"session was and verified currentUser linkage");
+                [self loginAttemptedWithSuccess:YES withError:nil];
+            } else if (!([[[session accessTokenData] accessToken] length] > 1)) {
+                NSLog(@"could not access accessToken for active session, failing out");
+                [self loginAttemptedWithSuccess:NO withError:error];
+            } else {
+                NSLog(@"linking PFUser to FBUser");
+                [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:linkageCompletionBlock];
+                [self checkUserFBLinkage:[PFUser currentUser]];
+            }
             break;
         }
         case FBSessionStateClosed:
@@ -649,31 +725,6 @@
             NSLog(@"%@",[FBErrorUtility shouldNotifyUserForError:error] ? [FBErrorUtility userMessageForError:error] :  @"session had an error case we don't catch, but doesn't need to notify the user");
             [self loginAttemptedWithSuccess:NO withError:error];
         }
-    }
-    NSLog(@"session %@",session);
-    PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            NSLog(@"user signed in successfully and linked with a new facebook account");
-            [self loginAttemptedWithSuccess:YES withError:nil];
-        } else if (error)
-        {
-            NSLog(@"user couldn't link their facebook account to their parse account because of error: %@",error);
-            [self loginAttemptedWithSuccess:NO withError:error];
-        } else
-        {
-            NSLog(@"linking parse current with facebook user returned from web view failed without a posted reason");
-            [self loginAttemptedWithSuccess:NO withError:error];
-        }
-    };
-    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
-    {
-        NSLog(@"session was and verified currentUser linkage");
-        [self loginAttemptedWithSuccess:YES withError:nil];
-    } else if (![[session accessTokenData] userID]) {
-        NSLog(@"could not access accessToken for active session, requesting new");
-        [PFFacebookUtils linkUser:[PFUser currentUser] permissions:self->readPermissions block:linkageCompletionBlock];
-    } else {
-        [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData]expirationDate] block:linkageCompletionBlock];
     }
 }
 
@@ -753,7 +804,7 @@
         }
     }
     
-        NSString *errorMessage = nil;
+    NSString *errorMessage = nil;
     if (error)
         errorMessage = [[error domain] isEqualToString:FacebookSDKDomain] ? [FBErrorUtility userMessageForError:error] : [FBErrorUtility userMessageForError:error];
     
@@ -1227,7 +1278,7 @@
     [LTStartScreenViewController storeUserDataToDefaults:nil];
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName & facebookId & userName & sessionToken");
     
-    // invalidating session
+    // invalidating session to allow user switching
     [[PFFacebookUtils session] closeAndClearTokenInformation];
     [PFUser logOut];
     
@@ -1290,11 +1341,10 @@
     NSDictionary *lastLoggedInUserFBAuthData = NULL;
     
     //write to user defaults and update buttons
-    if ([PFFacebookUtils isLinkedWithUser:user])
+    if ([PFFacebookUtils isLinkedWithUser:user] && [[PFFacebookUtils session] isOpen])
     {
-        NSLog(@"fb account detected, id: %@", [user objectForKey:@"facebookId"]);
+        NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
         lastLoggedInUserFBAuthData = [[user objectForKey:@"authData"] objectForKey:@"facebook"];
-        
     }
     
     lastLoggedInUserId = [user objectId];

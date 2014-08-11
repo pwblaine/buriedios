@@ -31,7 +31,7 @@
     IBOutlet UIImageView *buriedLogo;
     
     IBOutlet UIButton *forgotPasswordButton;
-    IBOutlet UIButton *facebookLoginButton;
+    IBOutlet FBLoginView *facebookLoginButton;
     
     CGPoint originalViewCenter;
     
@@ -52,7 +52,7 @@
     UIBarButtonItem *clearButton;
     UIBarButtonItem *notYouButton;
     
-    NSMutableSet *barButtons;
+    NSMutableArray *barButtons;
     
     MBProgressHUD *HUD;
     UITextField *currentResponder;

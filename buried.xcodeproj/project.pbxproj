@@ -293,9 +293,9 @@
 		280C85EB192D9C63009E6FE1 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				280C85EA192D9C4B009E6FE1 /* Interface Builder Files */,
 				28D34E07194CC42E002095F9 /* LTGrassViewController.h */,
 				28D34E08194CC42E002095F9 /* LTGrassViewController.m */,
-				280C85EA192D9C4B009E6FE1 /* Interface Builder Files */,
 				2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */,
 				2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */,
 				28D2A21118C33354007EB808 /* LTUnearthedViewController.h */,
