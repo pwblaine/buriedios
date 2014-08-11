@@ -115,7 +115,7 @@
 {
     [super viewDidAppear:NO];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self.navigationController action:@selector(popViewControllerAnimated:)];
-    self.navigationItem.title = @"admin nenu";
+    self.navigationItem.title = @"admin menu";
     [self.navigationItem setRightBarButtonItems:[NSArray array] animated:NO];
     
     

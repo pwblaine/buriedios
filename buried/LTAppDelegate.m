@@ -197,7 +197,6 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
     if ([PFUser currentUser])
     {
         [[PFFacebookUtils session] close];
-        [PFUser logOut];
     }
 }
 

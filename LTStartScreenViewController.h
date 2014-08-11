@@ -91,7 +91,9 @@
 -(BOOL)validateField:(UITextField *)textField;
 -(void)validateFields:(NSArray *)fields;
 
-+(void)storeUserDataToDefaults:(PFUser *)user;
++(NSString *)syncUserSessionCacheForKey:(NSString *)key;
++(void)clearCachedUsers;
++(BOOL)storeUserDataToDefaults:(PFUser *)user;
 
 #pragma mark - PFSignup Protocol
 

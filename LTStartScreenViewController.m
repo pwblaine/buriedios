@@ -110,8 +110,9 @@
     userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"];
     sessionToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"];
     
-    if ((userId != NULL) || (sessionToken != NULL))
+    if ((!userId) || (!sessionToken))
     {
+        NSLog(@"noUserFound");
         return NO;
     }
     else
@@ -160,7 +161,7 @@
     }
     else
     {
-                NSLog(@"stored facebook data found in cache");
+        NSLog(@"stored facebook data found in cache");
         return YES;
     }
 }
@@ -614,8 +615,8 @@
 -(IBAction)continueButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    [self initiateLoginSequence];
     [self disableAllBarButtons];
+    [self initiateLoginSequence];
 }
 
 
@@ -1267,6 +1268,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
+    if ([currentInstallation objectForKey:@"lastLoggedInUserId"])
     [currentInstallation removeObjectForKey:@"lastLoggedInUserId"];
     
     [currentInstallation saveEventually:^(BOOL succeeded, NSError *error) {
@@ -1281,7 +1283,6 @@
     [LTStartScreenViewController storeUserDataToDefaults:nil];
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName & facebookId & userName & sessionToken");
     
-    // invalidating session to allow user switching
     [[PFFacebookUtils session] closeAndClearTokenInformation];
     [PFUser logOut];
     
@@ -1333,7 +1334,44 @@
     }
 }
 
-+(void)storeUserDataToDefaults:(PFUser*)user
++(NSString *)syncUserSessionCacheForKey:(NSString *)key
+{
+    NSDictionary *userSessionCacheDictionaryRepresentation = NULL;
+    userSessionCacheDictionaryRepresentation = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    NSLog(@"saving user session cache | key %@",key);
+    PFObject *userSessionCache = [PFObject objectWithClassName:@"userSessionCache" dictionary:userSessionCacheDictionaryRepresentation];
+    
+    __block NSString *blockKey = key;
+    
+    [userSessionCache saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!succeeded)
+        {
+            if (error)
+            {
+                NSLog(@"error in saving user at key:%@ | %@",key,error);
+            }
+            blockKey = nil;
+        } else
+        {
+            NSLog(@"saved user session cache at key %@",key);
+            blockKey = key;
+        }
+    }];
+    
+    return blockKey;
+}
+
++(void)clearCachedUsers
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserId"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInFacebookId"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInDisplayName"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserName"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInSessionToken"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserFBAuthData"];
+}
+
++(BOOL)storeUserDataToDefaults:(PFUser*)user
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSString *lastLoggedInUserId = nil;
@@ -1343,27 +1381,46 @@
     NSString *lastLoggedInSessionToken = nil;
     NSDictionary *lastLoggedInUserFBAuthData = NULL;
     
-    //write to user defaults and update buttons
-    if ([PFFacebookUtils isLinkedWithUser:user])
+    if (user)
     {
-        NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
-        if ([[PFFacebookUtils session] isOpen])
-        lastLoggedInUserFBAuthData = [[user objectForKey:@"authData"] objectForKey:@"facebook"];
+        NSString *userSessionKey = [NSString stringWithFormat:@"userSession%@",[user objectId]];
+        NSDictionary *userSession = NULL;
+        NSLog(@"user session dictionary for key: %@ | %@",userSessionKey,userSession);
+        
+        //write to user defaults and update buttons
+        if ([PFFacebookUtils isLinkedWithUser:user])
+        {
+            NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
+            if ([[PFFacebookUtils session] isOpen])
+                lastLoggedInUserFBAuthData = [[user objectForKey:@"authData"] objectForKey:@"facebook"];
+           userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
+        } else
+        {
+            userSession = @{@"lastLoggedInUserId":[user objectId],lastLoggedInSessionToken:[user sessionToken]};
+        }
+        
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
+        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
+        lastLoggedInUserName = [user username];
+        lastLoggedInSessionToken = [user sessionToken];
+        
+        // write to user defaults
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
+        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
+        [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
+        
+        [self syncUserSessionCacheForKey:userSessionKey];
+        
+        return YES;
+    } else {
+        [self clearCachedUsers];
+        return NO;
     }
-    
-    lastLoggedInUserId = [user objectId];
-    lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-    lastLoggedInDisplayName = [user objectForKey:@"firstName"];
-    lastLoggedInUserName = [user username];
-    lastLoggedInSessionToken = [user sessionToken];
-    
-    // write to user defaults
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
-    [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
     
     NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@/",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId,lastLoggedInSessionToken,[lastLoggedInUserFBAuthData description]);
 }
