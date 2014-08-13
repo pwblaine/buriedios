@@ -176,8 +176,8 @@
         if ([self isFbAuthDataStoredWithLastLogin])
         {
             NSLog(@"fbAuthData cached, restoring PFUser state");
-            NSDictionary *fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFbAuthData"];
-            [PFFacebookUtils linkUser:user facebookId:[fbAuthData objectForKey:@"id"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"access_token"] block:^(BOOL succeeded, NSError *error) {
+            FBAccessTokenData *fbAuthData = [FBAccessTokenData createTokenFromDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFbAuthData"]];
+            [PFFacebookUtils linkUser:user facebookId:[fbAuthData userID] accessToken:[fbAuthData accessToken] expirationDate:[fbAuthData expirationDate] block:^(BOOL succeeded, NSError *error) {
                 if (succeeded)
                 {
                     NSLog(@"restoring PFUser state successful");
@@ -793,7 +793,12 @@
         {
             NSLog(@"detected fb linkage, logging in and storing data");
             
-            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            __block LTUpdateResult updateProfileResult = LTUpdateResultNil;
+            
+            if (updateProfileResult == LTUpdateNotNeeded || updateProfileResult == LTUpdateSucceeded)
+            {
+              [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            
             
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
@@ -802,6 +807,11 @@
             [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
             
             [self enableAllBarButtons];
+            }
+            else
+            {
+                didLogIn = NO;
+            }
         } else
         {
             didLogIn = NO;
@@ -1330,6 +1340,10 @@
         return NO;
     } else {
         NSLog(@"user info acceptable for signup");
+        
+        if ([PFUser currentUser])
+            [PFUser logOut];
+        
         return YES;
     }
 }
@@ -1393,10 +1407,17 @@
             NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
             if ([[PFFacebookUtils session] isOpen])
                 lastLoggedInUserFBAuthData = [[user objectForKey:@"authData"] objectForKey:@"facebook"];
+            
+            if ([user objectForKey:@"facebookId"])
+            {
+                NSLog(@"facebookId was blank, storing");
+                [user setObject:lastLoggedInUserFBAuthData[@"id"] forKey:@"facebookId"];
+            }
            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
         } else
         {
-            userSession = @{@"lastLoggedInUserId":[user objectId],lastLoggedInSessionToken:[user sessionToken]};
+            NSLog(@"user account not linked with FB");
+            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInSessionToken":[user sessionToken]};
         }
         
         lastLoggedInUserId = [user objectId];
@@ -1496,6 +1517,8 @@
         return NO;
     } else {
         NSLog(@"user info acceptable for login");
+        if ([PFUser currentUser])
+            [PFUser logOut];
         return YES;
     }
 }
