@@ -349,7 +349,7 @@
         {
             displayName = [[PFUser currentUser] objectForKey:@"firstName"];
         }
-        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome back, %@!",[displayName lowercaseString]];
+        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"we back, %@!",[displayName lowercaseString]];
         
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
@@ -1709,7 +1709,7 @@
             // let the user know
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.labelText = @"can't remember right now";
-            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-scared-icon-37_MB.png"]];
+            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-scared-icon-37_MB.png" ]];
             updateResult = LTUpdateFailed;
             
             if ([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"type"] isEqualToString:@"OAuthException"])
@@ -1725,10 +1725,6 @@
             if ([[[PFUser currentUser] objectForKey:@"fbProfileChangedAt"] isEqualToString:userData[@"updated_time"]])
             {
                 NSLog(@"buried's user info is up to date with facebook");
-                
-                self->HUD.mode = MBProgressHUDModeCustomView;
-                self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-wink-icon-48_MB.png"]];
-                self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
                 
                 updateResult = LTUpdateNotNeeded;
             }
@@ -1793,6 +1789,7 @@
                     }
                 }];
                 [LTStartScreenViewController storeUserDataToDefaults:user];
+                [LTStartScreenViewController syncUserSessionCacheForKey:@"userSessionKey"];
             };
         }
     }];

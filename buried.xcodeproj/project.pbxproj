@@ -196,7 +196,7 @@
 		28B75D0C1957727400593B3A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		28B922D21987E13D003A87EF /* x-circlemark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark.png"; sourceTree = SOURCE_ROOT; };
 		28B922D31987E13D003A87EF /* x-circlemark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-circlemark@2x.png"; sourceTree = SOURCE_ROOT; };
-		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../Documents/Parse.framework; sourceTree = "<group>"; };
+		28C5931818DD32E300288764 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../Documents/Parse/Parse.framework; sourceTree = "<group>"; };
 		28D2A21118C33354007EB808 /* LTUnearthedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTUnearthedViewController.h; sourceTree = "<group>"; };
 		28D2A21218C33354007EB808 /* LTUnearthedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTUnearthedViewController.m; sourceTree = "<group>"; };
 		28D2A21318C33354007EB808 /* LTUnearthedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTUnearthedViewController.xib; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 		44FC42ED186267CE00CC948C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		44FC42EF186267D300CC948C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		44FC42F3186267DF00CC948C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		D6D824D75D3B43B5BEE0FC64 /* Bolts.framework */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = Bolts.framework; path = ../../../../../../../../Documents/Bolts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6D824D75D3B43B5BEE0FC64 /* Parse.framework */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = Parse.framework; path = ../../../../../../../../Documents/Parse/Parse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,7 +421,7 @@
 				44FC42AB1862667700CC948C /* CoreGraphics.framework */,
 				44FC42AD1862667700CC948C /* UIKit.framework */,
 				44FC42CB1862667700CC948C /* XCTest.framework */,
-				D6D824D75D3B43B5BEE0FC64 /* Bolts.framework */,
+				D6D824D75D3B43B5BEE0FC64 /* Parse.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
