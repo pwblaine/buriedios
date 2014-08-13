@@ -177,7 +177,7 @@
         {
             NSLog(@"fbAuthData cached, restoring PFUser state");
             NSDictionary *fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFbAuthData"];
-            [PFFacebookUtils linkUser:user facebookId:[fbAuthData objectForKey:@"id"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"expiration_date"] block:^(BOOL succeeded, NSError *error) {
+            [PFFacebookUtils linkUser:user facebookId:[user objectForKey:@"facebookId"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"expiration_date"] block:^(BOOL succeeded, NSError *error) {
                 if (succeeded)
                 {
                     NSLog(@"restoring PFUser state successful");
@@ -673,7 +673,7 @@
             
             // You may wish to show a logged in view
             NSLog(@"session was opened for user : %@",[[PFUser currentUser] objectForKey:@"facebookId"]);
-            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebook"] : @"unlinked");
+            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebookId"] : @"unlinked");
             NSLog(@"session %@",session);
             PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
@@ -689,7 +689,7 @@
                     [self loginAttemptedWithSuccess:NO withError:error];
                 }
             };
-            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]] && [[session accessTokenData] userID] == [[PFUser currentUser] objectForKey:@"facebookId"])
+            if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
             {
                 NSLog(@"session was and verified currentUser linkage");
                 [self loginAttemptedWithSuccess:YES withError:nil];
@@ -803,14 +803,8 @@
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         {
             NSLog(@"detected fb linkage, logging in and storing data");
+            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
             
-            __block LTUpdateResult updateProfileResult = LTUpdateResultNil;
-            
-            updateProfileResult = [self updateFbProfileForUser];
-            
-            if (updateProfileResult == LTUpdateNotNeeded || updateProfileResult == LTUpdateSucceeded)
-            {
-              [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
             
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
@@ -819,12 +813,6 @@
             [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
             
             [self enableAllBarButtons];
-                
-            }
-            else
-            {
-                didLogIn = NO;
-            }
         } else
         {NSLog(@"facebook not linked with the current usah");
             didLogIn = NO;
@@ -1397,7 +1385,6 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserName"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInSessionToken"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserFBAuthData"];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserAuthData"];
 }
 
 +(BOOL)storeUserDataToDefaults:(PFUser*)user
@@ -1414,8 +1401,11 @@
     {
         NSString *userSessionKey = [NSString stringWithFormat:@"userSession%@",[user objectId]];
         NSDictionary *userSession = NULL;
+        NSLog(@"user session dictionary for key: %@ | %@",userSessionKey,[[PFFacebookUtils session] dictionary]);
         
-        NSLog(@"user session dictionary for key: %@ for user %@",userSessionKey, user.allKeys);
+        lastLoggedInUserId = [user objectId];
+        lastLoggedInUserName = [user username];
+        lastLoggedInSessionToken = [user sessionToken];
         
         //write to user defaults and update buttons
         if ([PFFacebookUtils isLinkedWithUser:user])
@@ -1423,28 +1413,23 @@
             
             NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
             if ([[PFFacebookUtils session] isOpen])
-            {
-                
-                lastLoggedInUserId = [user objectId];
-                lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-                lastLoggedInDisplayName = [user objectForKey:@"firstName"];
-                lastLoggedInUserName = [user username];
-                lastLoggedInSessionToken = [user sessionToken];
-                
-                NSLog(@"session is open");
-                
-                if ([[PFFacebookUtils session] accessTokenData])
-                    NSLog(@"authData %@",[[[PFFacebookUtils session] accessTokenData] dictionary]);
-                
-                NSLog(@"user is authenticated %@", (user.isAuthenticated ? @"YES" : @"NO"));
-                
-                lastLoggedInUserFBAuthData = [[[PFFacebookUtils session] accessTokenData] dictionary];
+                lastLoggedInUserFBAuthData = [[[PFFacebookUtils session]accessTokenData] dictionary];
             
-                if (!([[user objectForKey:@"facebookId"] length] > 1))
-                {
-                    NSLog(@"facebookId was blank, storing %@",[lastLoggedInUserFBAuthData objectForKey:@"id"]);
-                    [user setObject:[lastLoggedInUserFBAuthData objectForKey:@"id"] forKey:@"facebookId"];
-                }
+            if (![user objectForKey:@"facebookId"])
+            {
+                NSLog(@"facebookId was blank, storing");
+                // After logging in with Facebook
+                __block NSString *fbId = nil;
+                [FBRequestConnection
+                 startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                     if (!error) {
+
+                         fbId = [result objectForKey:@"id"];
+                     }
+                 }];
+                
+
+                [user setObject:fbId forKey:@"facebookId"];
             }
             
             NSLog(@"writing to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@",[user objectId],lastLoggedInDisplayName,lastLoggedInUserName,[user objectForKey:@"facebookId"],[user sessionToken],[[[PFFacebookUtils session] accessTokenData] dictionary]);
@@ -1454,10 +1439,6 @@
         {
             NSLog(@"user account not linked with FB");
             userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInSessionToken":[user sessionToken]};
-            
-            lastLoggedInUserId = [user objectId];
-            lastLoggedInUserName = [user username];
-            lastLoggedInSessionToken = [user sessionToken];
         }
         
         // write to user defaults
@@ -1478,12 +1459,7 @@
         return NO;
     }
     
-    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId,lastLoggedInSessionToken,lastLoggedInUserFBAuthData);
-    
-    FBAccessTokenData *testAuthData = [FBAccessTokenData createTokenFromDictionary:lastLoggedInUserFBAuthData];
-    NSLog(@"access token is of class: %@ and has contents %@",[testAuthData class],testAuthData);
-    
-    NSLog(@"stored access token");
+    NSLog(@"written to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@/",lastLoggedInUserId,lastLoggedInDisplayName,lastLoggedInUserName,lastLoggedInFacebookId,lastLoggedInSessionToken,[lastLoggedInUserFBAuthData description]);
 }
 
 /// Sent to the delegate when a PFUser is signed up.
