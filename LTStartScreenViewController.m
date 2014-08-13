@@ -148,13 +148,15 @@
     self->HUD.mode = MBProgressHUDModeIndeterminate;
 }
 
--(BOOL)isFbAuthDataStoredWithLastLogin
+-(BOOL)isFbAuthDataStoredForUser:(PFUser *)user
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->HUD.labelText = @"linking to facebook";
     NSDictionary *fbAuthData = NULL;
-    fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFBAuthData"];
-    if (!(fbAuthData.count > 1))
+    NSDictionary *userSessionCache = NULL;
+    userSessionCache = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"userSession%@",user.objectId ]];
+    fbAuthData = [userSessionCache objectForKey:@"lastLoggedInUserFBAuthData"];
+    if (!(fbAuthData.count > 1) && [[userSessionCache objectForKey:@"lastLoggedInFacebookId"] length] > 1)
     {
         NSLog(@"no stored facebook data found in cache or online");
         return NO;
@@ -166,6 +168,34 @@
     }
 }
 
+-(void)restoreUser:(PFUser *)user fromUserSessionCache:(NSDictionary *)userSessionCache
+{
+    NSDictionary *fbAuthData =NULL;
+    fbAuthData = [userSessionCache objectForKey:@"lastLoggedInUserFBAuthData"];
+    [PFFacebookUtils linkUser:user facebookId:[userSessionCache objectForKey:@"lastLoggedInFacebookId"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"expiration_date"] block:^(BOOL succeeded, NSError *error) {
+        if (succeeded)
+        {
+            NSLog(@"restoring PFUser state successful");
+            NSLog(@"current linked user data : %@",[PFUser currentUser]);
+            [self loginAttemptedWithSuccess:YES withError:nil];
+        } else
+        {
+            if (error)
+            {
+                
+                NSLog(@"restoring PFUser state failed due to error: %@",error);
+            } else
+            {
+                
+                NSLog(@"restoring PFUser state failed due to unknown error");
+            }
+            
+            NSLog(@"could not retrieve session from cache initiating new");
+            [self openFacebookAuthentication];
+        }
+    }];
+}
+
 -(void)checkUserFBLinkage:(PFUser *)user
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
@@ -173,35 +203,38 @@
     if (![PFFacebookUtils isLinkedWithUser:user])
     {
         NSLog(@"PFFacebookUtils not linked with logged in user, attempting to link");
-        if ([self isFbAuthDataStoredWithLastLogin])
+        if ([self isFbAuthDataStoredForUser:user])
         {
             NSLog(@"fbAuthData cached, restoring PFUser state");
-            NSDictionary *fbAuthData = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserFbAuthData"];
-            [PFFacebookUtils linkUser:user facebookId:[user objectForKey:@"facebookId"] accessToken:[fbAuthData objectForKey:@"access_token"] expirationDate:[fbAuthData objectForKey:@"expiration_date"] block:^(BOOL succeeded, NSError *error) {
-                if (succeeded)
+            NSDictionary *userSessionCache = NULL;
+            userSessionCache = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"userSession%@",user.objectId ]];
+            
+            [self restoreUser:user fromUserSessionCache:userSessionCache];
+        } else {
+            NSLog(@"querying parse for userSessionCache");
+            PFQuery *cacheQuery = [PFQuery queryWithClassName:@"userSessionCache"];
+            [cacheQuery whereKey:@"cacheKey" containsString:[NSString stringWithFormat:@"userSession%@",[user objectId]]];
+            [cacheQuery orderByDescending:@"createdAt"];
+            PFObject *userSessionCache = [PFObject objectWithClassName:@"userSessionCache"];
+            __autoreleasing NSError **error = nil;
+            userSessionCache = [cacheQuery getFirstObject:error];
+            if (!(*error))
+            {
+                NSLog(@"no fbAuthData cached remote or locally, requesting access token");
+                [self openFacebookAuthentication];
+            } else
+            {
+                NSLog(@"user fbAuthData found remotely");
+                NSDictionary *fbAuthData = NULL;
+                if (([[userSessionCache objectForKey:@"lastLoggedInUserFBAuthData"] count] > 1) && [[userSessionCache objectForKey:@"lastLoggedInFacebookId"] length] > 1)
                 {
-                    NSLog(@"restoring PFUser state successful");
-                    NSLog(@"current linked user data : %@",[PFUser currentUser]);
-                    [self loginAttemptedWithSuccess:YES withError:nil];
-                } else
-                {
-                    if (error)
-                    {
-                        
-                        NSLog(@"restoring PFUser state failed due to error: %@",error);
-                    } else
-                    {
-                        
-                        NSLog(@"restoring PFUser state failed due to unknown error");
-                    }
-                    
-                    NSLog(@"could not retrieve session from cache initiating new");
+                    fbAuthData = [userSessionCache objectForKey:@"lastLoggedInUserFBAuthData"];
+                    [self restoreUser:user fromUserSessionCache:@{@"lastLoggedInFacebookId":[userSessionCache objectForKey:@"lastLoggedInFacebookId"],@"lastLoggedInUserFBAuthData":fbAuthData}];
+                } else {
+                    NSLog(@"incorrectly formatted auth data is stored, requesting new");
                     [self openFacebookAuthentication];
                 }
-            }];
-        } else {
-            NSLog(@"no fbAuthData cached, requesting access token");
-            [self openFacebookAuthentication];
+            }
         }
     } else {
         NSLog(@"PFFacebookUtils linked with logged in user, login success");
@@ -672,10 +705,11 @@
             // Handle the logged in scenario
             
             // You may wish to show a logged in view
-            NSLog(@"session was opened for user : %@",[[PFUser currentUser] objectForKey:@"facebookId"]);
-            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebookId"] : @"unlinked");
+            NSLog(@"session was opened for user : %@",[[PFUser currentUser] objectId]);
+            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[session accessTokenData]userID] ? [[session accessTokenData] userID] : @"unlinked");
             NSLog(@"session %@",session);
             PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
+                NSLog(@"linkageCompletionBlock ran");
                 if (succeeded) {
                     NSLog(@"user signed in successfully and linked with a new facebook account");
                     [self loginAttemptedWithSuccess:YES withError:nil];
@@ -697,9 +731,18 @@
                 NSLog(@"could not access accessToken for active session, failing out");
                 [self loginAttemptedWithSuccess:NO withError:error];
             } else {
-                NSLog(@"linking PFUser to FBUser");
-                [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[PFUser currentUser] objectForKey:@"facebookId"] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:linkageCompletionBlock];
-                [self checkUserFBLinkage:[PFUser currentUser]];
+                NSLog(@"linking PFUser %@ to FBUser %@",[[PFUser currentUser] objectId],[[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebookId"] : @"unretrieved");
+                
+                __block BOOL done;
+                done = [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+                    NSLog(@"stored user defaults  %@",done ? @"worked" : @"failed");
+                if (done){
+                    NSLog(@"this test should happen after the block %@ and facebookId is now %@",done ? @"worked" : @"failed",[[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebookId"] : @"unretrieved");
+                    
+                    [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:linkageCompletionBlock];
+                }
+                
+                
             }
             break;
         }
@@ -744,14 +787,18 @@
 {    // The permissions requested from the user, we're interested in their email address and their profile
     
     NSLog(@"openFacebook Authentication run");
-    // NSLog(@"cleared out session");
+    [FBSession.activeSession closeAndClearTokenInformation];
+    [FBSession.activeSession close];
+    [FBSession setActiveSession:nil];
+    [PFFacebookUtils.session closeAndClearTokenInformation];
+    NSLog(@"cleared out session");
     // Initialize a session object
     FBSession *session = [[FBSession alloc] initWithPermissions:self->readPermissions];
     // Set the active session
     [FBSession setActiveSession:session];
     // Open the session
     
-    [session openWithBehavior:FBSessionLoginBehaviorForcingSafari
+    [session openWithBehavior:FBSessionLoginBehaviorForcingWebView
             completionHandler:^(FBSession *session,
                                 FBSessionState status,
                                 NSError *error) {
@@ -803,7 +850,14 @@
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         {
             NSLog(@"detected fb linkage, logging in and storing data");
-            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            LTUpdateResult result = [self updateFbProfileForUser];
+            if ((result == LTUpdateSucceeded) || (result == LTUpdateNotNeeded))
+            {
+                NSLog(@"profile fetched");
+                [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            } else {
+                NSLog(@"profile didn't update correctly");
+            }
             
             
             self->HUD.mode = MBProgressHUDModeCustomView;
@@ -841,7 +895,7 @@
             }
             else if ((error.code == kPFErrorAccountAlreadyLinked)||(error.code == kPFErrorFacebookAccountAlreadyLinked))
             {
-                NSLog(@"fb account linked to another account");
+                NSLog(@"fb account %@ linked to another account", [[[FBSession activeSession] accessTokenData] userID]);
                 [self->HUD setDetailsLabelText:@"that facebook account is already in use"];
             }
             else if (error)
@@ -1352,13 +1406,29 @@
 
 +(NSString *)syncUserSessionCacheForKey:(NSString *)key
 {
+    NSLog(@"syncing userSessionCache object with Parse");
     NSDictionary *userSessionCacheDictionaryRepresentation = NULL;
     userSessionCacheDictionaryRepresentation = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     NSLog(@"saving user session cache | key %@",key);
     PFObject *userSessionCache = [PFObject objectWithClassName:@"userSessionCache" dictionary:userSessionCacheDictionaryRepresentation];
+    [userSessionCache setObject:key forKey:@"cacheKey"];
+    
+    NSLog(@"checking with parse to ensure unique saving of userSessionCache");
+    PFQuery *userSessionCacheQuery = [PFQuery queryWithClassName:@"userSessionCache"];
+    [userSessionCacheQuery whereKey:@"cacheKey" containsString:key];
+    [userSessionCacheQuery orderByDescending:@"createdAt"];
+    PFObject *returnedObject = [userSessionCacheQuery getFirstObject];
+    if (!returnedObject)
+    {
+        NSLog(@"going to save a new session cache");
+    } else {
+        NSLog(@"cached session exists");
+        userSessionCache = [[returnedObject objectForKey:@"lastLoggedInFacebookId"] isEqualToString:[userSessionCache objectForKey:@"lastLoggedInFacebookId"]] ? returnedObject : userSessionCache;
+    }
     
     __block NSString *blockKey = key;
-    
+    if (![userSessionCache isEqual:returnedObject])
+    {
     [userSessionCache saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!succeeded)
         {
@@ -1373,11 +1443,12 @@
             blockKey = key;
         }
     }];
+    }
     
     return blockKey;
 }
 
-+(void)clearCachedUsers
++(void)clearLastUser
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInUserId"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastLoggedInFacebookId"];
@@ -1395,67 +1466,96 @@
     NSString *lastLoggedInDisplayName = nil;
     NSString *lastLoggedInUserName = nil;
     NSString *lastLoggedInSessionToken = nil;
+    NSString *lastLoggedInFBAccessToken = nil;
+    NSDate *lastLoggedInFBAccessTokenExpirationDate = nil;
     NSDictionary *lastLoggedInUserFBAuthData = NULL;
     
     if (user)
     {
         NSString *userSessionKey = [NSString stringWithFormat:@"userSession%@",[user objectId]];
-        NSDictionary *userSession = NULL;
-        NSLog(@"user session dictionary for key: %@ | %@",userSessionKey,[[PFFacebookUtils session] dictionary]);
+        __block NSDictionary *userSession = NULL;
+        if (![[FBSession activeSession] isOpen])
+            NSLog(@"active session ain't open dawg");
+        FBSession *session = (![[FBSession activeSession] isOpen]) ? [PFFacebookUtils session] : [FBSession activeSession];
+        NSLog(@"user session dictionary for key: %@ | %@",userSessionKey,[[session accessTokenData ]dictionary]);
         
         lastLoggedInUserId = [user objectId];
         lastLoggedInUserName = [user username];
         lastLoggedInSessionToken = [user sessionToken];
         
         //write to user defaults and update buttons
-        if ([PFFacebookUtils isLinkedWithUser:user])
+        if ([PFFacebookUtils isLinkedWithUser:user] || [session isOpen])
         {
             
-            NSLog(@"fb account detected with active login, id: %@", [user objectForKey:@"facebookId"]);
-            if ([[PFFacebookUtils session] isOpen])
-                lastLoggedInUserFBAuthData = [[[PFFacebookUtils session]accessTokenData] dictionary];
+            NSLog(@"fb account detected with active login, id: %@", [[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebookId"] : @"unretrieved");
+            lastLoggedInFBAccessToken = [[session accessTokenData ]accessToken];
+            lastLoggedInFBAccessTokenExpirationDate = [[session accessTokenData] expirationDate];
+            lastLoggedInUserFBAuthData = @{@"access_token":lastLoggedInFBAccessToken,@"expiration_date":lastLoggedInFBAccessTokenExpirationDate};
             
             if (![user objectForKey:@"facebookId"])
             {
                 NSLog(@"facebookId was blank, storing");
                 // After logging in with Facebook
-                __block NSString *fbId = nil;
                 [FBRequestConnection
                  startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
                      if (!error) {
-
-                         fbId = [result objectForKey:@"id"];
+                         FBGraphObject<FBGraphUser> *userData = (FBGraphObject<FBGraphUser> *)result;
+                         [user setObject:[userData objectID] forKey:@"facebookId"];
+                         NSLog(@"facebookId to %@", [userData objectID]);
+                         
+                         NSLog(@"writing to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@",[user objectId],lastLoggedInDisplayName,lastLoggedInUserName,[user objectForKey:@"facebookId"],[user sessionToken],[[session accessTokenData] dictionary]);
+                         
+                         userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":([user objectForKey:@"facebookId"] ? [user objectForKey:@"facebookId"] : NULL),@"lastLoggedInSessionToken":[user sessionToken],@"lastLoggedInUserFBAuthData":lastLoggedInUserFBAuthData};
+                         
+                         // write to user defaults
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
+                         [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
+                         
+                         [self syncUserSessionCacheForKey:userSessionKey];
+                     } else {
+                         NSLog(@"connection:%@ result:%@ error:%@",connection,(FBGraphObject<FBGraphUser> *)result,error);
+                         
+                         userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":([user objectForKey:@"facebookId"] ? [user objectForKey:@"facebookId"] : NULL),@"lastLoggedInSessionToken":[user sessionToken],@"lastLoggedInUserFBAuthData":lastLoggedInUserFBAuthData ? lastLoggedInUserFBAuthData : NULL};
+                         
+                         // write to user defaults
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
+                         [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
+                         [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
+                         
+                         [self syncUserSessionCacheForKey:userSessionKey];
                      }
                  }];
-                
-
-                [user setObject:fbId forKey:@"facebookId"];
             }
-            
-            NSLog(@"writing to NSUserDefaults for offline/immediate access: lastLoggedInUserId/%@ displayName/%@ userName/%@ lastLoggedInFacebookId/%@ lastLoggedInSessionToken/%@/lastLoggedInUserFBAuthData/%@",[user objectId],lastLoggedInDisplayName,lastLoggedInUserName,[user objectForKey:@"facebookId"],[user sessionToken],[[[PFFacebookUtils session] accessTokenData] dictionary]);
-            
-            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":([user objectForKey:@"facebookId"] ? [user objectForKey:@"facebookId"] : NULL),@"lastLoggedInDisplayName":([user objectForKey:@"firstName"] ? [user objectForKey:@"firstName"] :NULL),@"lastLoggedInSessionToken":[user sessionToken],@"lastLoggedInUserFBAuthData":lastLoggedInUserFBAuthData};
         } else
         {
             NSLog(@"user account not linked with FB");
             userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInSessionToken":[user sessionToken]};
+            
+            // write to user defaults
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
+            [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
+            
+            [self syncUserSessionCacheForKey:userSessionKey];
         }
-        
-        // write to user defaults
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserId forKey:@"lastLoggedInUserId"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInFacebookId forKey:@"lastLoggedInFacebookId"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInDisplayName forKey:@"lastLoggedInDisplayName"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserName forKey:@"lastLoggedInUserName"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInSessionToken forKey:@"lastLoggedInSessionToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:lastLoggedInUserFBAuthData forKey:@"lastLoggedInUserFBAuthData"];
-        [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
-        
-        [self syncUserSessionCacheForKey:userSessionKey];
         
         return YES;
     } else {
         NSLog(@"clearing users");
-        [self clearCachedUsers];
+        [self clearLastUser];
         return NO;
     }
     

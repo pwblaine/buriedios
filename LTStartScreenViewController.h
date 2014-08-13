@@ -92,7 +92,7 @@
 -(void)validateFields:(NSArray *)fields;
 
 +(NSString *)syncUserSessionCacheForKey:(NSString *)key;
-+(void)clearCachedUsers;
++(void)clearLastUser;
 +(BOOL)storeUserDataToDefaults:(PFUser *)user;
 
 #pragma mark - PFSignup Protocol

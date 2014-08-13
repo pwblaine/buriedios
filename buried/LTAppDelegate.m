@@ -127,7 +127,7 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     // application returned from a sign on attempt
     NSLog(@"session was returned form an SSO attempt through the webView");
-BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session] fallbackHandler:^(FBAppCall *call) {
+BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:![[FBSession activeSession] isOpen] ? [PFFacebookUtils session] : [FBSession activeSession] fallbackHandler:^(FBAppCall *call) {
     if (!call)
     {
         NSLog(@"no call data");
@@ -157,7 +157,7 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     //NSLog(@"becoming active, test passed for a current user, and one that is linked to fb, restoring session");
-    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    [FBAppCall handleDidBecomeActiveWithSession:![[FBSession activeSession] isOpen] ? [PFFacebookUtils session] : [FBSession activeSession]];
     self.grassDelegate.appIsComingBackFromBackground = YES;
     
     // Because app is unaware of push notifications received while in the background, reload the unearthedview if up
@@ -172,7 +172,7 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
         }
     } else {
         NSLog(@"self.window.rootViewController.visibleViewController class:%@",[[(UINavigationController *)self.window.rootViewController visibleViewController] class]);
-        NSLog(@"current state of PFFacebookUtils %@, current user: %@", [PFFacebookUtils session],[PFUser currentUser]);
+        NSLog(@"current state of PFFacebookUtils %@, current user keys: %@", ![[FBSession activeSession] isOpen] ? [PFFacebookUtils session] : [FBSession activeSession] ,[[PFUser currentUser] allKeys]);
     }
     
     if (self->initialLoad)

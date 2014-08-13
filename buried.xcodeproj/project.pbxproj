@@ -770,6 +770,8 @@
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
 					"~/Documents/FacebookSDK",
+					"~/Documents/Parse",
+					"~/Documents/Bolts",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -801,6 +803,8 @@
 					"~/Documents",
 					"$(PROJECT_DIR)/UbertestersSDK",
 					"~/Documents/FacebookSDK",
+					"~/Documents/Parse",
+					"~/Documents/Bolts",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
