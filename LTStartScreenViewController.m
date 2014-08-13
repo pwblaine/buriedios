@@ -118,7 +118,7 @@
     else
     {
         
-        NSLog(@"user found with id %@ & name %@ & fbid %@ & username %@ & sessionToken %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInFacebookId"], [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"]);
+        NSLog(@"user found with id %@ & username %@ & displayname %@ & fbid %@ & sessionToken %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserId"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInUserName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInFacebookId"], [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInSessionToken"]);
         return YES;
     }
 }
@@ -672,8 +672,8 @@
             // Handle the logged in scenario
             
             // You may wish to show a logged in view
-            NSLog(@"session was opened for user : %@",[[session accessTokenData] userID]);
-            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[[PFUser currentUser] objectForKey:@"authData"] objectForKey:@"facebook"] : @"unlinked");
+            NSLog(@"session was opened for user : %@",[[PFUser currentUser] objectForKey:@"facebookId"]);
+            NSLog(@"current user is %@ with a facebook id of %@",[[PFUser currentUser] objectId], [[PFUser currentUser] objectForKey:@"facebookId"] ? [[PFUser currentUser] objectForKey:@"facebook"] : @"unlinked");
             NSLog(@"session %@",session);
             PFBooleanResultBlock linkageCompletionBlock = ^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
@@ -698,7 +698,7 @@
                 [self loginAttemptedWithSuccess:NO withError:error];
             } else {
                 NSLog(@"linking PFUser to FBUser");
-                [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[session accessTokenData] userID] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:linkageCompletionBlock];
+                [PFFacebookUtils linkUser:[PFUser currentUser] facebookId:[[PFUser currentUser] objectForKey:@"facebookId"] accessToken:[[session accessTokenData] accessToken] expirationDate:[[session accessTokenData] expirationDate] block:linkageCompletionBlock];
                 [self checkUserFBLinkage:[PFUser currentUser]];
             }
             break;
@@ -826,7 +826,7 @@
                 didLogIn = NO;
             }
         } else
-        {
+        {NSLog(@"facebook not linked with the current usah");
             didLogIn = NO;
         }
     }
