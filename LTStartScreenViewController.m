@@ -317,6 +317,8 @@
 
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    self->lastLoggedInLabel.alpha = 0;
 }
 
 -(void)changeButtonsForSavedUser
@@ -643,7 +645,9 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self disableAllBarButtons];
-    [self initiateLoginSequence];
+    
+    [self loginAttemptedWithSuccess:YES withError:nil];
+    
 }
 
 
@@ -824,27 +828,25 @@
             
             if (updateProfileResult == LTUpdateNotNeeded || updateProfileResult == LTUpdateSucceeded)
             {
-              [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
             
             
             self->HUD.mode = MBProgressHUDModeCustomView;
             self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
             self->HUD.labelText = @"welcome to buried";
             self->HUD.detailsLabelText = nil;
-            [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
+            
             
             [self enableAllBarButtons];
             }
-            else
-            {
-                didLogIn = NO;
-            }
-        } else
+        }
+            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+            
+            [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
+    }else
         {
             didLogIn = NO;
         }
-    }
-    
+
     NSString *errorMessage = nil;
     if (error)
         errorMessage = [[error domain] isEqualToString:FacebookSDKDomain] ? [FBErrorUtility userMessageForError:error] : [FBErrorUtility userMessageForError:error];
@@ -1439,7 +1441,7 @@
             if ([user objectForKey:@"facebookId"])
             {
                 NSLog(@"facebookId was blank, storing");
-                [user setObject:lastLoggedInUserFBAuthData[@"id"] forKey:@"facebookId"];
+                //[user setObject:lastLoggedInUserFBAuthData[@"id"] forKey:@"facebookId"];
             }
            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
         } else
