@@ -14,6 +14,7 @@
 #import "UIBarButtonItem+_projectButtons.h"
 #import "LTAdminTableViewController.h"
 #import "LTStartScreenViewController.h"
+#import <ParseUI/ParseUI.h>
 
 @interface LTUnearthedViewController () {
     LTAdminTableViewController * adminTableVC;

@@ -14,6 +14,7 @@
 #import "LTUnearthedViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
+#import <ParseUI/ParseUI.h>
 
 @interface LTCapsuleViewController ()
 

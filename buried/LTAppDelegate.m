@@ -9,6 +9,9 @@
 #import "LTBuryItViewController.h"
 #import "LTUnearthedViewController.h"
 #import "LTGrassViewController.h"
+#import <ParseUI/ParseUI.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+
 
 @implementation LTAppDelegate
 
@@ -20,6 +23,7 @@
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
+    // window is grabbed in app delegate as a singleton for the grass, possibly pointless as is
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     //Ubertersters SDK initialization

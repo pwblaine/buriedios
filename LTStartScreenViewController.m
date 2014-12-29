@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import "LTAppDelegate.h"
 #import "LTStartScreenViewController.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 @interface LTStartScreenViewController()
 

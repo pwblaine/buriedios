@@ -7,6 +7,7 @@
 //
 
 #import "LTAdminTableViewController.h"
+#import <ParseUI/ParseUI.h>
 
 @interface LTAdminTableViewController ()
 
@@ -125,8 +126,6 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    [super objectsDidLoad:error];
-    
 }
 
 -(void)didReceiveMemoryWarning
@@ -139,9 +138,9 @@
     
     static NSString *CellIdentifier = @"Cell";
     
-    PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell
@@ -173,7 +172,7 @@
     self.HUD.labelText = @"sending...";
     [self.HUD show:YES];
     
-    __block PFUser *userInFocus = (PFUser *)[self objectAtIndexPath:indexPath];
+    __block PFUser *userInFocus = [PFUser currentUser];
     __block PFQuery *capsuleQuery = [PFQuery queryWithClassName:@"capsule"];
     [capsuleQuery orderByDescending:@"deliveryDate"];
     [capsuleQuery whereKey:@"fromUserId" containsString:userInFocus.objectId]; // must be from selected user

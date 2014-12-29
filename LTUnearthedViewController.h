@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "LTGrassViewController.h"
 #import "MBProgressHUD.h"
+#import <ParseUI/ParseUI.h>
 
 @interface LTUnearthedViewController : PFQueryTableViewController <NSURLConnectionDelegate, UINavigationControllerDelegate, LTGrassViewControllerDelegate, UITableViewDelegate, MBProgressHUDDelegate>
 {

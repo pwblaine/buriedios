@@ -15,10 +15,14 @@
     
 }
 
+-(void)objectsDidLoad:(NSError *)error;
+
 @property PFUser *admin;
 
 @property __block NSMutableArray *users;
 
 @property __block NSArray *latestCapsules;
+
+@property BOOL loadingViewEnabled;
 
 @end

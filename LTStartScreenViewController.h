@@ -11,6 +11,7 @@
 #import "MBProgressHUD.h"
 #import "LTGrassViewController.h"
 #import "Facebook.h"
+#import <ParseUI/ParseUI.h>
 
 @class  FBSession;
 
