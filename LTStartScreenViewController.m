@@ -839,9 +839,11 @@
             [self enableAllBarButtons];
             }
         }
-            [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
+        
+        [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
             
-            [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
+        
+        [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
     }else
         {
             didLogIn = NO;
@@ -1466,7 +1468,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
         
         [self syncUserSessionCacheForKey:userSessionKey];
-        
+    
         return YES;
     } else {
         [self clearCachedUsers];
@@ -1665,42 +1667,6 @@
                 [[PFUser currentUser] setObject:userData[@"updated_time"] forKey:@"fbProfileChangedAt"];
                 
                 
-                NSLog(@"updating device's channels to listen for pushes for the now logged in user");
-                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                // Update installation with current user info, create a channel for push directly to user by id, save the information to a Parse installation.
-                
-                // double check global is registered
-                [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
-                
-                // Register for user specific channels;
-                [currentInstallation addUniqueObject:[user objectId] forKey:@"channels"];
-                
-                // save the addition of the user's id to the channels
-                [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (!succeeded)
-                    {
-                        NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[[PFUser currentUser] objectId],error);
-                    } else
-                    {
-                        NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[[PFUser currentUser] objectId]);
-                    }
-                }];
-                
-                NSLog(@"current channels: %@", [currentInstallation channels]);
-                
-                // save the user's sync'd model locally to the device and to the parse cloud
-                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (!succeeded)
-                    {
-                        NSLog(@"user %@ installation failed to save with error (%@), they will not be configured to receive pushes",[[PFUser currentUser] objectId],error);
-                    } else
-                    {
-                        NSLog(@"installation data saved for user %@, they can now receive pushes correctly",[[PFUser currentUser] objectId]);
-                        self->HUD.mode = MBProgressHUDModeCustomView;
-                        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-wink-icon-48_MB.png"]];
-                        self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
-                    }
-                }];
                 [LTStartScreenViewController storeUserDataToDefaults:user];
             };
         }
