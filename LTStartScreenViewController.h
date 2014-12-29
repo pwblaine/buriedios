@@ -144,3 +144,4 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
 -(void)loginAttemptedWithSuccess:(BOOL)success withError:(NSError *)error; // result method in either success or failure and notify user
 
 @end
+

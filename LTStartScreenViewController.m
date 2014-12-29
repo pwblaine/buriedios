@@ -35,7 +35,7 @@
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
         self->goBackButton = [[UIBarButtonItem alloc] initWithTitle:@"go back" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
-        self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(clearButtonTouchHandler:)];
+        self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->facebookLoginButton = [[FBLoginView alloc] initWithReadPermissions:nil];
         self->barButtons = [[NSMutableArray alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->notYouButton,self->clearButton,self->continueButton, self->facebookLoginButton,  nil];
         self->centerLogoPostition = CGRectMake(40,149,240,128);
@@ -395,6 +395,7 @@
 - (IBAction)goBackButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
         [self signUpViewControllerDidCancelSignUp:self.signUpVC];
@@ -409,6 +410,13 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self->currentResponder setText:nil];
+    if ([self.emailField hasText])
+        [self.emailField setText:nil];
+    else if ([self.passwordField hasText])
+        [self.passwordField setText:nil];
+    else if ([self.confirmField hasText])
+        [self.confirmField setText:nil];
+    [self.navigationItem setLeftBarButtonItem:self->goBackButton animated:YES];
 }
 
 - (NSMutableArray *)getTaggedElementsForView:(UIView *)view
@@ -447,11 +455,16 @@
 
 - (void)showView:(UIView *)view
 {
-    
     [self clearHUD];
     
     [self disableAllBarButtons];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    if ((buriedLogo.center.x != 160 ) && (buriedLogo.center.y != 568))
+        [buriedLogo setCenter:CGPointMake(160, 568)];
+    else ([buriedLogo setCenter:CGPointMake(self->topLogoPosition.origin.x,self->topLogoPosition.origin.y)]);
+        [buriedLogo setCenter:CGPointMake(160, self->topLogoPosition.origin.y)];
+    
     
     // only bounce in significantly if coming from off screen
     float damping = 0.8;
@@ -522,13 +535,14 @@
     [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
         if ([view isDescendantOfView:self->savedAccountView])
         {
-            self->buriedLogo.frame = self->centerLogoPostition;
+            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,self->centerLogoPostition.origin.y);
         } else if ([view isDescendantOfView:self->startView])
         {
-            self->buriedLogo.center = self.view.center;
+            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,view.center.y);
         } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:self->loginView])
         {
-            self->buriedLogo.frame = self->topLogoPosition;
+            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,2*self->topLogoPosition.origin.y);
+            
         }
     } completion:^(BOOL finished) {
         NSLog(@"logo bounced in");
@@ -969,7 +983,7 @@
     if ([self->currentTextFields indexOfObject:textField] < (self->currentTextFields.count - 1))
         isNotLast = YES;
     
-    self.navigationItem.leftBarButtonItem = self->clearButton;
+    self.navigationItem.leftBarButtonItem = self->goBackButton;
     
     NSLog(@"currentResponder - %@ | textfield - %@",self->currentResponder.accessibilityLabel,textField.accessibilityLabel);
     
