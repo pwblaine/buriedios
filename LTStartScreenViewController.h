@@ -35,9 +35,14 @@
     IBOutlet FBLoginView *facebookLoginButton;
     
     CGPoint originalViewCenter;
+    CGPoint currentLogoPosition;
+    CGPoint staticLogoPosition;
     
-    CGRect topLogoPosition;
-    CGRect centerLogoPostition;
+    CGPoint topLogoPosition;
+    CGPoint centerLogoPostition;
+    
+    CGPoint underLogoPosition;
+    CGPoint overLogoPosition;
     
     CGRect textFieldHighPosition;
     CGRect textFieldMedHighPosition;
@@ -62,6 +67,9 @@
     CALayer *initialBorderSpecs;
     
     NSArray *readPermissions;
+    
+    CGRect buriedLogoPosition;
+    
 }
 
 @property IBOutlet UITextField *passwordField;

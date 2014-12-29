@@ -38,10 +38,27 @@
         self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->facebookLoginButton = [[FBLoginView alloc] initWithReadPermissions:nil];
         self->barButtons = [[NSMutableArray alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->notYouButton,self->clearButton,self->continueButton, self->facebookLoginButton,  nil];
-        self->centerLogoPostition = CGRectMake(40,149,240,128);
-        self->topLogoPosition = CGRectMake(40,74,240,128);
+        
+        self->staticLogoPosition = CGPointMake(180, 74);
+        self->centerLogoPostition = CGPointMake(160,149+64);
+        self->topLogoPosition = CGPointMake(160,74+64);
+        self->underLogoPosition = CGPointMake(160, 568);
+        self->overLogoPosition = CGPointMake(160, -128);
+        
+        self->currentLogoPosition = self->underLogoPosition;
+        
+        self->buriedLogo.bounds = CGRectMake(120, 0, 240, 128);
+        self->buriedLogo.frame = CGRectMake(160, 568, 240, 128);
+        
         self->currentViewElements = [[NSMutableArray alloc] init];
         self->readPermissions = [[NSArray alloc] initWithObjects:@"public_profile", @"email",@"user_friends",nil];
+        
+        [self clearHUD];
+        
+        [self disableAllBarButtons];
+        NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+        
+       
     }
     return self;
 }
@@ -92,6 +109,24 @@
         leftImageView.alpha = 0.5;
         [textField  setLeftViewMode: UITextFieldViewModeAlways];
     }
+    // only bounce in significantly if coming from off screen
+    float damping = 0.8;
+    float velocity = 0.5;
+    float duration = 1;
+    if ((self->buriedLogo.frame.origin.y >= 568) || (self->buriedLogo.frame.origin.y <= 0))
+    {
+        NSLog(@"buried logo coming in from off screen!");
+        damping = 0.6;
+        duration = 2;
+        velocity = 0.4;
+    }
+    // set up logo animation in block above
+    
+    [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self->buriedLogo.center = self->staticLogoPosition;
+    } completion:^(BOOL finished) {
+        NSLog(@"logo bounced in");
+    }];
 }
 
 
@@ -282,16 +317,6 @@
 
 -(void) viewDidDisappear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    // Add login/sign in navigation bar button
-    
-    [self->HUD hide:YES];
-    
-    [self->currentViewElements arrayByAddingObjectsFromArray:self.view.subviews];
-    [self->currentViewElements removeObject:self->buriedLogo];
-    
-    [self hideViewElements:self->currentViewElements];
-    
-    self->currentViewState = nil;
 }
 
 -(void)changeButtonsForSavedUser
@@ -396,6 +421,8 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
+    [self returnViewToOrigin];
+    
     if ([self->signUpView isDescendantOfView:self->currentViewState])
     {
         [self signUpViewControllerDidCancelSignUp:self.signUpVC];
@@ -403,6 +430,7 @@
     {
         [self logInViewControllerDidCancelLogIn:self.logInVC];
     }
+    
     
 }
 
@@ -460,17 +488,12 @@
     [self disableAllBarButtons];
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     
-    if ((buriedLogo.center.x != 160 ) && (buriedLogo.center.y != 568))
-        [buriedLogo setCenter:CGPointMake(160, 568)];
-    else ([buriedLogo setCenter:CGPointMake(self->topLogoPosition.origin.x,self->topLogoPosition.origin.y)]);
-        [buriedLogo setCenter:CGPointMake(160, self->topLogoPosition.origin.y)];
-    
     
     // only bounce in significantly if coming from off screen
     float damping = 0.8;
     float velocity = 0.5;
     float duration = 1;
-    if (self->buriedLogo.center.y > 568)
+    if ((self->buriedLogo.frame.origin.y > 568) || (self->buriedLogo.frame.origin.y < 0))
     {
         NSLog(@"buried logo coming in from off screen!");
         damping = 0.6;
@@ -533,17 +556,6 @@
     }
     
     [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:damping initialSpringVelocity:velocity options:UIViewAnimationOptionCurveEaseOut animations:^{
-        if ([view isDescendantOfView:self->savedAccountView])
-        {
-            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,self->centerLogoPostition.origin.y);
-        } else if ([view isDescendantOfView:self->startView])
-        {
-            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,view.center.y);
-        } else if ([view isDescendantOfView:signUpView] || [view isDescendantOfView:self->loginView])
-        {
-            self->buriedLogo.center = CGPointMake(self->buriedLogo.center.x,2*self->topLogoPosition.origin.y);
-            
-        }
     } completion:^(BOOL finished) {
         NSLog(@"logo bounced in");
     }];
@@ -1260,6 +1272,7 @@
     
     self.navigationItem.leftBarButtonItem = self->goBackButton;
     self.navigationItem.rightBarButtonItem = self->submitButton;
+
 }
 
 -(void)returnViewToOrigin {
@@ -1520,7 +1533,6 @@
         self->HUD.labelText = @"invalid email address";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
-        
         return NO;
     } else if (self.passwordField.text.length < 1)  {
         self->HUD.mode = MBProgressHUDModeCustomView;
