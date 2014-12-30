@@ -34,10 +34,10 @@
         self->continueButton = [[UIBarButtonItem alloc] initWithTitle:@"continue" style:UIBarButtonItemStyleBordered target:self action:@selector(continueButtonTouchHandler:)];
         self->submitButton = [[UIBarButtonItem alloc] initWithTitle:@"submit" style:UIBarButtonItemStyleBordered target:self action:@selector(submitButtonTouchHandler:)];
         self->goBackButton = [[UIBarButtonItem alloc] initWithTitle:@"go back" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
-        self->notYouButton = [[UIBarButtonItem alloc] initWithTitle:@"not you?" style:UIBarButtonItemStyleBordered target:self action:@selector(notYouButtonTouched:)];
+        self->logOutButton = [[UIBarButtonItem alloc] initWithTitle:@"log out" style:UIBarButtonItemStyleBordered target:self action:@selector(logOutButtonTouched:)];
         self->clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(goBackButtonTouchHandler:)];
         self->facebookLoginButton = [[FBLoginView alloc] initWithReadPermissions:nil];
-        self->barButtons = [[NSMutableArray alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->notYouButton,self->clearButton,self->continueButton, self->facebookLoginButton,  nil];
+        self->barButtons = [[NSMutableArray alloc] initWithObjects:self->signInButton,self->signUpButton,self->submitButton,self->goBackButton,self->logOutButton,self->clearButton,self->continueButton, self->facebookLoginButton,  nil];
         
         self->staticLogoPosition = CGPointMake(180, 74);
         self->centerLogoPostition = CGPointMake(160,149+64);
@@ -339,7 +339,7 @@
         NSLog(@"navBar elements loaded and enabled");
         
         [self.navigationItem setRightBarButtonItem:self->continueButton animated:YES];
-        [self.navigationItem setLeftBarButtonItem:self->notYouButton animated:YES];
+        [self.navigationItem setLeftBarButtonItem:self->logOutButton animated:YES];
     } else {
         if (![PFUser currentUser])
         {
@@ -422,6 +422,8 @@
 - (IBAction)goBackButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    [self->currentResponder resignFirstResponder];
     
     [self returnViewToOrigin];
     
@@ -820,6 +822,18 @@
 {
     if (didLogIn && !error)
     {
+        // remove user from device channels
+        NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+        NSString *userObjectId = [[PFUser currentUser] objectId];
+        [mutableChannels addObject:userObjectId];
+        NSLog(@"removing user from push channels");
+        [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+        NSLog(@"storing userId as last logged in...");
+        [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
+        NSLog(@"saving updated installation data to Parse...");
+        [[PFInstallation currentInstallation] saveEventually];
+        NSLog(@"active channels for push: %@",mutableChannels);
+        
         if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
         {
             NSLog(@"detected fb linkage, logging in and storing data");
@@ -1304,7 +1318,7 @@
     return NO; // disabled, textFields just close
 }
 
-- (IBAction)notYouButtonTouched:(id)sender
+- (IBAction)logOutButtonTouched:(id)sender
 {
     // as of this moment ass this button does is to clear the stored userId for the last logged in user to remove the greeting, however, with the new account management branch, this will play an integral role in switching accounts and allowing the user to authenticate again as someone else
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);

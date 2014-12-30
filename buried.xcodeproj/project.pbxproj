@@ -775,12 +775,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"~/Documents",
-					"~/Documents/FacebookSDK",
+					"~/Documents/Workspace/Frameworks/FacebookSDK",
+					"~/Documents/Workspace/Frameworks",
 					"$(PROJECT_DIR)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					/Users/patrickblaine/Documents,
-					/Users/patrickblaine/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";
@@ -809,12 +807,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"~/Documents",
-					"~/Documents/FacebookSDK",
+					"~/Documents/Workspace/Frameworks/FacebookSDK",
+					"~/Documents/Workspace/Frameworks",
 					"$(PROJECT_DIR)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					/Users/patrickblaine/Documents,
-					/Users/patrickblaine/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "buried/buried-Prefix.pch";

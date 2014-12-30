@@ -37,7 +37,7 @@
 
 #pragma mark - Logout methods
 
-- (void)logoutButtonTouchHandler:(id)sender;
+- (void)goBackButtonTouchHandler:(id)sender;
 - (void)buryItButtonTouchHandler:(id)sender;
 
 #pragma mark - UINavigationControllerDelegate

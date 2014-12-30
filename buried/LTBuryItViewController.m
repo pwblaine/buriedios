@@ -94,7 +94,7 @@
     errorColor = [UIColor colorWithRed:111/255.0f green:0/255.0f blue:8/255.0f alpha:1.0f];
     successColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
     
-    // Add logout navigation bar button
+    // Add cancel burying a capsule navigation bar button
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     

@@ -56,7 +56,7 @@
     UIBarButtonItem *submitButton;
     UIBarButtonItem *goBackButton;
     UIBarButtonItem *clearButton;
-    UIBarButtonItem *notYouButton;
+    UIBarButtonItem *logOutButton;
     
     NSMutableArray *barButtons;
     
@@ -86,7 +86,7 @@
 - (IBAction)signUpButtonTouchHandler:(id)sender;
 - (IBAction)signInButtonTouchHandler:(id)sender;
 - (IBAction)continueButtonTouchHandler:(id)sender;
-- (IBAction)notYouButtonTouched:(id)sender;
+- (IBAction)logOutButtonTouched:(id)sender;
 - (IBAction)goBackButtonTouchHandler:(id)sender;
 - (IBAction)clearButtonTouchHandler:(id)sender;
 

@@ -104,10 +104,9 @@
     //self.tableView.tableHeaderView = self->awaitBadge;
     self->awaitBadge.center = CGPointMake(self.refreshControl.center.x, self.refreshControl.center.y + (self->awaitBadge.bounds.size.height));
     
-    // Add logout navigation bar button
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
-    [logoutButton setEnabled:NO];
-    self.navigationItem.leftBarButtonItem = logoutButton;
+    // Add go back to home navigation bar button
+    UIBarButtonItem *goBackButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(goBackButtonTouchHandler:)];
+    self.navigationItem.leftBarButtonItem = goBackButton;
     
     // Add camera navigation bar button
     UIBarButtonItem *buryItButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(buryItButtonTouchHandler:)];
@@ -116,6 +115,14 @@
     
     // Add the temporary title
     self.title = @"buried.";
+    
+    // clear any badges
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    if (currentInstallation.badge > 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+        NSLog(@"clearing badges for user.  badges: %d",(int)currentInstallation.badge);
+    }
     
 }
 
@@ -510,17 +517,11 @@
 
 #pragma mark Logout methods
 
-- (void)logoutButtonTouchHandler:(id)sender {
+- (void)goBackButtonTouchHandler:(id)sender {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"logging out");
+    NSLog(@"returning to home screen");
     
-    // clear any badges
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    if (currentInstallation.badge > 0) {
-        currentInstallation.badge = 0;
-        [currentInstallation saveEventually];
-        NSLog(@"clearing badges for user.  badges: %d",(int)currentInstallation.badge);
-    }
+    
     
     PFUser *user = [PFUser currentUser];
     
@@ -533,7 +534,7 @@
     NSLog(@"storing userId as last logged in...");
     [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
     NSLog(@"saving updated installation data to Parse...");
-    [currentInstallation saveEventually];
+    [[PFInstallation currentInstallation] saveEventually];
     NSLog(@"active channels for push: %@",mutableChannels);
     
     // Return to login view controller

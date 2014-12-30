@@ -27,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button hidden="YES" opaque="NO" alpha="0.0" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-Oc-O4y">
+                <button hidden="YES" opaque="NO" alpha="0.0" tag="3" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-Oc-O4y">
                     <rect key="frame" x="40" y="400" width="240" height="30"/>
                     <accessibility key="accessibilityConfiguration" label="forgot your password?"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -49,7 +49,7 @@
                     </connections>
                 </button>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="confirm password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kzB-8P-fji" userLabel="confirm">
-                    <rect key="frame" x="40" y="405" width="240" height="32"/>
+                    <rect key="frame" x="40" y="380" width="240" height="32"/>
                     <accessibility key="accessibilityConfiguration" label="confirm password"/>
                     <attributedString key="attributedText"/>
                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light"/>
@@ -58,7 +58,7 @@
                     </connections>
                 </textField>
                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BfP-qd-LXR" userLabel="password">
-                    <rect key="frame" x="40" y="316" width="240" height="32"/>
+                    <rect key="frame" x="40" y="300" width="240" height="32"/>
                     <accessibility key="accessibilityConfiguration" label="password"/>
                     <attributedString key="attributedText"/>
                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light"/>
