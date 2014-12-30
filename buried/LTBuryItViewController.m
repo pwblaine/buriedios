@@ -108,7 +108,7 @@
         [self checkForItemsAndSetClearOrCancel];
     
     // Add the temporary title
-    self.title = @"New Capsule";
+    self.title = @"new capsule";
     [self setMessageToUserForTimeframe];
     
     emailTextField.placeholder = @"for my eyes only";
@@ -202,7 +202,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
             [self applyImagePreview];
         else
             [self resetCamera];
-        UIBarButtonItem *clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
+        UIBarButtonItem *clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
         self.navigationItem.leftBarButtonItem = clearButton;
         return YES;
     } else {

@@ -124,6 +124,9 @@
 
 -(LTGrassState)defaultGrassStateForView;
 
+-(void)disableAllBarButtons;
+-(void)enableAllBarButtons;
+
 #pragma mark LTUpdateResult
 
 typedef NS_ENUM(NSInteger, LTUpdateResult) {
@@ -150,6 +153,7 @@ typedef NS_ENUM(NSInteger, LTUpdateResult) {
 -(LTUpdateResult)updateFbProfileForUser; // update profile from FB and store in defaults
 
 -(void)loginAttemptedWithSuccess:(BOOL)success withError:(NSError *)error; // result method in either success or failure and notify user
+
 
 @end
 

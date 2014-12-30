@@ -50,7 +50,7 @@
     {
         if ([(LTBuryItViewController *)[self callingViewController] launchedPickerForLibrary])
         {
-            UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(goBackToLibrary:)];
+            UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(goBackToLibrary:)];
             
             // if from bury it view, the picture can use: discard, actions, keep
             [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
@@ -183,6 +183,10 @@
                 }];
             }
         }
+        if (alertView.tag == 3)
+        {
+            [self goBackToLibrary:nil];
+        }
     
 }
 
@@ -238,8 +242,17 @@
 }
 
 
+-(IBAction)confirmLibraryDiscard
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Discard Photo" message:@"Do you really want to discard this?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alertView setTag:1];
+    [alertView show];
+}
+
 - (IBAction)goBackToLibrary:(id)sender
 {
+    
+    
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if ([self.callingViewController isKindOfClass:[LTBuryItViewController class]])

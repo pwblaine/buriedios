@@ -153,11 +153,11 @@
         [self setGrassState:[(id<LTGrassViewControllerDelegate>)viewController defaultGrassStateForView] animated:YES];
     } else if (![viewController isMemberOfClass:[LTUnearthedViewController class]])
     {
-        for (UITapGestureRecognizer *tapGesture in self.navigationController.navigationBar.gestureRecognizers) {
+        /*for (UITapGestureRecognizer *tapGesture in self.navigationController.navigationBar.gestureRecognizers) {
             NSLog(@"deactivating admin menu");
             [tapGesture removeTarget:(LTUnearthedViewController *)viewController action:@selector(pushToAdminTable)];
             [self.navigationController.navigationBar removeGestureRecognizer:tapGesture];
-        };
+        };*/
     }
     NSLog(@"transferring to %@ via navController from %@...",[viewController class], [[navigationController visibleViewController] class]);
 }

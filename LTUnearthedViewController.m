@@ -221,14 +221,14 @@
         {
             if ([self.navigationController.visibleViewController isMemberOfClass:[LTUnearthedViewController class]])
             {
-                NSLog(@"gestureRecognizers on title: %lu",(unsigned long)[self.navigationItem.titleView.gestureRecognizers count]);
-                if ([self.navigationItem.titleView.gestureRecognizers count] == 0)
+                //NSLog(@"gestureRecognizers on title: %lu",(unsigned long)[self.navigationItem.titleView.gestureRecognizers count]);
+                /*if ([self.navigationItem.titleView.gestureRecognizers count] == 0)
                 {
                     NSLog(@"attaching admin summon to titleview");
                     UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAdminTable)];
                     [titleTap setNumberOfTapsRequired:2]; // 2 taps on the menu bar sends it to admin view
                     [self.navigationController.navigationBar addGestureRecognizer:titleTap];
-                }
+                }*/
             }
         }
         

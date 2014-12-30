@@ -23,6 +23,8 @@
 
 @synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, emailField;
 
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -69,8 +71,8 @@
     self.title = nil;
     
     // Check if user is cached and linked to Facebook, if so, bypass login
-    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [self.navigationController pushViewController:[[LTUnearthedViewController alloc] initWithStyle:UITableViewStylePlain] animated:NO];
+    if ([PFUser currentUser] /*&& [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]*/) {
+        NSLog(@"existing user detected");
     }
     
     // Add signup navigation bar button
@@ -127,6 +129,27 @@
     } completion:^(BOOL finished) {
         NSLog(@"logo bounced in");
     }];
+}
+
+- (void)disableAllBarButtons
+{
+    
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    /*for (UIBarButtonItem *item in self->barButtons) {
+     item.enabled = NO;
+     }*/
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+-(void)enableAllBarButtons
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    /*for (UIBarButtonItem *item in self->barButtons) {
+     item.enabled = YES;
+     }*/
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 
@@ -464,26 +487,7 @@
     return taggedElements;
 }
 
-- (void)disableAllBarButtons
-{
-    
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    for (UIBarButtonItem *item in self->barButtons) {
-        item.enabled = NO;
-    }
-    self.navigationItem.leftBarButtonItem.enabled = NO;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-}
 
--(void)enableAllBarButtons
-{
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    for (UIBarButtonItem *item in self->barButtons) {
-        item.enabled = YES;
-    }
-    self.navigationItem.leftBarButtonItem.enabled = YES;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-}
 
 - (void)showView:(UIView *)view
 {
@@ -850,7 +854,7 @@
             self->HUD.detailsLabelText = nil;
             
             
-            [self enableAllBarButtons];
+            
             }
         }
         
@@ -918,6 +922,7 @@
 - (void)facebookLoginButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    [self logInToFacebookWithSuccessHandler:nil andErrorHandler:nil];
 }
 
 -(LTUpdateResult)logInToFacebookWithSuccessHandler:(PFUserResultBlock)successHandler andErrorHandler:(PFUserResultBlock)errorHandler
@@ -968,7 +973,7 @@
             }
         } else {
             // user succesfully returned, ask for the user's fb profile and store in parse db and locally on the phone
-            successHandler(user,nil);
+            NSLog(@"successHandler(user,nil);");
         }
     }];
     
@@ -1418,6 +1423,7 @@
         }
     }];
     
+    
     return blockKey;
 }
 
@@ -1482,7 +1488,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:userSession forKey:userSessionKey];
         
         [self syncUserSessionCacheForKey:userSessionKey];
-    
+        
         return YES;
     } else {
         [self clearCachedUsers];
