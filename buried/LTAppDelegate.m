@@ -65,7 +65,14 @@
     self->initialLoad = YES;
     
     // Register for Notification Center
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound];
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+
     
     LTStartScreenViewController *startScreenVC = [[LTStartScreenViewController alloc] initWithNibName:@"LTStartScreenViewController" bundle:[NSBundle mainBundle]];
     
@@ -120,6 +127,16 @@
     [self.window makeKeyAndVisible];
  
     return YES;
+}
+
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    // Store the deviceToken in the current Installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    NSLog(@"device token: %@",deviceToken);
+    [currentInstallation saveInBackground];
 }
 
 // ****************************************************************************
@@ -206,18 +223,6 @@ BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplicati
 
 #pragma mark Push Notification Methods
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"Push notitifications registered successfully, saving installation data to Parse");
-    
-    // Upon proper registration with push notifications, save the information to a Parse installation.
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation addUniqueObject:@"global" forKey:@"channels"];
-    [currentInstallation saveInBackground];
-    
-    // on a class that uses this data [self loadInstallData]; must be envoked in the ViewDidLoad method
-}
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     

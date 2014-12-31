@@ -175,7 +175,7 @@
 		2858DA541944C33900BDAB3A /* LTStartScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LTStartScreenViewController.h; sourceTree = "<group>"; };
 		2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LTStartScreenViewController.m; sourceTree = "<group>"; };
 		2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LTStartScreenViewController.xib; sourceTree = "<group>"; };
-		2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark@2x.png"; path = "buried/37x-Checkmark@2x.png"; sourceTree = "<group>"; };
+		2858DA591944D65100BDAB3A /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "37x-Checkmark@2x.png"; path = "../buried/37x-Checkmark@2x.png"; sourceTree = "<group>"; };
 		2858DA5B1944D65C00BDAB3A /* x-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark.png"; sourceTree = SOURCE_ROOT; };
 		2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark@2x.png"; sourceTree = SOURCE_ROOT; };
 		286325AC1A52B01500A266ED /* FB-f-Logo__blue_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FB-f-Logo__blue_72.png"; path = "../buried/FB-f-Logo__blue_72.png"; sourceTree = "<group>"; };
@@ -775,7 +775,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -797,7 +797,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f12f1382-e027-4482-9eb7-d52118f879a5";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -807,7 +807,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -829,7 +829,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f12f1382-e027-4482-9eb7-d52118f879a5";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};

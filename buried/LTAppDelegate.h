@@ -12,4 +12,7 @@
 
 @property (retain, nonatomic) LTGrassViewController *grassDelegate;
 
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+
 @end

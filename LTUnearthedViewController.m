@@ -521,22 +521,6 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     NSLog(@"returning to home screen");
     
-    
-    
-    PFUser *user = [PFUser currentUser];
-    
-    // remove user from device channels
-    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
-    NSString *userObjectId = [user objectId];
-    [mutableChannels removeObject:userObjectId];
-    NSLog(@"removing user from push channels");
-    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-    NSLog(@"storing userId as last logged in...");
-    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
-    NSLog(@"saving updated installation data to Parse...");
-    [[PFInstallation currentInstallation] saveEventually];
-    NSLog(@"active channels for push: %@",mutableChannels);
-    
     // Return to login view controller
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

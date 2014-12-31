@@ -109,6 +109,8 @@
             self->imageContainer.image = nil;
             LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+            self->thoughtContainer.frame = CGRectMake(0, 170, 320, 225);
+            self->thoughtButton.frame = CGRectMake(0, 170, 320, 225);
         }
         // this code runs whether there's an image or not after its been retrieved
         if (self.theThought.length > 1)

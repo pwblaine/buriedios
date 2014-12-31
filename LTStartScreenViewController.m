@@ -373,6 +373,22 @@
             NSLog(@"displayName is invalid for user %@", [[PFUser currentUser] objectId]);
         }
     }
+    
+    // add user to device channels
+    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+    NSString *userObjectId = [[PFUser currentUser] objectId];
+    if (![mutableChannels containsObject:[[PFUser currentUser] objectId]])
+    {
+        [mutableChannels addObject:userObjectId];
+    }
+        NSLog(@"removing user from push channels");
+    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+    NSLog(@"storing userId as last logged in...");
+    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
+    NSLog(@"saving updated installation data to Parse...");
+    [[PFInstallation currentInstallation] saveEventually];
+    NSLog(@"active channels for push: %@",mutableChannels);
+
 }
 
 #pragma mark - SignUpView methods
@@ -552,6 +568,7 @@
         
     } else if ([view isDescendantOfView:self->savedAccountView])
     {
+        
         self->HUD.detailsLabelText = nil;
         self->HUD.labelText = nil;
         self->HUD.customView = nil;
@@ -829,8 +846,11 @@
         // remove user from device channels
         NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
         NSString *userObjectId = [[PFUser currentUser] objectId];
-        [mutableChannels addObject:userObjectId];
-        NSLog(@"removing user from push channels");
+        if (![mutableChannels containsObject:[[PFUser currentUser] objectId]])
+        {
+            [mutableChannels addObject:userObjectId];
+            NSLog(@"adding user to push channels");
+        }
         [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
         NSLog(@"storing userId as last logged in...");
         [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
@@ -1332,6 +1352,21 @@
     if ([currentInstallation objectForKey:@"lastLoggedInUserId"])
     [currentInstallation removeObjectForKey:@"lastLoggedInUserId"];
     
+    
+    /* remove user from device channels
+    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+    NSString *userObjectId = [[PFUser currentUser] objectId];
+    if ([mutableChannels containsObject:userObjectId])
+    {
+        [mutableChannels removeObject:userObjectId];
+    NSLog(@"removing user from push channels");
+    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
+    NSLog(@"storing userId as last logged in...");
+    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
+    NSLog(@"saving updated installation data to Parse...");
+    }
+    NSLog(@"active channels for push: %@",mutableChannels);
+    
     [currentInstallation saveEventually:^(BOOL succeeded, NSError *error) {
         NSLog(@"currently stored last logged in user: %@",[currentInstallation objectForKey:@"lastLoggedInUserId"]);
         if (succeeded)
@@ -1344,6 +1379,7 @@
     [LTStartScreenViewController storeUserDataToDefaults:nil];
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName & facebookId & userName & sessionToken");
     
+     */
     [[PFFacebookUtils session] closeAndClearTokenInformation];
     [PFUser logOut];
     

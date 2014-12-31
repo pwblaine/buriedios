@@ -249,6 +249,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 #pragma mark - Show & hide
 
 - (void)show:(BOOL)animated {
+    
 	useAnimation = animated;
 	// If the grace time is set postpone the HUD display
 	if (self.graceTime > 0.0) {
