@@ -60,7 +60,7 @@
         [self disableAllBarButtons];
         NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
         
-       
+        
     }
     return self;
 }
@@ -374,21 +374,20 @@
         }
     }
     
-    // add user to device channels
-    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+    // add user to device channels and latest user
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     NSString *userObjectId = [[PFUser currentUser] objectId];
-    if (![mutableChannels containsObject:[[PFUser currentUser] objectId]])
-    {
-        [mutableChannels addObject:userObjectId];
-    }
-        NSLog(@"removing user from push channels");
-    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-    NSLog(@"storing userId as last logged in...");
-    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
-    NSLog(@"saving updated installation data to Parse...");
-    [[PFInstallation currentInstallation] saveEventually];
-    NSLog(@"active channels for push: %@",mutableChannels);
-
+    [currentInstallation setChannels:[NSArray arrayWithObject:userObjectId]];
+    [currentInstallation setObject:[[PFUser currentUser] objectId] forKey:@"lastLoggedInUserId"];
+    [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
+    [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded)
+            NSLog(@"current installation: |%@| == |%@|",currentInstallation,[PFInstallation currentInstallation]);
+        else
+            NSLog(@"error saving installation");
+    } ];
+    
 }
 
 #pragma mark - SignUpView methods
@@ -843,50 +842,36 @@
 {
     if (didLogIn && !error)
     {
-        // remove user from device channels
-        NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
-        NSString *userObjectId = [[PFUser currentUser] objectId];
-        if (![mutableChannels containsObject:[[PFUser currentUser] objectId]])
-        {
-            [mutableChannels addObject:userObjectId];
-            NSLog(@"adding user to push channels");
-        }
-        [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-        NSLog(@"storing userId as last logged in...");
-        [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
-        NSLog(@"saving updated installation data to Parse...");
-        [[PFInstallation currentInstallation] saveEventually];
-        NSLog(@"active channels for push: %@",mutableChannels);
         
-        if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]])
+        if ([PFUser currentUser])
         {
-            NSLog(@"detected fb linkage, logging in and storing data");
+            NSLog(@"detected user, logging in and storing data");
             
             __block LTUpdateResult updateProfileResult = LTUpdateResultNil;
             
             if (updateProfileResult == LTUpdateNotNeeded || updateProfileResult == LTUpdateSucceeded)
             {
-            
-            
-            self->HUD.mode = MBProgressHUDModeCustomView;
-            self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
-            self->HUD.labelText = @"welcome to buried";
-            self->HUD.detailsLabelText = nil;
-            
-            
-            
+                
+                
+                self->HUD.mode = MBProgressHUDModeCustomView;
+                self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"buriediconcircleshine_37.png"]];
+                self->HUD.labelText = @"welcome to buried";
+                self->HUD.detailsLabelText = nil;
+                
+                
+                
             }
         }
         
         [LTStartScreenViewController storeUserDataToDefaults:[PFUser currentUser]];
-            
+        
         
         [self hideHUDAfterDelay:1.0f andPerformSelector:@selector(pushUnearthedViewControllerFromTimer:) onTarget:self withUserInfo:@{@"animated":@YES}];
     }else
-        {
-            didLogIn = NO;
-        }
-
+    {
+        didLogIn = NO;
+    }
+    
     NSString *errorMessage = nil;
     if (error)
         errorMessage = [[error domain] isEqualToString:FacebookSDKDomain] ? [FBErrorUtility userMessageForError:error] : [FBErrorUtility userMessageForError:error];
@@ -1315,7 +1300,7 @@
     
     self.navigationItem.leftBarButtonItem = self->goBackButton;
     self.navigationItem.rightBarButtonItem = self->submitButton;
-
+    
 }
 
 -(void)returnViewToOrigin {
@@ -1350,27 +1335,29 @@
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
     if ([currentInstallation objectForKey:@"lastLoggedInUserId"])
-    [currentInstallation removeObjectForKey:@"lastLoggedInUserId"];
+        [currentInstallation removeObjectForKey:@"lastLoggedInUserId"];
     
     
-    /* remove user from device channels
-    NSMutableArray *mutableChannels = [[[PFInstallation currentInstallation] channels] mutableCopy];
+    //remove user from device channels
+    NSMutableArray *mutableChannels = [[currentInstallation channels] mutableCopy];
     NSString *userObjectId = [[PFUser currentUser] objectId];
     if ([mutableChannels containsObject:userObjectId])
     {
+        NSLog(@"channel %@ found in %@", userObjectId, [currentInstallation channels]);
         [mutableChannels removeObject:userObjectId];
-    NSLog(@"removing user from push channels");
-    [[PFInstallation currentInstallation] setChannels:[NSArray arrayWithArray:mutableChannels]];
-    NSLog(@"storing userId as last logged in...");
-    [[PFInstallation currentInstallation] setObject:userObjectId forKey:@"lastLoggedInUserId"];
-    NSLog(@"saving updated installation data to Parse...");
     }
-    NSLog(@"active channels for push: %@",mutableChannels);
+    
+    NSLog(@"removing user from push channels");
+    [currentInstallation setChannels:[NSArray arrayWithArray:mutableChannels]];
+    NSLog(@"storing userId as last logged in...");
+    [currentInstallation setObject:userObjectId forKey:@"lastLoggedInUserId"];
+    [currentInstallation setObject:[NSNull null] forKey:@"user"];
+    NSLog(@"saving updated installation data to Parse...");
     
     [currentInstallation saveEventually:^(BOOL succeeded, NSError *error) {
         NSLog(@"currently stored last logged in user: %@",[currentInstallation objectForKey:@"lastLoggedInUserId"]);
         if (succeeded)
-            NSLog(@"lastLoggedInUserId cleared successfully and sync'd with parse");
+            NSLog(@"lastLoggedInUserId cleared successfully and sync'd with parse |installation now %@",[PFInstallation currentInstallation]);
         else
             NSLog(@"unabled to save the clearing of the last login to parse, please contact the team.");
     }];
@@ -1379,7 +1366,7 @@
     [LTStartScreenViewController storeUserDataToDefaults:nil];
     NSLog(@"NSUserDefaults cleared for lastLoggedInUserId & displayName & facebookId & userName & sessionToken");
     
-     */
+    
     [[PFFacebookUtils session] closeAndClearTokenInformation];
     [PFUser logOut];
     
@@ -1501,7 +1488,7 @@
                 NSLog(@"facebookId was blank, storing");
                 //[user setObject:lastLoggedInUserFBAuthData[@"id"] forKey:@"facebookId"];
             }
-           userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
+            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
         } else
         {
             NSLog(@"user account not linked with FB");
