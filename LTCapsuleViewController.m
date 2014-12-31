@@ -14,7 +14,6 @@
 #import "LTUnearthedViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UIBarButtonItem+_projectButtons.h"
-#import <ParseUI/ParseUI.h>
 
 @interface LTCapsuleViewController ()
 
@@ -70,7 +69,7 @@
             PFUser *user = [objects firstObject];
             NSString *displayName = [user objectForKey:@"displayName"];
             if (displayName.length > 0)
-                self.title = [NSString stringWithFormat:@"from %@", displayName];
+                self.title = [NSString stringWithFormat:@"From %@", displayName];
         }
     }];
 }
@@ -97,8 +96,19 @@
             
             self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
             
-            self->thoughtContainer.frame = CGRectMake(20, 415, 280, 65);
-            self->thoughtButton.frame = CGRectMake(20, 415, 280, 65);
+            NSLog(@"picture code is running");
+            
+            self->thoughtContainer.contentMode = UIViewContentModeRedraw;
+            [UIView animateWithDuration:.1f animations:^{
+                self->thoughtContainer.alpha = 0.0f;
+            } completion:^(BOOL finished) {
+                NSLog(@"hide animation done");
+            }];
+            [UIView animateWithDuration:.1f delay:.1f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->thoughtContainer.alpha = 1;
+            } completion:^(BOOL finished) {
+                NSLog(@"animation done");
+            }];
             
             self->imageButton.enabled = YES;
             
@@ -106,15 +116,28 @@
             [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
             
         } else {
-            self->imageContainer.image = nil;
             LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
-            self->thoughtContainer.frame = CGRectMake(0, 170, 320, 225);
-            self->thoughtButton.frame = CGRectMake(0, 170, 320, 225);
+            self->thoughtContainer.contentMode = UIViewContentModeRedraw;
+            [UIView animateWithDuration:.2f animations:^{
+                self->thoughtContainer.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                NSLog(@"hide animation done");
+            }];
+            [UIView animateWithDuration:.3f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->thoughtContainer.alpha = 1;
+                self->thoughtContainer.frame = CGRectMake(20,-280, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
+            } completion:^(BOOL finished) {
+                NSLog(@"animation done");
+            }];
+            NSLog(@"no picture found in the capsule");
         }
         // this code runs whether there's an image or not after its been retrieved
         if (self.theThought.length > 1)
+        { NSLog(@"thethought > 1");
             self->thoughtButton.enabled = YES;
+        }
         else
         {
             LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];

@@ -19,7 +19,7 @@
     IBOutlet PFImageView *imageContainer;
     
     IBOutlet UIButton *imageButton;
-    IBOutlet UIButton *thoughtButton;    
+    IBOutlet UIButton *thoughtButton;
     IBOutlet UIActivityIndicatorView *activityIndicator;
     
     BOOL downloaded;
