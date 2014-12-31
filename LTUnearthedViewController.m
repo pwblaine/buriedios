@@ -156,8 +156,6 @@
                     self->awaitBadge.text = [NSString stringWithFormat:@"%i awaits you...",count];
                     self.title = self->awaitBadge.text;
                 }
-                else
-                self.title = [NSString stringWithFormat:@"%@",[[currentUser objectForKey:@"displayName"] lowercaseString]];
         }];
     }
     

@@ -356,7 +356,7 @@
         {
             displayName = [[PFUser currentUser] objectForKey:@"firstName"];
         }
-        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome back, %@!",[displayName lowercaseString]];
+        self->lastLoggedInLabel.text = displayName;
         
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
