@@ -775,8 +775,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents/Workspace/Frameworks/FacebookSDK",
@@ -797,7 +797,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "1334a80f-920d-4de7-97e2-f5a504828416";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -807,8 +807,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents/Workspace/Frameworks/FacebookSDK",
@@ -829,7 +829,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "1334a80f-920d-4de7-97e2-f5a504828416";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};

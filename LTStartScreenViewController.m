@@ -985,7 +985,7 @@
         
         if ([textField isEqual:self.usernameField])
         {
-            [textField setKeyboardType:UIKeyboardTypeNamePhonePad];
+            [textField setKeyboardType:UIKeyboardTypeDefault];
         }
         else
         {
