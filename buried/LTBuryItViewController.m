@@ -95,7 +95,7 @@
     successColor = [UIColor colorWithRed:25/255.0f green:96/255.0f blue:36/255.0f alpha:1.0f];
     
     // Add cancel burying a capsule navigation bar button
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonTouchHandler:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(cancelButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     
     // Add camera navigation bar button
@@ -162,9 +162,44 @@
 -(BOOL)textViewDidBeginEditing:(UITextView *)textView
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissKeyboardAndCheckInput:)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTouchHandler:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(dismissKeyboardAndCheckInput:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(cancelButtonTouchHandler:)];
     return YES;
+}
+
+-(IBAction)discardButtonTouched:(id)sender
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"discard photo" message:@"do you really want to discard this?" delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes", nil];
+    [alertView setTag:1];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    // only occurs in a buryItView currently
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    
+    if (alertView.tag == 2)
+    {
+        // code for the discard alert
+        if (buttonIndex == alertView.firstOtherButtonIndex)
+        {
+            // in the case where the cancel is tapped with a picture or text selected and no actively using, we clear the capsule
+            [self clearFields];
+            messagesToUserLabel.text = @"capsule cleared";
+            messagesToUserLabel.textColor =  errorColor;
+            [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+            [self checkForItemsAndSetClearOrCancel];
+        }
+    } else if (alertView.tag == 1)
+    {
+        // in the case where the cancel button is tapped while writing, resign the keyboard
+        if (buttonIndex == alertView.firstOtherButtonIndex)
+        {
+        self->thoughtTextView.text = @"";
+        [self dismissKeyboardAndCheckInput:self];
+        }
+    }
 }
 
 -(void)setMessageToUserForTimeframe {
@@ -202,11 +237,11 @@ messagesToUserLabel.text = @"will unearth within a week ";
             [self applyImagePreview];
         else
             [self resetCamera];
-        UIBarButtonItem *clearButton = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonTouchHandler:)];
-        self.navigationItem.leftBarButtonItem = clearButton;
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(cancelButtonTouchHandler:)];
+        self.navigationItem.leftBarButtonItem = cancelButton;
         return YES;
     } else {
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonTouchHandler:)];
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(cancelButtonTouchHandler:)];
         self.navigationItem.leftBarButtonItem = cancelButton;
         if (theImage)
             [self applyImagePreview];
@@ -241,6 +276,16 @@ messagesToUserLabel.text = @"will unearth within a week ";
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     theImage = nil;
     messagesToUserLabel.text = @"photo discarded";
+    messagesToUserLabel.textColor =  errorColor;
+    [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
+    [self checkForItemsAndSetClearOrCancel];
+}
+
+-(void)cancelSelectionFromLibrary
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    theImage = nil;
+    messagesToUserLabel.text = @"selection cancelled";
     messagesToUserLabel.textColor =  errorColor;
     [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
     [self checkForItemsAndSetClearOrCancel];
@@ -464,7 +509,7 @@ messagesToUserLabel.text = @"will unearth within a week ";
 - (IBAction)presentActionSheetForImageUpload
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Bury An Image In The Capsule" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take A Photo",@"Choose From Library", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"bury an image in the capsule" delegate:self cancelButtonTitle:@"cancel" destructiveButtonTitle:nil otherButtonTitles:@"take a photo",@"choose from library", nil];
     self->cameraActionSheet = actionSheet;
     [self->cameraActionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
 }
@@ -502,17 +547,17 @@ messagesToUserLabel.text = @"will unearth within a week ";
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if ([self->thoughtTextView isFirstResponder])
     {
-        self->thoughtTextView.text = @"";
-        [self dismissKeyboardAndCheckInput:self];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"clear text" message:@"do you really want to clear the text?" delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes", nil];
+        [alertView setTag:1];
+        [alertView show];
     }
     else if ([self checkForItemsAndSetClearOrCancel])
     {
-        [self clearFields];
-        messagesToUserLabel.text = @"capsule cleared";
-        messagesToUserLabel.textColor =  errorColor;
-        [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(setMessageToUserForTimeframe) userInfo:nil repeats:NO];
-        [self checkForItemsAndSetClearOrCancel];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"clear capsule" message:@"do you really want to clear the capsule?" delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes", nil];
+        [alertView setTag:2];
+        [alertView show];
     } else {
+        // in the case where the capsule has already been cleared, pop back to the unearthed view
         [self.navigationController popViewControllerAnimated:YES];
     }
     

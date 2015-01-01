@@ -74,7 +74,7 @@
 
 @property IBOutlet UITextField *passwordField;
 @property IBOutlet UITextField *confirmField;
-@property IBOutlet UITextField *emailField;
+@property IBOutlet UITextField *usernameField;
 @property NSDictionary *userInfo;
 
 @property (retain) PFSignUpViewController *signUpVC;
@@ -95,7 +95,7 @@
 -(void)clearHUD;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
--(BOOL)isValidEmail:(NSString *)email;
+-(BOOL)isValidUsername:(NSString *)username;
 
 -(BOOL)validateField:(UITextField *)textField;
 -(void)validateFields:(NSArray *)fields;

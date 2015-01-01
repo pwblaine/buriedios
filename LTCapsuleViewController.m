@@ -40,7 +40,7 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(backButtonTouchHandler:)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(backButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
     /*
@@ -52,7 +52,7 @@
     self->imageButton.enabled = NO;
     self->thoughtButton.enabled = NO;
     self->thoughtContainer.text = @"";
-    self.navigationItem.title = @"Loading...";
+    self.navigationItem.title = @"loading...";
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -66,10 +66,6 @@
     [fromUserIdQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error)
         {
-            PFUser *user = [objects firstObject];
-            NSString *displayName = [user objectForKey:@"displayName"];
-            if (displayName.length > 0)
-                self.title = [NSString stringWithFormat:@"buried."];
         }
     }];
 }
@@ -100,12 +96,15 @@
             
             self->thoughtContainer.contentMode = UIViewContentModeRedraw;
             [UIView animateWithDuration:.1f animations:^{
+                self->imageContainer.alpha = 0.0f;
                 self->thoughtContainer.alpha = 0.0f;
             } completion:^(BOOL finished) {
                 NSLog(@"hide animation done");
             }];
             [UIView animateWithDuration:.1f delay:.1f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->imageContainer.alpha = 1.0f;
                 self->thoughtContainer.alpha = 1;
+                self->thoughtContainer.frame = CGRectMake(20,-280, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
             } completion:^(BOOL finished) {
                 NSLog(@"animation done");
             }];
@@ -121,13 +120,14 @@
             self->thoughtContainer.contentMode = UIViewContentModeRedraw;
             [UIView animateWithDuration:.2f animations:^{
                 self->thoughtContainer.alpha = 0;
-                
+                self->imageContainer.alpha = 0.0f;
             } completion:^(BOOL finished) {
                 NSLog(@"hide animation done");
             }];
-            [UIView animateWithDuration:.3f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:.5f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->imageContainer.alpha = 1.0f;
                 self->thoughtContainer.alpha = 1;
-                self->thoughtContainer.frame = CGRectMake(20,-280, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
+                self->thoughtContainer.frame = CGRectMake(20,-180, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
             } completion:^(BOOL finished) {
                 NSLog(@"animation done");
             }];
@@ -145,7 +145,10 @@
             
         }
         if ([self->imageContainer.image isEqual:[UIImage imageWithContentsOfFile:@"burieddot152.png"]])
+        {
             self->imageContainer.image = nil;
+        }
+        self.navigationItem.title = @"buried.";
         self->thoughtContainer.text = self.theThought;
         [self->activityIndicator stopAnimating];
         [self->activityIndicator setAlpha:0];
@@ -212,7 +215,7 @@
 
 - (IBAction)trashButtonTapped:(id)sender
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Capsule" message:@"Are you sure you want to delete this capsule permanently?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"delete capsule" message:@"are you sure you want to delete this capsule permanently?" delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes", nil];
     [alertView show];
 }
 

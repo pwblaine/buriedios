@@ -10,7 +10,6 @@
                 <outlet property="accountTypesView" destination="FDI-yc-wqT" id="g0w-hX-QEr"/>
                 <outlet property="buriedLogo" destination="cpo-Y1-xtb" id="kby-Jx-dEZ"/>
                 <outlet property="confirmField" destination="kzB-8P-fji" id="pBq-rD-Fo5"/>
-                <outlet property="emailField" destination="aPS-kV-ODT" id="nfW-x4-zxz"/>
                 <outlet property="facebookLoginButton" destination="Y9Q-Ib-odj" id="eET-bu-iJY"/>
                 <outlet property="lastLoggedInLabel" destination="Tnc-qK-WQO" id="STF-Ge-rgs"/>
                 <outlet property="loginView" destination="nTJ-hi-3py" id="JV0-qu-gYZ"/>
@@ -19,6 +18,7 @@
                 <outlet property="sharedFieldsView" destination="zyg-5i-VWp" id="tou-iw-Gdy"/>
                 <outlet property="signUpView" destination="3rA-Qm-dly" id="YLV-GG-lEh"/>
                 <outlet property="startView" destination="Jdf-t8-8gj" id="fM9-ip-hQc"/>
+                <outlet property="usernameField" destination="aPS-kV-ODT" id="79D-9p-rIE"/>
                 <outlet property="view" destination="uZF-GN-OCq" id="YVU-Mk-6wB"/>
             </connections>
         </placeholder>
@@ -54,13 +54,13 @@
                         <outlet property="delegate" destination="-1" id="N58-38-7e6"/>
                     </connections>
                 </textField>
-                <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="email address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPS-kV-ODT" userLabel="email">
+                <textField hidden="YES" opaque="NO" clipsSubviews="YES" alpha="0.0" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" usesAttributedText="YES" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPS-kV-ODT" userLabel="username">
                     <rect key="frame" x="40" y="220" width="240" height="32"/>
-                    <accessibility key="accessibilityConfiguration" label="email"/>
+                    <accessibility key="accessibilityConfiguration" label="username"/>
                     <attributedString key="attributedText"/>
                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="light" returnKeyType="next"/>
                     <connections>
-                        <outlet property="delegate" destination="-1" id="ceu-l4-u38"/>
+                        <outlet property="delegate" destination="-1" id="QB9-ED-Xpq"/>
                     </connections>
                 </textField>
                 <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Tnc-qK-WQO" userLabel="lastLoggedInLabel">

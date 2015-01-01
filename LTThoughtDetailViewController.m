@@ -64,7 +64,7 @@
 - (IBAction)forwardButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Forward To New Capsule" message:@"Which would you like to forward to start a new capsule with" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Just This", @"All Of It", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"forward to new capsule" message:@"which would you like to forward to start a new capsule with..." delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"just this", @"all of it", nil];
     [alertView show];
 }
 

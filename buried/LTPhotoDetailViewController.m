@@ -50,7 +50,7 @@
     {
         if ([(LTBuryItViewController *)[self callingViewController] launchedPickerForLibrary])
         {
-            UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(goBackToLibrary:)];
+            UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(keepButtonTouched:)];
             
             // if from bury it view, the picture can use: discard, actions, keep
             [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempRight];
@@ -58,12 +58,12 @@
             
             [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
             
-            UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+            UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
             [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempLeft];
             self->leftButton = tempLeft;
             
         } else {
-        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        UIBarButtonItem *tempRight  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
         
         // if from bury it view, the picture can use: discard, actions, keep
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempRight];
@@ -78,14 +78,14 @@
             } else
                 [mutableTopToolbarItems removeObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->middleButton]];
         
-        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(discardButtonTouched:)];
+        UIBarButtonItem *tempLeft  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(keepButtonTouched:)];
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->rightButton] withObject:tempLeft];
         self->rightButton = tempLeft;
         }
     }
     else
     {
-        UIBarButtonItem *tempRight = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(keepButtonTouched:)];
+        UIBarButtonItem *tempRight = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(keepButtonTouched:)];
         
         [mutableTopToolbarItems replaceObjectAtIndex:[mutableTopToolbarItems indexOfObject:self->leftButton] withObject:tempRight];
         self->leftButton = tempRight;
@@ -236,7 +236,7 @@
 - (IBAction)forwardButtonTapped:(id)sender
 {
     NSLog(@"<%@:%@:%d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Forward To New Capsule" message:@"Which would you like to forward to start a new capsule with..." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Just This", @"All Of It", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"forward to new capsule" message:@"which would you like to forward to start a new capsule with..." delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"just this", @"all of it", nil];
     [alertView setTag:2];
     [alertView show];
 }

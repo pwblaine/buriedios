@@ -21,7 +21,7 @@
 
 @implementation LTStartScreenViewController
 
-@synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, emailField;
+@synthesize logInVC,signUpVC, userInfo, passwordField, confirmField, usernameField;
 
 
 
@@ -89,7 +89,7 @@
     
     for (UITextField *textField in [self.view.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@",@"class",[UITextField class]]]) {
         UIImageView *leftImageView;
-        if ([textField.accessibilityLabel isEqualToString:@"email"])
+        if ([textField.accessibilityLabel isEqualToString:@"username"])
         {
             leftImageView = [[UIImageView  alloc]  initWithImage:
                              [UIImage  imageNamed: @"iconmonstr-user-3-icon-40.png"]];
@@ -135,9 +135,9 @@
 {
     
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    /*for (UIBarButtonItem *item in self->barButtons) {
+    for (UIBarButtonItem *item in self->barButtons) {
      item.enabled = NO;
-     }*/
+    }
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem.enabled = NO;
 }
@@ -145,19 +145,17 @@
 -(void)enableAllBarButtons
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    /*for (UIBarButtonItem *item in self->barButtons) {
+    for (UIBarButtonItem *item in self->barButtons) {
      item.enabled = YES;
-     }*/
+     }
     self.navigationItem.leftBarButtonItem.enabled = YES;
     self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 
--(BOOL)isValidEmail:(NSString *)email
+-(BOOL)isValidUsername:(NSString *)username
 {
-    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    NSPredicate *emailPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailPredicate evaluateWithObject:email];
+    return (username.length >= 1);
 }
 
 -(BOOL)checkForSavedUser
@@ -318,9 +316,6 @@
     
     if ([self checkForSavedUser] || [PFUser currentUser])
     {
-        NSString *displayName = [[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"]] lowercaseString];
-        displayName = [[PFUser currentUser] objectForKey:@"firstName"];
-        self->lastLoggedInLabel.text = displayName;
         self.navigationItem.rightBarButtonItem = self->continueButton;
     } else {
         
@@ -351,12 +346,9 @@
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     if ([self checkForSavedUser] || [PFUser currentUser])
     {
-        NSString * displayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastLoggedInDisplayName"];
-        if ([PFUser currentUser])
-        {
-            displayName = [[PFUser currentUser] objectForKey:@"firstName"];
-        }
-        self->lastLoggedInLabel.text = displayName;
+        NSString *displayName = [[PFUser currentUser] objectForKey:@"username"];
+        
+        self->lastLoggedInLabel.text = [NSString stringWithFormat:@"welcome, %@",displayName ];
         
         NSLog(@"lastLoggedInLabel loaded");
         NSLog(@"navBar elements loaded and enabled");
@@ -394,8 +386,8 @@
 - (IBAction)submitButtonTouchHandler:(id)sender
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    
-    [self validateFields:self->currentTextFields];
+    // fields should only be checked by the (shouldSignUp/Login Methods)
+    // [self validateFields:self->currentTextFields];
     
     if ([self->currentResponder isFirstResponder])
     {
@@ -410,7 +402,7 @@
     self->HUD.labelText = @"submitting";
     [self->HUD show:YES];
     
-    self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.emailField.text,@"username",self.passwordField.text,@"password",self.emailField.text,@"email", nil];
+    self.userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.usernameField.text,@"username",self.passwordField.text,@"password", nil];
     NSLog(@"submitting userInfo: %@",self.userInfo);
     
     if ([self->signUpView isDescendantOfView:self->currentViewState])
@@ -422,11 +414,9 @@
             
             PFUser *userToSignup = [[PFUser alloc] init];
             
-            [userToSignup setEmail:self.userInfo[@"email"]];
-            [userToSignup setUsername:self.userInfo[@"email"]];
+            [userToSignup setUsername:self.userInfo[@"username"]];
             [userToSignup setPassword:self.userInfo[@"password"]];
             [userToSignup setObject:self.userInfo[@"username"] forKey:@"displayName"];
-            [userToSignup setObject:self.userInfo[@"username"] forKey:@"firstName"];
             
             [userToSignup signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded)
@@ -480,8 +470,8 @@
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     [self->currentResponder setText:nil];
-    if ([self.emailField hasText])
-        [self.emailField setText:nil];
+    if ([self.usernameField hasText])
+        [self.usernameField setText:nil];
     else if ([self.passwordField hasText])
         [self.passwordField setText:nil];
     else if ([self.confirmField hasText])
@@ -993,9 +983,9 @@
     {
         [textField setReturnKeyType:UIReturnKeyDone];
         
-        if ([textField isEqual:self.emailField])
+        if ([textField isEqual:self.usernameField])
         {
-            [textField setKeyboardType:UIKeyboardTypeEmailAddress];
+            [textField setKeyboardType:UIKeyboardTypeNamePhonePad];
         }
         else
         {
@@ -1042,10 +1032,10 @@
             self.view.center = CGPointMake(self.view.center.x,centerPointYForViewWithKeyboardUp);
         }
         
-        NSLog(@"text.center.y: %f | self.view.center.y: %f | emailField %f | offset %f",textField.center.y,self.view.center.y,self->emailField.center.y,(textField.center.y - self->emailField.center.y));
-        self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->emailField.center.y));
+        NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField %f | offset %f",textField.center.y,self.view.center.y,self->usernameField.center.y,(textField.center.y - self->usernameField.center.y));
+        self.view.center = CGPointMake((self.view.frame.size.width/2.0),centerPointYForViewWithKeyboardUp - (textField.center.y - self->usernameField.center.y));
     } completion:^(BOOL finished) {
-        NSLog(@"text.center.y: %f | self.view.center.y: %f | emailField.center.y %f",textField.center.y,self.view.center.y,self->emailField.center.y);
+        NSLog(@"text.center.y: %f | self.view.center.y: %f | usernameField.center.y %f",textField.center.y,self.view.center.y,self->usernameField.center.y);
     }];
 }
 
@@ -1134,9 +1124,9 @@
     NSLog(@"validateField called for %@",textField);
     if (textField.text.length < 1) {
         return NO;
-    } else if ([textField isEqual:self.emailField])
+    } else if ([textField isEqual:self.usernameField])
     {
-        if ([self isValidEmail:textField.text])
+        if ([self isValidUsername:textField.text])
         {
             return YES;
         }
@@ -1230,7 +1220,7 @@
             changeColor = [LTGrassViewController errorColor];
         }
         
-        if ([[fieldsToChangeColorOf objectForKey:self.emailField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]] && ![textField.accessibilityLabel isEqualToString:self.emailField.accessibilityLabel])
+        if ([[fieldsToChangeColorOf objectForKey:self.usernameField.accessibilityLabel] isEqual:[LTGrassViewController errorColor]] && ![textField.accessibilityLabel isEqualToString:self.usernameField.accessibilityLabel])
         {
             NSLog(@"skipping %@",textField.accessibilityLabel);
         } else
@@ -1380,31 +1370,48 @@
     [self enableAllBarButtons];
 }
 
-- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info
+- (BOOL)validateFields
 {
-    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    NSLog(@"info: %@",info);
-    
-    if (![self isValidEmail:self.emailField.text])
+    if (![self isValidUsername:self.usernameField.text])
     {
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.usernameField, nil]];
+        
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"invalid email address";
+        self->HUD.labelText = @"username cannot be empty";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
         return NO;
-    } else if ((self.passwordField.text.length < 1) || (self.confirmField.text.length < 1))
+    } else if (self.passwordField.text.length < 1)
     {
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.passwordField, nil]];
+        
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"password is too short";
+        self->HUD.labelText = @"password cannot be empty";
         [self->HUD show:YES];
         [self->HUD hide:YES afterDelay:1.0f];
         
         return NO;
-    } else if (![self.passwordField.text isEqualToString:self.confirmField.text])
+    } else if ((self.confirmField.text.length < 1) && [self->currentTextFields containsObject:self.confirmField]) {
+        
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:
+                                  self.confirmField, nil]];
+        
+        self->HUD.mode = MBProgressHUDModeCustomView;
+        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
+        self->HUD.labelText = @"confirm cannot be empty";
+        [self->HUD show:YES];
+        [self->HUD hide:YES afterDelay:1.0f];
+        
+        return NO;
+    } else if ((![self.passwordField.text isEqualToString:self.confirmField.text]) && [self->currentTextFields containsObject:self.confirmField])
     {
+        
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.passwordField
+                                 , self.confirmField, nil]];
+        
         self->HUD.mode = MBProgressHUDModeCustomView;
         self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
         self->HUD.labelText = @"passwords must match";
@@ -1415,11 +1422,16 @@
     } else {
         NSLog(@"user info acceptable for signup");
         
-        if ([PFUser currentUser])
-            [PFUser logOut];
-        
         return YES;
     }
+}
+
+- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info
+{
+    NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    NSLog(@"info: %@",info);
+    
+    return [self validateFields];
 }
 
 +(NSString *)syncUserSessionCacheForKey:(NSString *)key
@@ -1488,7 +1500,7 @@
                 NSLog(@"facebookId was blank, storing");
                 //[user setObject:lastLoggedInUserFBAuthData[@"id"] forKey:@"facebookId"];
             }
-            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"firstName"],@"lastLoggedInSessionToken":[user sessionToken]};
+            userSession = @{@"lastLoggedInUserId":[user objectId],@"lastLoggedInFacebookId":[user objectForKey:@"facebookId"],@"lastLoggedInDisplayName":[user objectForKey:@"displayName"],@"lastLoggedInSessionToken":[user sessionToken]};
         } else
         {
             NSLog(@"user account not linked with FB");
@@ -1497,7 +1509,7 @@
         
         lastLoggedInUserId = [user objectId];
         lastLoggedInFacebookId = [user objectForKey:@"facebookId"];
-        lastLoggedInDisplayName = [user objectForKey:@"firstName"];
+        lastLoggedInDisplayName = [user objectForKey:@"displayName"];
         lastLoggedInUserName = [user username];
         lastLoggedInSessionToken = [user sessionToken];
         
@@ -1546,7 +1558,7 @@
     if ([error code] == 202)
     {
         self->HUD.labelText = @"username already taken";
-        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.emailField, nil]];
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.usernameField, nil]];
     }
     else
     {
@@ -1573,28 +1585,8 @@
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
-    if (![self isValidEmail:self.emailField.text])
-    {
-        self->HUD.mode = MBProgressHUDModeCustomView;
-        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"invalid email address";
-        [self->HUD show:YES];
-        [self->HUD hide:YES afterDelay:1.0f];
-        return NO;
-    } else if (self.passwordField.text.length < 1)  {
-        self->HUD.mode = MBProgressHUDModeCustomView;
-        self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x-mark.png"]];
-        self->HUD.labelText = @"password is too short";
-        [self->HUD show:YES];
-        [self->HUD hide:YES afterDelay:1.0f];
-        
-        return NO;
-    } else {
-        NSLog(@"user info acceptable for login");
-        if ([PFUser currentUser])
-            [PFUser logOut];
-        return YES;
-    }
+    
+    return [self validateFields];
 }
 
 /*! @name Responding to Actions */
@@ -1627,8 +1619,9 @@
     }
     else
     {
-        self->HUD.labelText = @"login error";
-        [self validateFields:self->currentTextFields];
+        self->HUD.labelText = @"unknown error";
+        [self flashFieldAsError:[[NSArray alloc] initWithObjects:self.passwordField
+                                 , self.usernameField, nil]];
     }
     
     [self->HUD hide:YES afterDelay:1.0f];
@@ -1682,7 +1675,7 @@
                 
                 self->HUD.mode = MBProgressHUDModeCustomView;
                 self->HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iconmonstr-smiley-wink-icon-48_MB.png"]];
-                self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"firstName"] lowercaseString]];
+                self->HUD.labelText = [NSString stringWithFormat:@"hello %@",[[[PFUser currentUser] objectForKey:@"displayName"] lowercaseString]];
                 
                 updateResult = LTUpdateNotNeeded;
             }

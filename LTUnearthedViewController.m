@@ -105,7 +105,7 @@
     self->awaitBadge.center = CGPointMake(self.refreshControl.center.x, self.refreshControl.center.y + (self->awaitBadge.bounds.size.height));
     
     // Add go back to home navigation bar button
-    UIBarButtonItem *goBackButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(goBackButtonTouchHandler:)];
+    UIBarButtonItem *goBackButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(goBackButtonTouchHandler:)];
     self.navigationItem.leftBarButtonItem = goBackButton;
     
     // Add camera navigation bar button

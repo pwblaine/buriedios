@@ -12,7 +12,7 @@
 #import "MBProgressHUD.h"
 #import "LTGrassViewController.h"
 
-@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, UIActionSheetDelegate, LTGrassViewControllerDelegate>
+@interface LTBuryItViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, FBFriendPickerDelegate, UIActionSheetDelegate, LTGrassViewControllerDelegate, UIAlertViewDelegate>
 {
     IBOutlet UITextField *emailTextField;
     IBOutlet UITextView *thoughtTextView;
@@ -70,5 +70,7 @@
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
 - (LTGrassState)defaultGrassStateForView;
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
 @end
