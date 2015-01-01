@@ -69,7 +69,7 @@
             PFUser *user = [objects firstObject];
             NSString *displayName = [user objectForKey:@"displayName"];
             if (displayName.length > 0)
-                self.title = [NSString stringWithFormat:@"From %@", displayName];
+                self.title = [NSString stringWithFormat:@"buried."];
         }
     }];
 }
