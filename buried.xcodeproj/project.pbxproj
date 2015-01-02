@@ -57,6 +57,8 @@
 		2858DA571944C33900BDAB3A /* LTStartScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DA551944C33900BDAB3A /* LTStartScreenViewController.m */; };
 		2858DA581944C33900BDAB3A /* LTStartScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858DA561944C33900BDAB3A /* LTStartScreenViewController.xib */; };
 		286325AD1A52B01500A266ED /* FB-f-Logo__blue_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 286325AC1A52B01500A266ED /* FB-f-Logo__blue_72.png */; };
+		2863489B1A561C0700E60E1F /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2863489A1A561C0700E60E1F /* GameKit.framework */; };
+		2863489D1A561C0B00E60E1F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2863489C1A561C0B00E60E1F /* StoreKit.framework */; };
 		286D080218CB647E000B5EBE /* grassToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 286D080118CB647E000B5EBE /* grassToolbar.png */; };
 		286E641818C30D3400CDB033 /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */; };
 		286E641918C30D3400CDB033 /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E641518C30D3400CDB033 /* UIImage+AlphaAdditions.m */; };
@@ -179,6 +181,8 @@
 		2858DA5B1944D65C00BDAB3A /* x-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark.png"; sourceTree = SOURCE_ROOT; };
 		2858DA5C1944D65C00BDAB3A /* x-mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-mark@2x.png"; sourceTree = SOURCE_ROOT; };
 		286325AC1A52B01500A266ED /* FB-f-Logo__blue_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FB-f-Logo__blue_72.png"; path = "../buried/FB-f-Logo__blue_72.png"; sourceTree = "<group>"; };
+		2863489A1A561C0700E60E1F /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		2863489C1A561C0B00E60E1F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		286D080118CB647E000B5EBE /* grassToolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassToolbar.png; sourceTree = SOURCE_ROOT; };
 		286E641218C30D3400CDB033 /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
 		286E641318C30D3400CDB033 /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
@@ -264,6 +268,7 @@
 				289D65071A512D1D00C12BEF /* ParseUI.framework in Frameworks */,
 				44FC42EE186267CE00CC948C /* QuartzCore.framework in Frameworks */,
 				28B75D051957724000593B3A /* AdSupport.framework in Frameworks */,
+				2863489D1A561C0B00E60E1F /* StoreKit.framework in Frameworks */,
 				289D65051A512D1D00C12BEF /* ParseCrashReporting.framework in Frameworks */,
 				289D65061A512D1D00C12BEF /* ParseFacebookUtils.framework in Frameworks */,
 				112B79081946FD9200558BE1 /* Social.framework in Frameworks */,
@@ -273,6 +278,7 @@
 				44FC42AC1862667700CC948C /* CoreGraphics.framework in Frameworks */,
 				44FC42E6186267B100CC948C /* CFNetwork.framework in Frameworks */,
 				289D64FF1A5128FB00C12BEF /* FBAudienceNetwork.framework in Frameworks */,
+				2863489B1A561C0700E60E1F /* GameKit.framework in Frameworks */,
 				44FC42AE1862667700CC948C /* UIKit.framework in Frameworks */,
 				289D64FE1A5128FB00C12BEF /* FacebookSDK.framework in Frameworks */,
 				289D65041A512D1D00C12BEF /* Parse.framework in Frameworks */,
@@ -406,6 +412,8 @@
 		44FC42A81862667700CC948C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2863489C1A561C0B00E60E1F /* StoreKit.framework */,
+				2863489A1A561C0700E60E1F /* GameKit.framework */,
 				289D65151A51349300C12BEF /* libsqlite3.0.dylib */,
 				289D65161A51349300C12BEF /* libsqlite3.dylib */,
 				289D65001A512D1D00C12BEF /* Parse.framework */,
@@ -533,8 +541,11 @@
 					44FC42A51862667700CC948C = {
 						DevelopmentTeam = D6SYSZQ5Q4;
 						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
 							com.apple.InAppPurchase = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -775,8 +786,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents/Workspace/Frameworks/FacebookSDK",
@@ -797,7 +808,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "1334a80f-920d-4de7-97e2-f5a504828416";
+				PROVISIONING_PROFILE = "486d326f-aa03-49a0-8834-cb26de58df3d";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
@@ -807,8 +818,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Patrick Blaine (GVTD5QR338)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"~/Documents/Workspace/Frameworks/FacebookSDK",
@@ -829,7 +840,7 @@
 					"-fobjc-arc",
 				);
 				PRODUCT_NAME = buried;
-				PROVISIONING_PROFILE = "1334a80f-920d-4de7-97e2-f5a504828416";
+				PROVISIONING_PROFILE = "486d326f-aa03-49a0-8834-cb26de58df3d";
 				WARNING_LDFLAGS = "-v";
 				WRAPPER_EXTENSION = app;
 			};
