@@ -58,6 +58,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->activityIndicator.alpha = 1;
+    self->imageContainer.alpha = 0;
     self.theThought = [self.capsule objectForKey:@"thought"];
     
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
