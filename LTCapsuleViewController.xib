@@ -22,7 +22,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XiR-1H-bWQ" userLabel="Thought button">
-                    <rect key="frame" x="0.0" y="423" width="320" height="72"/>
+                    <rect key="frame" x="0.0" y="420" width="320" height="72"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -30,17 +31,26 @@
                         <action selector="thoughtButtonTapped:" destination="-1" eventType="touchUpInside" id="LaN-S0-ZvB"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gHH-Yb-fWW">
-                    <rect key="frame" x="20" y="410" width="280" height="55"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gHH-Yb-fWW" userLabel="thought container">
+                    <rect key="frame" x="20" y="400" width="280" height="72"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="burieddot152.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
-                    <rect key="frame" x="0.0" y="130" width="320" height="285"/>
+                <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="burieddot152.png" translatesAutoresizingMaskIntoConstraints="NO" id="SXu-Cg-vxo" customClass="PFImageView">
+                    <rect key="frame" x="0.0" y="130" width="320" height="270"/>
                 </imageView>
+                <label opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mx-yr-bg7" userLabel="timestamp">
+                    <rect key="frame" x="0.0" y="65" width="320" height="65"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UIx-Ai-R9H">
+                    <rect key="frame" x="150" y="274" width="20" height="20"/>
+                </activityIndicatorView>
                 <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfl-qq-4kq" userLabel="Image Button">
-                    <rect key="frame" x="0.0" y="130" width="320" height="285"/>
+                    <rect key="frame" x="0.0" y="130" width="320" height="270"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -48,15 +58,6 @@
                         <action selector="imageButtonTapped:" destination="-1" eventType="touchUpInside" id="yeo-Rw-CCb"/>
                     </connections>
                 </button>
-                <label opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mx-yr-bg7">
-                    <rect key="frame" x="0.0" y="65" width="320" height="65"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <activityIndicatorView opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UIx-Ai-R9H">
-                    <rect key="frame" x="150" y="395" width="20" height="20"/>
-                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

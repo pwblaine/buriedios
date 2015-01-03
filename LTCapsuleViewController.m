@@ -58,7 +58,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
     self->activityIndicator.alpha = 1;
-    self->imageContainer.alpha = 0;
+    self->imageContainer.alpha = 0.0f;
+    self->thoughtContainer.alpha = 0.0f;
     self.theThought = [self.capsule objectForKey:@"thought"];
     
     NSString *fromUserId = [self.capsule objectForKey:@"fromUserId"];
@@ -84,28 +85,19 @@
         else if (image)
         {
             
+
             // this code is run if a picture is downloaded
             self.theImage = image; // store image in property
             
-            self->imageContainer.image = image;
-            self->imageContainer.frame = CGRectMake(0, 130, 320, 285);
-            self->imageButton.frame = CGRectMake(0, 125, 320, 285);
-            
-            self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
             
             NSLog(@"picture code is running");
             
-            self->thoughtContainer.contentMode = UIViewContentModeRedraw;
-            [UIView animateWithDuration:.1f animations:^{
-                self->imageContainer.alpha = 0.0f;
-                self->thoughtContainer.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                NSLog(@"hide animation done");
-            }];
-            [UIView animateWithDuration:.1f delay:.1f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:.5f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->imageContainer.image = image;
+                self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
                 self->imageContainer.alpha = 1.0f;
-                self->thoughtContainer.alpha = 1;
-                self->thoughtContainer.frame = CGRectMake(20,-280, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
+                self->thoughtContainer.alpha = 1.0f;
+                ;
             } completion:^(BOOL finished) {
                 NSLog(@"animation done");
             }];
@@ -117,18 +109,14 @@
             
         } else {
             LTAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            [appDelegate.grassDelegate setGrassState:LTGrassStateGrown animated:YES];
+            [appDelegate.grassDelegate setGrassState:LTGrassStateShrunk animated:YES];
             self->thoughtContainer.contentMode = UIViewContentModeRedraw;
-            [UIView animateWithDuration:.2f animations:^{
-                self->thoughtContainer.alpha = 0;
-                self->imageContainer.alpha = 0.0f;
-            } completion:^(BOOL finished) {
-                NSLog(@"hide animation done");
-            }];
+            
             [UIView animateWithDuration:.5f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self->imageContainer.contentMode = UIViewContentModeCenter;
                 self->imageContainer.alpha = 1.0f;
-                self->thoughtContainer.alpha = 1;
-                self->thoughtContainer.frame = CGRectMake(20,-180, self->thoughtContainer.frame.size.width, self->thoughtContainer.frame.size.height);
+                self->thoughtContainer.alpha = 1.0f;
+                
             } completion:^(BOOL finished) {
                 NSLog(@"animation done");
             }];
@@ -151,8 +139,13 @@
         }
         self.navigationItem.title = @"buried.";
         self->thoughtContainer.text = self.theThought;
-        [self->activityIndicator stopAnimating];
-        [self->activityIndicator setAlpha:0];
+        [UIView animateWithDuration:.5f delay:.2f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [self->activityIndicator setAlpha:0];
+            self->thoughtContainer.center = CGPointMake(self->thoughtContainer.center.x,self->thoughtContainer.center.y - 72);
+        } completion:^(BOOL finished) {
+            NSLog(@"animation done");
+            [self->activityIndicator stopAnimating];
+        }];
         NSString *timestampString = [NSDateFormatter localizedStringFromDate:self.capsule.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         self->timestamp.text = timestampString; // timestamp states created at date
     }];
@@ -162,12 +155,12 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+    self->imageContainer.alpha = 0;
     [UIView animateWithDuration:0.25f animations:^{
-        self->imageContainer.contentMode = UIViewContentModeCenter;
+        self->imageContainer.contentMode = UIViewContentModeScaleAspectFit;
         self->imageContainer.image = [UIImage imageNamed:@"burieddot152.png"];
-        self->thoughtContainer.text = @"";
     }];
-    
+    self->thoughtContainer.text = @"";
     self->timestamp.text = @"";
 }
 
